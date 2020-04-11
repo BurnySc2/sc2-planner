@@ -10,6 +10,14 @@ import ActionsSelection from './ActionSelection'
 import Settings from './Settings'
 import Footer from './Footer'
 
+// TODO remove the following imports
+import ABILITIES from '../constants/enabled_abilities'
+import ENABLED_UPGRADES from '../constants/enabled_upgrades'
+import UPGRADES from '../constants/upgrades'
+import ENABLED_UNITS from '../constants/enabled_units'
+import UNITS from '../constants/units'
+import STRUCTURES from '../constants/structures'
+
 export default class WebPage extends Component {
     actionButtonPressed = () => {
         // If a button is pressed in the action selection, add it to the build order
@@ -27,7 +35,7 @@ export default class WebPage extends Component {
                 </div>
                 <div className="flex flex-row">
                     <div className="w-9/12">
-                        <div className="flex flex-row">
+                        <div className="flex flex-row bg-indigo-400 m-2 p-2">
                             <RaceSelection />
                             <Time />
                             <BuildOrder />

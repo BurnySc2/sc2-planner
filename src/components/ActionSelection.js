@@ -12,7 +12,6 @@ export default class ActionsSelection extends Component {
     // TODO If a button is pressed, add item to build order
     
     state = {
-        iconSize: 10,
         race: "terran",
         resources: RESOURCES,
         customactions: CUSTOMACTIONS,

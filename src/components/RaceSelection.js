@@ -9,7 +9,7 @@ export default class RaceSelection extends Component {
      */
 
      state = {
-        races: ["terran", "protoss", "zerg"]
+        races: ["protoss", "terran", "zerg"]
      }
 
     render() {

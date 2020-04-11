@@ -5,7 +5,7 @@ export default class Footer extends Component {
     redirect = {
         "donate": {
             name: "Donate",
-            url: "" // paypal url?
+            url: "https://www.google.de" // paypal url?
         },
         "contribute": {
             name: "Contribute",
@@ -31,7 +31,7 @@ export default class Footer extends Component {
 
         return (
             <div className="flex flex-row">
-                {this.buttons}
+                {buttons}
             </div>
         )
     }
