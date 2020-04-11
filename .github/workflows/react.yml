@@ -17,16 +17,16 @@ jobs:
         with:
           node-version: '10.x'
 
-      - name: Install dependencies
-        run: |
-          npm install
-
       - uses: actions/cache@v1
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: |
+          npm install
 
       # - name: Test with npm
       #   run: |
