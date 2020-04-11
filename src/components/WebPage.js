@@ -7,6 +7,8 @@ import Time from './Time'
 import BuildOrder from './BuildOrder'
 import BOArea from './BOArea'
 import ActionsSelection from './ActionSelection'
+import Settings from './Settings'
+import Footer from './Footer'
 
 export default class WebPage extends Component {
     actionButtonPressed = () => {
@@ -19,7 +21,10 @@ export default class WebPage extends Component {
         return (
             <div className="flex-col h-full w-full bg-gray-500">
                 <Title />
-                <ImportExport />
+                <div className="flex flex-row">
+                    <ImportExport />
+                    <Settings />
+                </div>
                 <div className="flex flex-row">
                     <div className="w-9/12">
                         <div className="flex flex-row">
@@ -33,6 +38,7 @@ export default class WebPage extends Component {
                         <ActionsSelection />
                     </div>
                 </div>
+                <Footer />
             </div>
         )
     }
