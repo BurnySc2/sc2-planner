@@ -13,8 +13,7 @@ export default class RaceSelection extends Component {
      }
 
     render() {
-        const iconSize = `w-${this.state.iconSize} h-${this.state.iconSize}`
-        const classString = `${iconSize} ${CLASSES.icon}`
+        const classString = `${CLASSES.raceIcon}`
 
         const races = this.state.races.map((race, index) => {
             const item = RACES[race]

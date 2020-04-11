@@ -28,8 +28,7 @@ export default class ActionsSelection extends Component {
     }
 
     render() {
-        const iconSize = `w-${this.state.iconSize} h-${this.state.iconSize}`
-        const classString = `${iconSize} ${CLASSES.icon}`
+        const classString = `${CLASSES.icon}`
 
         const resources = this.state.resources.map((item, index) => {
             return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>

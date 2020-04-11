@@ -1,6 +1,9 @@
 const CLASSES = {
     // Race icon and the items on the right side icons
-    icon: "m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
+    icon: "h-10 w-10 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
+    raceIcon: "h-8 w-8 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
+    timeIcon: "h-24 w-24 m-0 p-0 z-10",
+    timeText: "absolute z-20 text-white",
     // Icons in the build order
     // Build order area
     buildOrder: "",
