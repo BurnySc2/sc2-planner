@@ -29,12 +29,12 @@ export default class ActionsSelection extends Component {
 
         const units = this.state.units.map((item, index) => {
             return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
-                <img className={classString} src={require("../icons/sc2/" + item.path)} />
+                <img className={classString} src={require("../icons/sc2/" + item.path)} alt={item.name} />
             </div>
         });
         const structures = this.state.structures.map((item, index) => {
             return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
-                <img className={classString} src={require("../icons/sc2/" + item.path)} />
+                <img className={classString} src={require("../icons/sc2/" + item.path)} alt={item.name} />
             </div>
         });
 
