@@ -1,0 +1,7 @@
+
+/* Init Tailwind */
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
