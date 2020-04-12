@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "./static/css/main.70a3ca94.chunk.css",
-    "main.js": "./static/js/main.2da34ab9.chunk.js",
-    "main.js.map": "./static/js/main.2da34ab9.chunk.js.map",
+    "main.css": "./static/css/main.cc2a59c2.chunk.css",
+    "main.js": "./static/js/main.a15251f6.chunk.js",
+    "main.js.map": "./static/js/main.a15251f6.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.7dcc11e6.js",
     "runtime-main.js.map": "./static/js/runtime-main.7dcc11e6.js.map",
-    "static/js/2.261faac8.chunk.js": "./static/js/2.261faac8.chunk.js",
-    "static/js/2.261faac8.chunk.js.map": "./static/js/2.261faac8.chunk.js.map",
+    "static/js/2.d550854f.chunk.js": "./static/js/2.d550854f.chunk.js",
+    "static/js/2.d550854f.chunk.js.map": "./static/js/2.d550854f.chunk.js.map",
     "index.html": "./index.html",
-    "precache-manifest.7aaeeda7e7905c33dc276d3da6e2356f.js": "./precache-manifest.7aaeeda7e7905c33dc276d3da6e2356f.js",
+    "precache-manifest.5ed491980d2ab879476a8746385fd9bc.js": "./precache-manifest.5ed491980d2ab879476a8746385fd9bc.js",
     "service-worker.js": "./service-worker.js",
-    "static/css/main.70a3ca94.chunk.css.map": "./static/css/main.70a3ca94.chunk.css.map",
-    "static/js/2.261faac8.chunk.js.LICENSE.txt": "./static/js/2.261faac8.chunk.js.LICENSE.txt",
+    "static/css/main.cc2a59c2.chunk.css.map": "./static/css/main.cc2a59c2.chunk.css.map",
+    "static/js/2.d550854f.chunk.js.LICENSE.txt": "./static/js/2.d550854f.chunk.js.LICENSE.txt",
     "static/media/btn-ability-spearofadun-chronosurge.png": "./static/media/btn-ability-spearofadun-chronosurge.c37fcfbc.png",
     "static/media/btn-ability-zerg-neuralparasite-color.png": "./static/media/btn-ability-zerg-neuralparasite-color.8e5608d3.png",
     "static/media/btn-building-protoss-nexus.png": "./static/media/btn-building-protoss-nexus.61dcb5dd.png",
@@ -20,6 +20,7 @@
     "static/media/btn-unit-protoss-archon.png": "./static/media/btn-unit-protoss-archon.80232096.png",
     "static/media/btn-unit-protoss-mothership.png": "./static/media/btn-unit-protoss-mothership.dad598bf.png",
     "static/media/btn-unit-terran-battlecruiser.png": "./static/media/btn-unit-terran-battlecruiser.0dcd57ed.png",
+    "static/media/btn-upgrade-kerrigan-seismicspines.png": "./static/media/btn-upgrade-kerrigan-seismicspines.3bb4659d.png",
     "static/media/btn-upgrade-protoss-resonatingglaives.png": "./static/media/btn-upgrade-protoss-resonatingglaives.5920db97.png",
     "static/media/btn-upgrade-terran-advanceballistics.png": "./static/media/btn-upgrade-terran-advanceballistics.721dcab8.png",
     "static/media/btn-upgrade-terran-cyclonerangeupgrade.png": "./static/media/btn-upgrade-terran-cyclonerangeupgrade.688da04d.png",
@@ -30,6 +31,7 @@
     "static/media/btn-upgrade-zerg-airattacks-level1.png": "./static/media/btn-upgrade-zerg-airattacks-level1.79347196.png",
     "static/media/btn-upgrade-zerg-airattacks-level2.png": "./static/media/btn-upgrade-zerg-airattacks-level2.a65f8b43.png",
     "static/media/btn-upgrade-zerg-airattacks-level3.png": "./static/media/btn-upgrade-zerg-airattacks-level3.d9affd4e.png",
+    "static/media/btn-upgrade-zerg-centrifugalhooks.png": "./static/media/btn-upgrade-zerg-centrifugalhooks.f06f9867.png",
     "static/media/btn-upgrade-zerg-evolvemuscularaugments.png": "./static/media/btn-upgrade-zerg-evolvemuscularaugments.4ce0fdf6.png",
     "static/media/btn-upgrade-zerg-flyercarapace-level1.png": "./static/media/btn-upgrade-zerg-flyercarapace-level1.c83c9ce4.png",
     "static/media/btn-upgrade-zerg-flyercarapace-level2.png": "./static/media/btn-upgrade-zerg-flyercarapace-level2.2ae16fbf.png",
@@ -52,8 +54,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.7dcc11e6.js",
-    "static/js/2.261faac8.chunk.js",
-    "static/css/main.70a3ca94.chunk.css",
-    "static/js/main.2da34ab9.chunk.js"
+    "static/js/2.d550854f.chunk.js",
+    "static/css/main.cc2a59c2.chunk.css",
+    "static/js/main.a15251f6.chunk.js"
   ]
 }
