@@ -44,6 +44,14 @@ data.Ability.forEach((ability) => {
         ENABLED_UNITS[buildStructure.produces] = 1
         return
     }
+    
+    // Build abilities, e.g. build refinery
+    let buildGas = ability.target.BuildOnUnit
+    if (buildGas !== undefined && ENABLED_ABILITIES[ability.id] === 1) {
+        // console.log(buildStructure)
+        ENABLED_UNITS[buildGas.produces] = 1
+        return
+    }
 });
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the unit is available from an ability
