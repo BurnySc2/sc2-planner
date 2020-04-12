@@ -396,8 +396,7 @@
             "name": "NEXUSTRAINMOTHERSHIP_MOTHERSHIP",
             "target": {
                 "Train": {
-                    "produces": 10,
-                    "requirement": ""
+                    "produces": 10
                 }
             }
         },
@@ -1605,7 +1604,7 @@
             "name": "BUILD_TECHLAB_BARRACKS",
             "target": {
                 "BuildInstant": {
-                    "produces": 5
+                    "produces": 37
                 }
             }
         },
@@ -1621,7 +1620,7 @@
             "name": "BUILD_REACTOR_BARRACKS",
             "target": {
                 "BuildInstant": {
-                    "produces": 6
+                    "produces": 38
                 }
             }
         },
@@ -1665,7 +1664,7 @@
             "name": "BUILD_TECHLAB_FACTORY",
             "target": {
                 "BuildInstant": {
-                    "produces": 5
+                    "produces": 39
                 }
             }
         },
@@ -1681,7 +1680,7 @@
             "name": "BUILD_REACTOR_FACTORY",
             "target": {
                 "BuildInstant": {
-                    "produces": 6
+                    "produces": 40
                 }
             }
         },
@@ -1725,7 +1724,7 @@
             "name": "BUILD_TECHLAB_STARPORT",
             "target": {
                 "BuildInstant": {
-                    "produces": 5
+                    "produces": 41
                 }
             }
         },
@@ -1741,7 +1740,7 @@
             "name": "BUILD_REACTOR_STARPORT",
             "target": {
                 "BuildInstant": {
-                    "produces": 6
+                    "produces": 42
                 }
             }
         },

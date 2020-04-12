@@ -14,6 +14,10 @@ const CUSTOMACTIONS = {
         },
 
     ],
+    protoss: [
+    ],
+    zerg: [
+    ],
 }
 
 export default CUSTOMACTIONS

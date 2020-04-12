@@ -1,28 +1,51 @@
 import React, { Component } from 'react'
 
-import STRUCTURES from '../icons/structures.js'
-import UNITS from '../icons/units.js'
-import UPGRADES from '../icons/upgrades.js'
-import RESOURCES from '../icons/resources.js'
-import CUSTOMACTIONS from '../icons/customactions.js'
+// import STRUCTURES from '../icons/structures.js'
+// import UNITS from '../icons/units.js'
+// import UPGRADES from '../icons/upgrades.js'
+
+import RESOURCES from '../constants/resources'
+import CUSTOMACTIONS from '../constants/customactions'
 import CLASSES from "../constants/classes"
+import UNITS from '../constants/units'
+import STRUCTURES from '../constants/structures'
+import UPGRADES from "../constants/upgrades"
+
+import UNIT_ICONS from "../icons/unit_icons.json"
+import UPGRADE_ICONS from "../icons/upgrade_icons.json"
 
 export default class ActionsSelection extends Component {
     // TODO Receive race, then based on that build the actions selection
     // TODO If a button is pressed, add item to build order
-    
-    state = {
-        race: "terran",
-        resources: RESOURCES,
-        customactions: CUSTOMACTIONS,
-        units: UNITS,
-        structures: STRUCTURES,
-        upgrades: UPGRADES,
+    constructor(props) {
+        super(props)
+        this.state = {
+            resources: RESOURCES,
+            customactions: CUSTOMACTIONS,
+            units: UNITS,
+            structures: STRUCTURES,
+            upgrades: UPGRADES,
+        }
+        // console.log(this.state.race)
+
+        // Load unit icons
+        this.unitIcons = {}
+        Object.keys(UNIT_ICONS).forEach((item) => {
+            this.unitIcons[item] = require(`../icons/png/${UNIT_ICONS[item]}`)
+        });
+
+        // Load upgrade icons
+        this.upgradeIcons = {}
+        Object.keys(UPGRADE_ICONS).forEach((item) => {
+            this.upgradeIcons[item] = require(`../icons/png/${UPGRADE_ICONS[item]}`)
+            // console.log(item);
+            // console.log(this.upgradeIcons[item]);
+        });
     }
 
     onClick = (e, itemName) => {
-        console.log(e.target)
-        console.log(`${itemName} was clicked`)
+        // console.log(e.target)
+        console.log(`${itemName}: 1,`)
         // TODO add it to the build order
     }
 
@@ -40,28 +63,31 @@ export default class ActionsSelection extends Component {
                 <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
             </div>
         }).concat(
-            this.state.customactions[this.state.race].map((item, index) => {
+            this.state.customactions[this.props.race].map((item, index) => {
                 return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
                     <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
                 </div>
             })
         );
 
-        const units = this.state.units[this.state.race].map((item, index) => {
+        const units = this.state.units[this.props.race].map((item, index) => {
+            const icon = this.unitIcons[item.name.toUpperCase()]
             return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
-                <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
+                <img className={classString} src={icon} alt={item.name} />
             </div>
         });
 
-        const structures = this.state.structures[this.state.race].map((item, index) => {
+        const structures = this.state.structures[this.props.race].map((item, index) => {
+            const icon = this.unitIcons[item.name.toUpperCase()]
             return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
-                <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
+                <img className={classString} src={icon} alt={item.name} />
             </div>
         });
-
-        const upgrades = this.state.upgrades[this.state.race].map((item, index) => {
+        
+        const upgrades = this.state.upgrades[this.props.race].map((item, index) => {
+            const icon = this.upgradeIcons[item.name.toUpperCase()]
             return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
-                <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
+                <img className={classString} src={icon} alt={item.name} />
             </div>
         });
 
