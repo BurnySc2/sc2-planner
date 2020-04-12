@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 
-// import STRUCTURES from '../icons/structures.js'
-// import UNITS from '../icons/units.js'
-// import UPGRADES from '../icons/upgrades.js'
-
 import RESOURCES from '../constants/resources'
 import CUSTOMACTIONS from '../constants/customactions'
 import CLASSES from "../constants/classes"
@@ -11,8 +7,9 @@ import UNITS from '../constants/units'
 import STRUCTURES from '../constants/structures'
 import UPGRADES from "../constants/upgrades"
 
-import UNIT_ICONS from "../icons/unit_icons.json"
-import UPGRADE_ICONS from "../icons/upgrade_icons.json"
+// Importing json doesnt seem to work with `import` statements, but have to use `require`
+const UNIT_ICONS = require("../icons/unit_icons.json")
+const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 export default class ActionsSelection extends Component {
     // TODO Receive race, then based on that build the actions selection
