@@ -16,14 +16,14 @@ export default class ActionsSelection extends Component {
     // TODO If a button is pressed, add item to build order
     constructor(props) {
         super(props)
-        this.state = {
-            resources: RESOURCES,
-            customactions: CUSTOMACTIONS,
-            units: UNITS,
-            structures: STRUCTURES,
-            upgrades: UPGRADES,
-        }
-        // console.log(this.state.race)
+        this.state = {}
+
+        this.resources = RESOURCES
+        this.customactions = CUSTOMACTIONS
+        this.units = UNITS
+        this.structures = STRUCTURES
+        this.upgrades = UPGRADES
+        // console.log(props.race)
 
         // Load unit icons
         this.unitIcons = {}
@@ -40,50 +40,38 @@ export default class ActionsSelection extends Component {
         });
     }
 
-    onClick = (e, itemName) => {
-        // console.log(e.target)
-        console.log(`${itemName}: 1,`)
-        // TODO add it to the build order
-    }
-
     render() {
         const classString = `${CLASSES.icon}`
 
-        const resources = this.state.resources.map((item, index) => {
-            return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
+        const resources = this.resources.map((item, index) => {
+            return <div key={item.name}>
                 <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
             </div>
         });
 
-        const customactions = this.state.customactions.all.map((item, index) => {
-            return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
+        const customactions = this.customactions.all.concat(this.customactions[this.props.race]).map((item, index) => {
+            return <div key={item.name} onClick={(e) => {this.props.actionClick(e, item.name)}}>
                 <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
             </div>
-        }).concat(
-            this.state.customactions[this.props.race].map((item, index) => {
-                return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
-                    <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
-                </div>
-            })
-        );
+        })
 
-        const units = this.state.units[this.props.race].map((item, index) => {
+        const units = this.units[this.props.race].map((item, index) => {
             const icon = this.unitIcons[item.name.toUpperCase()]
-            return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
+            return <div key={item.name} onClick={(e) => {this.props.unitClick(e, item.name)}}>
                 <img className={classString} src={icon} alt={item.name} />
             </div>
         });
 
-        const structures = this.state.structures[this.props.race].map((item, index) => {
+        const structures = this.structures[this.props.race].map((item, index) => {
             const icon = this.unitIcons[item.name.toUpperCase()]
-            return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
+            return <div key={item.name} onClick={(e) => {this.props.structureClick(e, item.name)}}>
                 <img className={classString} src={icon} alt={item.name} />
             </div>
         });
         
-        const upgrades = this.state.upgrades[this.props.race].map((item, index) => {
+        const upgrades = this.upgrades[this.props.race].map((item, index) => {
             const icon = this.upgradeIcons[item.name.toUpperCase()]
-            return <div key={item.name} onClick={(e) => {this.onClick(e, item.name)}}>
+            return <div key={item.name} onClick={(e) => {this.props.upgradeClick(e, item.name)}}>
                 <img className={classString} src={icon} alt={item.name} />
             </div>
         });

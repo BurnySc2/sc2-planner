@@ -12,41 +12,24 @@ export default class ImportExport extends Component {
         import: false,
     }
 
-    onMouseEnter = (e) => {
+    onMouseEnter = (e, name) => {
         // On mouse enter: open drop down menu with various options
-        let key
-        if (this.refs.export === e.target) {
-            key = "export"
-        } else if (this.refs.import === e.target) {
-            key = "import"
-        } else {
-            return
-        }
         this.setState({
-            [key]: true
+            [name]: true
         })
-        // console.log({[key]: true});
     }
 
-    onMouseLeave = (e) => {
+    onMouseLeave = (e, name) => {
         // On mouse exit: close the above
-        let key
-        if (this.refs.export === e.target) {
-            key = "export"
-        } else if (this.refs.import === e.target) {
-            key = "import"
-        } else {
-            return
-        }
         this.setState({
-            [key]: false
+            [name]: false
         })
     }
 
     render() {
-        // TODO On state condition, show dropdown
-        const exportButton = <div className={CLASSES.buttons} ref="export" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>Export</div>
-        const importButton = <div className={CLASSES.buttons} ref="import" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>Import</div>
+        // TODO On state condition: show dropdown
+        const exportButton = <div className={CLASSES.buttons} onMouseEnter={(e) => this.onMouseEnter(e, "export")} onMouseLeave={(e) => this.onMouseLeave(e, "export")}>Export</div>
+        const importButton = <div className={CLASSES.buttons} onMouseEnter={(e) => this.onMouseEnter(e, "import")} onMouseLeave={(e) => this.onMouseLeave(e, "import")}>Import</div>
 
         return (
             <div className="flex flex-row">

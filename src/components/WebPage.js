@@ -22,15 +22,36 @@ export default class WebPage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            "race": "terran",
+            race: "terran",
+            // Build order
+            // Each element needs to have an .image attached and tooltip with: name, minerals, vespene, time
+            bo: [],
+            // Selected timestamp
+            time: 0,
         }
     }
 
-    raceSelectionPressed = (e, race) => {
+    raceSelectionClicked = (e, race) => {
         // Set race in state after a race selection icon has been pressed
         this.setState({
-            "race": race
+            race: race,
+            bo: [],
+            time: 0,
         })
+    }
+
+    actionSelectionActionClicked = (e, action) => {
+        console.log(action);
+    }
+    actionSelectionUnitClicked = (e, unit) => {
+        console.log(unit);
+    }
+    actionSelectionStructureClicked = (e, structure) => {
+        console.log(structure);
+    }
+    actionSelectionUpgradeClicked = (e, upgrade) => {
+        console.log(upgrade);
+        
     }
 
     render() {
@@ -44,14 +65,18 @@ export default class WebPage extends Component {
                 <div className="flex flex-row">
                     <div className="w-9/12">
                         <div className="flex flex-row bg-indigo-400 m-2 p-2">
-                            <RaceSelection onClick={this.raceSelectionPressed} />
-                            <Time />
-                            <BuildOrder />
+                            <RaceSelection onClick={this.raceSelectionClicked} />
+                            <Time time={this.state.time} />
+                            <BuildOrder bo={this.state.bo} />
                         </div>
                         <BOArea />
                     </div>
                     <div className="w-3/12">
-                        <ActionsSelection race={this.state.race} />
+                        <ActionsSelection race={this.state.race} 
+                        actionClick={this.actionSelectionActionClicked} 
+                        unitClick={this.actionSelectionUnitClicked} 
+                        structureClick={this.actionSelectionStructureClicked} 
+                        upgradeClick={this.actionSelectionUpgradeClicked} />
                     </div>
                 </div>
                 <Footer />

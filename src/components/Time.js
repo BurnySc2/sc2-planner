@@ -4,18 +4,9 @@ import CLASSES from '../constants/classes'
 
 
 export default class Time extends Component {
-    /**
-     * Keep track of the current selected time, if
-     */
-    state = {
-        minutes: 0,
-        seconds: 0
-    }
-
     render() {
         const timeTextCss = {
             bottom: "0%",
-            // top: 50%;
             left: "50%",
             transform: "translate(-50%, -50%)",
             /**
@@ -29,8 +20,10 @@ export default class Time extends Component {
             "fontSize": "x-large",
         }
         // Get the time in a 00:00 format
-        const minutes = `${this.state.minutes}`.padStart(2, "0")
-        const seconds = `${this.state.seconds}`.padStart(2, "0")
+        // console.log(this.props.time)
+        const totalSeconds = Math.floor(this.props.time)
+        const minutes = `${Math.floor(totalSeconds / 60)}`.padStart(2, "0")
+        const seconds = `${totalSeconds % 60}`.padStart(2, "0")
         const timeFormatted = `${minutes}:${seconds}`
         const item = RACES.time
 
