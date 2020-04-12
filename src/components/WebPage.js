@@ -55,6 +55,7 @@ export default class WebPage extends Component {
         this.setState({
             bo: bo
         })
+        // TODO re-calculate build order
     }
     removeItemFromBO = (index) => {
         const bo = this.state.bo
@@ -62,6 +63,7 @@ export default class WebPage extends Component {
         this.setState({
             bo: bo
         })
+        // TODO re-calculate build order
     }
 
     // If a button is pressed in the action selection, add it to the build order
@@ -133,7 +135,7 @@ export default class WebPage extends Component {
                             <Time time={this.state.time} />
                             <BuildOrder bo={this.state.bo} removeClick={this.buildOrderRemoveClicked} />
                         </div>
-                        <BOArea />
+                        <BOArea bo={this.state.bo} />
                     </div>
                     <div className="w-3/12">
                         <ActionsSelection race={this.state.race} 

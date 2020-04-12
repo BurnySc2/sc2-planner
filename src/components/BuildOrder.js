@@ -9,8 +9,6 @@ export default class BuildOrder extends Component {
      */
 
     render() {
-        console.log(this.props.bo);
-        
         // Convert build order items to div elements
         const buildOrder = this.props.bo.map((item, index) => {
             return <div key={`bo_${index}`} onClick={(e) => (this.props.removeClick(e, index))}>

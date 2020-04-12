@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {GameLogic} from "../game_logic/gamelogic"
 
 export default class BOArea extends Component {
     /**
@@ -7,8 +8,18 @@ export default class BOArea extends Component {
      * If an item is hovered, display some tooltip
      * If the time line is clicked, display the state at the current clicked time
      */
-
+    constructor(props) {
+        super(props)
+        const logic = new GameLogic()
+        logic.setStart()
+        this.state = {
+            logic: logic,
+        }
+        console.log(this.state.logic)
+    }
+    
     render() {
+        console.log(this.props);
         return (
             <div>
                 <div>time bar</div>
