@@ -7,24 +7,23 @@ export default class BuildOrder extends Component {
      * If a build order item is pressed, remove it and recalculate the events in WebPage.js
      * If dragged, reorder the build order and then update game logic in WebPage.js
      */
-    onClick = (e) => {
-        // Remove element from build order and BOArea
-    }
 
     render() {
+        console.log(this.props.bo);
+        
         // Convert build order items to div elements
         const buildOrder = this.props.bo.map((item, index) => {
-            return <div onClick={this.onClick}>
+            return <div key={`bo_${index}`} onClick={(e) => (this.props.removeClick(e, index))}>
                 <img className={CLASSES.boItem} src={item.image} alt={item.name} />
             </div>
         })
         
         // Hide element if no build order items are present
-        const buildOrderArea = (
+        const buildOrderArea = buildOrder.length > 0 ? (
             <div className={CLASSES.bo}>
                 {buildOrder}
             </div>
-        )   ? buildOrder > 0 : ""
+        ) : ""
         return (
             <div>
                 {buildOrderArea}

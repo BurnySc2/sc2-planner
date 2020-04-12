@@ -10,13 +10,9 @@ import ActionsSelection from './ActionSelection'
 import Settings from './Settings'
 import Footer from './Footer'
 
-// TODO remove the following imports
-// import ABILITIES from '../constants/enabled_abilities'
-// import ENABLED_UPGRADES from '../constants/enabled_upgrades'
-// import UPGRADES from '../constants/upgrades'
-// import ENABLED_UNITS from '../constants/enabled_units'
-// import UNITS from '../constants/units'
-// import STRUCTURES from '../constants/structures'
+// Importing json doesnt seem to work with `import` statements, but have to use `require`
+const UNIT_ICONS = require("../icons/unit_icons.json")
+const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 export default class WebPage extends Component {
     constructor(props) {
@@ -29,6 +25,18 @@ export default class WebPage extends Component {
             // Selected timestamp
             time: 0,
         }
+
+        // Load unit icons
+        this.unitIcons = {}
+        Object.keys(UNIT_ICONS).forEach((item) => {
+            this.unitIcons[item] = require(`../icons/png/${UNIT_ICONS[item]}`)
+        });
+
+        // Load upgrade icons
+        this.upgradeIcons = {}
+        Object.keys(UPGRADE_ICONS).forEach((item) => {
+            this.upgradeIcons[item] = require(`../icons/png/${UPGRADE_ICONS[item]}`)
+        });
     }
 
     raceSelectionClicked = (e, race) => {
@@ -40,18 +48,74 @@ export default class WebPage extends Component {
         })
     }
 
+    // type is one of ["worker", "action", "unit", "structure", "upgrade"]
+    addItemToBO = (item) => {
+        const bo = this.state.bo
+        bo.push(item)
+        this.setState({
+            bo: bo
+        })
+    }
+    removeItemFromBO = (index) => {
+        const bo = this.state.bo
+        bo.splice(index, 1)
+        this.setState({
+            bo: bo
+        })
+    }
+
+    // If a button is pressed in the action selection, add it to the build order
+    // Then re-calculate the resulting time of all the items
+    // Then send all items and events to the BOArea
     actionSelectionActionClicked = (e, action) => {
+        this.addItemToBO({
+            name: action,
+            type: "action",
+            // TODO Add custom action icon
+            image: ""
+        })
         console.log(action);
     }
+
     actionSelectionUnitClicked = (e, unit) => {
+        if (["SCV", "Probe", "Drone"].indexOf(unit) >= 0) {
+            this.addItemToBO({
+                name: unit,
+                type: "worker",
+                image: this.unitIcons[unit.toUpperCase()]
+            })
+        } else {
+            this.addItemToBO({
+                name: unit,
+                type: "unit",
+                image: this.unitIcons[unit.toUpperCase()]
+            })
+        }
         console.log(unit);
     }
+
     actionSelectionStructureClicked = (e, structure) => {
+        this.addItemToBO({
+            name: structure,
+            type: "structure",
+            image: this.unitIcons[structure.toUpperCase()]
+        })
         console.log(structure);
     }
+
     actionSelectionUpgradeClicked = (e, upgrade) => {
+        this.addItemToBO({
+            name: upgrade,
+            type: "upgrade",
+            image: this.upgradeIcons[upgrade.toUpperCase()]
+        })
         console.log(upgrade);
-        
+    }
+
+    buildOrderRemoveClicked = (e, index) => {
+        // console.log(e.target)
+        console.log(index)
+        this.removeItemFromBO(index)
     }
 
     render() {
@@ -64,10 +128,10 @@ export default class WebPage extends Component {
                 </div>
                 <div className="flex flex-row">
                     <div className="w-9/12">
-                        <div className="flex flex-row bg-indigo-400 m-2 p-2">
+                        <div className="flex flex-row bg-indigo-400 m-2 p-2 items-center">
                             <RaceSelection onClick={this.raceSelectionClicked} />
                             <Time time={this.state.time} />
-                            <BuildOrder bo={this.state.bo} />
+                            <BuildOrder bo={this.state.bo} removeClick={this.buildOrderRemoveClicked} />
                         </div>
                         <BOArea />
                     </div>
@@ -84,9 +148,3 @@ export default class WebPage extends Component {
         )
     }
 }
-
-// actionButtonPressed = () => {
-//     // If a button is pressed in the action selection, add it to the build order
-//     // Then re-calculate the resulting time of all the items
-//     // Then send all items and events to teh BOArea
-// }

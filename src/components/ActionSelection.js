@@ -12,7 +12,6 @@ const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 export default class ActionsSelection extends Component {
-    // TODO Receive race, then based on that build the actions selection
     // TODO If a button is pressed, add item to build order
     constructor(props) {
         super(props)
@@ -75,14 +74,14 @@ export default class ActionsSelection extends Component {
                 <img className={classString} src={icon} alt={item.name} />
             </div>
         });
-
+        
         return (
             <div>
-                <div className="flex flex-wrap">{resources}</div>
-                <div className="flex flex-wrap">{customactions}</div>
-                <div className="flex flex-wrap">{units}</div>
-                <div className="flex flex-wrap">{structures}</div>
-                <div className="flex flex-wrap">{upgrades}</div>
+                <div className={CLASSES.actionContainer}>{resources}</div>
+                <div className={CLASSES.actionContainer}>{customactions}</div>
+                <div className={CLASSES.actionContainer}>{units}</div>
+                <div className={CLASSES.actionContainer}>{structures}</div>
+                <div className={CLASSES.actionContainer}>{upgrades}</div>
             </div>
         )
     }
