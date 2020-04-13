@@ -49,7 +49,7 @@ data.Ability.forEach((ability) => {
     let buildGas = ability.target.BuildOnUnit
     if (buildGas !== undefined && ENABLED_ABILITIES[ability.id] === 1) {
         // console.log(buildStructure)
-        CREATION_ABILITIES[buildGas.produces] = 1
+        CREATION_ABILITIES[ability.id] = buildGas.produces
         return
     }
 });

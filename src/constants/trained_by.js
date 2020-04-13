@@ -54,6 +54,6 @@ data.Unit.forEach((trainingUnit) => {
     trainedBy: { Gateway: 1, WarpGate: 1 }
 }
  */
-console.assert(Object.keys(TRAINED_BY).length === 141, `${Object.keys(TRAINED_BY).length} is not 141`)
+console.assert(Object.keys(TRAINED_BY).length === 144, `${Object.keys(TRAINED_BY).length} is not 144`)
 
 export default TRAINED_BY
