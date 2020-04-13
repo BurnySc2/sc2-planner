@@ -26,6 +26,16 @@ test('Build an SCV', () => {
     logic.setStart()
     logic.runUntilEnd()
     expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(1)
+});
+
+test('Build two SCVs', () => {
+    const bo = [{name: "SCV", type: "worker"}, {name: "SCV", type: "worker"}]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(2)
 });
 
 test('Build depot', () => {
@@ -33,7 +43,10 @@ test('Build depot', () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
+    // console.log(logic.units);
+    
     expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(1)
 });
 
 test('Build SCV then depot', () => {
@@ -41,5 +54,50 @@ test('Build SCV then depot', () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(15)
+    expect(logic.supplyCap).toBe(23)
+    expect(logic.eventLog.length).toBe(2)
 });
+
+test('Build 4 SCVs', () => {
+    const bo = []
+    for (let i = 0; i < 4; i++) {
+        bo.push({name: "SCV", type: "worker"})
+    }
+    expect(bo.length).toBe(4)
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    // Should be 17 but since we get supply blocked, only get up to 16 units max (15 workers + 1 cc)
+    expect(logic.units.size).toBe(16)
+    expect(logic.eventLog.length).toBe(3)
+});
+
+test('Build 3 SCVs then depot then one more SCV', () => {
+    const bo = []
+    for (let i = 0; i < 3; i++) {
+        bo.push({name: "SCV", type: "worker"})
+    }
+    bo.push({name: "SupplyDepot", type: "structure"})
+    bo.push({name: "SCV", type: "worker"})
+
+    expect(bo.length).toBe(5)
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    // Should be 17 but since we get supply blocked, only get up to 16 units max (15 workers + 1 cc)
+    expect(logic.supplyCap).toBe(23)
+    expect(logic.units.size).toBe(18)
+    expect(logic.eventLog.length).toBe(5)
+});
+
+test('Build commandcenter', () => {
+    const bo = [{name: "CommandCenter", type: "structure"}]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(1)
+});
+
+

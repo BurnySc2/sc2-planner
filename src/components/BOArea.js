@@ -15,11 +15,11 @@ export default class BOArea extends Component {
         this.state = {
             logic: logic,
         }
-        console.log(this.state.logic)
+        // console.log(this.state.logic)
     }
     
     render() {
-        console.log(this.props);
+        // console.log(this.props);
         return (
             <div>
                 <div>time bar</div>

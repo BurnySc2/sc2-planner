@@ -1,11 +1,12 @@
 const CLASSES = {
     // Race icon and the items on the right side icons
-    icon: "h-10 w-10 m-1 p-0 z-10 hover:bg-gray-400 cursor-pointer",
     raceIcon: "h-8 w-8 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
     timeIcon: "h-24 w-24 m-0 p-0 z-10",
     timeText: "absolute z-20 text-white",
     // Action selection container
     actionContainer: "flex flex-wrap bg-gray-600 m-1 p-1",
+    // Action icon
+    icon: "h-12 w-12 m-0 p-1 z-10 hover:bg-gray-400 cursor-pointer",
     // Icons in the build order
     bo: "flex flex-row bg-green-700 m-1 p-0",
     boItem: "m-0 p-0 h-16 w-16 bg-green-700 flex-shrink-0 border border-black hover:bg-green-400 cursor-move",

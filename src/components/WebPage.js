@@ -9,6 +9,9 @@ import BOArea from './BOArea'
 import ActionsSelection from './ActionSelection'
 import Settings from './Settings'
 import Footer from './Footer'
+import {GameLogic} from '../game_logic/gamelogic'
+
+
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 const UNIT_ICONS = require("../icons/unit_icons.json")
@@ -17,6 +20,11 @@ const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 export default class WebPage extends Component {
     constructor(props) {
         super(props)
+
+        const gameLogic = new GameLogic()
+        gameLogic.reset()
+        gameLogic.setStart()
+
         this.state = {
             race: "terran",
             // Build order
@@ -24,6 +32,7 @@ export default class WebPage extends Component {
             bo: [],
             // Selected timestamp
             time: 0,
+            gameLogic: gameLogic
         }
 
         // Load unit icons
@@ -52,18 +61,53 @@ export default class WebPage extends Component {
     addItemToBO = (item) => {
         const bo = this.state.bo
         bo.push(item)
+        // Re-calculate build order
+        const gameLogic = this.state.gameLogic
+        gameLogic.bo = bo
+        if (gameLogic.hasSnapshot()) {
+            // Find the latest snapshot that was saved after incrementing the gameLogic.boIndex
+            const maxSnapshotIndex = Math.max.apply(null, Object.keys(gameLogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}))
+            const snapshot = gameLogic.getBOIndexSnapshots()[maxSnapshotIndex]
+            // console.log(maxSnapshotIndex);
+            // console.log(Object.keys(gameLogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}));
+            // console.log(gameLogic.getBOIndexSnapshots());
+            // console.log(snapshot);
+            
+            gameLogic.loadFromSnapshotObject(snapshot)
+        }
+        // console.log(gameLogic.getBOIndexSnapshots());
+        gameLogic.runUntilEnd()
+
+        // console.log("Amount of events: " + gameLogic.eventLog.length);
+
         this.setState({
-            bo: bo
+            bo: bo,
+            gameLogic: gameLogic,
         })
-        // TODO re-calculate build order
     }
     removeItemFromBO = (index) => {
         const bo = this.state.bo
         bo.splice(index, 1)
+
+        const gameLogic = this.state.gameLogic
+        // TODO load snapshot from shortly before this bo index
+        if (gameLogic.hasSnapshot() && index > 0) {
+            const snapshot = gameLogic.getBOIndexSnapshots()[index-1]
+            console.log(snapshot);
+            gameLogic.loadFromSnapshotObject(snapshot)
+            // console.log("loaded: " + bo.length);
+            // console.log(gameLogic.getBOIndexSnapshots());
+        } else {
+            gameLogic.reset()
+            gameLogic.setStart()
+        }
+        
+        gameLogic.bo = bo
+        gameLogic.runUntilEnd()
+
         this.setState({
             bo: bo
         })
-        // TODO re-calculate build order
     }
 
     // If a button is pressed in the action selection, add it to the build order
@@ -71,12 +115,11 @@ export default class WebPage extends Component {
     // Then send all items and events to the BOArea
     actionSelectionActionClicked = (e, action) => {
         this.addItemToBO({
-            name: action,
+            name: action.name,
             type: "action",
-            // TODO Add custom action icon
-            image: ""
+            image: action.image
         })
-        console.log(action);
+        console.log(action.name);
     }
 
     actionSelectionUnitClicked = (e, unit) => {
@@ -135,7 +178,7 @@ export default class WebPage extends Component {
                             <Time time={this.state.time} />
                             <BuildOrder bo={this.state.bo} removeClick={this.buildOrderRemoveClicked} />
                         </div>
-                        <BOArea bo={this.state.bo} />
+                        <BOArea gamelogic={this.state.gamelogic} />
                     </div>
                     <div className="w-3/12">
                         <ActionsSelection race={this.state.race} 

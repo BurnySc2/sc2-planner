@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import RESOURCES from '../constants/resources'
-import CUSTOMACTIONS from '../constants/customactions'
+import {CUSTOMACTIONS_BY_NAME, CUSTOMACTIONS} from '../constants/customactions'
 import CLASSES from "../constants/classes"
 import UNITS from '../constants/units'
 import STRUCTURES from '../constants/structures'
@@ -49,7 +49,7 @@ export default class ActionsSelection extends Component {
         });
 
         const customactions = this.customactions.all.concat(this.customactions[this.props.race]).map((item, index) => {
-            return <div key={item.name} onClick={(e) => {this.props.actionClick(e, item.name)}}>
+            return <div key={item.name} onClick={(e) => {this.props.actionClick(e, item)}}>
                 <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
             </div>
         })

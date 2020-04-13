@@ -24,9 +24,12 @@ export default class Footer extends Component {
     render() {
         const buttons = ["donate", "contribute", "report_bugs", "contact"].map((myKey, index) => {
             const item = this.redirect[myKey]
-            return <form key={item.name} action={item.url}>
-            <button className={CLASSES.buttons} type="submit">{item.name}</button>
-            </form>
+            return <a key={item.name} className={CLASSES.buttons} href={item.url}>
+                {item.name}
+            </a>
+            // return <form key={item.name} action={item.url}>
+            // <button className={CLASSES.buttons} type="submit">{item.name}</button>
+            // </form>
         })
 
         return (
