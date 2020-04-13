@@ -98,6 +98,8 @@ export default class WebPage extends Component {
         // Re-calculate build order
         const gamelogic = this.state.gamelogic
         gamelogic.bo = bo
+
+        // Caching using snapshots
         if (gamelogic.hasSnapshot()) {
             // Find the latest snapshot that was saved after incrementing the gamelogic.boIndex
             const maxSnapshotIndex = Math.max.apply(null, Object.keys(gamelogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}))
@@ -111,6 +113,11 @@ export default class WebPage extends Component {
         }
         // console.log(gamelogic.getBOIndexSnapshots());
         gamelogic.runUntilEnd()
+        
+        // Non cached:
+        // gamelogic.reset()
+        // gamelogic.setStart()
+        // gamelogic.runUntilEnd()
 
         // console.log("Amount of events: " + gamelogic.eventLog.length);
 
@@ -122,10 +129,12 @@ export default class WebPage extends Component {
     removeItemFromBO = (index) => {
         const bo = this.state.bo
         bo.splice(index, 1)
-
+        
         const gamelogic = this.state.gamelogic
+        gamelogic.bo = bo
         // TODO load snapshot from shortly before this bo index
         if (gamelogic.hasSnapshot() && index > 0) {
+            // TODO remove snapshots >=index
             const snapshot = gamelogic.getBOIndexSnapshots()[index-1]
             console.log(snapshot);
             gamelogic.loadFromSnapshotObject(snapshot)
@@ -136,7 +145,6 @@ export default class WebPage extends Component {
             gamelogic.setStart()
         }
         
-        gamelogic.bo = bo
         gamelogic.runUntilEnd()
 
         this.setState({
@@ -192,7 +200,6 @@ export default class WebPage extends Component {
     }
 
     buildOrderRemoveClicked = (e, index) => {
-        // console.log(e.target)
         console.log(index)
         this.removeItemFromBO(index)
     }

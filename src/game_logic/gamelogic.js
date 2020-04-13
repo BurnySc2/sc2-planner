@@ -144,7 +144,7 @@ class Unit {
                     // console.log(gamelogic.frame);
                     // console.log(newUnit);
                     gamelogic.eventLog.push(new Event(
-                        newUnit, UNIT_ICONS[completedTask.newWorker.toUpperCase()], firstTask.startFrame, this.frame
+                        newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "worker", firstTask.startFrame, gamelogic.frame
                     ))
                 }
                 // Spawn unit
@@ -155,7 +155,7 @@ class Unit {
                     // console.log(gamelogic.frame);
                     // console.log(newUnit);
                     gamelogic.eventLog.push(new Event(
-                        newUnit, UNIT_ICONS[completedTask.newUnit.toUpperCase()], firstTask.startFrame, this.frame
+                        newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "unit", firstTask.startFrame, gamelogic.frame
                     ))
                     // TODO if overlord finishes: increase max supply
                 }
@@ -167,7 +167,7 @@ class Unit {
                     // console.log(gamelogic.frame);
                     // console.log(newUnit);
                     gamelogic.eventLog.push(new Event(
-                        newUnit, UNIT_ICONS[completedTask.newStructure.toUpperCase()], firstTask.startFrame, this.frame
+                        newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "structure", firstTask.startFrame, gamelogic.frame
                         ))
                     const unitData = UNITS_BY_NAME[completedTask.newStructure]
                     
@@ -180,12 +180,12 @@ class Unit {
                 }
                 // Mark upgrade as researched
                 if (completedTask.newUpgrade !== null) {
-                    const newUnit = new Unit(completedTask.newUpgrade)
-                    // gamelogic.units.add(newUnit)
-                    // gamelogic.idleUnits.add(newUnit)
+                    const newUpgrade = new Unit(completedTask.newUpgrade)
+                    // gamelogic.units.add(newUpgrade)
+                    // gamelogic.idleUnits.add(newUpgrade)
                     // TODO add to event
                     gamelogic.eventLog.push(new Event(
-                        newUnit, UNIT_ICONS[completedTask.newUpgrade.toUpperCase()], firstTask.startFrame, this.frame
+                        newUpgrade.name, UNIT_ICONS[newUpgrade.name.toUpperCase()], "upgrade", firstTask.startFrame, gamelogic.frame
                     ))
                 }
             }
@@ -242,6 +242,9 @@ class GameLogic {
         this.workerReturnDelay = 2
         // Allow max 40 seocnds frames for all units to be idle, before the game logic aborts and marks the build order as 'not valid' (cc off 12 workers can be started after 35 seconds)
         this.idleLimit = 40 * 22.4
+        // HTML element width factor
+        this.htmlElementWidthFactor = 0.3
+        // this.htmlElementWidthFactor = 1
 
         // Update settings from customSettings object, see WebPage.js defaultSettings
         for (let item of customSettings) {
@@ -275,10 +278,6 @@ class GameLogic {
     hasSnapshot() {
         return Object.keys(this.getBOIndexSnapshots()).length > 0
     }
-
-    // getFrameSnapshots() {
-    //     return frameSnapshots
-    // }
 
     getBOIndexSnapshots() {
         return boSnapshots
@@ -334,8 +333,10 @@ class GameLogic {
             //         console.log(item.tasks[0]);
             //     }
             // })
+
             
             this.runFrame()
+            this.frame += 1
             // Abort once all units are idle and end of build order is reached
             if (this.boIndex >= this.bo.length && this.busyUnits.size === 0) {
                 break
@@ -351,7 +352,6 @@ class GameLogic {
                 this.idleTime = 0
             }
 
-            this.frame += 1
         }
     }
 
@@ -402,7 +402,10 @@ class GameLogic {
                 // Each time the boIndex gets incremented, take a snapshot of the current state - this way i can cache the gamelogic and reload it from the state
                 // e.g. bo = [scv, depot, scv]
                 // and i want to remove depot, i can resume from cached state of index 0
-                boSnapshots[this.boIndex] = cloneDeep(this)
+                const clone = cloneDeep(this)
+                // Need to add one frame here
+                clone.frame += 1
+                boSnapshots[this.boIndex] = clone
             }
         }
     }

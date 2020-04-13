@@ -14,7 +14,7 @@ const CLASSES = {
     bo: "flex flex-row bg-green-700 m-1 p-0",
     boItem: "m-0 p-0 h-16 w-16 bg-green-700 flex-shrink-0 border border-black hover:bg-green-400 cursor-move",
     // Build order area
-    buildOrder: "",
+    boArea: "overflow-x-auto bg-indigo-400",
     typeColor: {
         "time": "bg-orange-600",
         "worker": "bg-green-600",
@@ -23,7 +23,18 @@ const CLASSES = {
         "structure": "bg-teal-500",
         "upgrade": "bg-purple-600",
     },
-    boElementContainer: "z-50 flex flex-row flex-shrink-0 items-center border-l-2 border-r-2 border-t border-b border-black",
+    // Should be 100-300 less than above
+    hoverColor: {
+        "time": "hover:bg-orange-400",
+        "worker": "hover:bg-green-400",
+        "action": "hover:bg-red-400",
+        "unit": "hover:bg-pink-300",
+        "structure": "hover:bg-teal-300",
+        "upgrade": "hover:bg-purple-400",
+    },
+    boCol: "flex flex-col relative m-0 p-0 border border-black",
+    boRow: "flex flex-row relative m-0 p-0 border border-black",
+    boElementContainer: "z-50 flex flex-row flex-shrink-0 items-center border-l border-r border-t border-b border-black",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
 
