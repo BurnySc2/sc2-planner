@@ -108,7 +108,7 @@ class Unit {
         return this.tasks.length > 0 || (this.hasReactor && this.reactorTasks.length > 0)
     }
 
-    hasChrono(gameLogic) {
+    hasChrono(gamelogic) {
         return this.hasChronoUntilFrame <= this.frame
     }
 
@@ -116,7 +116,7 @@ class Unit {
         this.hasChronoUntilFrame = frame + 20 * 22.4
     }
 
-    updateUnit(gameLogic) {
+    updateUnit(gamelogic) {
         // Should be called every frame
 
         const wasIdle = this.isIdle()
@@ -138,23 +138,23 @@ class Unit {
                 if (completedTask.newWorker !== null) {
                     const newUnit = new Unit(completedTask.newWorker)
                     // TODO Add worker spawn delay and add them to busy units instead of idle units
-                    gameLogic.units.add(newUnit)
-                    gameLogic.idleUnits.add(newUnit)
-                    gameLogic.workersMinerals += 1
-                    // console.log(gameLogic.frame);
+                    gamelogic.units.add(newUnit)
+                    gamelogic.idleUnits.add(newUnit)
+                    gamelogic.workersMinerals += 1
+                    // console.log(gamelogic.frame);
                     // console.log(newUnit);
-                    gameLogic.eventLog.push(new Event(
+                    gamelogic.eventLog.push(new Event(
                         newUnit, UNIT_ICONS[completedTask.newWorker.toUpperCase()], firstTask.startFrame, this.frame
                     ))
                 }
                 // Spawn unit
                 if (completedTask.newUnit !== null) {
                     const newUnit = new Unit(completedTask.newUnit)
-                    gameLogic.units.add(newUnit)
-                    gameLogic.idleUnits.add(newUnit)
-                    // console.log(gameLogic.frame);
+                    gamelogic.units.add(newUnit)
+                    gamelogic.idleUnits.add(newUnit)
+                    // console.log(gamelogic.frame);
                     // console.log(newUnit);
-                    gameLogic.eventLog.push(new Event(
+                    gamelogic.eventLog.push(new Event(
                         newUnit, UNIT_ICONS[completedTask.newUnit.toUpperCase()], firstTask.startFrame, this.frame
                     ))
                     // TODO if overlord finishes: increase max supply
@@ -162,29 +162,29 @@ class Unit {
                 // Spawn structure
                 if (completedTask.newStructure !== null) {
                     const newUnit = new Unit(completedTask.newStructure)
-                    gameLogic.units.add(newUnit)
-                    gameLogic.idleUnits.add(newUnit)
-                    // console.log(gameLogic.frame);
+                    gamelogic.units.add(newUnit)
+                    gamelogic.idleUnits.add(newUnit)
+                    // console.log(gamelogic.frame);
                     // console.log(newUnit);
-                    gameLogic.eventLog.push(new Event(
+                    gamelogic.eventLog.push(new Event(
                         newUnit, UNIT_ICONS[completedTask.newStructure.toUpperCase()], firstTask.startFrame, this.frame
                         ))
                     const unitData = UNITS_BY_NAME[completedTask.newStructure]
                     
                     if (unitData.supply < 0) {
-                        gameLogic.supplyCap += -unitData.supply
-                        gameLogic.supplyCap = Math.min(200, gameLogic.supplyCap)
-                        gameLogic.supplyLeft = gameLogic.supplyCap - gameLogic.supplyUsed
+                        gamelogic.supplyCap += -unitData.supply
+                        gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
+                        gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
                     }
                     // TODO if townhall / pylon / depot finishes: increase max supply
                 }
                 // Mark upgrade as researched
                 if (completedTask.newUpgrade !== null) {
                     const newUnit = new Unit(completedTask.newUpgrade)
-                    // gameLogic.units.add(newUnit)
-                    // gameLogic.idleUnits.add(newUnit)
+                    // gamelogic.units.add(newUnit)
+                    // gamelogic.idleUnits.add(newUnit)
                     // TODO add to event
-                    gameLogic.eventLog.push(new Event(
+                    gamelogic.eventLog.push(new Event(
                         newUnit, UNIT_ICONS[completedTask.newUpgrade.toUpperCase()], firstTask.startFrame, this.frame
                     ))
                 }
@@ -195,11 +195,11 @@ class Unit {
 
         // Turn units idle if they have no more tasks (or reactor has no task)
         if (!wasIdle && this.isIdle()) {
-            gameLogic.idleUnits.add(this)
+            gamelogic.idleUnits.add(this)
         }
         // Turn busy if was previously not busy
         if (!wasBusy && this.isBusy) {
-            gameLogic.busyUnits.add(this)
+            gamelogic.busyUnits.add(this)
         } 
     }
 }
@@ -210,7 +210,7 @@ let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 
 class GameLogic {
-    constructor(race="terran", bo=[], customSettings={}) {
+    constructor(race="terran", bo=[], customSettings=[]) {
         this.race = race
         this.bo = bo
         this.boIndex = 0
@@ -242,6 +242,11 @@ class GameLogic {
         this.workerReturnDelay = 2
         // Allow max 40 seocnds frames for all units to be idle, before the game logic aborts and marks the build order as 'not valid' (cc off 12 workers can be started after 35 seconds)
         this.idleLimit = 40 * 22.4
+
+        // Update settings from customSettings object, see WebPage.js defaultSettings
+        for (let item of customSettings) {
+            this[item.variableName] = item.value
+        }
     }
     
     reset() {

@@ -21,9 +21,36 @@ export default class WebPage extends Component {
     constructor(props) {
         super(props)
 
-        const gameLogic = new GameLogic()
-        gameLogic.reset()
-        gameLogic.setStart()
+        const defaultSettings = [
+            {
+                name: "Worker start delay",
+                tooltip: "idk some tooltip",
+                variableName: "workerStartDelay",
+                value: 2
+            },
+            {
+                name: "Worker build delay",
+                tooltip: "idk some tooltip",
+                variableName: "workerBuildDelay",
+                value: 2
+            },
+            {
+                name: "Worker return delay",
+                tooltip: "idk some tooltip",
+                variableName: "workerReturnDelay",
+                value: 2
+            },
+            {
+                name: "Idle limit",
+                tooltip: "idk some tooltip",
+                variableName: "idleLimit",
+                value: 40 * 22.4
+            },
+        ]
+
+        const gamelogic = new GameLogic("terran", [], defaultSettings)
+        gamelogic.reset()
+        gamelogic.setStart()
 
         this.state = {
             race: "terran",
@@ -32,7 +59,8 @@ export default class WebPage extends Component {
             bo: [],
             // Selected timestamp
             time: 0,
-            gameLogic: gameLogic
+            gamelogic: gamelogic,
+            settings: defaultSettings
         }
 
         // Load unit icons
@@ -46,6 +74,12 @@ export default class WebPage extends Component {
         Object.keys(UPGRADE_ICONS).forEach((item) => {
             this.upgradeIcons[item] = require(`../icons/png/${UPGRADE_ICONS[item]}`)
         });
+
+    }
+
+    // TODO Pass the settings to Settings.js and let the user input handle it
+    updateSettings = (e, settings) => {
+        this.setState({settings: settings})
     }
 
     raceSelectionClicked = (e, race) => {
@@ -62,48 +96,48 @@ export default class WebPage extends Component {
         const bo = this.state.bo
         bo.push(item)
         // Re-calculate build order
-        const gameLogic = this.state.gameLogic
-        gameLogic.bo = bo
-        if (gameLogic.hasSnapshot()) {
-            // Find the latest snapshot that was saved after incrementing the gameLogic.boIndex
-            const maxSnapshotIndex = Math.max.apply(null, Object.keys(gameLogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}))
-            const snapshot = gameLogic.getBOIndexSnapshots()[maxSnapshotIndex]
+        const gamelogic = this.state.gamelogic
+        gamelogic.bo = bo
+        if (gamelogic.hasSnapshot()) {
+            // Find the latest snapshot that was saved after incrementing the gamelogic.boIndex
+            const maxSnapshotIndex = Math.max.apply(null, Object.keys(gamelogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}))
+            const snapshot = gamelogic.getBOIndexSnapshots()[maxSnapshotIndex]
             // console.log(maxSnapshotIndex);
-            // console.log(Object.keys(gameLogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}));
-            // console.log(gameLogic.getBOIndexSnapshots());
+            // console.log(Object.keys(gamelogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}));
+            // console.log(gamelogic.getBOIndexSnapshots());
             // console.log(snapshot);
             
-            gameLogic.loadFromSnapshotObject(snapshot)
+            gamelogic.loadFromSnapshotObject(snapshot)
         }
-        // console.log(gameLogic.getBOIndexSnapshots());
-        gameLogic.runUntilEnd()
+        // console.log(gamelogic.getBOIndexSnapshots());
+        gamelogic.runUntilEnd()
 
-        // console.log("Amount of events: " + gameLogic.eventLog.length);
+        // console.log("Amount of events: " + gamelogic.eventLog.length);
 
         this.setState({
             bo: bo,
-            gameLogic: gameLogic,
+            gamelogic: gamelogic,
         })
     }
     removeItemFromBO = (index) => {
         const bo = this.state.bo
         bo.splice(index, 1)
 
-        const gameLogic = this.state.gameLogic
+        const gamelogic = this.state.gamelogic
         // TODO load snapshot from shortly before this bo index
-        if (gameLogic.hasSnapshot() && index > 0) {
-            const snapshot = gameLogic.getBOIndexSnapshots()[index-1]
+        if (gamelogic.hasSnapshot() && index > 0) {
+            const snapshot = gamelogic.getBOIndexSnapshots()[index-1]
             console.log(snapshot);
-            gameLogic.loadFromSnapshotObject(snapshot)
+            gamelogic.loadFromSnapshotObject(snapshot)
             // console.log("loaded: " + bo.length);
-            // console.log(gameLogic.getBOIndexSnapshots());
+            // console.log(gamelogic.getBOIndexSnapshots());
         } else {
-            gameLogic.reset()
-            gameLogic.setStart()
+            gamelogic.reset()
+            gamelogic.setStart()
         }
         
-        gameLogic.bo = bo
-        gameLogic.runUntilEnd()
+        gamelogic.bo = bo
+        gamelogic.runUntilEnd()
 
         this.setState({
             bo: bo
@@ -169,7 +203,7 @@ export default class WebPage extends Component {
                 <Title />
                 <div className="flex flex-row">
                     <ImportExport />
-                    <Settings />
+                    <Settings settings={this.state.settings} />
                 </div>
                 <div className="flex flex-row">
                     <div className="w-9/12">
