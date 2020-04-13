@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import RESOURCES from '../constants/resources'
-import {CUSTOMACTIONS_BY_NAME, CUSTOMACTIONS} from '../constants/customactions'
+import {CUSTOMACTIONS} from '../constants/customactions'
 import CLASSES from "../constants/classes"
 import UNITS from '../constants/units'
 import STRUCTURES from '../constants/structures'

@@ -1,21 +1,14 @@
-// import UNITS from "../constants/units"
-// import STRUCTURES from "../constants/structures"
-// import UPGRADES from "../constants/upgrades"
-
 import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 // import RESEARCHED_BY from "../constants/researched_by"
-// import CUSTOMACTIONS from "../constants/customactions"
+// import {CUSTOMACTIONS} from "../constants/customactions"
 import {incomeMinerals, incomeVespene} from "./income"
 
 import {cloneDeep} from 'lodash'
-// import {cloneDeep} from 'react-lodash'
 
 const UNIT_ICONS = require("../icons/unit_icons.json")
-const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
-
-// import data from "../constants/data.json"
+// const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 /** Logic of this file:
 Each frame
@@ -29,11 +22,9 @@ Each second (22.4 frames):
 */
 
 
-/**
+/** TODO
 Upgrades
 custom actions
-add cached view every second
-// add event
 */
 
 let currentId = 0
