@@ -1,6 +1,5 @@
 import {GameLogic} from "./gamelogic"
 
-
 test('Get the train time of SCV', () => {
     const logic = new GameLogic("terran")
     expect(logic.getTime("SCV")).toBe(272)
@@ -21,6 +20,7 @@ test('Get the train cost of Depot', () => {
 });
 
 test('Build an SCV', () => {
+    // Test if building one worker works
     const bo = [{name: "SCV", type: "worker"}]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
@@ -30,6 +30,7 @@ test('Build an SCV', () => {
 });
 
 test('Build two SCVs', () => {
+    // Test if building two workers works
     const bo = [{name: "SCV", type: "worker"}, {name: "SCV", type: "worker"}]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
@@ -39,6 +40,7 @@ test('Build two SCVs', () => {
 });
 
 test('Build depot', () => {
+    // Test if building a structure works
     const bo = [{name: "SupplyDepot", type: "structure"}]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
@@ -60,6 +62,7 @@ test('Build SCV then depot', () => {
 });
 
 test('Build 4 SCVs', () => {
+    // Test to see if supply block matters
     const bo = []
     for (let i = 0; i < 4; i++) {
         bo.push({name: "SCV", type: "worker"})
@@ -92,6 +95,7 @@ test('Build 3 SCVs then depot then one more SCV', () => {
 });
 
 test('Build commandcenter', () => {
+    // Test command center - idleLimit cannot be set too low by default
     const bo = [{name: "CommandCenter", type: "structure"}]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
@@ -100,9 +104,33 @@ test('Build commandcenter', () => {
     expect(logic.eventLog.length).toBe(1)
 });
 
-// Test larva: build 2 drones, then 1 overlord, then 3 drones
+test('Build refinery', () => {
+    // Test refinery
+    const bo = [{name: "Refinery", type: "structure"}]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(1)
+});
 
-// Build refinery, gas structure
-
+test('Build 2 drones, 1 overlord, 4 drones', () => {
+    // Test zerg mechanics
+    const bo = [
+        {name: "Drone", type: "worker"},
+        {name: "Drone", type: "worker"},
+        {name: "Overlord", type: "unit"},
+        {name: "Drone", type: "worker"},
+        {name: "Drone", type: "worker"},
+        {name: "Drone", type: "worker"},
+        {name: "Drone", type: "worker"},
+    ]
+    const logic = new GameLogic("zerg", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(20)
+    expect(logic.eventLog.length).toBe(7)
+    expect(logic.supplyCap).toBe(22)
+});
 
 

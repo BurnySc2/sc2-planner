@@ -150,14 +150,14 @@ class Unit {
                 this.larvaCount += 1
                 this.nextLarvaSpawn = gamelogic.frame + 11 * 22.4
             }
-    
+            
             // If has inject: spawn larva when frame has been reached
             if (Math.round(this.hasInjectUntilFrame) === gamelogic.frame) {
                 this.larvaCount += 3
             }
         }
     }
-
+    
     updateTask(gamelogic, task) {
         // Task is a task class instance
 
@@ -262,16 +262,28 @@ class Unit {
 
         // TODO expire chrono
 
-        // Turn units idle if they have no more tasks (or reactor has no task)
-        if (!wasIdle && this.isIdle()) {
+        // Turn units idle if they have no more tasks (or reactor has no task or there is larva), and vice versa
+        // if (!wasIdle && this.isIdle()) {
+        //     gamelogic.idleUnits.add(this)
+        // } else if (wasIdle && !this.isIdle()) {
+        //     gamelogic.idleUnits.delete(this)
+        // }
+        if (this.isIdle()) {
             gamelogic.idleUnits.add(this)
-        } else if (wasIdle && !this.isIdle()) {
+        } else {
             gamelogic.idleUnits.delete(this)
         }
-        // Turn busy if was previously not busy
-        if (!wasBusy && this.isBusy()) {
+        // TODO Dont know which saves time, if is idle: keep adding, if not idle: keep deleting? or keep it like this?
+
+        // Turn busy if was previously not busy, and vice versa
+        // if (!wasBusy && this.isBusy()) {
+        //     gamelogic.busyUnits.add(this)
+        // } else if (wasBusy && !this.isBusy()) {
+        //     gamelogic.busyUnits.delete(this)
+        // }
+        if (this.isBusy()) {
             gamelogic.busyUnits.add(this)
-        } else if (wasBusy && !this.isBusy()) {
+        } else {
             gamelogic.busyUnits.delete(this)
         }
     }
@@ -444,6 +456,7 @@ class GameLogic {
         // if bo is not valid and current item in bo requires more supply than we have left: tell user that we are out of supply
         // if bo item costs gas but no gas mining: tell user that we dont mine gas
         console.assert(this.boIndex >= this.bo.length, cloneDeep(this))
+        // console.assert(this.boIndex >= this.bo.length, JSON.stringify(cloneDeep(this), undefined, 4))
         // TODO sort eventList by item.start 
     }
 
