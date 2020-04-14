@@ -84,10 +84,15 @@ export default class WebPage extends Component {
 
     raceSelectionClicked = (e, race) => {
         // Set race in state after a race selection icon has been pressed
+        const gamelogic = new GameLogic(race, [], this.state.defaultSettings)
+        gamelogic.reset()
+        gamelogic.setStart()
+        
         this.setState({
             race: race,
             bo: [],
             time: 0,
+            gamelogic: gamelogic,
         })
     }
 

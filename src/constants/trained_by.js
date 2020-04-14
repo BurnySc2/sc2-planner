@@ -1,11 +1,13 @@
 import CREATION_ABILITIES from "./creation_abilities"
 import UNITS_BY_ID from "./units_by_id"
 import UPGRADE_BY_ID from "./upgrade_by_id"
+
 import data from "./data.json"
 // const data = require("./data.json")
 
 const TRAINED_BY = {}
 // console.log(CREATION_ABILITIES)
+
 data.Unit.forEach((trainingUnit) => {
     trainingUnit.abilities.forEach((ability) => {
         const resultingUnitId = CREATION_ABILITIES[ability.ability]

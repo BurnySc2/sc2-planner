@@ -83,7 +83,9 @@ class Unit {
         this.hasChronoUntilFrame = 0
         // Zerg townhalls
         this.hasInjectUntilFrame = 0
+        this.nextLarvaSpawn = -1
         this.larvaCount = 0
+        this.larvaTasks = []
         // Terran depot
         this.hasSupplyDrop = false
         // Terran production structures
@@ -92,20 +94,35 @@ class Unit {
         this.reactorTasks = []
     }
 
-    addTask(task, taskForReactor=false) {
+    /**
+     * 
+     * @param {Task} task 
+     * @param {boolean} taskForReactor 
+     * @param {boolean} taskForLarva 
+     */
+    addTask(task, taskForReactor=false, taskForLarva=false) {
+        console.assert([true, false].includes(taskForReactor), taskForReactor)
+        console.assert([true, false].includes(taskForLarva), taskForLarva)
+        
         if (taskForReactor) {
             this.reactorTasks.push(task)
+            return
+        }
+        if (taskForLarva) {
+            this.larvaTasks.push(task)
             return
         }
         this.tasks.push(task)
     }
 
     isIdle() {
-        return this.tasks.length === 0 || (this.hasReactor && this.reactorTasks.length === 0)
+        // Returns true if it has no tasks, or has reactor and reactor has no tasks, or has larva
+        return this.tasks.length === 0 || (this.hasReactor && this.reactorTasks.length === 0) || this.larvaCount > 0
     }
     
     isBusy() {
-        return this.tasks.length > 0 || (this.hasReactor && this.reactorTasks.length > 0)
+        // Returns true it has a task (hatchery builds queen, or hatchery's larva builds drone, or barrack's reactor builds a marine)
+        return this.tasks.length > 0 || (this.hasReactor && this.reactorTasks.length > 0) || this.larvaTasks.length > 0
     }
 
     hasChrono(gamelogic) {
@@ -116,91 +133,147 @@ class Unit {
         this.hasChronoUntilFrame = frame + 20 * 22.4
     }
 
-    updateUnit(gamelogic) {
-        // Should be called every frame
-
-        const wasIdle = this.isIdle()
-        const wasBusy = this.isBusy()
+    updateUnitState(gamelogic) {
+        // Should be called every frame for each unit
 
         // Energy per frame
         this.energy = Math.min(200, this.energy + 0.03515625)
 
-
-        if (this.tasks.length > 0) {
-            // TODO If structure has reactor: progress reactor-task too
-            const firstTask = this.tasks[0]
-            firstTask.updateProgress(this.hasChrono())
-            // Remove first task if completed
-            if (firstTask.isCompleted) {
-                const completedTask = this.tasks.shift()
-
-                // Spawn worker
-                if (completedTask.newWorker !== null) {
-                    const newUnit = new Unit(completedTask.newWorker)
-                    // TODO Add worker spawn delay and add them to busy units instead of idle units
-                    gamelogic.units.add(newUnit)
-                    gamelogic.idleUnits.add(newUnit)
-                    gamelogic.workersMinerals += 1
-                    // console.log(gamelogic.frame);
-                    // console.log(newUnit);
-                    gamelogic.eventLog.push(new Event(
-                        newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "worker", firstTask.startFrame, gamelogic.frame
-                    ))
-                }
-                // Spawn unit
-                if (completedTask.newUnit !== null) {
-                    const newUnit = new Unit(completedTask.newUnit)
-                    gamelogic.units.add(newUnit)
-                    gamelogic.idleUnits.add(newUnit)
-                    // console.log(gamelogic.frame);
-                    // console.log(newUnit);
-                    gamelogic.eventLog.push(new Event(
-                        newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "unit", firstTask.startFrame, gamelogic.frame
-                    ))
-                    // TODO if overlord finishes: increase max supply
-                }
-                // Spawn structure
-                if (completedTask.newStructure !== null) {
-                    const newUnit = new Unit(completedTask.newStructure)
-                    gamelogic.units.add(newUnit)
-                    gamelogic.idleUnits.add(newUnit)
-                    // console.log(gamelogic.frame);
-                    // console.log(newUnit);
-                    gamelogic.eventLog.push(new Event(
-                        newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "structure", firstTask.startFrame, gamelogic.frame
-                        ))
-                    const unitData = UNITS_BY_NAME[completedTask.newStructure]
-                    
-                    if (unitData.supply < 0) {
-                        gamelogic.supplyCap += -unitData.supply
-                        gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
-                        gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
-                    }
-                    // TODO if townhall / pylon / depot finishes: increase max supply
-                }
-                // Mark upgrade as researched
-                if (completedTask.newUpgrade !== null) {
-                    const newUpgrade = new Unit(completedTask.newUpgrade)
-                    // gamelogic.units.add(newUpgrade)
-                    // gamelogic.idleUnits.add(newUpgrade)
-                    // TODO add to event
-                    gamelogic.eventLog.push(new Event(
-                        newUpgrade.name, UNIT_ICONS[newUpgrade.name.toUpperCase()], "upgrade", firstTask.startFrame, gamelogic.frame
-                    ))
-                }
+        // If is zerg townhall: generate new larva
+        if (["Hatchery", "Lair", "Hive"].includes(this.name)) {
+            // If at max larva, dont generate new one until 11 secs elapsed
+            if (this.larvaCount >= 3) {
+                this.nextLarvaSpawn = gamelogic.frame + 11 * 22.4
+            }
+            
+            if (this.nextLarvaSpawn < gamelogic.frame) {
+                this.larvaCount += 1
+                this.nextLarvaSpawn = gamelogic.frame + 11 * 22.4
+            }
+    
+            // If has inject: spawn larva when frame has been reached
+            if (Math.round(this.hasInjectUntilFrame) === gamelogic.frame) {
+                this.larvaCount += 3
             }
         }
+    }
+
+    updateTask(gamelogic, task) {
+        // Task is a task class instance
+
+        // TODO If structure has reactor: progress reactor-task too
+        task.updateProgress(this.hasChrono())
+        // Remove first task if completed
+        if (task.isCompleted) {
+            // Spawn worker
+            if (task.newWorker !== null) {
+                const newUnit = new Unit(task.newWorker)
+                // TODO Add worker spawn delay and add them to busy units instead of idle units
+                gamelogic.units.add(newUnit)
+                gamelogic.idleUnits.add(newUnit)
+                gamelogic.workersMinerals += 1
+                // console.log(gamelogic.frame);
+                // console.log(newUnit);
+                gamelogic.eventLog.push(new Event(
+                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "worker", task.startFrame, gamelogic.frame
+                ))
+            }
+            // Spawn unit
+            if (task.newUnit !== null) {
+                const newUnit = new Unit(task.newUnit)
+                gamelogic.units.add(newUnit)
+                gamelogic.idleUnits.add(newUnit)
+                // console.log(gamelogic.frame);
+                // console.log(newUnit);
+                gamelogic.eventLog.push(new Event(
+                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "unit", task.startFrame, gamelogic.frame
+                ))
+                const unitData = UNITS_BY_NAME[task.newUnit]
+                // Overlord finishes, overlord will have -8 supply
+                if (unitData.supply < 0) {
+                    gamelogic.supplyCap += -unitData.supply
+                    gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
+                    gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
+                }
+            }
+            // Spawn structure
+            if (task.newStructure !== null) {
+                const newUnit = new Unit(task.newStructure)
+                gamelogic.units.add(newUnit)
+                gamelogic.idleUnits.add(newUnit)
+                // console.log(gamelogic.frame);
+                // console.log(newUnit);
+                gamelogic.eventLog.push(new Event(
+                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "structure", task.startFrame, gamelogic.frame
+                ))
+                const unitData = UNITS_BY_NAME[task.newStructure]
+                
+                // Structure that gives supply finishes, structure will have -X supply
+                if (unitData.supply < 0) {
+                    gamelogic.supplyCap += -unitData.supply
+                    gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
+                    gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
+                }
+            }
+            // Mark upgrade as researched
+            if (task.newUpgrade !== null) {
+                const newUpgrade = new Unit(task.newUpgrade)
+                // gamelogic.units.add(newUpgrade)
+                // gamelogic.idleUnits.add(newUpgrade)
+                // TODO add to event
+                gamelogic.eventLog.push(new Event(
+                    newUpgrade.name, UNIT_ICONS[newUpgrade.name.toUpperCase()], "upgrade", task.startFrame, gamelogic.frame
+                ))
+            }
+            // Task is complete, mark for removal
+            return true
+        }
+        return false
+    }
+
+    updateUnit(gamelogic) {
+        // Should be called every for each busy unit (tasks.length + reactortasks.length > 0)
+
+        const wasIdle = this.isIdle()
+        const wasBusy = this.isBusy()
+
+        // Update normal unit task
+        if (this.tasks.length > 0) {
+            const taskCompleted = this.updateTask(gamelogic, this.tasks[0])
+            if (taskCompleted) {
+                this.tasks.shift()
+            }
+        }
+        // Update the task of the unit's reactor
+        if (this.reactorTasks.length > 0) {
+            const taskCompleted = this.updateTask(gamelogic, this.reactorTasks[0])
+            if (taskCompleted) {
+                this.reactorTasks.shift()
+            }
+        }
+        // Larva is linked to the zerg townhalls: update all of them
+        this.larvaTasks.forEach((task) => {
+            this.updateTask(gamelogic, task)
+        })
+        // Remove completed tasks
+        this.larvaTasks = this.larvaTasks.filter((item) => {
+            return !item.isCompleted
+        })
 
         // TODO expire chrono
 
         // Turn units idle if they have no more tasks (or reactor has no task)
         if (!wasIdle && this.isIdle()) {
             gamelogic.idleUnits.add(this)
+        } else if (wasIdle && !this.isIdle()) {
+            gamelogic.idleUnits.delete(this)
         }
         // Turn busy if was previously not busy
-        if (!wasBusy && this.isBusy) {
+        if (!wasBusy && this.isBusy()) {
             gamelogic.busyUnits.add(this)
-        } 
+        } else if (wasBusy && !this.isBusy()) {
+            gamelogic.busyUnits.delete(this)
+        }
     }
 }
 
@@ -304,20 +377,35 @@ class GameLogic {
 
     setStart() {
         this.reset()
+        let townhallName = ""
+        let workerName = ""
         if (this.race === "terran") {
-            const cc = new Unit("CommandCenter")
-            this.units.add(cc)
-            this.idleUnits.add(cc)
-            for (let i = 0; i < 12; i++) {
-                const unit = new Unit("SCV")
-                // Add worker delay of 2 seconds before they start gathering minerals
-                const workerStartDelayTask = new Task(22.4 * this.workerStartDelay, this.frame)
-                unit.addTask(workerStartDelayTask)
-                this.units.add(unit)
-                this.busyUnits.add(unit)
-            }
+            townhallName = "CommandCenter"
+            workerName = "SCV"
         }
-        // TODO set start of zerg and protoss
+        if (this.race === "protoss") {
+            townhallName = "Nexus"
+            workerName = "Probe"
+        }
+        if (this.race === "zerg") {
+            townhallName = "Hatchery"
+            workerName = "Drone"
+            // TODO add 3 larva for zerg
+        }
+        const townhall = new Unit(townhallName)
+        if (this.race === "zerg") {
+            townhall.larvaCount = 3
+        }
+        this.units.add(townhall)
+        this.idleUnits.add(townhall)
+        for (let i = 0; i < 12; i++) {
+            const unit = new Unit(workerName)
+            // Add worker delay of 2 seconds before they start gathering minerals
+            const workerStartDelayTask = new Task(22.4 * this.workerStartDelay, this.frame)
+            unit.addTask(workerStartDelayTask)
+            this.units.add(unit)
+            this.busyUnits.add(unit)
+        }
     }
 
     runUntilEnd() {
@@ -351,8 +439,12 @@ class GameLogic {
             } else {
                 this.idleTime = 0
             }
-
         }
+        // TODO better assertion statements
+        // if bo is not valid and current item in bo requires more supply than we have left: tell user that we are out of supply
+        // if bo item costs gas but no gas mining: tell user that we dont mine gas
+        console.assert(this.boIndex >= this.bo.length, cloneDeep(this))
+        // TODO sort eventList by item.start 
     }
 
     runFrame() {
@@ -426,6 +518,9 @@ class GameLogic {
         console.assert(trainedInfo, unit.name)
         // The unit/structure that is training the target unit or structure
         for (let trainerUnit of this.idleUnits) {
+            if (!trainerUnit.isIdle()) {
+                continue
+            }
             // const unitName = unit.name
 
             // Check if requirement is met
@@ -447,7 +542,17 @@ class GameLogic {
             // TODO If this is a barracks and has reactor: build from reactor if reactor is idle
             // TODO could be a morph, then just morph current unit
             
-            if (trainedInfo.trainedBy[trainerUnit.name] !== 1) {
+            
+            const trainerCanTrainThisUnit = trainedInfo.trainedBy[trainerUnit.name] === 1
+            // TODO Reactor builds units
+            const trainerCanTrainThroughReactor = false
+            const trainerCanTrainThroughLarva = trainedInfo.trainedBy["Larva"] === 1 && trainerUnit.larvaCount > 0
+            // console.log(this.frame);
+            // console.log(trainerUnit.name);
+            // console.log(trainedInfo);
+            // console.log(trainerCanTrainThisUnit);
+            // console.log(trainerCanTrainThroughLarva);
+            if (!trainerCanTrainThisUnit && !trainerCanTrainThroughLarva) {
                 continue
             }
             
@@ -456,27 +561,30 @@ class GameLogic {
             // Add task to unit
             // If trained unit is made by worker: add worker move delay
             const buildTime = this.getTime(unit.name)
+            
             const newTask = new Task(buildTime, this.frame)
 
             if (unit.type === "worker") {
                 newTask.newWorker = unit.name
             } else if (unit.type === "unit") {
-                newTask.newUnits = unit.name
+                newTask.newUnit = unit.name
             } else if (unit.type === "structure") {
                 newTask.newStructure = unit.name
             }
-            trainerUnit.addTask(newTask)   
+            trainerUnit.addTask(newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
             // Unit is definitely busy after receiving a task
             this.busyUnits.add(trainerUnit)
-            // If unit has reactor, might still be idle
-            if (!trainerUnit.isIdle() && this.idleUnits.has(trainerUnit)) {
-                this.idleUnits.delete(trainerUnit)
+            if (trainerCanTrainThroughLarva) {
+                trainerUnit.larvaCount -= 1
             }
-
+            // If unit has reactor, might still be idle
+            // console.log(cloneDeep(trainerUnit));
+            
             // console.log(this.frame);
-            // console.log(unit);
-            // console.log(trainerUnit);
-            // console.log(trainedInfo);
+            // console.log(cloneDeep(unit));
+            // console.log(cloneDeep(trainerUnit));
+            // console.log(cloneDeep(trainedInfo));
+            // console.log(cloneDeep(newTask));
 
             const cost = this.getCost(unit.name)
             this.minerals -= cost.minerals
@@ -505,9 +613,12 @@ class GameLogic {
 
     updateUnitsProgress() {
         // Updates the energy on each unit and their task progress
-        this.busyUnits.forEach((unit) => {
+        this.units.forEach((unit) => {
+            unit.updateUnitState(this)
             unit.updateUnit(this)
         })
+        // this.busyUnits.forEach((unit) => {
+        // })
     }
 
     getCost(unitName, isUpgrade=false) {

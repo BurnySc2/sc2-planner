@@ -25,6 +25,7 @@ export default class BOArea extends Component {
 
         // Build vertical bars
         const barClasses = {}
+        
         const verticalBars = ["worker", "action", "unit", "structure", "upgrade"].map((barType) => {
             barClasses[barType] = `${CLASSES.typeColor[barType]} ${CLASSES.boCol}`
             // Each bar contains another array
@@ -34,11 +35,12 @@ export default class BOArea extends Component {
                     let addedItem = false
                     verticalCalc.forEach((row, index1) => {
                         const lastItem = row[row.length - 1]
-                        if (lastItem.end <= item.start) {
+                        if (!addedItem && lastItem.end <= item.start) {
                             verticalCalc[index1].push(item)
                             addedItem = true
                             return
                         }
+                        
                     })
                     if (!addedItem) {
                         // Create new row

@@ -100,4 +100,9 @@ test('Build commandcenter', () => {
     expect(logic.eventLog.length).toBe(1)
 });
 
+// Test larva: build 2 drones, then 1 overlord, then 3 drones
+
+// Build refinery, gas structure
+
+
 
