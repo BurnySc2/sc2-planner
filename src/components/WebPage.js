@@ -22,6 +22,7 @@ export default class WebPage extends Component {
         super(props)
 
         const defaultSettings = [
+            // TODO Specificy a min and max limit, e.g. min=0, max=10000
             {
                 name: "Worker start delay",
                 tooltip: "idk some tooltip",
@@ -138,18 +139,20 @@ export default class WebPage extends Component {
         const gamelogic = this.state.gamelogic
         gamelogic.bo = bo
         // TODO load snapshot from shortly before this bo index
-        if (gamelogic.hasSnapshot() && index > 0) {
-            // TODO remove snapshots >=index
-            const snapshot = gamelogic.getBOIndexSnapshots()[index-1]
-            console.log(snapshot);
-            gamelogic.loadFromSnapshotObject(snapshot)
-            // console.log("loaded: " + bo.length);
-            // console.log(gamelogic.getBOIndexSnapshots());
-        } else {
-            gamelogic.reset()
-            gamelogic.setStart()
-        }
+        // if (gamelogic.hasSnapshot() && index > 0) {
+        //     // TODO remove snapshots >=index
+        //     const snapshot = gamelogic.getBOIndexSnapshots()[index-1]
+        //     console.log(snapshot);
+        //     gamelogic.loadFromSnapshotObject(snapshot)
+        //     // console.log("loaded: " + bo.length);
+        //     // console.log(gamelogic.getBOIndexSnapshots());
+        // } else {
+        //     gamelogic.reset()
+        //     gamelogic.setStart()
+        // }
         
+        gamelogic.reset()
+        gamelogic.setStart()
         gamelogic.runUntilEnd()
 
         this.setState({

@@ -234,8 +234,8 @@ class Unit {
     updateUnit(gamelogic) {
         // Should be called every for each busy unit (tasks.length + reactortasks.length > 0)
 
-        const wasIdle = this.isIdle()
-        const wasBusy = this.isBusy()
+        // const wasIdle = this.isIdle()
+        // const wasBusy = this.isBusy()
 
         // Update normal unit task
         if (this.tasks.length > 0) {
@@ -614,6 +614,8 @@ class GameLogic {
     
     researchUpgrade(upgrade) {
         // Issue research command of upgrade type
+        console.assert(upgrade.name, JSON.stringify(upgrade, null, 4))
+        console.assert(upgrade.type, JSON.stringify(upgrade, null, 4))
         // TODO
         return true
     }

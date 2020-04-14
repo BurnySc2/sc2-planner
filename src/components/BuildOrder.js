@@ -11,8 +11,8 @@ export default class BuildOrder extends Component {
     render() {
         // Convert build order items to div elements
         const buildOrder = this.props.bo.map((item, index) => {
-            return <div key={`bo_${index}`} onClick={(e) => (this.props.removeClick(e, index))}>
-                <img className={CLASSES.boItem} src={item.image} alt={item.name} />
+            return <div key={`bo_${index}`} className={CLASSES.boItem}  onClick={(e) => (this.props.removeClick(e, index))}>
+                <img src={item.image} alt={item.name} />
             </div>
         })
         
@@ -23,7 +23,7 @@ export default class BuildOrder extends Component {
             </div>
         ) : ""
         return (
-            <div>
+            <div className="flex flex-row overflow-x-auto">
                 {buildOrderArea}
             </div>
         )

@@ -20,8 +20,8 @@ export default class RaceSelection extends Component {
 
         const races = ["protoss", "terran", "zerg"].map((race, index) => {
             const item = RACES[race]
-            return <div key={item.name} onClick={(e) => this.onClick(e, race)}>
-                <img race={item} className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
+            return <div key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
+                <img race={item} src={require("../icons/png/" + item.path)} alt={item.name} />
             </div>
         });
 

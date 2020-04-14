@@ -1,6 +1,6 @@
 const CLASSES = {
     // Race icon and the items on the right side icons
-    raceIcon: "h-8 w-8 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
+    raceIcon: "h-8 w-8 m-0 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
     timeIcon: "h-24 w-24 m-0 p-0 z-10",
     timeText: "absolute z-20 text-white",
 
@@ -10,10 +10,10 @@ const CLASSES = {
     // Action icon
     icon: "h-12 w-12 m-0 p-1 z-10 hover:bg-gray-400 cursor-pointer",
 
-    // Icons in the build order
+    // Icons in the build order at the top
     bo: "flex flex-row bg-green-700 m-1 p-0",
-    boItem: "m-0 p-0 h-16 w-16 bg-green-700 flex-shrink-0 border border-black hover:bg-green-400 cursor-move",
-    // Build order area
+    boItem: "m-0 p-0 h-16 w-16 bg-green-700 border border-black hover:bg-green-400 cursor-move",
+    // Build order area in the bottom left
     boArea: "overflow-x-auto bg-indigo-400",
     typeColor: {
         "time": "bg-orange-600",
@@ -34,7 +34,7 @@ const CLASSES = {
     },
     boCol: "flex flex-col relative m-0 p-0 border border-black",
     boRow: "flex flex-row relative m-0 p-0 border border-black",
-    boElementContainer: "z-50 flex flex-row flex-shrink-0 items-center border-l border-r border-t border-b border-black",
+    boElementContainer: "z-50 flex flex-row flex-shrink-0 items-center border-l border-r border-t border-b border-black cursor-move",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
 

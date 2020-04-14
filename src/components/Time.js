@@ -28,7 +28,7 @@ export default class Time extends Component {
         const item = RACES.time
 
         return (
-            <div key={item.name} className="relative">
+            <div key={item.name} className="relative flex-shrink-0">
                 <img className={CLASSES.timeIcon} src={require("../icons/png/" + item.path)} alt={item.name} />
                 <div className={CLASSES.timeText} style={timeTextCss}>{timeFormatted}</div>
             </div>
