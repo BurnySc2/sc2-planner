@@ -167,7 +167,7 @@ export default class WebPage extends Component {
         this.addItemToBO({
             name: action.name,
             type: "action",
-            image: action.image
+            image: require(`../icons/png/${action.imageSource}`)
         })
         console.log(action.name);
     }

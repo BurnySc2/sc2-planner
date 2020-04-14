@@ -23,7 +23,7 @@ data.Unit.forEach((trainingUnit) => {
             //     console.log(trainingUnit);
             //     console.log(resultingUnit);
             // }
-            let consumesUnit = resultingUnit.race === "zerg" && resultingUnit.is_structure && !trainingUnit.is_structure
+            let consumesUnit = resultingUnit.race === "Zerg" && resultingUnit.is_structure && !trainingUnit.is_structure
             if (Array.isArray(ability.requirements)) {
                 for (let requirement of ability.requirements) {
                     if (requirement.upgrade) {

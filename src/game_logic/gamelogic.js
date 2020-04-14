@@ -2,7 +2,7 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 // import RESEARCHED_BY from "../constants/researched_by"
-// import {CUSTOMACTIONS} from "../constants/customactions"
+import {CUSTOMACTIONS_BY_NAME} from "../constants/customactions"
 import {incomeMinerals, incomeVespene} from "./income"
 
 import {cloneDeep} from 'lodash'
@@ -36,6 +36,7 @@ const getUnitId = () => {
 class Event {
     constructor(name, imageSource, type, start, end) {
         this.name = name
+        // Source path of image, not the image itself
         this.imageSource = imageSource
         this.type = type
         this.start = start
@@ -79,6 +80,11 @@ class Unit {
         this.id = getUnitId()
         this.energy = 0
         this.tasks = []
+        // Worker
+        this.isMiningGas = false
+        this.isScouting = false
+        // Mule expires
+        this.isAliveUntilFrame = -1
         // Protoss train and research structures
         this.hasChronoUntilFrame = 0
         // Zerg townhalls
@@ -125,6 +131,16 @@ class Unit {
         return this.tasks.length > 0 || (this.hasReactor && this.reactorTasks.length > 0) || this.larvaTasks.length > 0
     }
 
+    isMiningMinerals() {
+        // Return true if worker is not scouting or mining vespene
+        return this.isIdle && !this.isMiningGas && !this.isScouting
+    }
+
+    isAlive(frame) {
+        // Function that checks if a unit expired (e.g. mule)
+        return this.isAliveUntilFrame === -1 || frame < this.isAliveUntilFrame
+    }
+
     hasChrono(gamelogic) {
         return this.hasChronoUntilFrame <= this.frame
     }
@@ -165,10 +181,11 @@ class Unit {
         task.updateProgress(this.hasChrono())
         // Remove first task if completed
         if (task.isCompleted) {
+            let unitData
             // Spawn worker
             if (task.newWorker !== null) {
                 const newUnit = new Unit(task.newWorker)
-                // TODO Add worker spawn delay and add them to busy units instead of idle units
+                // TODO Add worker spawn delay and add them to busy units instead of idle units for up to 2 seconds
                 gamelogic.units.add(newUnit)
                 gamelogic.idleUnits.add(newUnit)
                 gamelogic.workersMinerals += 1
@@ -189,7 +206,7 @@ class Unit {
                 gamelogic.eventLog.push(new Event(
                     newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "unit", task.startFrame, gamelogic.frame
                 ))
-                const unitData = UNITS_BY_NAME[task.newUnit]
+                unitData = UNITS_BY_NAME[task.newUnit]
                 // Overlord finishes, overlord will have -8 supply
                 if (unitData.supply < 0) {
                     gamelogic.supplyCap += -unitData.supply
@@ -203,8 +220,18 @@ class Unit {
                 newUnit.energy = 50
                 gamelogic.units.add(newUnit)
                 gamelogic.idleUnits.add(newUnit)
+
+                unitData = UNITS_BY_NAME[newUnit.name]
+                
+                if (unitData.is_townhall) {
+                    gamelogic.baseCount += 1
+                }
+                
+                if (unitData.needs_geyser) {
+                    gamelogic.gasCount += 1
+                }
                 // Structure that gives supply finishes, structure will have -X supply
-                const unitData = UNITS_BY_NAME[task.newStructure]
+                unitData = UNITS_BY_NAME[task.newStructure]
                 if (unitData.supply < 0) {
                     gamelogic.supplyCap += -unitData.supply
                     gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
@@ -306,6 +333,7 @@ class Unit {
 let boSnapshots = {}
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
+const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
 class GameLogic {
     constructor(race="terran", bo=[], customSettings=[]) {
@@ -365,7 +393,9 @@ class GameLogic {
         this.busyUnits = new Set()
         this.workersMinerals = 12
         this.workersVespene = 0
+        // Amount of bases
         this.baseCount = 1
+        // Amount of refineries, extractors, assimilators
         this.gasCount = 0
         this.frame = 0
         this.eventLog = []
@@ -398,6 +428,7 @@ class GameLogic {
         this.gasCount = snapshot.gasCount
         this.frame = snapshot.frame
         this.eventLog = snapshot.eventLog
+        
     }
 
     setStart() {
@@ -506,12 +537,18 @@ class GameLogic {
 
             // Research upgrade
             else if (boElement.type === "upgrade") {
-                this.researchUpgrade(boElement)
+                const researched = this.researchUpgrade(boElement)
+                if (researched) {
+                    endOfActions = false
+                }
             }
 
             // Run action
             else if (boElement.type === "action") {
-                this.executeAction(boElement)
+                const executed = this.executeAction(boElement)
+                if (executed) {
+                    endOfActions = false
+                }
             }
 
             if (!endOfActions) {
@@ -544,6 +581,7 @@ class GameLogic {
         console.assert(trainedInfo, unit.name)
         // The unit/structure that is training the target unit or structure
         for (let trainerUnit of this.idleUnits) {
+            // Unit might no longer be idle while iterating over idleUnits
             if (!trainerUnit.isIdle()) {
                 continue
             }
@@ -571,14 +609,17 @@ class GameLogic {
             
             const trainerCanTrainThisUnit = trainedInfo.trainedBy[trainerUnit.name] === 1
             // TODO Reactor builds units
-            const trainerCanTrainThroughReactor = false
+            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor
             const trainerCanTrainThroughLarva = trainedInfo.trainedBy["Larva"] === 1 && trainerUnit.larvaCount > 0
             // console.log(this.frame);
             // console.log(trainerUnit.name);
             // console.log(trainedInfo);
             // console.log(trainerCanTrainThisUnit);
             // console.log(trainerCanTrainThroughLarva);
-            if (!trainerCanTrainThisUnit && !trainerCanTrainThroughLarva) {
+            if (
+                !trainerCanTrainThisUnit 
+                && !trainerCanTrainThroughReactor 
+                && !trainerCanTrainThroughLarva) {
                 continue
             }
             
@@ -589,7 +630,9 @@ class GameLogic {
             const buildTime = this.getTime(unit.name)
             
             const newTask = new Task(buildTime, this.frame)
-            newTask.morphToUnit = trainedInfo.isMorph || trainedInfo.consumesUnit ? unit.name : null
+            
+            const morphCondition = (trainedInfo.isMorph || trainedInfo.consumesUnit) && !trainerCanTrainThroughLarva
+            newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
             
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
@@ -600,15 +643,15 @@ class GameLogic {
                     newTask.newStructure = unit.name
                 }
             }
-            console.log(trainedInfo);
+            // console.log(trainedInfo);
             // console.log(newTask);
             trainerUnit.addTask(newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
+            // TODO If trainerUnit is a worker: reduce mineral worker count by 1 and add it by 1 once the task is complete
             // Unit is definitely busy after receiving a task
             this.busyUnits.add(trainerUnit)
             if (trainerCanTrainThroughLarva) {
                 trainerUnit.larvaCount -= 1
             }
-            // If unit has reactor, might still be idle
             // console.log(cloneDeep(trainerUnit));
             
             // console.log(this.frame);
@@ -638,20 +681,108 @@ class GameLogic {
         return true
     }
     
-    executeAction(action) {
+    executeAction(actionItem) {
         // Issue action
         // TODO
-        return true
+        // console.log(this.frame);
+        // console.log(actionItem);
+        const action = CUSTOMACTIONS_BY_NAME[actionItem.name]
+        console.assert(action !== undefined, JSON.stringify(actionItem, null, 4))
+        let actionCompleted = false
+
+        // ALL RACES
+
+        if (action.internal_name === "worker_to_mins" && this.workersVespene > 0) {
+            for (const unit of this.idleUnits) {
+                if (workerTypes.has(unit.name) && unit.isMiningGas) {
+                    unit.isMiningGas = false
+                    this.workersMinerals += 1
+                    this.workersVespene -= 1
+                    actionCompleted = true
+                    break
+                }
+            }
+        }
+
+        if (action.internal_name === "worker_to_gas" && this.workersMinerals > 0) {
+            for (const unit of this.idleUnits) {
+                if (this.gasCount > 0 && workerTypes.has(unit.name) && unit.isMiningMinerals()) {
+                    unit.isMiningGas = true
+                    this.workersMinerals -= 1
+                    this.workersVespene += 1
+                    actionCompleted = true
+                    break
+                }
+            }
+        }
+
+        if (action.internal_name === "3worker_to_gas" && this.workersMinerals >= 3) {
+            const mineralWorkers = []
+            for (const unit of this.idleUnits) {
+                // Find 3 workers that are mining minerals
+                if (this.gasCount > 0 && workerTypes.has(unit.name) && unit.isMiningMinerals()) {
+                    mineralWorkers.push(unit)
+                    if (mineralWorkers.length === 3) {
+                        mineralWorkers.forEach((worker) => {
+                            worker.isMiningGas = true
+                        })
+                        this.workersMinerals -= 3
+                        this.workersVespene += 3
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+        }
+
+        // TERRAN
+
+        if (action.internal_name === "call_down_mule") {
+            for (const unit of this.idleUnits) {
+                // Find orbital with >=50 energy
+                if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
+                    unit.energy -= 50
+                    // Spawn temporary unit mule
+                    const newUnit = new Unit("MULE")
+                    newUnit.isAliveUntilFrame = this.frame + action.duration * 22.4
+                    this.units.add(newUnit)
+                    this.muleCount += 1
+                    actionCompleted = true
+                }
+            }
+        }
+
+        if (actionCompleted) {    
+            // Add event                  
+            this.eventLog.push(new Event(
+                action.name, action.imageSource, "action", this.frame, this.frame + 22.4 * action.duration
+            ))
+            return true
+        }
+
+        
+        return false
     }
 
     updateUnitsProgress() {
         // Updates the energy on each unit and their task progress
         this.units.forEach((unit) => {
             unit.updateUnitState(this)
+        })
+        this.units.forEach((unit) => {
+            const isAlive = unit.isAlive()
+            if (!isAlive) {
+                if (unit.name === "MULE") {
+                    this.muleCount -= 1
+                } 
+                this.units.delete(unit)
+                this.idleUnits.delete(unit)
+                this.busyUnits.delete(unit)
+            }
+        })
+        this.units.forEach((unit) => {
             unit.updateUnit(this)
         })
-        // this.busyUnits.forEach((unit) => {
-        // })
     }
 
     getCost(unitName, isUpgrade=false) {

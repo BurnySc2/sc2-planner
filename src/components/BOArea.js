@@ -26,6 +26,8 @@ export default class BOArea extends Component {
         // Build vertical bars
         const barClasses = {}
         
+        // console.log(this.props.gamelogic.eventLog);
+
         const verticalBars = ["worker", "action", "unit", "structure", "upgrade"].map((barType) => {
             barClasses[barType] = `${CLASSES.typeColor[barType]} ${CLASSES.boCol}`
             // Each bar contains another array

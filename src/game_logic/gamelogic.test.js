@@ -133,20 +133,35 @@ test('Build 2 drones, 1 overlord, 4 drones', () => {
     expect(logic.supplyCap).toBe(22)
 });
 
-
 test('Build OC and call down MULE', () => {
     // Morph CC to OC, then call down a mule
     const bo = [
         {name: "SupplyDepot", type: "structure"}, 
         {name: "Barracks", type: "structure"}, 
         {name: "OrbitalCommand", type: "structure"}, 
-        {name: "call_down_mule", type: "action"}
+        {name: "Call down MULE", type: "action"}
     ]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(15)
+    expect(logic.units.size).toBe(16)
     expect(logic.eventLog.length).toBe(4)
+});
+
+test('Able to create a gas unit (reaper)', () => {
+    // Morph CC to OC, then call down a mule
+    const bo = [
+        {name: "SupplyDepot", type: "structure"}, 
+        {name: "Barracks", type: "structure"}, 
+        {name: "Refinery", type: "structure"}, 
+        {name: "3x Mine gas", type: "action"},
+        {name: "Reaper", type: "unit"},
+    ]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(17)
+    expect(logic.eventLog.length).toBe(5)
 });
 
 // TODO research an upgrade, e.g. from ebay

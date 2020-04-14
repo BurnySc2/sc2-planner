@@ -50,7 +50,7 @@ export default class ActionsSelection extends Component {
 
         const customactions = this.customactions.all.concat(this.customactions[this.props.race]).map((item, index) => {
             return <div key={item.name} onClick={(e) => {this.props.actionClick(e, item)}}>
-                <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
+                <img className={classString} src={require("../icons/png/" + item.imageSource)} alt={item.name} />
             </div>
         })
 
