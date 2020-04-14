@@ -56,7 +56,7 @@ class Task {
         this.newUnit = null
         this.newStructure = null
         this.newUpgrade = null
-        // this.morphToUnit = null
+        this.morphToUnit = null
         this.addsTechlab = false
         this.addsReactor = false
     }
@@ -181,6 +181,7 @@ class Unit {
             // Spawn unit
             if (task.newUnit !== null) {
                 const newUnit = new Unit(task.newUnit)
+                newUnit.energy = 50
                 gamelogic.units.add(newUnit)
                 gamelogic.idleUnits.add(newUnit)
                 // console.log(gamelogic.frame);
@@ -199,32 +200,44 @@ class Unit {
             // Spawn structure
             if (task.newStructure !== null) {
                 const newUnit = new Unit(task.newStructure)
+                newUnit.energy = 50
                 gamelogic.units.add(newUnit)
                 gamelogic.idleUnits.add(newUnit)
-                // console.log(gamelogic.frame);
-                // console.log(newUnit);
-                gamelogic.eventLog.push(new Event(
-                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "structure", task.startFrame, gamelogic.frame
-                ))
-                const unitData = UNITS_BY_NAME[task.newStructure]
-                
                 // Structure that gives supply finishes, structure will have -X supply
+                const unitData = UNITS_BY_NAME[task.newStructure]
                 if (unitData.supply < 0) {
                     gamelogic.supplyCap += -unitData.supply
                     gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
                     gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
                 }
+                // console.log(gamelogic.frame);
+                // console.log(newUnit);
+                gamelogic.eventLog.push(new Event(
+                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "structure", task.startFrame, gamelogic.frame
+                ))
+                
             }
             // Mark upgrade as researched
             if (task.newUpgrade !== null) {
                 const newUpgrade = new Unit(task.newUpgrade)
                 // gamelogic.units.add(newUpgrade)
                 // gamelogic.idleUnits.add(newUpgrade)
-                // TODO add to event
+
                 gamelogic.eventLog.push(new Event(
                     newUpgrade.name, UNIT_ICONS[newUpgrade.name.toUpperCase()], "upgrade", task.startFrame, gamelogic.frame
                 ))
             }
+            // Morph to unit
+            if (task.morphToUnit !== null) {
+                this.name = task.morphToUnit
+                this.energy = 50
+
+                const targetUnit = UNITS_BY_NAME[task.morphToUnit]
+                const eventType = targetUnit.is_structure ? "structure" : "unit"
+                gamelogic.eventLog.push(new Event(
+                    targetUnit.name, UNIT_ICONS[targetUnit.name.toUpperCase()], eventType, task.startFrame, gamelogic.frame
+                ))
+            } 
             // Task is complete, mark for removal
             return true
         }
@@ -576,14 +589,19 @@ class GameLogic {
             const buildTime = this.getTime(unit.name)
             
             const newTask = new Task(buildTime, this.frame)
-
-            if (unit.type === "worker") {
-                newTask.newWorker = unit.name
-            } else if (unit.type === "unit") {
-                newTask.newUnit = unit.name
-            } else if (unit.type === "structure") {
-                newTask.newStructure = unit.name
+            newTask.morphToUnit = trainedInfo.isMorph || trainedInfo.consumesUnit ? unit.name : null
+            
+            if (newTask.morphToUnit === null) {
+                if (unit.type === "worker") {
+                    newTask.newWorker = unit.name
+                } else if (unit.type === "unit") {
+                    newTask.newUnit = unit.name
+                } else if (unit.type === "structure") {
+                    newTask.newStructure = unit.name
+                }
             }
+            console.log(trainedInfo);
+            // console.log(newTask);
             trainerUnit.addTask(newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
             // Unit is definitely busy after receiving a task
             this.busyUnits.add(trainerUnit)

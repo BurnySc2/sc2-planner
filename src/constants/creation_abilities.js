@@ -3,6 +3,7 @@ import data from "./data.json"
 // const data = require("./data.json")
 
 const CREATION_ABILITIES = {}
+const MORPH_ABILITIES = new Set()
 
 data.Ability.forEach((ability) => {
     // Train abilities, e.g. probe
@@ -18,6 +19,7 @@ data.Ability.forEach((ability) => {
     if (morph !== undefined && ENABLED_ABILITIES[ability.id] === 1) {
         // console.log(morph)
         CREATION_ABILITIES[ability.id] = morph.produces
+        MORPH_ABILITIES.add(ability.id)
         return
     }
 
@@ -54,10 +56,12 @@ data.Ability.forEach((ability) => {
     }
 });
 
+// console.log(MORPH_ABILITIES);
+
 // Returns object with keys as ability id and value as resulting unit id
 
 // COMMANDCENTERTRAIN_SCV: SCV
 // Exported:
 // {524, 45}
 
-export default CREATION_ABILITIES
+export {CREATION_ABILITIES, MORPH_ABILITIES}

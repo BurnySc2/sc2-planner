@@ -134,3 +134,20 @@ test('Build 2 drones, 1 overlord, 4 drones', () => {
 });
 
 
+test('Build OC and call down MULE', () => {
+    // Morph CC to OC, then call down a mule
+    const bo = [
+        {name: "SupplyDepot", type: "structure"}, 
+        {name: "Barracks", type: "structure"}, 
+        {name: "OrbitalCommand", type: "structure"}, 
+        {name: "call_down_mule", type: "action"}
+    ]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(4)
+});
+
+// TODO research an upgrade, e.g. from ebay
+
