@@ -336,7 +336,7 @@ class GameLogic {
                 return false
             }
         }
-        
+
         // The unit/structure that is training the target unit or structure
         for (let trainerUnit of this.idleUnits) {
             console.assert(trainerUnit.name, trainerUnit)
@@ -414,7 +414,7 @@ class GameLogic {
             if (trainerUnit.name === "Drone") {
                 this.supplyUsed -= 1
                 this.supplyLeft += 1
-            }
+            }            
 
             return true
         }

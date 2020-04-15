@@ -202,7 +202,6 @@ class Unit {
             if (task.morphToUnit !== null) {
                 this.name = task.morphToUnit
                 this.energy = 50
-
                 const targetUnit = UNITS_BY_NAME[task.morphToUnit]
                 const eventType = targetUnit.is_structure ? "structure" : "unit"
                 gamelogic.eventLog.push(new Event(

@@ -175,7 +175,7 @@ test('Test if able to research +1 from ebay', () => {
     ]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
-    logic.runUntilEnd()
+    logic.runUntilEnd()    
     expect(logic.units.size).toBe(16)
     expect(logic.upgrades.has("TerranInfantryWeaponsLevel1")).toBe(true)
     expect(logic.eventLog.length).toBe(5)
@@ -200,10 +200,37 @@ test('Test if able to research +2 from ebay after requirements are met', () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(21)
     expect(logic.upgrades.has("TerranInfantryWeaponsLevel1")).toBe(true)
     expect(logic.upgrades.has("TerranInfantryWeaponsLevel2")).toBe(true)
+    expect(logic.units.size).toBe(21)
     expect(logic.eventLog.length).toBe(12)
+});
+
+test('Test if able upgrade to PF', () => {
+    // Morph CC to OC, then call down a mule
+    const bo = [
+        {name: "SupplyDepot", type: "structure"}, 
+        {name: "Refinery", type: "structure"}, 
+        {name: "Refinery", type: "structure"}, 
+        {name: "EngineeringBay", type: "structure"}, 
+        {name: "3x Mine gas", type: "action"},
+        {name: "3x Mine gas", type: "action"},
+        {name: "PlanetaryFortress", type: "structure"}, 
+    ]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.minerals = 1000
+    logic.vespene = 1000
+    logic.runUntilEnd()
+    let pfCount = 0
+    logic.units.forEach(item => {
+        if (item.name === "PlanetaryFortress") {
+            pfCount = 1
+        }
+    })
+    expect(pfCount).toBe(1)
+    expect(logic.units.size).toBe(17)
+    expect(logic.eventLog.length).toBe(7)
 });
 
 // TODO Add test for unit count, e.g. call down mule: it needs to appear in count
