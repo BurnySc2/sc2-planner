@@ -14,8 +14,8 @@ data.Unit.forEach((trainingUnit) => {
         const resultingUnit = UNITS_BY_ID[resultingUnitId]
         // Check if ability id maps to a train / build command
         if (resultingUnit !== undefined) {
-            let requiredStructure = null
-            let requiredUpgrade = null
+            let requiredStructureId = null
+            let requiredUpgradeId = null
             let requiresTechlab = false
             let isMorph = MORPH_ABILITIES.has(ability.ability)
             // if (isMorph) {
@@ -27,24 +27,24 @@ data.Unit.forEach((trainingUnit) => {
             if (Array.isArray(ability.requirements)) {
                 for (let requirement of ability.requirements) {
                     if (requirement.upgrade) {
-                        requiredUpgrade = requirement.upgrade
+                        requiredUpgradeId = requirement.upgrade
                     }
                     if (requirement.building) {
-                        requiredStructure = requirement.building
+                        requiredStructureId = requirement.building
                     }
                     if (requirement.addon) {
                         requiresTechlab = true
                     }
                 }
             }
+
+            let requiredStructure = requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
+            let requiredUpgrade = requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
+
             // If it doesnt exist: create
             if (TRAINED_BY[resultingUnit.name] === undefined) {
                 TRAINED_BY[resultingUnit.name] = {
                     trainedBy: {[trainingUnit.name]: 1},
-
-                    requiredStructure: requiredStructure !== null ? UNITS_BY_ID[requiredStructure].name : null,
-
-                    requiredUpgrade: requiredUpgrade !== null ? UPGRADE_BY_ID[requiredUpgrade].name : null,
 
                     requiresTechlab: requiresTechlab,
 
@@ -53,9 +53,17 @@ data.Unit.forEach((trainingUnit) => {
                     consumesUnit: consumesUnit,
                 }
             } else {
-                // Entry already exists, add training unit to object of 'trainedBy'
+                // Entry already exists, add training unit to object of 'trainedBy' and update requirement
                 TRAINED_BY[resultingUnit.name].trainedBy[trainingUnit.name] = 1
             }
+            TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name].requiredStructure ? requiredStructure : TRAINED_BY[resultingUnit.name].requiredStructure
+
+            TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[resultingUnit.name].requiredUpgrade ? requiredUpgrade : TRAINED_BY[resultingUnit.name].requiredUpgrade
+            // if (resultingUnit.name === "Zergling") {
+            //     console.log(TRAINED_BY[resultingUnit.name]);
+            //     console.log(ability);
+            //     console.log(requiredStructure);
+            // }
         }
     })
 })
@@ -75,5 +83,7 @@ data.Unit.forEach((trainingUnit) => {
 }
  */
 console.assert(Object.keys(TRAINED_BY).length === 144, `${Object.keys(TRAINED_BY).length} is not 144`)
+
+console.assert(TRAINED_BY["Zergling"].requiredStructure === "SpawningPool", TRAINED_BY["Zergling"].requiredStructure)
 
 export default TRAINED_BY

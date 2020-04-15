@@ -2,21 +2,21 @@ const CUSTOMACTIONS = {
     all: [
         {   
             internal_name: "worker_to_mins",
-            name: "Stop gas",
+            name: "Stop mine gas",
             imageSource: "icon-mineral-nobg.png",
-            duration: 20,
+            duration: 21,
         },
         {   
             internal_name: "worker_to_gas",
             name: "Mine gas",
             imageSource: "icon-gas-terran-nobg.png",
-            duration: 20,
+            duration: 21,
         },
         {   
             internal_name: "3worker_to_gas",
             name: "3x Mine gas",
             imageSource: "icon-gas-protoss-nobg.png",
-            duration: 20,
+            duration: 21,
         },
         {   
             internal_name: "worker_to_scout",

@@ -579,33 +579,33 @@ class GameLogic {
         // Get unit type / structure type that can train this unit
         const trainedInfo = TRAINED_BY[unit.name]
         console.assert(trainedInfo, unit.name)
-        // The unit/structure that is training the target unit or structure
-        for (let trainerUnit of this.idleUnits) {
-            // Unit might no longer be idle while iterating over idleUnits
-            if (!trainerUnit.isIdle()) {
-                continue
-            }
-            // const unitName = unit.name
 
-            // Check if requirement is met
-            const requiredStructure = trainedInfo.requiredStructure
-            let requiredStructureMet = requiredStructure === null ? true : false
-            if (!requiredStructureMet) {
-                for (let structure of this.units) {
-                    if (structure.name === requiredStructure) {
-                        requiredStructureMet = true
-                        break
-                    } 
-                }
+
+        // Check if requirement is met
+        const requiredStructure = trainedInfo.requiredStructure
+        let requiredStructureMet = requiredStructure === null ? true : false
+        if (!requiredStructureMet) {
+            for (let structure of this.units) {
+                if (structure.name === requiredStructure) {
+                    requiredStructureMet = true
+                    break
+                } 
             }
             if (!requiredStructureMet) {
                 return false
             }
+        }
+        
+        // The unit/structure that is training the target unit or structure
+        for (let trainerUnit of this.idleUnits) {
+            console.assert(trainerUnit.name, trainerUnit)
+            console.assert(trainerUnit.constructor.name === "Unit")
+            // Unit might no longer be idle while iterating over idleUnits
+            if (!trainerUnit.isIdle()) {
+                continue
+            }
 
             // Loop over all idle units and check if they match unit type
-            // TODO If this is a barracks and has reactor: build from reactor if reactor is idle
-            // TODO could be a morph, then just morph current unit
-            
             
             const trainerCanTrainThisUnit = trainedInfo.trainedBy[trainerUnit.name] === 1
             // TODO Reactor builds units
@@ -666,6 +666,10 @@ class GameLogic {
             if (cost.supply > 0) {
                 this.supplyUsed += cost.supply
                 this.supplyLeft -= cost.supply
+            }
+            if (trainerUnit.name === "Drone") {
+                this.supplyUsed -= 1
+                this.supplyLeft += 1
             }
 
             return true
@@ -743,6 +747,7 @@ class GameLogic {
                 if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
                     unit.energy -= 50
                     // Spawn temporary unit mule
+                    // TODO Might want to add mule spawn delay later? (2-3 seconds)
                     const newUnit = new Unit("MULE")
                     newUnit.isAliveUntilFrame = this.frame + action.duration * 22.4
                     this.units.add(newUnit)

@@ -208,7 +208,7 @@ export default class WebPage extends Component {
     }
 
     buildOrderRemoveClicked = (e, index) => {
-        console.log(index)
+        // console.log(index)
         this.removeItemFromBO(index)
     }
 

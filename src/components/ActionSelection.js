@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactTooltip from "react-tooltip";
 
 import RESOURCES from '../constants/resources'
 import {CUSTOMACTIONS} from '../constants/customactions'
@@ -15,14 +16,9 @@ export default class ActionsSelection extends Component {
     // TODO If a button is pressed, add item to build order
     constructor(props) {
         super(props)
-        this.state = {}
-
-        this.resources = RESOURCES
-        this.customactions = CUSTOMACTIONS
-        this.units = UNITS
-        this.structures = STRUCTURES
-        this.upgrades = UPGRADES
-        // console.log(props.race)
+        this.state = {
+            tooltipText: ""
+        }
 
         // Load unit icons
         this.unitIcons = {}
@@ -39,44 +35,97 @@ export default class ActionsSelection extends Component {
         });
     }
 
+    onMouseEnter = (e, item) => {
+        this.setState({
+            tooltipText: item
+        })
+    }
+
     render() {
         const classString = `${CLASSES.icon}`
 
-        const resources = this.resources.map((item, index) => {
+        const resources = RESOURCES.map((item, index) => {
             return <div key={item.name}>
                 <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
             </div>
         });
 
-        const customactions = this.customactions.all.concat(this.customactions[this.props.race]).map((item, index) => {
-            return <div key={item.name} onClick={(e) => {this.props.actionClick(e, item)}}>
+        const customactions = CUSTOMACTIONS.all.concat(CUSTOMACTIONS[this.props.race]).map((item, index) => {
+            // Update tooltip function
+            const mouseEnterFunc = (e) => {
+                return this.onMouseEnter(e, 
+                    <div className="flex flex-col">
+                        <div>{item.name}</div>
+                        <div>Duration: {item.duration}s</div>
+                    </div>
+                )
+            }
+            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.actionClick(e, item)}}>
                 <img className={classString} src={require("../icons/png/" + item.imageSource)} alt={item.name} />
             </div>
         })
 
-        const units = this.units[this.props.race].map((item, index) => {
+        const units = UNITS[this.props.race].map((item, index) => {
+            // Update tooltip function
+            const mouseEnterFunc = (e) => {
+                return this.onMouseEnter(e, 
+                    <div className="flex flex-col text-center">
+                        <div>Build unit</div>
+                        <div>{item.name}</div>
+                        <div>Minerals: {item.minerals}</div>
+                        <div>Vespene: {item.gas}</div>
+                        <div>Supply: {item.supply}</div>
+                        <div>Train time: {Math.round(item.time / 22.4)}s</div>
+                    </div>
+                )
+            }
             const icon = this.unitIcons[item.name.toUpperCase()]
-            return <div key={item.name} onClick={(e) => {this.props.unitClick(e, item.name)}}>
+            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.unitClick(e, item.name)}}>
                 <img className={classString} src={icon} alt={item.name} />
             </div>
         });
 
-        const structures = this.structures[this.props.race].map((item, index) => {
+        const structures = STRUCTURES[this.props.race].map((item, index) => {
+            // Update tooltip function
+            const mouseEnterFunc = (e) => {
+                return this.onMouseEnter(e, 
+                    <div className="flex flex-col text-left">
+                        <div>Build structure</div>
+                        <div>{item.name}</div>
+                        <div>Minerals: {item.minerals}</div>
+                        <div>Vespene: {item.gas}</div>
+                        <div>Build time: {Math.round(item.time / 22.4)}s</div>
+                    </div>
+                )
+            }
             const icon = this.unitIcons[item.name.toUpperCase()]
-            return <div key={item.name} onClick={(e) => {this.props.structureClick(e, item.name)}}>
+            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.structureClick(e, item.name)}}>
                 <img className={classString} src={icon} alt={item.name} />
             </div>
         });
         
-        const upgrades = this.upgrades[this.props.race].map((item, index) => {
+        const upgrades = UPGRADES[this.props.race].map((item, index) => {
+            // Update tooltip function
+            const mouseEnterFunc = (e) => {
+                return this.onMouseEnter(e, 
+                    <div className="flex flex-col">
+                        <div>Research upgrade</div>
+                        <div>{item.name}</div>
+                        <div>Minerals: {item.cost.minerals}</div>
+                        <div>Vespene: {item.cost.gas}</div>
+                        <div>Research time: {Math.round(item.cost.time / 22.4)}s</div>
+                    </div>
+                )
+            }
             const icon = this.upgradeIcons[item.name.toUpperCase()]
-            return <div key={item.name} onClick={(e) => {this.props.upgradeClick(e, item.name)}}>
+            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc}  onClick={(e) => {this.props.upgradeClick(e, item.name)}}>
                 <img className={classString} src={icon} alt={item.name} />
             </div>
         });
         
         return (
             <div>
+                <ReactTooltip place="left" id="actionTooltip">{this.state.tooltipText}</ReactTooltip>
                 <div className={CLASSES.actionContainer}>{resources}</div>
                 <div className={CLASSES.actionContainer}>{customactions}</div>
                 <div className={CLASSES.actionContainer}>{units}</div>
