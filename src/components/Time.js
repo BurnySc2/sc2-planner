@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import RACES from "../icons/races"
 import CLASSES from '../constants/classes'
 
+import {CONVERT_SECONDS_TO_TIME_STRING} from '../constants/helper'
 
 
 export default class Time extends Component {
@@ -21,11 +22,8 @@ export default class Time extends Component {
             "fontSize": "x-large",
         }
         // Get the time in a 00:00 format
-        // console.log(this.props.time)
-        const totalSeconds = Math.floor(this.props.time)
-        const minutes = `${Math.floor(totalSeconds / 60)}`.padStart(2, "0")
-        const seconds = `${totalSeconds % 60}`.padStart(2, "0")
-        const timeFormatted = `${minutes}:${seconds}`
+        console.log(this.props.time)
+        const timeFormatted = CONVERT_SECONDS_TO_TIME_STRING(this.props.time)
         const item = RACES.time
 
         return (

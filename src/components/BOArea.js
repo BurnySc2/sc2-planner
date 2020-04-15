@@ -121,7 +121,7 @@ export default class BOArea extends Component {
                 end: i + this.timeInterval
             })
         }
-        
+        // Generate HTML for time bar
         const timeIntervalContent = timeBarCalc.map((item, index) => {
             const myStyle = {
                 "width": `${this.timeInterval * this.props.gamelogic.htmlElementWidthFactor * 22.4}px`
@@ -129,14 +129,19 @@ export default class BOArea extends Component {
             const timeString = CONVERT_SECONDS_TO_TIME_STRING(item.start)
             return <div key={`timeInterval${item.start}`} className={`${CLASSES.boTimeElement} ${CLASSES.typeColor.time} ${CLASSES.hoverColor.time}`} style={myStyle}>{timeString}</div>
         })
+        // Only show time bar if there are any events to display
+        const timeBarContent = (
+            this.props.gamelogic.eventLog.length > 0 ?
+            <div className={`${CLASSES.boCol} ${CLASSES.bgColor.time}`}>
+                <div className={CLASSES.boRow}>
+                    {timeIntervalContent}
+                </div>
+            </div> : ""
+        )
 
         return (
             <div className={CLASSES.boArea}>
-                <div className={`${CLASSES.boCol} ${CLASSES.bgColor.time}`}>
-                    <div className={CLASSES.boRow}>
-                        {timeIntervalContent}
-                    </div>
-                </div>
+                {timeBarContent}
                 {verticalBarsContent}
             </div>
         )
