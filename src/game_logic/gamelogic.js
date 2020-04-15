@@ -180,7 +180,17 @@ class GameLogic {
         // if bo item costs gas but no gas mining: tell user that we dont mine gas
         console.assert(this.boIndex >= this.bo.length, cloneDeep(this))
         // console.assert(this.boIndex >= this.bo.length, JSON.stringify(cloneDeep(this), undefined, 4))
-        // TODO sort eventList by item.start 
+        
+        // Sort eventList by item.start, but perhaps the reverse is the desired behavior?
+        this.eventLog.sort((a, b) => {
+            if (a.start < b.start) {
+                return -1
+            } 
+            if (a.start > b.start) {
+                return 1
+            }
+            return 0
+        })
     }
 
     runFrame() {
