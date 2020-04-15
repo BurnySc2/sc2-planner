@@ -3,6 +3,7 @@ import RACES from "../icons/races"
 import CLASSES from '../constants/classes'
 
 
+
 export default class Time extends Component {
     render() {
         const timeTextCss = {

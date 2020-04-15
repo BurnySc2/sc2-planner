@@ -15,6 +15,9 @@ const CLASSES = {
     boItem: "m-0 p-0 h-16 w-16 bg-green-700 border border-black hover:bg-green-400 cursor-move",
     // Build order area in the bottom left
     boArea: "m-2 overflow-x-auto bg-indigo-400",
+    // Time bar at the top of the area
+    timeBar: "",
+    // Build order bars things
     bgColor: {
         "time": "bg-orange-700",
         "worker": "bg-green-700",
@@ -43,6 +46,7 @@ const CLASSES = {
     // Would like to add margin to boCol but doesnt allow me
     boCol: "flex table-row m-0 p-0 border border-black",
     boRow: "flex m-0 p-0 border border-black",
+    boTimeElement: "z-50 flex flex-shrink-0 items-center border-l border-r border-black",
     boElementContainer: "z-50 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black cursor-move",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
