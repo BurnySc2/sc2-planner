@@ -8,15 +8,14 @@ export default class BOArea extends Component {
      * If an item is hovered, display some tooltip
      * If the time line is clicked, display the state at the current clicked time
      */
-    getFillerElement(width) {
+    getFillerElement(width, key) {
         if (width === 0) {
             return ""
         }
         const myStyle = {
             "width": `${width * this.props.gamelogic.htmlElementWidthFactor}px`,
-
         }
-        return <div style={myStyle}></div>
+        return <div key={key} style={myStyle}></div>
     }
     
     render() {
@@ -24,11 +23,17 @@ export default class BOArea extends Component {
         const widthFactor = this.props.gamelogic.htmlElementWidthFactor
 
         // Build vertical bars
+        const barBgClasses = {}
         const barClasses = {}
         
         // console.log(this.props.gamelogic.eventLog);
 
-        const verticalBars = ["worker", "action", "unit", "structure", "upgrade"].map((barType) => {
+        const verticalBarNames = ["worker", "action", "unit", "structure", "upgrade"]
+
+        const verticalContent = []
+
+        verticalBarNames.forEach((barType) => {
+            barBgClasses[barType] = `${CLASSES.bgColor[barType]} ${CLASSES.boCol}`
             barClasses[barType] = `${CLASSES.typeColor[barType]} ${CLASSES.boCol}`
             // Each bar contains another array
             const verticalCalc = []
@@ -54,20 +59,23 @@ export default class BOArea extends Component {
             // console.log(verticalCalc);
 
             const verticalBar = verticalCalc.map((row, index1) => {
-                const rowJSX = row.map((item, index2) => {
+                const rowContent = []
+                row.forEach((item, index2) => {
                     // TODO Subtract border width
                     const myStyle = {width: widthFactor * (item.end - item.start)}
-                    let fillerElement = ""
                     if (index2 > 0) {
+                        const key = `filler${index1}${index2}`
                         const prevElementEnd = row[index2 - 1].end
-                        fillerElement = this.getFillerElement(item.start - prevElementEnd)
+                        const fillerElement = this.getFillerElement(item.start - prevElementEnd, key)
+                        rowContent.push(fillerElement)
                     } else if (item.start > 0) {
-                        fillerElement = this.getFillerElement(item.start)
+                        const key = `filler${index1}${index2}`
+                        const fillerElement = this.getFillerElement(item.start, key)
+                        rowContent.push(fillerElement)
                     }
-                    return (
+                    rowContent.push(
                         <div key={`boArea${barType}${index1}${index2}`} className="flex flex-row">
-                            {fillerElement}
-                            <div style={myStyle} className={`${CLASSES.boElementContainer} ${CLASSES.hoverColor[barType]}`}>
+                            <div style={myStyle} className={`${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} ${CLASSES.hoverColor[barType]}`}>
                                 <img className={CLASSES.boElementIcon} src={require("../icons/png/" + item.imageSource)} alt={item.name} />
                                 <div className={CLASSES.boElementText}>{item.name}</div>
                             </div>
@@ -76,22 +84,37 @@ export default class BOArea extends Component {
                 })
                 return (
                     <div key={`row${barType}${index1}`} className={CLASSES.boRow}>
-                        {rowJSX}
+                        {rowContent}
                     </div>
                 )
             })
+            verticalContent.push(verticalBar)
             return <div>{verticalBar}</div>
         })
+
+        const verticalBarsContent = verticalBarNames.map((barName, index) => {
+            // console.log(verticalContent);
+            const bar = verticalContent[index]
+            // Hide bar if it has no content to show
+            if (bar.length > 0){
+                return <div key={`verticalBar ${barName}`} className={barBgClasses[barName]}>{bar}</div>
+            }
+            return ""
+        })
+
+        // Generate time bar
+        let maxTime = 0
+        this.props.gamelogic.eventLog.forEach((item) => {
+            maxTime = Math.max(item.end, maxTime)
+        })
+
+        
         
         return (
             <div className={CLASSES.boArea}>
                 {/* TODO Time bar */}
                 <div>time bar</div>
-                <div className={barClasses.worker}>{verticalBars[0]}</div>
-                <div className={barClasses.action}>{verticalBars[1]}</div>
-                <div className={barClasses.unit}>{verticalBars[2]}</div>
-                <div className={barClasses.structure}>{verticalBars[3]}</div>
-                <div className={barClasses.upgrade}>{verticalBars[4]}</div>
+                {verticalBarsContent}
             </div>
         )
     }
