@@ -20,7 +20,7 @@ export default class ActionsSelection extends Component {
         this.state = {
             tooltipText: ""
         }
-        this.classString = `${CLASSES.icon}`
+        this.classString = `${CLASSES.actionIconContainer}`
 
         // Load unit icons
         this.unitIcons = {}
@@ -50,22 +50,42 @@ export default class ActionsSelection extends Component {
             latestSnapshot = this.props.gamelogic
         }
 
-        const resources = RESOURCES.map((item, index) => {
-            const myStyle = {
-                "bottom": "0%",
-                "right": "0%",
+        const actionIconTextStyle = {
+            "bottom": "0%",
+            "right": "0%",
+        }
+
+        const resourcesAvailble = RESOURCES.filter((item) => {
+            if (["Minerals", "Vespene"].includes(item.name)) {
+                return true
             }
+            if (latestSnapshot.race === "zerg" && (item.name === "Larva" || item.name === "SupplyZerg")) {
+                return true
+            }
+            if (latestSnapshot.race === "terran" && (item.name === "SupplyTerran" || item.name === "MULE")) {
+                return true
+            }
+            if (latestSnapshot.race === "protoss" && item.name === "SupplyProtoss") {
+                return true
+            }
+            return false
+        })
+        const resources = resourcesAvailble.map((item, index) => {
             // Instead of getting the status when the last element finished, get the state after the last build order index was started
             let value = "";
-            if (item.name === "Supply") {
+            if (item.name.includes("Supply")) {
                 value = `${latestSnapshot.supplyUsed}/${latestSnapshot.supplyCap}`
+            } else if (item.name === "Larva") {
+                value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
+            } else if (item.name === "MULE") {
+                value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
             } else {
                 value = `${Math.round(latestSnapshot[item.name.toLowerCase()])}`
             }
             
-            return <div key={item.name} className={`relative ${this.classString}`}>
+            return <div key={item.name} className={this.classString}>
                 <img src={require("../icons/png/" + item.path)} alt={item.name} />
-                <div className={CLASSES.actionIconText} style={myStyle}>
+                <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                     {value}
                 </div>
             </div>
@@ -81,8 +101,12 @@ export default class ActionsSelection extends Component {
                     </div>
                 )
             }
-            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.actionClick(e, item)}}>
-                <img className={this.classString} src={require("../icons/png/" + item.imageSource)} alt={item.name} />
+            const value = latestSnapshot.unitsCount[item.internal_name] ? latestSnapshot.unitsCount[item.internal_name] : ""
+            return <div data-tip data-for='actionTooltip' key={item.name} className={this.classString} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.actionClick(e, item)}}>
+                <img src={require("../icons/png/" + item.imageSource)} alt={item.name} />
+                <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
+                    {value}
+                </div>
             </div>
         })
 
@@ -101,8 +125,12 @@ export default class ActionsSelection extends Component {
                 )
             }
             const icon = this.unitIcons[item.name.toUpperCase()]
-            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.unitClick(e, item.name)}}>
-                <img className={this.classString} src={icon} alt={item.name} />
+            const value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
+            return <div data-tip data-for='actionTooltip' key={item.name}  className={this.classString} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.unitClick(e, item.name)}}>
+                <img src={icon} alt={item.name} />
+                <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
+                    {value}
+                </div>
             </div>
         });
 
@@ -120,8 +148,12 @@ export default class ActionsSelection extends Component {
                 )
             }
             const icon = this.unitIcons[item.name.toUpperCase()]
-            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.structureClick(e, item.name)}}>
-                <img className={this.classString} src={icon} alt={item.name} />
+            const value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
+            return <div data-tip data-for='actionTooltip' key={item.name} className={this.classString} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.structureClick(e, item.name)}}>
+                <img src={icon} alt={item.name} />
+                <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
+                    {value}
+                </div>
             </div>
         });
         
@@ -139,8 +171,12 @@ export default class ActionsSelection extends Component {
                 )
             }
             const icon = this.upgradeIcons[item.name.toUpperCase()]
-            return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc}  onClick={(e) => {this.props.upgradeClick(e, item.name)}}>
-                <img className={this.classString} src={icon} alt={item.name} />
+            const value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
+            return <div data-tip data-for='actionTooltip' key={item.name} className={this.classString} onMouseEnter={mouseEnterFunc}  onClick={(e) => {this.props.upgradeClick(e, item.name)}}>
+                <img src={icon} alt={item.name} />
+                <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
+                    {value}
+                </div>
             </div>
         });
         

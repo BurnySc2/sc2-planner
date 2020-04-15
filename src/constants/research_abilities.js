@@ -1,4 +1,3 @@
-import ENABLED_ABILITIES from "./enabled_abilities"
 import data from "./data.json"
 // const data = require("./data.json")
 

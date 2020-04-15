@@ -5,13 +5,14 @@ import Event from "./event"
 // import Task from "./task"
 
 const UNIT_ICONS = require("../icons/unit_icons.json")
-// const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
+const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 let currentId = 0
 const getUnitId = () => {
     currentId += 1
     return currentId
 }
+const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
 class Unit { 
     constructor(name) {
@@ -72,7 +73,7 @@ class Unit {
 
     isMiningMinerals() {
         // Return true if worker is not scouting or mining vespene
-        return this.isIdle && !this.isMiningGas && !this.isScouting
+        return workerTypes.has(this.name) && this.isIdle && !this.isMiningGas && !this.isScouting
     }
 
     isAlive(frame) {
@@ -139,6 +140,10 @@ class Unit {
                 newUnit.energy = 50
                 gamelogic.units.add(newUnit)
                 gamelogic.idleUnits.add(newUnit)
+                if (newUnit.name === "Zergling") {
+                    gamelogic.units.add(newUnit)
+                    gamelogic.idleUnits.add(newUnit)
+                }
                 // console.log(gamelogic.frame);
                 // console.log(newUnit);
                 gamelogic.eventLog.push(new Event(
@@ -184,12 +189,13 @@ class Unit {
             }
             // Mark upgrade as researched
             if (task.newUpgrade !== null) {
-                const newUpgrade = new Unit(task.newUpgrade)
+                // const newUpgrade = new Unit(task.newUpgrade)
                 // gamelogic.units.add(newUpgrade)
                 // gamelogic.idleUnits.add(newUpgrade)
+                gamelogic.upgrades.add(task.newUpgrade)
 
                 gamelogic.eventLog.push(new Event(
-                    newUpgrade.name, UNIT_ICONS[newUpgrade.name.toUpperCase()], "upgrade", task.startFrame, gamelogic.frame
+                    task.newUpgrade, UPGRADE_ICONS[task.newUpgrade.toUpperCase()], "upgrade", task.startFrame, gamelogic.frame
                 ))
             }
             // Morph to unit

@@ -7,7 +7,7 @@ const CLASSES = {
     // Action selection container
     actionContainer: "flex flex-wrap bg-gray-600 m-1 p-1",
     // Action icon
-    icon: "h-12 w-12 m-0 p-1 z-10 hover:bg-gray-400 cursor-pointer",
+    actionIconContainer: "relative h-12 w-12 m-0 p-1 z-10 hover:bg-gray-400 cursor-pointer",
     actionIconText: "m-0 p-0 absolute z-40 text-white bg-black select-none text-xs",
 
     // Icons in the build order at the top

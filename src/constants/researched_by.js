@@ -1,4 +1,3 @@
-import CREATION_ABILITIES from "./creation_abilities"
 import RESEARCH_ABILITIES from "./research_abilities"
 import UNITS_BY_ID from "./units_by_id"
 import UPGRADE_BY_ID from "./upgrade_by_id"

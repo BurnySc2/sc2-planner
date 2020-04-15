@@ -148,7 +148,7 @@ test('Build OC and call down MULE', () => {
     expect(logic.eventLog.length).toBe(4)
 });
 
-test('Able to create a gas unit (reaper)', () => {
+test('Test if able to create a gas unit (reaper)', () => {
     // Morph CC to OC, then call down a mule
     const bo = [
         {name: "SupplyDepot", type: "structure"}, 
@@ -164,5 +164,46 @@ test('Able to create a gas unit (reaper)', () => {
     expect(logic.eventLog.length).toBe(5)
 });
 
-// TODO research an upgrade, e.g. from ebay
+test('Test if able to research +1 from ebay', () => {
+    // Morph CC to OC, then call down a mule
+    const bo = [
+        {name: "SupplyDepot", type: "structure"}, 
+        {name: "Refinery", type: "structure"}, 
+        {name: "3x Mine gas", type: "action"},
+        {name: "EngineeringBay", type: "structure"}, 
+        {name: "TerranInfantryWeaponsLevel1", type: "upgrade"},
+    ]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(16)
+    expect(logic.upgrades.has("TerranInfantryWeaponsLevel1")).toBe(true)
+    expect(logic.eventLog.length).toBe(5)
+});
 
+test('Test if able to research +2 from ebay after requirements are met', () => {
+    // Morph CC to OC, then call down a mule
+    const bo = [
+        {name: "SupplyDepot", type: "structure"}, 
+        {name: "Refinery", type: "structure"}, 
+        {name: "Refinery", type: "structure"}, 
+        {name: "3x Mine gas", type: "action"},
+        {name: "3x Mine gas", type: "action"},
+        {name: "Barracks", type: "structure"}, 
+        {name: "Factory", type: "structure"}, 
+        {name: "EngineeringBay", type: "structure"}, 
+        {name: "EngineeringBay", type: "structure"}, 
+        {name: "TerranInfantryWeaponsLevel1", type: "upgrade"},
+        {name: "Armory", type: "structure"}, 
+        {name: "TerranInfantryWeaponsLevel2", type: "upgrade"},
+    ]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(21)
+    expect(logic.upgrades.has("TerranInfantryWeaponsLevel1")).toBe(true)
+    expect(logic.upgrades.has("TerranInfantryWeaponsLevel2")).toBe(true)
+    expect(logic.eventLog.length).toBe(12)
+});
+
+// TODO Add test for unit count, e.g. call down mule: it needs to appear in count

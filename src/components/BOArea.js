@@ -80,6 +80,7 @@ export default class BOArea extends Component {
                         const fillerElement = this.getFillerElement(item.start, key)
                         rowContent.push(fillerElement)
                     }
+                    
                     rowContent.push(
                         <div key={`boArea${barType}${index1}${index2}`} className="flex flex-row">
                             <div style={myStyle} className={`${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} ${CLASSES.hoverColor[barType]}`}>

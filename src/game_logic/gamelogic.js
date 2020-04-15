@@ -1,7 +1,7 @@
 import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
-// import RESEARCHED_BY from "../constants/researched_by"
+import RESEARCHED_BY from "../constants/researched_by"
 import {CUSTOMACTIONS_BY_NAME} from "../constants/customactions"
 import {incomeMinerals, incomeVespene} from "./income"
 
@@ -50,6 +50,7 @@ class GameLogic {
         // Keep track of how long all units were idle (waiting for resources)
         this.idleTime = 0
         this.eventLog = []
+        this.unitsCount = {}
 
         // Custom settings from the settings page
         // TODO
@@ -86,12 +87,16 @@ class GameLogic {
         this.busyUnits = new Set()
         this.workersMinerals = 12
         this.workersVespene = 0
+        // Researched upgrades
+        this.upgrades = new Set()
         // Amount of bases
         this.baseCount = 1
         // Amount of refineries, extractors, assimilators
         this.gasCount = 0
         this.frame = 0
         this.eventLog = []
+        // Number of units, will only be saved after every build order index advances - only used for UI purpose on the right side of the website
+        this.unitsCount = {}
         boSnapshots = {}
     }
 
@@ -157,6 +162,7 @@ class GameLogic {
             this.units.add(unit)
             this.busyUnits.add(unit)
         }
+        this.updateUnitsCount()
     }
 
     runUntilEnd() {
@@ -247,6 +253,7 @@ class GameLogic {
             if (!endOfActions) {
                 // console.log(this.frame);
                 this.boIndex += 1
+                this.updateUnitsCount()
                 // Each time the boIndex gets incremented, take a snapshot of the current state - this way i can cache the gamelogic and reload it from the state
                 // e.g. bo = [scv, depot, scv]
                 // and i want to remove depot, i can resume from cached state of index 0
@@ -256,6 +263,48 @@ class GameLogic {
                 boSnapshots[this.boIndex] = clone
             }
         }
+    }
+
+    updateUnitsCount() {
+        // Counts all available actions and how many units, structures we have and if an upgrade is researched
+        this.unitsCount = {}
+        const incrementUnitName = (item, amount=1) => {
+            if (!this.unitsCount[item]) {
+                this.unitsCount[item] = amount
+            } else {
+                this.unitsCount[item] += amount
+            }
+        }
+        this.units.forEach((unit, index) => {
+            incrementUnitName(unit.name)
+            if (unit.hasTechlab) {
+                incrementUnitName(`${unit.name}Techlab`)
+            } else if (unit.hasReactor) {
+                incrementUnitName(`${unit.name}Reactor`)
+            }
+            if (unit.larvaCount > 0) {
+                incrementUnitName("Larva", unit.larvaCount)
+            }
+            if (unit.isMiningMinerals()) {
+                // Amount of workers mining minerals
+                incrementUnitName("worker_to_mins")
+            }
+            if (unit.isMiningGas) {
+                // Amount of workers mining gas
+                incrementUnitName("worker_to_gas")
+            }
+            if (unit.isScouting) {
+                // Amount of scouting workers
+                incrementUnitName("worker_to_scout")
+            }
+            if (unit.hasSupplyDrop) {
+                incrementUnitName("call_down_supply")
+            }
+            // TODO Count actions by dividing energy through action energy cost, e.g. Math.floor(OC / 50) for amount of mule calldown available 
+        })
+        this.upgrades.forEach((upgrade, index) => {
+            incrementUnitName(upgrade)
+        })
     }
 
     trainUnit(unit) {
@@ -272,7 +321,6 @@ class GameLogic {
         // Get unit type / structure type that can train this unit
         const trainedInfo = TRAINED_BY[unit.name]
         console.assert(trainedInfo, unit.name)
-
 
         // Check if requirement is met
         const requiredStructure = trainedInfo.requiredStructure
@@ -377,8 +425,70 @@ class GameLogic {
         // Issue research command of upgrade type
         console.assert(upgrade.name, JSON.stringify(upgrade, null, 4))
         console.assert(upgrade.type, JSON.stringify(upgrade, null, 4))
-        // TODO
-        return true
+        
+        // Get cost (mineral, vespene, supply)
+        if (!this.canAfford(upgrade)) {
+            // console.log(this.frame, this.minerals, this.vespene);
+            return false
+        }
+
+        // Get unit type / structure type that can train this unit
+        const researchInfo = RESEARCHED_BY[upgrade.name]
+        console.assert(researchInfo, researchInfo)
+        
+        // Check if requirement is met
+        const requiredStructure = researchInfo.requiredStructure
+        let requiredStructureMet = requiredStructure === null ? true : false
+        if (!requiredStructureMet) {
+            for (let structure of this.units) {
+                if (structure.name === requiredStructure) {
+                    requiredStructureMet = true
+                    break
+                } 
+            }
+            if (!requiredStructureMet) {
+                return false
+            }
+        }
+
+        const requiredUpgrade = researchInfo.requiredUpgrade
+        let requiredUpgradeMet = requiredUpgrade === null ? true : false
+        if (!requiredUpgradeMet) {
+            if (this.upgrades.has(requiredUpgrade)) {
+                requiredUpgradeMet = true
+            }
+            if (!requiredUpgradeMet) {
+                return false
+            }
+        }
+        
+        // The unit/structure that is training the target unit or structure
+        for (let researcherStructure of this.idleUnits) {
+            console.assert(researcherStructure.name, researcherStructure)
+            
+            // Unit might no longer be idle while iterating over idleUnits
+            if (!researcherStructure.isIdle()) {
+                continue
+            }
+            
+            const structureCanResearchUpgrade = researchInfo.researchedBy[researcherStructure.name] === 1
+            if (!structureCanResearchUpgrade) {
+                continue
+            }
+            
+            // All requirement checks complete, start the task
+            
+            const researchTime = this.getTime(upgrade.name, true)
+            const newTask = new Task(researchTime, this.frame)
+            newTask.newUpgrade = upgrade.name
+            researcherStructure.addTask(newTask)
+            this.busyUnits.add(researcherStructure)
+            const cost = this.getCost(upgrade.name, true)
+            this.minerals -= cost.minerals
+            this.vespene -= cost.vespene
+            return true
+        }
+        return false
     }
     
     executeAction(actionItem) {
@@ -492,8 +602,8 @@ class GameLogic {
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
             return {
-                minerals: UPGRADES_BY_NAME[unitName].minerals,
-                vespene: UPGRADES_BY_NAME[unitName].gas,
+                minerals: UPGRADES_BY_NAME[unitName].cost.minerals,
+                vespene: UPGRADES_BY_NAME[unitName].cost.gas,
                 supply: 0,
             }
         }
@@ -510,7 +620,7 @@ class GameLogic {
         // TODO get time of upgrade
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
-            return UPGRADES_BY_NAME[unitName].time
+            return UPGRADES_BY_NAME[unitName].cost.time
         }
         console.assert(UNITS_BY_NAME[unitName], `${unitName}`)
         return UNITS_BY_NAME[unitName].time
