@@ -2,7 +2,7 @@
 import UNITS_BY_NAME from "../constants/units_by_name"
 
 import Event from "./event"
-import Task from "./task"
+// import Task from "./task"
 
 const UNIT_ICONS = require("../icons/unit_icons.json")
 // const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
