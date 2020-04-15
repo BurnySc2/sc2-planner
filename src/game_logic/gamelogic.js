@@ -287,7 +287,7 @@ class GameLogic {
         
         // The unit/structure that is training the target unit or structure
         for (let trainerUnit of this.idleUnits) {
-            console.assert(trainerUnit.name, trainerUnit)
+            // console.assert(trainerUnit.name, trainerUnit)
             console.assert(trainerUnit.constructor.name === "Unit")
             // Unit might no longer be idle while iterating over idleUnits
             if (!trainerUnit.isIdle()) {
