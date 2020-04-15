@@ -108,7 +108,7 @@ export default class WebPage extends Component {
         // Caching using snapshots
         if (gamelogic.hasSnapshot()) {
             // Find the latest snapshot that was saved after incrementing the gamelogic.boIndex
-            const maxSnapshotIndex = Math.max.apply(null, Object.keys(gamelogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}))
+            const maxSnapshotIndex = gamelogic.getHighestBOSnapshotIndex()
             const snapshot = gamelogic.getBOIndexSnapshots()[maxSnapshotIndex]
             // console.log(maxSnapshotIndex);
             // console.log(Object.keys(gamelogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}));
@@ -153,7 +153,9 @@ export default class WebPage extends Component {
         
         gamelogic.reset()
         gamelogic.setStart()
-        gamelogic.runUntilEnd()
+        if (bo.length > 0) {
+            gamelogic.runUntilEnd()
+        }
 
         this.setState({
             bo: bo
@@ -230,7 +232,7 @@ export default class WebPage extends Component {
                         <BOArea gamelogic={this.state.gamelogic} />
                     </div>
                     <div className="w-3/12">
-                        <ActionsSelection race={this.state.race} 
+                        <ActionsSelection gamelogic={this.state.gamelogic}  race={this.state.race} 
                         actionClick={this.actionSelectionActionClicked} 
                         unitClick={this.actionSelectionUnitClicked} 
                         structureClick={this.actionSelectionStructureClicked} 

@@ -7,6 +7,7 @@ import CLASSES from "../constants/classes"
 import UNITS from '../constants/units'
 import STRUCTURES from '../constants/structures'
 import UPGRADES from "../constants/upgrades"
+// import { GameLogic } from '../game_logic/gamelogic';
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 const UNIT_ICONS = require("../icons/unit_icons.json")
@@ -19,6 +20,7 @@ export default class ActionsSelection extends Component {
         this.state = {
             tooltipText: ""
         }
+        this.classString = `${CLASSES.icon}`
 
         // Load unit icons
         this.unitIcons = {}
@@ -42,11 +44,30 @@ export default class ActionsSelection extends Component {
     }
 
     render() {
-        const classString = `${CLASSES.icon}`
+        let latestSnapshot = this.props.gamelogic.getBOIndexSnapshots()[this.props.gamelogic.getHighestBOSnapshotIndex()]
+        // Is undefined on first frame = when build order is empty
+        if (!latestSnapshot) {
+            latestSnapshot = this.props.gamelogic
+        }
 
         const resources = RESOURCES.map((item, index) => {
-            return <div key={item.name}>
-                <img className={classString} src={require("../icons/png/" + item.path)} alt={item.name} />
+            const myStyle = {
+                "bottom": "0%",
+                "right": "0%",
+            }
+            // Instead of getting the status when the last element finished, get the state after the last build order index was started
+            let value = "";
+            if (item.name === "Supply") {
+                value = `${latestSnapshot.supplyUsed}/${latestSnapshot.supplyCap}`
+            } else {
+                value = `${Math.round(latestSnapshot[item.name.toLowerCase()])}`
+            }
+            
+            return <div key={item.name} className={`relative ${this.classString}`}>
+                <img src={require("../icons/png/" + item.path)} alt={item.name} />
+                <div className={CLASSES.actionIconText} style={myStyle}>
+                    {value}
+                </div>
             </div>
         });
 
@@ -61,7 +82,7 @@ export default class ActionsSelection extends Component {
                 )
             }
             return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.actionClick(e, item)}}>
-                <img className={classString} src={require("../icons/png/" + item.imageSource)} alt={item.name} />
+                <img className={this.classString} src={require("../icons/png/" + item.imageSource)} alt={item.name} />
             </div>
         })
 
@@ -81,7 +102,7 @@ export default class ActionsSelection extends Component {
             }
             const icon = this.unitIcons[item.name.toUpperCase()]
             return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.unitClick(e, item.name)}}>
-                <img className={classString} src={icon} alt={item.name} />
+                <img className={this.classString} src={icon} alt={item.name} />
             </div>
         });
 
@@ -100,7 +121,7 @@ export default class ActionsSelection extends Component {
             }
             const icon = this.unitIcons[item.name.toUpperCase()]
             return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.structureClick(e, item.name)}}>
-                <img className={classString} src={icon} alt={item.name} />
+                <img className={this.classString} src={icon} alt={item.name} />
             </div>
         });
         
@@ -119,7 +140,7 @@ export default class ActionsSelection extends Component {
             }
             const icon = this.upgradeIcons[item.name.toUpperCase()]
             return <div data-tip data-for='actionTooltip' key={item.name} onMouseEnter={mouseEnterFunc}  onClick={(e) => {this.props.upgradeClick(e, item.name)}}>
-                <img className={classString} src={icon} alt={item.name} />
+                <img className={this.classString} src={icon} alt={item.name} />
             </div>
         });
         

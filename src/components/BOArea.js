@@ -11,7 +11,7 @@ export default class BOArea extends Component {
      */
     constructor(props) {
         super(props)
-        // TODO Perhaps set time interval as props?
+        // TODO Perhaps set time interval as props so it can be set in settings?
         this.timeInterval = 20
     }
 

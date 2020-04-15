@@ -103,6 +103,10 @@ class GameLogic {
         return boSnapshots
     }
 
+    getHighestBOSnapshotIndex(){
+        return Math.max.apply(null, Object.keys(boSnapshots).map(item => {return parseInt(item)}))
+    }
+
     loadFromSnapshotObject(snapshot) {
         console.assert(snapshot !== undefined, snapshot)
         this.boIndex = snapshot.boIndex
@@ -288,7 +292,7 @@ class GameLogic {
         // The unit/structure that is training the target unit or structure
         for (let trainerUnit of this.idleUnits) {
             console.assert(trainerUnit.name, trainerUnit)
-            
+
             // Unit might no longer be idle while iterating over idleUnits
             if (!trainerUnit.isIdle()) {
                 continue
@@ -349,6 +353,10 @@ class GameLogic {
             // console.log(cloneDeep(newTask));
 
             const cost = this.getCost(unit.name)
+            if (unit.name === "Zergling") {
+                cost.supply = 1
+                cost.minerals = 50
+            }
             this.minerals -= cost.minerals
             this.vespene -= cost.vespene
             if (cost.supply > 0) {

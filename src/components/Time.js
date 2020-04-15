@@ -22,7 +22,7 @@ export default class Time extends Component {
             "fontSize": "x-large",
         }
         // Get the time in a 00:00 format
-        console.log(this.props.time)
+        // console.log(this.props.time)
         const timeFormatted = CONVERT_SECONDS_TO_TIME_STRING(this.props.time)
         const item = RACES.time
 

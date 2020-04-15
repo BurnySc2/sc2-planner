@@ -6,9 +6,9 @@ const CLASSES = {
 
     // Action selection container
     actionContainer: "flex flex-wrap bg-gray-600 m-1 p-1",
-
     // Action icon
     icon: "h-12 w-12 m-0 p-1 z-10 hover:bg-gray-400 cursor-pointer",
+    actionIconText: "m-0 p-0 absolute z-40 text-white bg-black select-none text-xs",
 
     // Icons in the build order at the top
     bo: "flex flex-row bg-green-700 m-1 p-0",
@@ -46,8 +46,8 @@ const CLASSES = {
     // Would like to add margin to boCol but doesnt allow me
     boCol: "flex table-row m-0 p-0 border border-black",
     boRow: "flex m-0 p-0 border border-black",
-    boTimeElement: "z-50 flex flex-shrink-0 items-center border-l border-r border-black",
-    boElementContainer: "z-50 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black cursor-move",
+    boTimeElement: "z-40 flex flex-shrink-0 items-center border-l border-r border-black",
+    boElementContainer: "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black cursor-move",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
 
@@ -55,7 +55,7 @@ const CLASSES = {
     dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
     dropDownLabel: "hover:bg-gray-400 px-2 flex flex-row justify-between",
-    dropDownInput: "rounded w-20 mx-2",
+    dropDownInput: "rounded w-20 mx-2 z-50",
 
     // Rectangle items in the BOArea
     // Import export buttons

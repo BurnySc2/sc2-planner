@@ -116,7 +116,6 @@ class Unit {
     updateTask(gamelogic, task) {
         // Task is a task class instance
 
-        // TODO If structure has reactor: progress reactor-task too
         task.updateProgress(this.hasChrono())
         // Remove first task if completed
         if (task.isCompleted) {
