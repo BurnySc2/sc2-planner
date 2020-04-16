@@ -122,7 +122,7 @@ class Unit {
      * @param {GameLogic} gamelogic 
      */
     hasChrono(gamelogic) {
-        return this.hasChronoUntilFrame <= gamelogic.frame
+        return this.hasChronoUntilFrame !== -1 && this.hasChronoUntilFrame > gamelogic.frame
     }
 
     /**
@@ -168,7 +168,7 @@ class Unit {
      * @param {Task} task 
      */
     updateTask(gamelogic, task) {
-        task.updateProgress(this.hasChrono())
+        task.updateProgress(this.hasChrono(gamelogic))
         // Remove first task if completed
         if (task.isCompleted) {
             let unitData
