@@ -1,4 +1,5 @@
-{
+
+const UNIT_ICONS = {
     "ADEPT": "btn-unit-protoss-adept.png",
     "ARMORY": "btn-building-terran-armory.png",
     "ASSIMILATOR": "btn-building-protoss-assimilator.png",
@@ -107,3 +108,5 @@
     "ZEALOT": "btn-unit-protoss-zealot.png",
     "ZERGLING": "btn-unit-zerg-zergling.png"
 }
+
+export default UNIT_ICONS

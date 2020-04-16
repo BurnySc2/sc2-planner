@@ -44,6 +44,8 @@ const executeAction = (gamelogic, actionItem) => {
     if (action.internal_name === "3worker_to_gas" && gamelogic.workersMinerals >= 3) {
         const mineralWorkers = []
         for (const unit of gamelogic.idleUnits) {
+            // console.log(unit);
+            
             // Find 3 workers that are mining minerals
             if (gamelogic.gasCount > 0 && workerTypes.has(unit.name) && unit.isMiningMinerals()) {
                 mineralWorkers.push(unit)

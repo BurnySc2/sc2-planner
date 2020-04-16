@@ -112,6 +112,10 @@ class GameLogic {
         lastSnapshot = null
     }
 
+    loadSettings(settings) {
+        
+    }
+
     loadFromSnapshotObject(snapshot) {
         console.assert(snapshot, snapshot)
         // TODO Find a better way of overwriting values from snapshot

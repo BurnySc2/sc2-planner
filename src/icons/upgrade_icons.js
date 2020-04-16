@@ -1,4 +1,5 @@
-{
+
+const UPGRADE_ICONS = {
     "ADEPTPIERCINGATTACK": "btn-upgrade-protoss-resonatingglaives.png",
     "ANABOLICSYNTHESIS": "btn-upgrade-zerg-anabolicsynthesis.png",
     "BANSHEECLOAK": "btn-ability-terran-cloak-color.png",
@@ -90,3 +91,5 @@
     "ZERGMISSILEWEAPONSLEVEL2": "btn-upgrade-zerg-missileattacks-level2.png",
     "ZERGMISSILEWEAPONSLEVEL3": "btn-upgrade-zerg-missileattacks-level3.png"
 }
+
+export default UPGRADE_ICONS

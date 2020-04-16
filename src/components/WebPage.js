@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { withRouter } from "react-router-dom"
 
 import Title from "./Title"
 import ImportExport from './ImportExport'
@@ -10,54 +11,56 @@ import ActionsSelection from './ActionSelection'
 import Settings from './Settings'
 import Footer from './Footer'
 import {GameLogic} from '../game_logic/gamelogic'
-// import {cloneDeep} from 'lodash'
+import {defaultSettings, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder} from  "../constants/helper"
+import {isEqual, cloneDeep} from 'lodash'
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
-const UNIT_ICONS = require("../icons/unit_icons.json")
-const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
+import UNIT_ICONS from "../icons/unit_icons"
+import UPGRADE_ICONS from "../icons/upgrade_icons"
 
-export default class WebPage extends Component {
+export default withRouter(class WebPage extends Component {
     constructor(props) {
         super(props)
-        
-        const defaultSettings = [
-            // TODO Specificy a min and max limit, e.g. min=0, max=10000
-            {
-                name: "Worker start delay",
-                tooltip: "idk some tooltip",
-                variableName: "workerStartDelay",
-                value: 2
-            },
-            {
-                name: "Worker build delay",
-                tooltip: "idk some tooltip",
-                variableName: "workerBuildDelay",
-                value: 2
-            },
-            {
-                name: "Worker return delay",
-                tooltip: "idk some tooltip",
-                variableName: "workerReturnDelay",
-                value: 2
-            },
-            {
-                name: "Idle limit",
-                tooltip: "idk some tooltip",
-                variableName: "idleLimit",
-                value: 40 * 22.4
-            },
-        ]
 
-        const gamelogic = new GameLogic(this.props.race, [], defaultSettings)
+        // Get information from url
+        const urlPath = this.props.location.pathname.split("/")
+        const settingsEncoded = urlPath[2]
+        const boEncoded = urlPath[3]
+
+        // Decode settings from url
+        let settings = cloneDeep(defaultSettings)
+        if (settingsEncoded !== undefined) {
+            const decodedSettings = decodeSettings(settingsEncoded)
+            // Override default settings from settings in url
+            settings.forEach((item1) => {
+                decodedSettings.forEach((item2) => {
+                    if (item1.n === item2.n) {
+                        item1.v = item2.v
+                    }
+                })
+            })
+        }
+
+        // Decode build order from url
+        let bo = []
+        if (boEncoded !== undefined) {
+            bo = decodeBuildOrder(boEncoded)
+        }
+
+        // Start the game logic with given settings and build order
+        const gamelogic = new GameLogic(this.props.race, bo, settings)
         gamelogic.reset()
         gamelogic.setStart()
+        if (bo.length > 0) {
+            // If a build order was given, simulate it
+            gamelogic.runUntilEnd()
+        }
         
-
         this.state = {
             race: this.props.race,
             // Build order
             // Each element needs to have an .image attached and tooltip with: name, minerals, vespene, time
-            bo: [],
+            bo: bo,
             gamelogic: gamelogic,
             settings: defaultSettings
         }
@@ -76,14 +79,47 @@ export default class WebPage extends Component {
 
     }
 
+    updateUrl = (race, settings, buildOrder) => {
+        // See router props
+        // console.log(this.props);
+        // Encode the settings
+        const settingsEncoded = encodeSettings(settings)
+        // const decoded = decodeSettings(settingsEncoded)
+        // console.log(decoded);
+        
+        // Encode the build order
+        const buildOrderEncoded = encodeBuildOrder(buildOrder)
+        // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
+
+        const newUrl = `/${race}/${settingsEncoded}/${buildOrderEncoded}`
+        // console.log(newUrl);
+        // Change current url
+        this.props.history.replace(`${newUrl}`)
+        // this.props.history.push(`${newUrl}`)
+    }
+
+    rerunBuildOrder(bo, settings) {
+        const gamelogic = this.state.gamelogic
+        gamelogic.reset()
+        gamelogic.setStart()
+        gamelogic.bo = bo
+        gamelogic.loadSettings(settings)
+        gamelogic.runUntilEnd()
+    }
+
+
     // TODO Pass the settings to Settings.js and let the user input handle it
     updateSettings = (e, settings) => {
         this.setState({settings: settings})
+        // Re-calculate the whole simulation
+        // TODO optimize: only recalculate if settings were changed that affected it
+        this.rerunBuildOrder(this.state.bo, settings)
+        this.updateUrl(this.state.race, settings, this.state.bo)
     }
 
     raceSelectionClicked = (e, race) => {
         // Set race in state after a race selection icon has been pressed
-        const gamelogic = new GameLogic(race, [], this.state.defaultSettings)
+        const gamelogic = new GameLogic(race, [], this.state.settings)
         gamelogic.reset()
         gamelogic.setStart()
         
@@ -92,6 +128,13 @@ export default class WebPage extends Component {
             bo: [],
             gamelogic: gamelogic,
         })
+        
+        // If settings are unchanged, change url to just '/race' instead of encoded settings
+        if (isEqual(this.state.settings, defaultSettings)) {
+            this.props.history.replace(`/${race}`)
+        } else {
+            this.updateUrl(race, this.state.settings, [])
+        }     
     }
 
     // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
@@ -110,15 +153,14 @@ export default class WebPage extends Component {
         // gamelogic.runUntilEnd()
         
         // Non cached:
-        gamelogic.bo = bo
-        gamelogic.reset()
-        gamelogic.setStart()
-        gamelogic.runUntilEnd()
+        this.rerunBuildOrder(bo, this.state.settings)
 
         this.setState({
             bo: bo,
             gamelogic: gamelogic,
         })
+
+        this.updateUrl(this.state.race, this.state.settings, bo)
     }
     removeItemFromBO = (index) => {
         const bo = this.state.bo
@@ -137,6 +179,8 @@ export default class WebPage extends Component {
         this.setState({
             bo: bo
         })
+
+        this.updateUrl(this.state.race, this.state.settings, bo)
     }
 
     // If a button is pressed in the action selection, add it to the build order
@@ -197,7 +241,7 @@ export default class WebPage extends Component {
                 <Title />
                 <div className="flex flex-row">
                     <ImportExport />
-                    <Settings settings={this.state.settings} />
+                    <Settings settings={this.state.settings} updateSettings={this.updateSettings} />
                 </div>
                 <div className="flex flex-row">
                     <div className="w-9/12">
@@ -223,4 +267,4 @@ export default class WebPage extends Component {
             </div>
         )
     }
-}
+})

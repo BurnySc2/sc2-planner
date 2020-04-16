@@ -4,8 +4,8 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import Event from "./event"
 // import Task from "./task"
 
-const UNIT_ICONS = require("../icons/unit_icons.json")
-const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
+import UNIT_ICONS from "../icons/unit_icons"
+import UPGRADE_ICONS from "../icons/upgrade_icons"
 
 let currentId = 0
 const getUnitId = () => {
@@ -236,6 +236,16 @@ class Unit {
                 const targetUnit = UNITS_BY_NAME[task.morphToUnit]
                 const eventType = targetUnit.is_structure ? "structure" : "unit"
                 if (!["WarpGate", "Gateway"].includes(task.morphToUnit)) {
+                    // Drone morphing to hatch or extractor
+                    unitData = UNITS_BY_NAME[task.morphToUnit]
+                    if (unitData.is_townhall) {
+                        gamelogic.baseCount += 1
+                    }
+                    
+                    if (unitData.needs_geyser) {
+                        gamelogic.gasCount += 1
+                    }
+
                     gamelogic.eventLog.push(new Event(
                         targetUnit.name, UNIT_ICONS[targetUnit.name.toUpperCase()], eventType, task.startFrame, gamelogic.frame
                     ))

@@ -36,7 +36,7 @@ export default class Settings extends Component {
                     <div className={CLASSES.dropDownLabel}>
                         {item.name}
                     </div>
-                    <input className={CLASSES.dropDownInput} type="number" placeholder={item.value} defaultValue={item.value} />
+                    <input className={CLASSES.dropDownInput} type="number" placeholder={item.v} defaultValue={item.v} />
                 </div>
             )
         })
