@@ -1,4 +1,9 @@
 
+/**
+ * @param {Number} workers 
+ * @param {Number} bases 
+ * @param {Number} mules 
+ */
 const incomeMinerals = (workers, bases, mules = 0) => {
     // Returns mineral income per second. """
     if ((workers === 0 || mules === 0) && bases === 0) {
@@ -52,8 +57,10 @@ const incomeMinerals = (workers, bases, mules = 0) => {
     return 1.4 * income_per_min / 60 + 1.4 * mules * mule_rate / 60
 }
 
-// TODO install eslint
-
+/**
+ * @param {Number} workers 
+ * @param {Number} geysers 
+ */
 const incomeVespene = (workers, geysers) => {
     // Returns vespene income per second. """
     if (workers === 0 || geysers === 0) {

@@ -15,6 +15,9 @@ const getUnitId = () => {
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
 class Unit { 
+    /**
+     * @param {String} name - For example 'SCV'
+     */
     constructor(name) {
         this.name = name
         this.id = getUnitId()
@@ -42,10 +45,10 @@ class Unit {
     }
 
     /**
-     * 
+     * Adding a task will also turn the unit 'busy' - If no unit is busy anymore, the runUntilEnd() function will stop
      * @param {Task} task 
-     * @param {boolean} taskForReactor 
-     * @param {boolean} taskForLarva 
+     * @param {Boolean} taskForReactor 
+     * @param {Boolean} taskForLarva 
      */
     addTask(gamelogic, task, taskForReactor=false, taskForLarva=false) {
         console.assert([true, false].includes(taskForReactor), taskForReactor)
@@ -63,8 +66,10 @@ class Unit {
         this.tasks.push(task)
     }
 
+    /**
+     * Returns true if it has no tasks, or has reactor and reactor has no tasks, or has larva
+     */
     isIdle() {
-        // Returns true if it has no tasks, or has reactor and reactor has no tasks, or has larva
         return (
                 this.tasks.length === 0 
                 || this.larvaCount > 0
@@ -76,8 +81,10 @@ class Unit {
             && !this.isFlying
     }
     
+    /**
+     * Returns true it has a task (hatchery builds queen, or hatchery's larva builds drone, or barrack's reactor builds a marine)
+     */
     isBusy() {
-        // Returns true it has a task (hatchery builds queen, or hatchery's larva builds drone, or barrack's reactor builds a marine)
         return (
             this.tasks.length > 0 
             || this.larvaTasks.length > 0
@@ -88,30 +95,49 @@ class Unit {
         )
     }
     
+    /**
+     * 
+     */
     hasAddon() {
         return this.hasTechlab || this.hasReactor
     }
 
+    /**
+     * Return true if worker is not scouting and not mining vespene
+     */
     isMiningMinerals() {
-        // Return true if worker is not scouting or mining vespene
-        return workerTypes.has(this.name) && this.isIdle && !this.isMiningGas && !this.isScouting
+        return workerTypes.has(this.name) && this.isIdle() && !this.isMiningGas && !this.isScouting
     }
 
+    /**
+     * Function that checks if a unit expired (e.g. mule)
+     * @param {Number} frame 
+     */
     isAlive(frame) {
-        // Function that checks if a unit expired (e.g. mule)
         return this.isAliveUntilFrame === -1 || frame < this.isAliveUntilFrame
     }
 
+    /**
+     * Checks if chronoboost ran out
+     * @param {GameLogic} gamelogic 
+     */
     hasChrono(gamelogic) {
-        return this.hasChronoUntilFrame <= this.frame
+        return this.hasChronoUntilFrame <= gamelogic.frame
     }
 
+    /**
+     * Activates chronoboost, automatically calculates when it should run out
+     * @param {Number} frame 
+     */
     addChrono(frame) {
         this.hasChronoUntilFrame = frame + 20 * 22.4
     }
 
+    /**
+     * Should be called every frame for each unit, spawns larva for zerg townhalls, advances in energy and injects
+     * @param {GameLogic} gamelogic 
+     */
     updateUnitState(gamelogic) {
-        // Should be called every frame for each unit
         // Energy per frame
         this.energy = Math.min(200, this.energy + 0.03515625)
 
@@ -135,14 +161,15 @@ class Unit {
         }
     }
     
+    /**
+     * Progresses a task by 1 frame
+     * If a task was completed, this function will fire events
+     * @param {GameLogic} gamelogic 
+     * @param {Task} task 
+     */
     updateTask(gamelogic, task) {
-        // Task is a task class instance
-
         task.updateProgress(this.hasChrono())
         // Remove first task if completed
-        // if (this.name === "Factory") {
-        //     console.log(task);
-        // }
         if (task.isCompleted) {
             let unitData
             // Spawn worker
@@ -272,11 +299,12 @@ class Unit {
         return false
     }
 
+    /**
+     * Updates the unit
+     * @param {GameLogic} gamelogic 
+     */
     updateUnit(gamelogic) {
         // Should be called every for each busy unit (tasks.length + reactortasks.length > 0)
-
-        // const wasIdle = this.isIdle()
-        // const wasBusy = this.isBusy()
 
         // Update normal unit task
         if (this.tasks.length > 0) {
@@ -301,14 +329,9 @@ class Unit {
             return !item.isCompleted
         })
 
-        // TODO expire chrono
+        // TODO expire chrono?
 
         // Turn units idle if they have no more tasks (or reactor has no task or there is larva), and vice versa
-        // if (!wasIdle && this.isIdle()) {
-        //     gamelogic.idleUnits.add(this)
-        // } else if (wasIdle && !this.isIdle()) {
-        //     gamelogic.idleUnits.delete(this)
-        // }
         if (this.isIdle()) {
             gamelogic.idleUnits.add(this)
         } else {
@@ -317,11 +340,6 @@ class Unit {
         // TODO Dont know which saves time, if is idle: keep adding, if not idle: keep deleting? or keep it like this?
 
         // Turn busy if was previously not busy, and vice versa
-        // if (!wasBusy && this.isBusy()) {
-        //     gamelogic.busyUnits.add(this)
-        // } else if (wasBusy && !this.isBusy()) {
-        //     gamelogic.busyUnits.delete(this)
-        // }
         if (this.isBusy()) {
             gamelogic.busyUnits.add(this)
         } else {

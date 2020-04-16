@@ -28,6 +28,14 @@ let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 
 class GameLogic {
+    /**
+     * 
+     * @param {String} race - One of ["terran", "zerg", "protoss"] 
+     * @param {Object[]} bo 
+     * @param {String} bo[].name - Each build order element has a name, e.g. 'SCV'
+     * @param {String} bo[].type - One of ["worker", "action", "unit", "structure", "upgrade"] 
+     * @param {*} customSettings - See helper.js for default settings
+     */
     constructor(race="terran", bo=[], customSettings=[]) {
         this.race = race
         this.bo = bo
@@ -65,7 +73,6 @@ class GameLogic {
         this.unitsCount = {}
 
         // Custom settings from the settings page
-        // TODO
         // How many seconds the worker mining should be delayed at game start
         this.workerStartDelay = 2
         // How many seconds a worker needs before starting to build a structure
@@ -83,6 +90,9 @@ class GameLogic {
         this.loadSettings(customSettings)
     }
     
+    /**
+     * Prepares default properties for this.setStart()
+     */
     reset() {
         this.boIndex = 0
         this.minerals = 50
@@ -110,12 +120,20 @@ class GameLogic {
         lastSnapshot = null
     }
 
+    /**
+     * 
+     * @param {Object} customSettings - See helper.js for default settings
+     */
     loadSettings(customSettings) {
         for (let item of customSettings) {
             this[item.variableName] = item.v
         }
     }
 
+    /**
+     * 
+     * @param {GameLogic} snapshot - A snapshot of the game logic
+     */
     loadFromSnapshotObject(snapshot) {
         console.assert(snapshot, snapshot)
         // TODO Find a better way of overwriting values from snapshot
@@ -126,10 +144,16 @@ class GameLogic {
         }
     }
 
+    /**
+     * Returns a GameLogic object back
+     */
     getLastSnapshot() {
         return lastSnapshot
     }
 
+    /**
+     * Sets the start conditions: spawns all start structures, starting resources and values will be set in this.reset()
+     */
     setStart() {
         this.reset()
         let townhallName = ""
@@ -162,6 +186,11 @@ class GameLogic {
         this.updateUnitsCount()
     }
 
+    /**
+     * Runs the simulation until a limit is reached (20 minutes)
+     * or until the end of build order is reached and no unit is busy (= no unit has a task)
+     * or if no unit was busy for a long time, then it is assumed that the build order cannot be executed completely and must be invalid
+     */
     runUntilEnd() {
         // Runs until all units are idle
         while (this.frame < 22.4 * 20 * 60) { // Limit to 20 mins
@@ -200,6 +229,12 @@ class GameLogic {
         })
     }
 
+    /**
+     * Executes one frame of the simulation
+     * Adds income
+     * Steps each unit by 1 frame (task progress, energy generation etc.)
+     * Tries to execute next build order elements until it is no longer possible
+     */
     runFrame() {
         // Run one frame in game logic
         this.addIncome()
@@ -263,6 +298,9 @@ class GameLogic {
         }
     }
 
+    /**
+     * Updates the statistics of available actions, how many units and structures we have, and what upgrades are researched
+     */
     updateUnitsCount() {
         // Counts all available actions and how many units, structures we have and if an upgrade is researched
         this.unitsCount = {}
@@ -305,6 +343,12 @@ class GameLogic {
         })
     }
 
+    /**
+     * The simulation tries to train a unit, builds a structure or morphs a unit
+     * @param {Object} unit - The build order element 
+     * @param {String} unit.name - For example 'SCV'
+     * @param {String} unit.type - The type of the build order item, one of ["worker", "action", "unit", "structure", "upgrade"] 
+     */
     trainUnit(unit) {
         // Issue train command of unit type
         console.assert(unit.name, JSON.stringify(unit, null, 4))
@@ -428,6 +472,13 @@ class GameLogic {
         return false
     }
     
+    /**
+     * The simulation tries to research an upgrade
+     * Nearly the same as trainUnit(unit)
+     * @param {Object} upgrade 
+     * @param {String} upgrade.name 
+     * @param {String} upgrade.type 
+     */
     researchUpgrade(upgrade) {
         // Issue research command of upgrade type
         console.assert(upgrade.name, JSON.stringify(upgrade, null, 4))
@@ -497,6 +548,9 @@ class GameLogic {
         return false
     }
 
+    /**
+     * Updates the unit state and progress of all living units
+     */
     updateUnitsProgress() {
         // Updates the energy on each unit and their task progress
         this.units.forEach((unit) => {
@@ -518,12 +572,21 @@ class GameLogic {
 
     // UTILITY FUNCTIONS
 
+    /**
+     * Kills a unit and removes it from the game logic
+     * @param {Unit} unit 
+     */
     killUnit(unit) {
         this.units.delete(unit)
         this.idleUnits.delete(unit)
         this.busyUnits.delete(unit)
     }
 
+    /**
+     * Gets the cost of a unit, structure, morph or upgrade
+     * @param {String} unitName 
+     * @param {Boolean} isUpgrade 
+     */
     getCost(unitName, isUpgrade=false) {
         // Gets cost of unit, structure or upgrade
         // TODO get cost of upgrade
@@ -543,6 +606,11 @@ class GameLogic {
         }
     }
     
+    /**
+     * Gets build or research time of a unit, structure, morph or upgrade
+     * @param {String} unitName 
+     * @param {Boolean} isUpgrade 
+     */
     getTime(unitName, isUpgrade=false) {
         // Get build time of unit or structure, or research time of upgrade (in frames)
         // TODO get time of upgrade
@@ -554,6 +622,9 @@ class GameLogic {
         return UNITS_BY_NAME[unitName].time
     }
     
+    /**
+     * Calculates and caches the income based on how many workers (and mules), bases and gas structures we have
+     */
     addIncome() {
         // Calculate income based on mineral and gas workers
         let minerals = mineralIncomeCache[[this.workersMinerals, this.baseCount, this.muleCount]]
@@ -573,6 +644,11 @@ class GameLogic {
         // this.vespene +=  incomeVespene(this.workersVespene, this.gasCount) / 22.4
     }
 
+    /**
+     * @param {Object} unit 
+     * @param {String} unit.name
+     * @param {String} unit.type 
+     */
     canAfford(unit) {
         // Input: unit or upgrade object {name: "SCV", type: "worker"}
         console.assert(unit.name, JSON.stringify(unit, null, 4))
@@ -582,8 +658,14 @@ class GameLogic {
         } else {
             return this._canAfford(this.getCost(unit.name, false))
         }
-
     }
+
+    /**
+     * @param {Object} cost 
+     * @param {Number} cost.minerals 
+     * @param {Number} cost.vespene 
+     * @param {Number} cost.supply 
+     */
     _canAfford(cost) {
         // Input: cost object
         console.assert(cost.minerals, JSON.stringify(cost, null, 4))

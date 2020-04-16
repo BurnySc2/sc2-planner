@@ -1,5 +1,9 @@
 
 class Task {
+    /**
+     * @param {Number} totalFramesRequired - How many frames this task takes to complete
+     * @param {Number} startFrame - At which frame the task was started (required for creating events) 
+     */
     constructor(totalFramesRequired=0, startFrame=0) {
         // Once progress reaches 1, the task is supposed to be removed and the unit ends up idle
         // How much total progress is required
@@ -21,6 +25,10 @@ class Task {
         this.addsReactor = null
     }
 
+    /**
+     * Updates the progress of the task, once completed, an event will be fired
+     * @param {Boolean} hasChrono - If the unit has chronoboost, the task is accelerated by 50%
+     */
     updateProgress(hasChrono=false) {
         if (hasChrono) {
             this.progress += 1.5

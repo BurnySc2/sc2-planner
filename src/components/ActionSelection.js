@@ -36,6 +36,9 @@ export default class ActionsSelection extends Component {
         });
     }
 
+    /**
+     * 
+     */
     onMouseEnter = (e, item) => {
         this.setState({
             tooltipText: item

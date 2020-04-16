@@ -6,6 +6,14 @@ import Task from "./task"
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
+/**
+ * 
+ * @param {GameLogic} gamelogic 
+ * @param {Object} actionItem 
+ * @param {String} actionItem.name - E.g. send 3 worker to gas 
+ * @param {String} actionItem.type - "action"
+ * @param {String} actionItem.image - The related image (png) as data
+ */
 const executeAction = (gamelogic, actionItem) => {
     // Issue action
     // TODO

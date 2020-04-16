@@ -49,7 +49,6 @@ export default withRouter(class WebPage extends Component {
 
         // Start the game logic with given settings and build order
         const gamelogic = new GameLogic(this.props.race, bo, settings)
-        gamelogic.reset()
         gamelogic.setStart()
         if (bo.length > 0) {
             // If a build order was given, simulate it
@@ -102,7 +101,6 @@ export default withRouter(class WebPage extends Component {
 
     rerunBuildOrder(bo, settings) {
         const gamelogic = this.state.gamelogic
-        gamelogic.reset()
         gamelogic.setStart()
         gamelogic.bo = bo
         gamelogic.loadSettings(settings)
@@ -135,7 +133,6 @@ export default withRouter(class WebPage extends Component {
     raceSelectionClicked = (e, race) => {
         // Set race in state after a race selection icon has been pressed
         const gamelogic = new GameLogic(race, [], this.state.settings)
-        gamelogic.reset()
         gamelogic.setStart()
         
         this.setState({
@@ -186,7 +183,6 @@ export default withRouter(class WebPage extends Component {
         gamelogic.bo = bo
         // TODO load snapshot from shortly before the removed bo index
         
-        gamelogic.reset()
         gamelogic.setStart()
         if (bo.length > 0) {
             gamelogic.runUntilEnd()
