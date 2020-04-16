@@ -206,31 +206,66 @@ test('Test if able to research +2 from ebay after requirements are met', () => {
     expect(logic.eventLog.length).toBe(12)
 });
 
-test('Test if able upgrade to PF', () => {
+// test('Test if able upgrade to PF', () => {
+//     // Morph CC to OC, then call down a mule
+//     const bo = [
+//         {name: "SupplyDepot", type: "structure"}, 
+//         {name: "Refinery", type: "structure"}, 
+//         {name: "Refinery", type: "structure"}, 
+//         {name: "EngineeringBay", type: "structure"}, 
+//         {name: "3x Mine gas", type: "action"},
+//         {name: "3x Mine gas", type: "action"},
+//         {name: "PlanetaryFortress", type: "structure"}, 
+//     ]
+//     const logic = new GameLogic("terran", bo)
+//     logic.setStart()
+//     logic.runUntilEnd()
+//     let pfCount = 0
+//     logic.units.forEach(unit => {
+//         if (unit.name === "PlanetaryFortress") {
+//             pfCount += 1
+//         }
+//     })
+//     expect(pfCount).toBe(1)
+//     expect(logic.units.size).toBe(17)
+//     expect(logic.eventLog.length).toBe(7)
+// });
+
+test('Test if able lift Barracks from reactor and let factory attach to it', () => {
     // Morph CC to OC, then call down a mule
     const bo = [
         {name: "SupplyDepot", type: "structure"}, 
         {name: "Refinery", type: "structure"}, 
-        {name: "Refinery", type: "structure"}, 
-        {name: "EngineeringBay", type: "structure"}, 
+        {name: "Barracks", type: "structure"}, 
         {name: "3x Mine gas", type: "action"},
-        {name: "3x Mine gas", type: "action"},
-        {name: "PlanetaryFortress", type: "structure"}, 
+        {name: "BarracksReactor", type: "structure"}, 
+        {name: "Factory", type: "structure"}, 
+        {name: "Lift Barracks from Reactor", type: "action"}, 
+        {name: "Factory to free Reactor", type: "action"}, 
     ]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
-    logic.minerals = 1000
-    logic.vespene = 1000
     logic.runUntilEnd()
-    let pfCount = 0
-    logic.units.forEach(item => {
-        if (item.name === "PlanetaryFortress") {
-            pfCount = 1
+
+    let nakedBarracksCount = 0
+    logic.units.forEach(unit => {
+        if (unit.name === "Barracks" && unit.hasReactor) {
+            nakedBarracksCount += 1
         }
     })
-    expect(pfCount).toBe(1)
+    expect(nakedBarracksCount).toBe(0)
+
+    expect(logic.freeReactors).toBe(0)
+
+    let factoryReactorCount = 0
+    logic.units.forEach(unit => {
+        if (unit.name === "Factory" && unit.hasReactor) {
+            factoryReactorCount += 1
+        }
+    })
+    expect(factoryReactorCount).toBe(1)
+
     expect(logic.units.size).toBe(17)
-    expect(logic.eventLog.length).toBe(7)
+    expect(logic.eventLog.length).toBe(8)
 });
 
-// TODO Add test for unit count, e.g. call down mule: it needs to appear in count

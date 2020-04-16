@@ -26,9 +26,9 @@ class Unit {
         // Mule expires
         this.isAliveUntilFrame = -1
         // Protoss train and research structures
-        this.hasChronoUntilFrame = 0
+        this.hasChronoUntilFrame = -1
         // Zerg townhalls
-        this.hasInjectUntilFrame = 0
+        this.hasInjectUntilFrame = -1
         this.nextLarvaSpawn = -1
         this.larvaCount = 0
         this.larvaTasks = []
@@ -37,6 +37,7 @@ class Unit {
         // Terran production structures
         this.hasTechlab = false
         this.hasReactor = false
+        this.isFlying = false
         this.reactorTasks = []
     }
 
@@ -46,7 +47,7 @@ class Unit {
      * @param {boolean} taskForReactor 
      * @param {boolean} taskForLarva 
      */
-    addTask(task, taskForReactor=false, taskForLarva=false) {
+    addTask(gamelogic, task, taskForReactor=false, taskForLarva=false) {
         console.assert([true, false].includes(taskForReactor), taskForReactor)
         console.assert([true, false].includes(taskForLarva), taskForLarva)
         
@@ -59,16 +60,36 @@ class Unit {
             return
         }
         this.tasks.push(task)
+        gamelogic.busyUnits.add(this)
     }
 
     isIdle() {
         // Returns true if it has no tasks, or has reactor and reactor has no tasks, or has larva
-        return this.tasks.length === 0 || (this.hasReactor && this.reactorTasks.length === 0) || this.larvaCount > 0
+        return (
+                this.tasks.length === 0 
+                || this.larvaCount > 0
+                || (
+                    this.hasReactor 
+                    && this.reactorTasks.length === 0
+                ) 
+            ) 
+            && !this.isFlying
     }
     
     isBusy() {
         // Returns true it has a task (hatchery builds queen, or hatchery's larva builds drone, or barrack's reactor builds a marine)
-        return this.tasks.length > 0 || (this.hasReactor && this.reactorTasks.length > 0) || this.larvaTasks.length > 0
+        return (
+            this.tasks.length > 0 
+            || this.larvaTasks.length > 0
+            || (
+                this.hasReactor 
+                && this.reactorTasks.length > 0
+            ) 
+        )
+    }
+    
+    hasAddon() {
+        return this.hasTechlab || this.hasReactor
     }
 
     isMiningMinerals() {
@@ -91,7 +112,6 @@ class Unit {
 
     updateUnitState(gamelogic) {
         // Should be called every frame for each unit
-
         // Energy per frame
         this.energy = Math.min(200, this.energy + 0.03515625)
 
@@ -108,7 +128,8 @@ class Unit {
             }
             
             // If has inject: spawn larva when frame has been reached
-            if (Math.round(this.hasInjectUntilFrame) === gamelogic.frame) {
+            if (this.hasInjectUntilFrame >= gamelogic.frame) {
+                this.hasInjectUntilFrame = -1
                 this.larvaCount += 3
             }
         }
@@ -119,6 +140,9 @@ class Unit {
 
         task.updateProgress(this.hasChrono())
         // Remove first task if completed
+        // if (this.name === "Factory") {
+        //     console.log(task);
+        // }
         if (task.isCompleted) {
             let unitData
             // Spawn worker
@@ -137,7 +161,7 @@ class Unit {
             // Spawn unit
             if (task.newUnit !== null) {
                 const newUnit = new Unit(task.newUnit)
-                newUnit.energy = 50
+                newUnit.energy = ["Queen"].includes(task.newUnit) ? 25 : 50 
                 gamelogic.units.add(newUnit)
                 gamelogic.idleUnits.add(newUnit)
                 if (newUnit.name === "Zergling") {
@@ -159,31 +183,38 @@ class Unit {
             }
             // Spawn structure
             if (task.newStructure !== null) {
-                const newUnit = new Unit(task.newStructure)
-                newUnit.energy = 50
-                gamelogic.units.add(newUnit)
-                gamelogic.idleUnits.add(newUnit)
-
-                unitData = UNITS_BY_NAME[newUnit.name]
-                
-                if (unitData.is_townhall) {
-                    gamelogic.baseCount += 1
+                if (task.newStructure.includes("TechLab")) {
+                    this.hasTechlab = true
+                } else if (task.newStructure.includes("Reactor")) {
+                    this.hasReactor = true
+                } else {
+                    const newUnit = new Unit(task.newStructure)
+                    newUnit.energy = 50
+                    gamelogic.units.add(newUnit)
+                    gamelogic.idleUnits.add(newUnit)
+    
+                    unitData = UNITS_BY_NAME[newUnit.name]
+                    
+                    if (unitData.is_townhall) {
+                        gamelogic.baseCount += 1
+                    }
+                    
+                    if (unitData.needs_geyser) {
+                        gamelogic.gasCount += 1
+                    }
+                    // Structure that gives supply finishes, structure will have -X supply
+                    unitData = UNITS_BY_NAME[task.newStructure]
+                    if (unitData.supply < 0) {
+                        gamelogic.supplyCap += -unitData.supply
+                        gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
+                        gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
+                    }
                 }
                 
-                if (unitData.needs_geyser) {
-                    gamelogic.gasCount += 1
-                }
-                // Structure that gives supply finishes, structure will have -X supply
-                unitData = UNITS_BY_NAME[task.newStructure]
-                if (unitData.supply < 0) {
-                    gamelogic.supplyCap += -unitData.supply
-                    gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
-                    gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
-                }
                 // console.log(gamelogic.frame);
                 // console.log(newUnit);
                 gamelogic.eventLog.push(new Event(
-                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "structure", task.startFrame, gamelogic.frame
+                    task.newStructure, UNIT_ICONS[task.newStructure.toUpperCase()], "structure", task.startFrame, gamelogic.frame
                 ))
                 
             }
@@ -204,10 +235,27 @@ class Unit {
                 this.energy = 50
                 const targetUnit = UNITS_BY_NAME[task.morphToUnit]
                 const eventType = targetUnit.is_structure ? "structure" : "unit"
-                gamelogic.eventLog.push(new Event(
-                    targetUnit.name, UNIT_ICONS[targetUnit.name.toUpperCase()], eventType, task.startFrame, gamelogic.frame
-                ))
+                if (!["WarpGate", "Gateway"].includes(task.morphToUnit)) {
+                    gamelogic.eventLog.push(new Event(
+                        targetUnit.name, UNIT_ICONS[targetUnit.name.toUpperCase()], eventType, task.startFrame, gamelogic.frame
+                    ))
+                }
             } 
+            // Attach addon
+            if (task.addsTechlab !== null) {
+                this.hasTechlab = true
+                // Event is already added in execute_action.js
+            } 
+            if (task.addsReactor !== null) {
+                this.hasReactor = true
+                // Event is already added in execute_action.js
+            } 
+            // Dettach addon
+            if (task.isLanding !== null) {
+                this.isFlying = false
+                // Event is already added in execute_action.js
+            } 
+
             // Task is complete, mark for removal
             return true
         }

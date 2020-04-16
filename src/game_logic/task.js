@@ -11,10 +11,14 @@ class Task {
         this.newWorker = null
         this.newUnit = null
         this.newStructure = null
+        // Research structures
         this.newUpgrade = null
+        // Drone to building, CC to OC, roach to ravager
         this.morphToUnit = null
-        this.addsTechlab = false
-        this.addsReactor = false
+        // Terran production
+        this.isLanding = null
+        this.addsTechlab = null
+        this.addsReactor = null
     }
 
     updateProgress(hasChrono=false) {

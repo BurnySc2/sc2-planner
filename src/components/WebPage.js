@@ -10,6 +10,7 @@ import ActionsSelection from './ActionSelection'
 import Settings from './Settings'
 import Footer from './Footer'
 import {GameLogic} from '../game_logic/gamelogic'
+// import {cloneDeep} from 'lodash'
 
 
 
@@ -97,35 +98,26 @@ export default class WebPage extends Component {
         })
     }
 
-    // type is one of ["worker", "action", "unit", "structure", "upgrade"]
+    // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
     addItemToBO = (item) => {
         const bo = this.state.bo
         bo.push(item)
         // Re-calculate build order
         const gamelogic = this.state.gamelogic
-        gamelogic.bo = bo
 
-        // Caching using snapshots
-        if (gamelogic.hasSnapshot()) {
-            // Find the latest snapshot that was saved after incrementing the gamelogic.boIndex
-            const maxSnapshotIndex = gamelogic.getHighestBOSnapshotIndex()
-            const snapshot = gamelogic.getBOIndexSnapshots()[maxSnapshotIndex]
-            // console.log(maxSnapshotIndex);
-            // console.log(Object.keys(gamelogic.getBOIndexSnapshots()).map(item => {return parseInt(item)}));
-            // console.log(gamelogic.getBOIndexSnapshots());
-            // console.log(snapshot);
-            
-            gamelogic.loadFromSnapshotObject(snapshot)
-        }
-        // console.log(gamelogic.getBOIndexSnapshots());
-        gamelogic.runUntilEnd()
+        // // Caching using snapshots - idk why this isnt working properly
+        // const latestSnapshot = gamelogic.getLastSnapshot()
+        // if (latestSnapshot) {
+        //     gamelogic.loadFromSnapshotObject(latestSnapshot)
+        // }
+        // gamelogic.bo = cloneDeep(bo)
+        // gamelogic.runUntilEnd()
         
         // Non cached:
-        // gamelogic.reset()
-        // gamelogic.setStart()
-        // gamelogic.runUntilEnd()
-
-        // console.log("Amount of events: " + gamelogic.eventLog.length);
+        gamelogic.bo = bo
+        gamelogic.reset()
+        gamelogic.setStart()
+        gamelogic.runUntilEnd()
 
         this.setState({
             bo: bo,
@@ -138,18 +130,7 @@ export default class WebPage extends Component {
         
         const gamelogic = this.state.gamelogic
         gamelogic.bo = bo
-        // TODO load snapshot from shortly before this bo index
-        // if (gamelogic.hasSnapshot() && index > 0) {
-        //     // TODO remove snapshots >=index
-        //     const snapshot = gamelogic.getBOIndexSnapshots()[index-1]
-        //     console.log(snapshot);
-        //     gamelogic.loadFromSnapshotObject(snapshot)
-        //     // console.log("loaded: " + bo.length);
-        //     // console.log(gamelogic.getBOIndexSnapshots());
-        // } else {
-        //     gamelogic.reset()
-        //     gamelogic.setStart()
-        // }
+        // TODO load snapshot from shortly before the removed bo index
         
         gamelogic.reset()
         gamelogic.setStart()

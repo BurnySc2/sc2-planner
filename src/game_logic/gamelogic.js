@@ -2,7 +2,6 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 import RESEARCHED_BY from "../constants/researched_by"
-import {CUSTOMACTIONS_BY_NAME} from "../constants/customactions"
 import {incomeMinerals, incomeVespene} from "./income"
 
 import {cloneDeep} from 'lodash'
@@ -10,6 +9,7 @@ import {cloneDeep} from 'lodash'
 import Unit from "./unit"
 import Event from "./event"
 import Task from "./task"
+import executeAction from "./execute_action"
 
 /** Logic of this file:
 Each frame
@@ -23,56 +23,14 @@ Each build order index increment
     Add the current state to snapshots for cached view 
 */
 
-let boSnapshots = {}
+let lastSnapshot = null
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
-const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
 class GameLogic {
     constructor(race="terran", bo=[], customSettings=[]) {
         this.race = race
         this.bo = bo
-        this.boIndex = 0
-        this.minerals = 50
-        this.vespene = 0
-        this.supplyUsed = 12
-        this.supplyLeft = this.race === "zerg" ? 2 : 3
-        this.supplyCap = this.race === "zerg" ? 14 : 15
-        this.units = new Set()
-        this.idleUnits = new Set()
-        this.busyUnits = new Set()
-        this.workersMinerals = 12
-        this.workersVespene = 0
-        this.muleCount = 0
-        this.baseCount = 1
-        this.gasCount = 0
-        this.frame = 0
-        // Keep track of how long all units were idle (waiting for resources)
-        this.idleTime = 0
-        this.eventLog = []
-        this.unitsCount = {}
-
-        // Custom settings from the settings page
-        // TODO
-        // How many seconds the worker mining should be delayed at game start
-        this.workerStartDelay = 2
-        // How many seconds a worker needs before starting to build a structure
-        this.workerBuildDelay = 2
-        // How many seconds a worker needs to return back to mining after completing a structure
-        this.workerReturnDelay = 2
-        // Allow max 40 seocnds frames for all units to be idle, before the game logic aborts and marks the build order as 'not valid' (cc off 12 workers can be started after 35 seconds)
-        this.idleLimit = 40 * 22.4
-        // HTML element width factor
-        this.htmlElementWidthFactor = 0.3
-        // this.htmlElementWidthFactor = 1
-
-        // Update settings from customSettings object, see WebPage.js defaultSettings
-        for (let item of customSettings) {
-            this[item.variableName] = item.value
-        }
-    }
-    
-    reset() {
         this.boIndex = 0
         this.minerals = 50
         this.vespene = 0
@@ -87,49 +45,85 @@ class GameLogic {
         this.busyUnits = new Set()
         this.workersMinerals = 12
         this.workersVespene = 0
+        this.workersScouting = 0
+        this.muleCount = 0
         // Researched upgrades
         this.upgrades = new Set()
         // Amount of bases
         this.baseCount = 1
         // Amount of refineries, extractors, assimilators
         this.gasCount = 0
+        this.freeTechlabs = 0
+        this.freeReactors = 0
         this.frame = 0
+        // Keep track of time for action 'do_nothing_5_sec'
+        this.waitTime = 0
+        // Keep track of how long all units were idle (waiting for resources)
+        this.idleTime = 0
         this.eventLog = []
         // Number of units, will only be saved after every build order index advances - only used for UI purpose on the right side of the website
         this.unitsCount = {}
-        boSnapshots = {}
-    }
 
-    hasSnapshot() {
-        return Object.keys(this.getBOIndexSnapshots()).length > 0
-    }
+        // Custom settings from the settings page
+        // TODO
+        // How many seconds the worker mining should be delayed at game start
+        this.workerStartDelay = 2
+        // How many seconds a worker needs before starting to build a structure
+        this.workerBuildDelay = 2
+        // How many seconds a worker needs to return back to mining after completing a structure
+        this.workerReturnDelay = 2
+        // Allow max 40 seocnds frames for all units to be idle, before the game logic aborts and marks the build order as 'not valid' (cc off 12 workers can be started after 35 seconds)
+        this.idleLimit = 40 * 22.4
+        // HTML element width factor
+        this.htmlElementWidthFactor = 0.3
+        // How long it takes buildings to dettach from addons (lift, fly away and land)
+        this.addonSwapDelay = 3
 
-    getBOIndexSnapshots() {
-        return boSnapshots
+        // Update settings from customSettings object, see WebPage.js defaultSettings
+        for (let item of customSettings) {
+            this[item.variableName] = item.value
+        }
     }
-
-    getHighestBOSnapshotIndex(){
-        return Math.max.apply(null, Object.keys(boSnapshots).map(item => {return parseInt(item)}))
+    
+    reset() {
+        this.boIndex = 0
+        this.minerals = 50
+        this.vespene = 0
+        this.supplyUsed = 12
+        this.supplyLeft = this.race === "zerg" ? 2 : 3
+        this.supplyCap = this.race === "zerg" ? 14 : 15
+        this.units = new Set()
+        this.idleUnits = new Set()
+        this.busyUnits = new Set()
+        this.workersMinerals = 12
+        this.workersVespene = 0
+        this.workersScouting = 0
+        this.muleCount = 0
+        this.upgrades = new Set()
+        this.baseCount = 1
+        this.gasCount = 0
+        this.freeTechlabs = 0
+        this.freeReactors = 0
+        this.frame = 0
+        this.waitTime = 0
+        this.idleTime = 0
+        this.eventLog = []
+        this.unitsCount = {}
+        lastSnapshot = null
     }
 
     loadFromSnapshotObject(snapshot) {
-        console.assert(snapshot !== undefined, snapshot)
-        this.boIndex = snapshot.boIndex
-        this.minerals = snapshot.minerals
-        this.vespene = snapshot.vespene
-        this.supplyUsed = snapshot.supplyUsed
-        this.supplyLeft = snapshot.supplyLeft
-        this.supplyCap = snapshot.supplyCap
-        this.units = snapshot.units
-        this.idleUnits = snapshot.idleUnits
-        this.busyUnits = snapshot.busyUnits
-        this.workersMinerals = snapshot.workersMinerals
-        this.workersVespene = snapshot.workersVespene
-        this.baseCount = snapshot.baseCount
-        this.gasCount = snapshot.gasCount
-        this.frame = snapshot.frame
-        this.eventLog = snapshot.eventLog
-        
+        console.assert(snapshot, snapshot)
+        // TODO Find a better way of overwriting values from snapshot
+        console.log(cloneDeep(this));
+        console.log(cloneDeep(snapshot));
+        for (let key of Object.keys(snapshot)) {
+            this[key] = cloneDeep(snapshot[key])
+        }
+    }
+
+    getLastSnapshot() {
+        return lastSnapshot
     }
 
     setStart() {
@@ -158,9 +152,8 @@ class GameLogic {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
             const workerStartDelayTask = new Task(22.4 * this.workerStartDelay, this.frame)
-            unit.addTask(workerStartDelayTask)
+            unit.addTask(this, workerStartDelayTask)
             this.units.add(unit)
-            this.busyUnits.add(unit)
         }
         this.updateUnitsCount()
     }
@@ -244,7 +237,7 @@ class GameLogic {
 
             // Run action
             else if (boElement.type === "action") {
-                const executed = this.executeAction(boElement)
+                const executed = executeAction(this, boElement)
                 if (executed) {
                     endOfActions = false
                 }
@@ -257,10 +250,11 @@ class GameLogic {
                 // Each time the boIndex gets incremented, take a snapshot of the current state - this way i can cache the gamelogic and reload it from the state
                 // e.g. bo = [scv, depot, scv]
                 // and i want to remove depot, i can resume from cached state of index 0
+
                 const clone = cloneDeep(this)
-                // Need to add one frame here
+                // // Need to add one frame here
                 clone.frame += 1
-                boSnapshots[this.boIndex] = clone
+                lastSnapshot = clone
             }
         }
     }
@@ -346,16 +340,25 @@ class GameLogic {
                 continue
             }
 
+            // If target is an addon but building structure already has addon: skip
+            // if (trainerUnit.name === "Barracks") {
+            //     console.log(this.frame)
+            //     console.log(cloneDeep(trainerUnit));
+            //     console.log(trainerUnit.isIdle())
+            //     console.log(trainerUnit.isBusy())
+            //     console.log(trainerUnit.hasAddon())
+            //     console.log(trainerUnit.hasReactor)
+            // }
+            if ((unit.name.includes("TechLab") || unit.name.includes("Reactor")) && trainerUnit.hasAddon()) {
+                continue
+            }
+
             // Loop over all idle units and check if they match unit type
             
-            const trainerCanTrainThisUnit = trainedInfo.trainedBy[trainerUnit.name] === 1
-            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor
-            const trainerCanTrainThroughLarva = trainedInfo.trainedBy["Larva"] === 1 && trainerUnit.larvaCount > 0
-            // console.log(this.frame);
-            // console.log(trainerUnit.name);
-            // console.log(trainedInfo);
-            // console.log(trainerCanTrainThisUnit);
-            // console.log(trainerCanTrainThroughLarva);
+            const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(trainerUnit.name)
+            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor //&& !unit.name.includes("TechLab") && !unit.name.includes("Reactor")
+            const trainerCanTrainThroughLarva = trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0
+
             if (
                 !trainerCanTrainThisUnit 
                 && !trainerCanTrainThroughReactor 
@@ -385,10 +388,9 @@ class GameLogic {
             }
             // console.log(trainedInfo);
             // console.log(newTask);
-            trainerUnit.addTask(newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
+            trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
             // TODO If trainerUnit is a worker: reduce mineral worker count by 1 and add it by 1 once the task is complete
             // Unit is definitely busy after receiving a task
-            this.busyUnits.add(trainerUnit)
             if (trainerCanTrainThroughLarva) {
                 trainerUnit.larvaCount -= 1
             }
@@ -414,6 +416,7 @@ class GameLogic {
             if (trainerUnit.name === "Drone") {
                 this.supplyUsed -= 1
                 this.supplyLeft += 1
+                this.workersMinerals -= 1
             }            
 
             return true
@@ -481,97 +484,12 @@ class GameLogic {
             const researchTime = this.getTime(upgrade.name, true)
             const newTask = new Task(researchTime, this.frame)
             newTask.newUpgrade = upgrade.name
-            researcherStructure.addTask(newTask)
-            this.busyUnits.add(researcherStructure)
+            researcherStructure.addTask(this, newTask)
             const cost = this.getCost(upgrade.name, true)
             this.minerals -= cost.minerals
             this.vespene -= cost.vespene
             return true
         }
-        return false
-    }
-    
-    executeAction(actionItem) {
-        // Issue action
-        // TODO
-        // console.log(this.frame);
-        // console.log(actionItem);
-        const action = CUSTOMACTIONS_BY_NAME[actionItem.name]
-        console.assert(action !== undefined, JSON.stringify(actionItem, null, 4))
-        let actionCompleted = false
-
-        // ALL RACES
-
-        if (action.internal_name === "worker_to_mins" && this.workersVespene > 0) {
-            for (const unit of this.idleUnits) {
-                if (workerTypes.has(unit.name) && unit.isMiningGas) {
-                    unit.isMiningGas = false
-                    this.workersMinerals += 1
-                    this.workersVespene -= 1
-                    actionCompleted = true
-                    break
-                }
-            }
-        }
-
-        if (action.internal_name === "worker_to_gas" && this.workersMinerals > 0) {
-            for (const unit of this.idleUnits) {
-                if (this.gasCount > 0 && workerTypes.has(unit.name) && unit.isMiningMinerals()) {
-                    unit.isMiningGas = true
-                    this.workersMinerals -= 1
-                    this.workersVespene += 1
-                    actionCompleted = true
-                    break
-                }
-            }
-        }
-
-        if (action.internal_name === "3worker_to_gas" && this.workersMinerals >= 3) {
-            const mineralWorkers = []
-            for (const unit of this.idleUnits) {
-                // Find 3 workers that are mining minerals
-                if (this.gasCount > 0 && workerTypes.has(unit.name) && unit.isMiningMinerals()) {
-                    mineralWorkers.push(unit)
-                    if (mineralWorkers.length === 3) {
-                        mineralWorkers.forEach((worker) => {
-                            worker.isMiningGas = true
-                        })
-                        this.workersMinerals -= 3
-                        this.workersVespene += 3
-                        actionCompleted = true
-                        break
-                    }
-                }
-            }
-        }
-
-        // TERRAN
-
-        if (action.internal_name === "call_down_mule") {
-            for (const unit of this.idleUnits) {
-                // Find orbital with >=50 energy
-                if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
-                    unit.energy -= 50
-                    // Spawn temporary unit mule
-                    // TODO Might want to add mule spawn delay later? (2-3 seconds)
-                    const newUnit = new Unit("MULE")
-                    newUnit.isAliveUntilFrame = this.frame + action.duration * 22.4
-                    this.units.add(newUnit)
-                    this.muleCount += 1
-                    actionCompleted = true
-                }
-            }
-        }
-
-        if (actionCompleted) {    
-            // Add event                  
-            this.eventLog.push(new Event(
-                action.name, action.imageSource, "action", this.frame, this.frame + 22.4 * action.duration
-            ))
-            return true
-        }
-
-        
         return false
     }
 
@@ -581,19 +499,25 @@ class GameLogic {
             unit.updateUnitState(this)
         })
         this.units.forEach((unit) => {
-            const isAlive = unit.isAlive()
+            const isAlive = unit.isAlive(this.frame)
             if (!isAlive) {
                 if (unit.name === "MULE") {
                     this.muleCount -= 1
                 } 
-                this.units.delete(unit)
-                this.idleUnits.delete(unit)
-                this.busyUnits.delete(unit)
+                this.killUnit(unit)
             }
         })
         this.units.forEach((unit) => {
             unit.updateUnit(this)
         })
+    }
+
+    // UTILITY FUNCTIONS
+
+    killUnit(unit) {
+        this.units.delete(unit)
+        this.idleUnits.delete(unit)
+        this.busyUnits.delete(unit)
     }
 
     getCost(unitName, isUpgrade=false) {

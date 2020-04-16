@@ -30,17 +30,17 @@ const CUSTOMACTIONS = {
             imageSource: "ui-editoricon-previewer_rotateleft.png",
             duration: 10,
         },
-        // {   
-        //     internal_name: "do_nothing_1_sec",
-        //     name: "Wait",
-        //     imageSource: "icon-time-terran.png",
-        //     duration: 1,
-        // },
+        {   
+            internal_name: "do_nothing_1_sec",
+            name: "Wait 1sec",
+            imageSource: "icon-time-terran.png",
+            duration: 16,
+        },
         {   
             internal_name: "do_nothing_5_sec",
             name: "Wait 5secs",
             imageSource: "icon-time-zerg.png",
-            duration: 5,
+            duration: 17,
         },
     ],
     terran: [
@@ -54,79 +54,79 @@ const CUSTOMACTIONS = {
             internal_name: "call_down_supply",
             name: "Call down supply",
             imageSource: "btn-ability-terran-calldownextrasupplies-color.png",
-            duration: 10,
+            duration: 25,
         },
         {   
             internal_name: "attach_barracks_to_free_techlab",
             name: "Barracks to free Techlab",
             imageSource: "btn-building-terran-barracks.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "attach_barracks_to_free_reactor",
             name: "Barracks to free Reactor",
             imageSource: "btn-building-terran-barracksmengsk.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "attach_factory_to_free_techlab",
             name: "Factory to free Techlab",
             imageSource: "btn-building-terran-factory.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "attach_factory_to_free_reactor",
             name: "Factory to free Reactor",
             imageSource: "btn-building-terran-factorymengsk.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "attach_starport_to_free_techlab",
             name: "Starport to free Techlab",
             imageSource: "btn-building-terran-starport.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "attach_starport_to_free_reactor",
             name: "Starport to free Reactor",
             imageSource: "btn-building-terran-starportmengsk.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "dettach_barracks_from_techlab",
             name: "Lift Barracks from Techlab",
             imageSource: "btn-building-nova-barracks.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "dettach_barracks_from_reactor",
             name: "Lift Barracks from Reactor",
             imageSource: "btn-building-stukov-infestedbarracks.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "dettach_factory_from_techlab",
             name: "Lift Factory from Techlab",
             imageSource: "btn-building-terran-factory-covertops.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "dettach_factory_from_reactor",
             name: "Lift Factory from Reactor",
             imageSource: "btn-building-terran-factorymengsk.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "dettach_starport_from_techlab",
             name: "Lift Starport from Techlab",
             imageSource: "btn-building-nova-starport.png",
-            duration: 3,
+            duration: 40,
         },
         {   
             internal_name: "dettach_starport_from_reactor",
             name: "Lift Starport from Reactor",
             imageSource: "btn-building-stukov-infestedstarport.png",
-            duration: 3,
+            duration: 40,
         },
         // {   
         //     internal_name: "salvage_bunker",
@@ -137,25 +137,25 @@ const CUSTOMACTIONS = {
 
     ],
     protoss: [
-        {   
-            // TODO chrono other buildings: gate, warpgate, forge, cybercore, twilight, stargate, fleet beacon, robo, robo bay
-            // Perhaps use drag and drop to select which to target? select event which is connected to task start and unit id which executes that task, then from game logic try to chrono that unit 
-            internal_name: "chrono_nexus",
-            name: "Chrono Nexus",
-            imageSource: "btn-ability-spearofadun-chronosurge.png",
-            duration: 20,
-        },
+        // {   
+        //     // TODO chrono other buildings: gate, warpgate, forge, cybercore, twilight, stargate, fleet beacon, robo, robo bay
+        //     // Perhaps use drag and drop to select which to target? select event which is connected to task start and unit id which executes that task, then from game logic try to chrono that unit 
+        //     internal_name: "chrono_nexus",
+        //     name: "Chrono Nexus",
+        //     imageSource: "btn-ability-spearofadun-chronosurge.png",
+        //     duration: 20,
+        // },
         {   
             internal_name: "convert_gateway_to_warpgate",
             name: "Gate to Warpgate",
             imageSource: "btn-building-protoss-warpgate.png",
-            duration: 7,
+            duration: 30,
         },
         {   
             internal_name: "convert_warpgate_to_gateway",
             name: "Warpgate to Gate",
             imageSource: "btn-building-protoss-gateway.png",
-            duration: 7,
+            duration: 30,
         },
         {   
             internal_name: "morph_archon_from_dt_dt",

@@ -44,7 +44,7 @@ export default class ActionsSelection extends Component {
     }
 
     render() {
-        let latestSnapshot = this.props.gamelogic.getBOIndexSnapshots()[this.props.gamelogic.getHighestBOSnapshotIndex()]
+        let latestSnapshot = this.props.gamelogic.getLastSnapshot()
         // Is undefined on first frame = when build order is empty
         if (!latestSnapshot) {
             latestSnapshot = this.props.gamelogic
@@ -70,6 +70,7 @@ export default class ActionsSelection extends Component {
             }
             return false
         })
+        
         const resources = resourcesAvailble.map((item, index) => {
             // Instead of getting the status when the last element finished, get the state after the last build order index was started
             let value = "";
@@ -97,7 +98,7 @@ export default class ActionsSelection extends Component {
                 return this.onMouseEnter(e, 
                     <div className="flex flex-col">
                         <div>{item.name}</div>
-                        <div>Duration: {item.duration}s</div>
+                        {/* <div>Duration: {item.duration}s</div> */}
                     </div>
                 )
             }

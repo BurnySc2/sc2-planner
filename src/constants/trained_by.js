@@ -44,7 +44,7 @@ data.Unit.forEach((trainingUnit) => {
             // If it doesnt exist: create
             if (TRAINED_BY[resultingUnit.name] === undefined) {
                 TRAINED_BY[resultingUnit.name] = {
-                    trainedBy: {[trainingUnit.name]: 1},
+                    trainedBy: new Set([trainingUnit.name]),
 
                     requiresTechlab: requiresTechlab,
 
@@ -54,7 +54,7 @@ data.Unit.forEach((trainingUnit) => {
                 }
             } else {
                 // Entry already exists, add training unit to object of 'trainedBy' and update requirement
-                TRAINED_BY[resultingUnit.name].trainedBy[trainingUnit.name] = 1
+                TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
             }
             TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name].requiredStructure ? requiredStructure : TRAINED_BY[resultingUnit.name].requiredStructure
 
