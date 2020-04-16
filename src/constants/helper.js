@@ -14,30 +14,53 @@ const CONVERT_SECONDS_TO_TIME_STRING = ((totalSeconds) => {
 })
 
 const defaultSettings = [
-    // TODO Specificy a min and max limit, e.g. min=0, max=10000
     {
+        // Pretty name displayed in gui
         name: "Worker start delay",
+        // Tooltip popup that shows some information text
         tooltip: "idk some tooltip",
+        // Internal long variable name used by gamelogic.js
+        variableName: "workerStartDelay",
+        // Short name for base64 string
         n: "wsd",
-        v: 2
+        // The given value
+        v: 2,
+        // Min value in GUI
+        min: 0,
+        // Max value in GUI
+        max: 100,
+        // Step size of values in GUI if you press the arrow things
+        step: 0.5,
     },
     {
         name: "Worker build delay",
         tooltip: "idk some tooltip",
+        variableName: "workerBuildDelay",
         n: "wbd",
-        v: 2
+        v: 2,
+        min: 0,
+        max: 100,
+        step: 0.5,
     },
     {
         name: "Worker return delay",
         tooltip: "idk some tooltip",
+        variableName: "workerReturnDelay",
         n: "wrd",
-        v: 2
+        v: 2,
+        min: 0,
+        max: 100,
+        step: 0.5,
     },
     {
         name: "Idle limit",
         tooltip: "idk some tooltip",
+        variableName: "idleLimit",
         n: "il",
-        v: 40 * 22.4
+        v: 40,
+        min: 0,
+        max: 600,
+        step: 10,
     },
 ]
 
@@ -73,7 +96,7 @@ const decodeSettings = ((settingsEncoded) => {
 })
 
 const encodeBuildOrder = ((buildOrderObject) => {
-    console.log(buildOrderObject);
+    // console.log(buildOrderObject);
     let strippedObject = buildOrderObject.map((item) => {
         return pick(item, ["name", "type"])
     })

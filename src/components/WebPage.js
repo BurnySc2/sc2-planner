@@ -62,7 +62,7 @@ export default withRouter(class WebPage extends Component {
             // Each element needs to have an .image attached and tooltip with: name, minerals, vespene, time
             bo: bo,
             gamelogic: gamelogic,
-            settings: defaultSettings
+            settings: settings
         }
 
         // Load unit icons
@@ -82,7 +82,7 @@ export default withRouter(class WebPage extends Component {
     updateUrl = (race, settings, buildOrder, pushHistory=false) => {
         // See router props
         // console.log(this.props);
-        
+
         // Encode the settings
         const settingsEncoded = encodeSettings(settings)
         // const decoded = decodeSettings(settingsEncoded)
@@ -107,15 +107,28 @@ export default withRouter(class WebPage extends Component {
         gamelogic.bo = bo
         gamelogic.loadSettings(settings)
         gamelogic.runUntilEnd()
+        this.setState({
+            bo: bo,
+            gamelogic: gamelogic,
+        })
     }
 
 
     // TODO Pass the settings to Settings.js and let the user input handle it
-    updateSettings = (e, settings) => {
-        this.setState({settings: settings})
+    updateSettings = (e, fieldKey, fieldValue) => {
+        const settings = this.state.settings
+        settings.forEach((item) => {
+            if (item.n === fieldKey) {
+                item.v = fieldValue
+            }
+        })
+        
         // Re-calculate the whole simulation
         // TODO optimize: only recalculate if settings were changed that affected it
         this.rerunBuildOrder(this.state.bo, settings)
+        this.setState({
+            settings: settings
+        })
         this.updateUrl(this.state.race, settings, this.state.bo)
     }
 

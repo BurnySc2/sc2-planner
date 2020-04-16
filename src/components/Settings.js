@@ -25,6 +25,11 @@ export default class Settings extends Component {
         })
     }
 
+    onChange = (e, itemShortName) => {
+        const newValue = parseFloat(e.target.value)
+        this.props.updateSettings(e, itemShortName, newValue)
+    }
+
     render() {
         const classes = CLASSES.dropDown
         const classesAll = this.state.show ? `visible ${classes}` : `hidden ${classes}`
@@ -36,7 +41,7 @@ export default class Settings extends Component {
                     <div className={CLASSES.dropDownLabel}>
                         {item.name}
                     </div>
-                    <input className={CLASSES.dropDownInput} type="number" placeholder={item.v} defaultValue={item.v} />
+                    <input className={CLASSES.dropDownInput} type="number" placeholder={item.v} defaultValue={item.v} step={item.step} min={item.min} max={item.max} onChange={(e) => {this.onChange(e, item.n)}} />
                 </div>
             )
         })

@@ -73,16 +73,14 @@ class GameLogic {
         // How many seconds a worker needs to return back to mining after completing a structure
         this.workerReturnDelay = 2
         // Allow max 40 seocnds frames for all units to be idle, before the game logic aborts and marks the build order as 'not valid' (cc off 12 workers can be started after 35 seconds)
-        this.idleLimit = 40 * 22.4
+        this.idleLimit = 40
         // HTML element width factor
         this.htmlElementWidthFactor = 0.3
         // How long it takes buildings to dettach from addons (lift, fly away and land)
         this.addonSwapDelay = 3
 
         // Update settings from customSettings object, see WebPage.js defaultSettings
-        for (let item of customSettings) {
-            this[item.variableName] = item.value
-        }
+        this.loadSettings(customSettings)
     }
     
     reset() {
@@ -112,8 +110,10 @@ class GameLogic {
         lastSnapshot = null
     }
 
-    loadSettings(settings) {
-        
+    loadSettings(customSettings) {
+        for (let item of customSettings) {
+            this[item.variableName] = item.v
+        }
     }
 
     loadFromSnapshotObject(snapshot) {
@@ -175,7 +175,7 @@ class GameLogic {
             // Abort if units idle for too long (waiting for resources), e.g. when making all workers scout and only one more worker is mining, then build a cc will take forever
             if (this.busyUnits.size === 0) {
                 this.idleTime += 1
-                if (this.idleTime >= this.idleLimit) {
+                if (this.idleTime >= this.idleLimit * 22.4) {
                     break
                 }
             } else {
