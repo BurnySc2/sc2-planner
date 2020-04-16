@@ -292,6 +292,10 @@ class Unit {
                 this.isFlying = false
                 // Event is already added in execute_action.js
             } 
+            // Worker returns from building structure
+            if (task.addMineralWorker !== null) {
+                gamelogic.workersMinerals += 1
+            }
 
             // Task is complete, mark for removal
             return true

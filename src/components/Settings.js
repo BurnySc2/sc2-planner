@@ -46,6 +46,8 @@ export default class Settings extends Component {
             )
         })
 
+        // TODO Add apply button because onChange doesnt work reliably
+
         const settingsButton = 
             <div className={CLASSES.buttons} onMouseEnter={this.showSettings} onMouseLeave={this.hideSettings}>
                 Settings

@@ -23,6 +23,8 @@ class Task {
         this.isLanding = null
         this.addsTechlab = null
         this.addsReactor = null
+        // Workers building stuff
+        this.addMineralWorker = null
     }
 
     /**

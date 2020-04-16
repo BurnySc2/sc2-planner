@@ -26,6 +26,7 @@ Each build order index increment
 let lastSnapshot = null
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
+const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
 class GameLogic {
     /**
@@ -103,7 +104,7 @@ class GameLogic {
         this.units = new Set()
         this.idleUnits = new Set()
         this.busyUnits = new Set()
-        this.workersMinerals = 12
+        this.workersMinerals = 0
         this.workersVespene = 0
         this.workersScouting = 0
         this.muleCount = 0
@@ -180,6 +181,7 @@ class GameLogic {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
             const workerStartDelayTask = new Task(22.4 * this.workerStartDelay, this.frame)
+            workerStartDelayTask.addMineralWorker = true
             unit.addTask(this, workerStartDelayTask)
             this.units.add(unit)
         }
@@ -389,14 +391,6 @@ class GameLogic {
             }
 
             // If target is an addon but building structure already has addon: skip
-            // if (trainerUnit.name === "Barracks") {
-            //     console.log(this.frame)
-            //     console.log(cloneDeep(trainerUnit));
-            //     console.log(trainerUnit.isIdle())
-            //     console.log(trainerUnit.isBusy())
-            //     console.log(trainerUnit.hasAddon())
-            //     console.log(trainerUnit.hasReactor)
-            // }
             if ((unit.name.includes("TechLab") || unit.name.includes("Reactor")) && trainerUnit.hasAddon()) {
                 continue
             }
@@ -405,7 +399,8 @@ class GameLogic {
             
             const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(trainerUnit.name)
             const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor //&& !unit.name.includes("TechLab") && !unit.name.includes("Reactor")
-            const trainerCanTrainThroughLarva = trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0
+            // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
+            const trainerCanTrainThroughLarva = (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) || trainerUnit.name === "Probe"
 
             if (
                 !trainerCanTrainThisUnit 
@@ -418,13 +413,22 @@ class GameLogic {
 
             // Add task to unit
             // If trained unit is made by worker: add worker move delay
-            const buildTime = this.getTime(unit.name)
+            let buildTime = this.getTime(unit.name)
             
-            const newTask = new Task(buildTime, this.frame)
-            
-            const morphCondition = (trainedInfo.isMorph || trainedInfo.consumesUnit) && !trainerCanTrainThroughLarva
+            // Create the build start delay task
+            let buildStartDelay = 0
+            if (workerTypes.has(trainerUnit.name)) {
+                this.workersMinerals -= 1
+                // Worker moving to location delay
+                const workerMovingToConstructionSite = new Task(this.workerBuildDelay * 22.4, this.frame)
+                trainerUnit.addTask(this, workerMovingToConstructionSite)
+                buildStartDelay = this.workerBuildDelay * 22.4
+            }
+
+            // Create the new task
+            const newTask = new Task(buildTime, this.frame + buildStartDelay)
+            const morphCondition = (trainedInfo.isMorph || trainedInfo.consumesUnit) && !trainerCanTrainThroughLarva 
             newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
-            
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
                     newTask.newWorker = unit.name
@@ -434,21 +438,19 @@ class GameLogic {
                     newTask.newStructure = unit.name
                 }
             }
-            // console.log(trainedInfo);
-            // console.log(newTask);
             trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
+
+            // Create the builder return task
+            if (["Probe", "SCV"].includes(trainerUnit.name)) {
+                // Probe and SCV return to mining after they are done with their task
+                const workerReturnToMinerals = new Task(this.workerReturnDelay * 22.4, this.frame)
+                workerReturnToMinerals.addMineralWorker = true
+                trainerUnit.addTask(this, workerReturnToMinerals)
+            }
             // TODO If trainerUnit is a worker: reduce mineral worker count by 1 and add it by 1 once the task is complete
-            // Unit is definitely busy after receiving a task
             if (trainerCanTrainThroughLarva) {
                 trainerUnit.larvaCount -= 1
             }
-            // console.log(cloneDeep(trainerUnit));
-            
-            // console.log(this.frame);
-            // console.log(cloneDeep(unit));
-            // console.log(cloneDeep(trainerUnit));
-            // console.log(cloneDeep(trainedInfo));
-            // console.log(cloneDeep(newTask));
 
             const cost = this.getCost(unit.name)
             if (unit.name === "Zergling") {
@@ -464,7 +466,6 @@ class GameLogic {
             if (trainerUnit.name === "Drone") {
                 this.supplyUsed -= 1
                 this.supplyLeft += 1
-                this.workersMinerals -= 1
             }            
 
             return true
