@@ -213,7 +213,9 @@ export default class WebPage extends Component {
                         <BOArea gamelogic={this.state.gamelogic} />
                     </div>
                     <div className="w-3/12">
-                        <ActionsSelection gamelogic={this.state.gamelogic}  race={this.state.race} 
+                        <ActionsSelection 
+                        gamelogic={this.state.gamelogic}  
+                        race={this.state.race} 
                         actionClick={this.actionSelectionActionClicked} 
                         unitClick={this.actionSelectionUnitClicked} 
                         structureClick={this.actionSelectionStructureClicked} 

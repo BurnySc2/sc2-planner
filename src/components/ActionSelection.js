@@ -14,7 +14,6 @@ const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 export default class ActionsSelection extends Component {
-    // TODO If a button is pressed, add item to build order
     constructor(props) {
         super(props)
         this.state = {

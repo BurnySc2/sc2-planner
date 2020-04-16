@@ -50,6 +50,7 @@ class Unit {
     addTask(gamelogic, task, taskForReactor=false, taskForLarva=false) {
         console.assert([true, false].includes(taskForReactor), taskForReactor)
         console.assert([true, false].includes(taskForLarva), taskForLarva)
+        gamelogic.busyUnits.add(this)
         
         if (taskForReactor) {
             this.reactorTasks.push(task)
@@ -60,7 +61,6 @@ class Unit {
             return
         }
         this.tasks.push(task)
-        gamelogic.busyUnits.add(this)
     }
 
     isIdle() {
