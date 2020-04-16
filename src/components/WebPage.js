@@ -12,8 +12,6 @@ import Footer from './Footer'
 import {GameLogic} from '../game_logic/gamelogic'
 // import {cloneDeep} from 'lodash'
 
-
-
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
@@ -21,7 +19,7 @@ const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 export default class WebPage extends Component {
     constructor(props) {
         super(props)
-
+        
         const defaultSettings = [
             // TODO Specificy a min and max limit, e.g. min=0, max=10000
             {
@@ -50,12 +48,13 @@ export default class WebPage extends Component {
             },
         ]
 
-        const gamelogic = new GameLogic("terran", [], defaultSettings)
+        const gamelogic = new GameLogic(this.props.race, [], defaultSettings)
         gamelogic.reset()
         gamelogic.setStart()
+        
 
         this.state = {
-            race: "terran",
+            race: this.props.race,
             // Build order
             // Each element needs to have an .image attached and tooltip with: name, minerals, vespene, time
             bo: [],

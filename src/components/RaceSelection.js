@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { Link } from "react-router-dom";
+
 import RACES from "../icons/races"
 import CLASSES from "../constants/classes"
 
@@ -20,9 +22,9 @@ export default class RaceSelection extends Component {
 
         const races = ["protoss", "terran", "zerg"].map((race, index) => {
             const item = RACES[race]
-            return <div key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
+            return <Link to={`${race}`} key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
                 <img race={item} src={require("../icons/png/" + item.path)} alt={item.name} />
-            </div>
+            </Link>
         });
 
         return (

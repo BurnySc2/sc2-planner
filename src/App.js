@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import './index.css';
 
-import WebPage from './components/WebPage';
+import MyRouter from './components/MyRouter';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <WebPage />
+        <MyRouter />
       </div>
     );
   }
