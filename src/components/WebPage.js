@@ -59,8 +59,6 @@ export default class WebPage extends Component {
             // Build order
             // Each element needs to have an .image attached and tooltip with: name, minerals, vespene, time
             bo: [],
-            // Selected timestamp
-            time: 0,
             gamelogic: gamelogic,
             settings: defaultSettings
         }
@@ -93,7 +91,6 @@ export default class WebPage extends Component {
         this.setState({
             race: race,
             bo: [],
-            time: 0,
             gamelogic: gamelogic,
         })
     }
@@ -207,7 +204,8 @@ export default class WebPage extends Component {
                     <div className="w-9/12">
                         <div className="flex flex-row bg-indigo-400 m-2 p-2 items-center">
                             <RaceSelection onClick={this.raceSelectionClicked} />
-                            <Time time={this.state.time} />
+                            <Time 
+                            gamelogic={this.state.gamelogic} />
                             <BuildOrder bo={this.state.bo} removeClick={this.buildOrderRemoveClicked} />
                         </div>
                         <BOArea gamelogic={this.state.gamelogic} />
