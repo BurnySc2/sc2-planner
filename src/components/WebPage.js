@@ -79,23 +79,25 @@ export default withRouter(class WebPage extends Component {
 
     }
 
-    updateUrl = (race, settings, buildOrder) => {
+    updateUrl = (race, settings, buildOrder, pushHistory=false) => {
         // See router props
         // console.log(this.props);
+        
         // Encode the settings
         const settingsEncoded = encodeSettings(settings)
         // const decoded = decodeSettings(settingsEncoded)
-        // console.log(decoded);
         
         // Encode the build order
         const buildOrderEncoded = encodeBuildOrder(buildOrder)
         // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
 
         const newUrl = `/${race}/${settingsEncoded}/${buildOrderEncoded}`
-        // console.log(newUrl);
         // Change current url
-        this.props.history.replace(`${newUrl}`)
-        // this.props.history.push(`${newUrl}`)
+        if (pushHistory) {
+            this.props.history.push(`${newUrl}`)
+        } else {
+            this.props.history.replace(`${newUrl}`)
+        }
     }
 
     rerunBuildOrder(bo, settings) {
@@ -131,9 +133,10 @@ export default withRouter(class WebPage extends Component {
         
         // If settings are unchanged, change url to just '/race' instead of encoded settings
         if (isEqual(this.state.settings, defaultSettings)) {
-            this.props.history.replace(`/${race}`)
+            // this.props.history.replace(`/${race}`)
+            this.props.history.push(`/${race}`)
         } else {
-            this.updateUrl(race, this.state.settings, [])
+            this.updateUrl(race, this.state.settings, [], true)
         }     
     }
 

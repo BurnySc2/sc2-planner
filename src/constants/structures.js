@@ -18,6 +18,7 @@ import data from "./data.json"
 
 const ignoreStructure = {
     // Protoss
+    WarpGate: 1,
     OracleStasisTrap: 1,
     // Terran
     SupplyDepotLowered: 1,
@@ -34,6 +35,7 @@ const ignoreStructure = {
     CreepTumorQueen: 1,
     SpineCrawlerUprooted: 1,
     SporeCrawlerUprooted: 1,
+    NydusCanal: 1,
 }
 
 const STRUCTURES = {
@@ -52,10 +54,10 @@ const STRUCTURES = {
 }
 
 // console.log(STRUCTURES.all)
-console.assert(STRUCTURES.all.length === 54, `${STRUCTURES.all.length} is not equal to 54`);
+console.assert(STRUCTURES.all.length === 52, `${STRUCTURES.all.length} is not equal to 52`);
 console.assert(STRUCTURES.terran.length === 20, `${STRUCTURES.terran.length} is not equal to 20`);
-console.assert(STRUCTURES.protoss.length === 16, `${STRUCTURES.protoss.length} is not equal to 16`);
-console.assert(STRUCTURES.zerg.length === 18, `${STRUCTURES.zerg.length} is not equal to 18`);
+console.assert(STRUCTURES.protoss.length === 15, `${STRUCTURES.protoss.length} is not equal to 15`);
+console.assert(STRUCTURES.zerg.length === 17, `${STRUCTURES.zerg.length} is not equal to 17`);
 
 
 export default STRUCTURES
