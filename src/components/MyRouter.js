@@ -6,10 +6,6 @@ import {
 import WebPage from "./WebPage"
 
 export default class MyRouter extends Component {
-    constructor(props) {
-        super(props)
-        console.log(props);
-    }
     render() {
         return (
             <div>

@@ -23,24 +23,13 @@ const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 export default withRouter(class WebPage extends Component {
     constructor(props) {
         super(props)
-        console.log(props);
         
         // Get information from url
         // is "" local dev, file:///home/burny/Github/sc2-planner-react/build/index.html local build, /sc2-planner/ on github pages
-        let path = this.props.location.search
-        // while (path.length > 0 && !path.startsWith("race") && !path.startsWith("terran") && !path.startsWith("zerg")) {
-        //     console.log(path);
-            
-        //     path = path.slice(1, path.length)
-        // }
-        
-        const urlParams = new URLSearchParams(path)
+        const urlParams = new URLSearchParams(this.props.location.search)
         const raceUrl = urlParams.get('race');
         const settingsEncoded = urlParams.get('settings');
         const boEncoded = urlParams.get('bo');
-        console.log(raceUrl);
-        console.log(settingsEncoded);
-        console.log(boEncoded);
 
         let race = "terran"
         if (["terran", "protoss", "zerg"].includes(raceUrl)) {
@@ -50,7 +39,6 @@ export default withRouter(class WebPage extends Component {
         // Decode settings from url
         let settings = cloneDeep(defaultSettings)
         if (settingsEncoded) {
-            console.log(settingsEncoded);
             const decodedSettings = decodeSettings(settingsEncoded)
             // Override default settings from settings in url
             settings.forEach((item1) => {
@@ -65,7 +53,6 @@ export default withRouter(class WebPage extends Component {
         // Decode build order from url
         let bo = []
         if (boEncoded) {
-            console.log(boEncoded);
             bo = decodeBuildOrder(boEncoded)
         }
 
