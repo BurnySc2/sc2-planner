@@ -96,9 +96,8 @@ export default class ActionsSelection extends Component {
 
         const customactions = CUSTOMACTIONS.all.concat(CUSTOMACTIONS[this.props.race]).map((item, index) => {
             // Update tooltip function
-            
             const mouseEnterFunc = (e) => {
-                return this.onMouseEnter(e, 
+                this.onMouseEnter(e, 
                     <div className="flex flex-col">
                         <div>{item.name}</div>
                         {/* <div>Duration: {item.duration}s</div> */}
@@ -117,7 +116,7 @@ export default class ActionsSelection extends Component {
         const units = UNITS[this.props.race].map((item, index) => {
             // Update tooltip function
             const mouseEnterFunc = (e) => {
-                return this.onMouseEnter(e, 
+                this.onMouseEnter(e, 
                     <div className="flex flex-col text-center">
                         <div>Build unit</div>
                         <div>{item.name}</div>
@@ -141,7 +140,7 @@ export default class ActionsSelection extends Component {
         const structures = STRUCTURES[this.props.race].map((item, index) => {
             // Update tooltip function
             const mouseEnterFunc = (e) => {
-                return this.onMouseEnter(e, 
+                this.onMouseEnter(e, 
                     <div className="flex flex-col text-left">
                         <div>Build structure</div>
                         <div>{item.name}</div>
@@ -164,7 +163,7 @@ export default class ActionsSelection extends Component {
         const upgrades = UPGRADES[this.props.race].map((item, index) => {
             // Update tooltip function
             const mouseEnterFunc = (e) => {
-                return this.onMouseEnter(e, 
+                this.onMouseEnter(e, 
                     <div className="flex flex-col">
                         <div>Research upgrade</div>
                         <div>{item.name}</div>

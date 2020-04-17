@@ -18,6 +18,11 @@ data.Unit.forEach((trainingUnit) => {
             let requiredUpgradeId = null
             let requiresTechlab = false
             let isMorph = MORPH_ABILITIES.has(ability.ability)
+            const isFreeMorph = resultingUnit.minerals === trainingUnit.minerals && resultingUnit.gas === trainingUnit.gas
+            // Ignore free morphs, e.g. hellbat to hellion is a free morph but adds the armory requirement for hellion
+            if (isFreeMorph) {
+                return
+            }
             // if (isMorph) {
             //     console.log("--------");
             //     console.log(trainingUnit);
@@ -82,7 +87,7 @@ data.Unit.forEach((trainingUnit) => {
     consumesUnit: false
 }
  */
-console.assert(Object.keys(TRAINED_BY).length === 144, `${Object.keys(TRAINED_BY).length} is not 144`)
+console.assert(Object.keys(TRAINED_BY).length === 111, `${Object.keys(TRAINED_BY).length} is not 111`)
 
 console.assert(TRAINED_BY["Zergling"].requiredStructure === "SpawningPool", TRAINED_BY["Zergling"].requiredStructure)
 

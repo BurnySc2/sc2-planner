@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import ReactTooltip from 'react-tooltip';
+
 import CLASSES from "../constants/classes"
 
 export default class Settings extends Component {
@@ -9,7 +11,8 @@ export default class Settings extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            show: false
+            show: false,
+            tooltipText: "",
         }
     }
 
@@ -30,14 +33,27 @@ export default class Settings extends Component {
         this.props.updateSettings(e, itemShortName, newValue)
     }
 
+    onMouseEnter = (e, item) => {
+        this.setState({
+            tooltipText: item
+        })
+    }
+
     render() {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
 
         const settingsElements = this.props.settings.map((item, index) => {
+            const mouseEnterFunc = (e) => {
+                this.onMouseEnter(e, 
+                    <div>
+                        {item.tooltip}
+                    </div>
+                )
+            }
             return (
                 <div key={index} className={CLASSES.dropDownContainer}>
-                    <div className={CLASSES.dropDownLabel}>
+                    <div className={CLASSES.dropDownLabel} data-tip data-for='settingsTooltip'  onMouseEnter={mouseEnterFunc}>
                         {item.name}
                     </div>
                     <input className={CLASSES.dropDownInput} type="number" placeholder={item.v} defaultValue={item.v} step={item.step} min={item.min} max={item.max} onChange={(e) => {this.onChange(e, item.n)}} />
@@ -56,6 +72,7 @@ export default class Settings extends Component {
             </div>
         return (
             <div>
+                <ReactTooltip place="bottom" id="settingsTooltip" className={"max-w-xs"}>{this.state.tooltipText}</ReactTooltip>
                 {settingsButton}
             </div>
         )

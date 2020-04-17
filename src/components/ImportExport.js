@@ -72,8 +72,6 @@ export default class ImportExport extends Component {
             "Copy build order instructions",
             "Copy SALT encoding"
         ].map((item) => {
-            // TODO Popup should appear when copied
-            // TODO on click events
             return (
                 <div key={`${item}`} data-tip={this.state.tooltipText} data-for='importExportTooltip' onMouseLeave={this.onLeaveButton} onClick={(e) => this.onClickExport(e, item)} className={CLASSES.dropDownContainer}>
                     <div className={CLASSES.dropDownLabel}>
@@ -87,8 +85,6 @@ export default class ImportExport extends Component {
             "Paste shareable link",
             "Paste spawning tool instructions",
         ].map((item) => {
-            // TODO Popup should appear when copied
-            // TODO on click events
             return (
                 <div key={`${item}`} data-tip={this.state.tooltipText} data-for='importExportTooltip' onMouseLeave={this.onLeaveButton} onClick={(e) => this.onClickImport(e, item)} className={CLASSES.dropDownContainer}>
                     <div className={CLASSES.dropDownLabel}>

@@ -399,7 +399,7 @@ class GameLogic {
             // Loop over all idle units and check if they match unit type
             
             const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(trainerUnit.name)
-            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor
+            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor && trainerUnit.reactorTasks.length === 0
 
             // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva            
             const trainerCanTrainThroughLarva = (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) || (unit.type === "structure" && trainerUnit.name === "Probe")
