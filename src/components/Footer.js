@@ -55,9 +55,9 @@ export default class Footer extends Component {
                 )
             }
             if (item.url === "") {
-                return <a key={item.name} data-tip data-for='footerTooltip' onMouseEnter={mouseEnterFunc} className={CLASSES.buttons}>
+                return <div key={item.name} data-tip data-for='footerTooltip' onMouseEnter={mouseEnterFunc} className={CLASSES.buttons}>
                     {item.name}
-                </a>
+                </div>
             } else {
                 return <a key={item.name} data-tip data-for='footerTooltip' onMouseEnter={mouseEnterFunc} className={CLASSES.buttons} href={item.url}>
                     {item.name}
