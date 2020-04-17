@@ -94,15 +94,12 @@ export default withRouter(class WebPage extends Component {
         // Encode the settings
         const settingsEncoded = encodeSettings(settings)
         // const decoded = decodeSettings(settingsEncoded)
-        console.log(settingsEncoded);
         
         // Encode the build order
         const buildOrderEncoded = encodeBuildOrder(buildOrder)
         // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
-        console.log(buildOrderEncoded);
 
         const newUrl = `?race=${race}&settings=${settingsEncoded}&bo=${buildOrderEncoded}`
-        console.log(newUrl);
         // Change current url
         if (pushHistory) {
             this.props.history.push(`${newUrl}`)
