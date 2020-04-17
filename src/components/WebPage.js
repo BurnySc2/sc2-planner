@@ -14,22 +14,30 @@ import {GameLogic} from '../game_logic/gamelogic'
 import {defaultSettings, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder} from  "../constants/helper"
 import {isEqual, cloneDeep} from 'lodash'
 
+// import UNIT_ICONS from "../icons/unit_icons"
+// import UPGRADE_ICONS from "../icons/upgrade_icons"
+const UNIT_ICONS = require("../icons/unit_icons.json")
+const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
-import UNIT_ICONS from "../icons/unit_icons"
-import UPGRADE_ICONS from "../icons/upgrade_icons"
 
 export default withRouter(class WebPage extends Component {
     constructor(props) {
         super(props)
-
+        console.log(props);
+        
         // Get information from url
         const urlPath = this.props.location.pathname.split("/")
         const settingsEncoded = urlPath[2]
         const boEncoded = urlPath[3]
-
+        let race = "terran"
+        if (["terran", "protoss", "zerg"].includes(urlPath[1])) {
+            race = urlPath[1]
+        }
+        
         // Decode settings from url
         let settings = cloneDeep(defaultSettings)
         if (settingsEncoded !== undefined) {
+            console.log(settingsEncoded);
             const decodedSettings = decodeSettings(settingsEncoded)
             // Override default settings from settings in url
             settings.forEach((item1) => {
@@ -44,11 +52,12 @@ export default withRouter(class WebPage extends Component {
         // Decode build order from url
         let bo = []
         if (boEncoded !== undefined) {
+            console.log(boEncoded);
             bo = decodeBuildOrder(boEncoded)
         }
 
         // Start the game logic with given settings and build order
-        const gamelogic = new GameLogic(this.props.race, bo, settings)
+        const gamelogic = new GameLogic(race, bo, settings)
         gamelogic.setStart()
         if (bo.length > 0) {
             // If a build order was given, simulate it
@@ -56,7 +65,7 @@ export default withRouter(class WebPage extends Component {
         }
         
         this.state = {
-            race: this.props.race,
+            race: race,
             // Build order
             // Each element needs to have an .image attached and tooltip with: name, minerals, vespene, time
             bo: bo,

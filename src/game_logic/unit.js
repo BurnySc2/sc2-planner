@@ -4,8 +4,8 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import Event from "./event"
 // import Task from "./task"
 
-import UNIT_ICONS from "../icons/unit_icons"
-import UPGRADE_ICONS from "../icons/upgrade_icons"
+const UNIT_ICONS = require("../icons/unit_icons.json")
+const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 let currentId = 0
 const getUnitId = () => {

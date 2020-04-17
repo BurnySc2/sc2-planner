@@ -1,9 +1,9 @@
 import { pick } from "lodash"
-import Base64 from "compact-base64"
+import lzbase62 from 'lzbase62';
 
 import {CUSTOMACTIONS_BY_NAME} from '../constants/customactions'
-import UNIT_ICONS from "../icons/unit_icons"
-import UPGRADE_ICONS from "../icons/upgrade_icons"
+const UNIT_ICONS = require("../icons/unit_icons.json")
+const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 const CONVERT_SECONDS_TO_TIME_STRING = ((totalSeconds) => {
     totalSeconds = Math.floor(totalSeconds)
@@ -82,14 +82,14 @@ const encodeSettings = ((settingsObject) => {
     // console.log(strippedObject);
     const jsonString = JSON.stringify(strippedObject)
     // console.log(jsonString);
-    const encoded = Base64.encode(jsonString)
+    const encoded = lzbase62.compress(jsonString)
     // console.log(encoded);
     // console.log(encoded.length);
     return encoded
 })
 
 const decodeSettings = ((settingsEncoded) => {
-    const decodedString = Base64.decode(settingsEncoded)
+    const decodedString = lzbase62.decompress(settingsEncoded)
     const jsonObj = JSON.parse(decodedString)
     // console.log(jsonObj);
     return jsonObj
@@ -101,12 +101,12 @@ const encodeBuildOrder = ((buildOrderObject) => {
         return pick(item, ["name", "type"])
     })
     const jsonString = JSON.stringify(strippedObject)
-    const encoded = Base64.encode(jsonString)
+    const encoded = lzbase62.compress(jsonString)
     return encoded
 })
 
 const decodeBuildOrder = ((buildOrderEncoded) => {
-    const decodedString = Base64.decode(buildOrderEncoded)
+    const decodedString = lzbase62.decompress(buildOrderEncoded)
     const jsonObj = JSON.parse(decodedString)
     // Load image
     jsonObj.forEach((item) => {

@@ -7,11 +7,11 @@ import CLASSES from "../constants/classes"
 import UNITS from '../constants/units'
 import STRUCTURES from '../constants/structures'
 import UPGRADES from "../constants/upgrades"
-// import { GameLogic } from '../game_logic/gamelogic';
 
-// Importing json doesnt seem to work with `import` statements, but have to use `require`
-import UNIT_ICONS from "../icons/unit_icons"
-import UPGRADE_ICONS from "../icons/upgrade_icons"
+// import UNIT_ICONS from "../icons/unit_icons"
+// import UPGRADE_ICONS from "../icons/upgrade_icons"
+const UNIT_ICONS = require("../icons/unit_icons.json")
+const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
 export default class ActionsSelection extends Component {
     constructor(props) {
@@ -96,6 +96,7 @@ export default class ActionsSelection extends Component {
 
         const customactions = CUSTOMACTIONS.all.concat(CUSTOMACTIONS[this.props.race]).map((item, index) => {
             // Update tooltip function
+            
             const mouseEnterFunc = (e) => {
                 return this.onMouseEnter(e, 
                     <div className="flex flex-col">
