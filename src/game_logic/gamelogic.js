@@ -356,15 +356,16 @@ class GameLogic {
         console.assert(unit.name, JSON.stringify(unit, null, 4))
         console.assert(unit.type, JSON.stringify(unit, null, 4))
 
+        // Get unit type / structure type that can train this unit
+        const trainedInfo = TRAINED_BY[unit.name]
+        let morphCondition = (trainedInfo.isMorph || trainedInfo.consumesUnit)
+        console.assert(trainedInfo, unit.name)
+
         // Get cost (mineral, vespene, supply)
-        if (!this.canAfford(unit)) {
+        if (!this.canAfford(unit) && !morphCondition) {
             // console.log(this.frame, this.minerals, this.vespene);
             return false
         }
-
-        // Get unit type / structure type that can train this unit
-        const trainedInfo = TRAINED_BY[unit.name]
-        console.assert(trainedInfo, unit.name)
 
         // Check if requirement is met
         const requiredStructure = trainedInfo.requiredStructure
@@ -400,7 +401,9 @@ class GameLogic {
             const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(trainerUnit.name)
             const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor //&& !unit.name.includes("TechLab") && !unit.name.includes("Reactor")
             // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
-            const trainerCanTrainThroughLarva = (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) || trainerUnit.name === "Probe"
+            
+            const trainerCanTrainThroughLarva = (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) || (unit.type === "structure" && trainerUnit.name === "Probe")
+            morphCondition = morphCondition && !trainerCanTrainThroughLarva 
 
             if (
                 !trainerCanTrainThisUnit 
@@ -409,6 +412,21 @@ class GameLogic {
                 continue
             }
             
+            const cost = this.getCost(unit.name)
+            if (unit.name === "Zergling") {
+                cost.supply = 1
+                cost.minerals = 50
+            } else if (morphCondition) {
+                const costTrainer = this.getCost(trainerUnit.name)
+                cost.minerals -= costTrainer.minerals
+                cost.vespene -= costTrainer.vespene
+                if (costTrainer > 0) {
+                    cost.supply -= costTrainer.supply
+                }
+            }
+            if (!this._canAfford(cost)) {
+                return false
+            }
             // The trainerUnit can train the target unit
 
             // Add task to unit
@@ -424,10 +442,9 @@ class GameLogic {
                 trainerUnit.addTask(this, workerMovingToConstructionSite)
                 buildStartDelay = this.workerBuildDelay * 22.4
             }
-
+            
             // Create the new task
             const newTask = new Task(buildTime, this.frame + buildStartDelay)
-            const morphCondition = (trainedInfo.isMorph || trainedInfo.consumesUnit) && !trainerCanTrainThroughLarva 
             newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
@@ -452,11 +469,6 @@ class GameLogic {
                 trainerUnit.larvaCount -= 1
             }
 
-            const cost = this.getCost(unit.name)
-            if (unit.name === "Zergling") {
-                cost.supply = 1
-                cost.minerals = 50
-            }
             this.minerals -= cost.minerals
             this.vespene -= cost.vespene
             if (cost.supply > 0) {
