@@ -1,0 +1,25 @@
+# TODO list
+- ~~Building a structure with a drone reduces supply by 1~~
+- ~~Add tooltips~~
+- ~~Add timebar~~
+- ~~Add status count (minerals, vespene, supply, how many units are alive)~~
+- ~~Add upgrades~~
+- ~~Add actions~~
+- ~~Fix [drone drone overlord drone drone drone], drones not showing up after overlord~~
+- ~~Add import export through url~~
+- ~~Remove warp gate structure from list of structure in protoss since we have gate to warpgate action~~
+- ~~Remove nydus canal 75/75~~
+- ~~Add impact of user settings drop down~~
+- ~~Add import export dropdown~~
+- ~~Fix costs for morphs (OC is still 550)~~
+- ~~Add tooltips for settings~~
+- Grey out actions / icons that are not available (locked by techtree)
+- Order the items on the right correctly: units: scv, marine, marauder, reaper, ghost...
+- Add drag and drop to build order
+- Add error message for user, and highlight till when the build order is valid
+- Cant make corruptor anymore if spire morphed to greater spire (so need to keep track of tech equivalents)
+- Add 'remove event' when clicking on items in the boArea bottom left
+- Fix tooltips when switching between races
+- When drone is building a structure, it is not instantly subtracted from unitscount
+- Improve GUI
+- Add readme
