@@ -74,7 +74,7 @@ export default class ImportExport extends Component {
         ].map((item) => {
             return (
                 <div key={`${item}`} data-tip={this.state.tooltipText} data-for='importExportTooltip' onMouseLeave={this.onLeaveButton} onClick={(e) => this.onClickExport(e, item)} className={CLASSES.dropDownContainer}>
-                    <div className={CLASSES.dropDownLabel}>
+                    <div className={CLASSES.dropDownButton}>
                         {item}
                     </div>
                 </div>
@@ -87,7 +87,7 @@ export default class ImportExport extends Component {
         ].map((item) => {
             return (
                 <div key={`${item}`} data-tip={this.state.tooltipText} data-for='importExportTooltip' onMouseLeave={this.onLeaveButton} onClick={(e) => this.onClickImport(e, item)} className={CLASSES.dropDownContainer}>
-                    <div className={CLASSES.dropDownLabel}>
+                    <div className={CLASSES.dropDownButton}>
                         {item}
                     </div>
                 </div>

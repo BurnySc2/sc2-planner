@@ -31,7 +31,11 @@ export default class Footer extends Component {
             name: "Contact",
             url: "", // popup with discord#tag
             tooltip: <div>
-                Discord: BuRny#8752
+                <div>Discord: BuRny#8752</div>
+                <div>Twitter?</div>
+                <div>Email?</div>
+                <div>Reddit?</div>
+                <div>Idk?</div>
             </div>
         }
     }
