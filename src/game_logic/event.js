@@ -7,14 +7,16 @@ class Event {
      * @param {String} type - The type of the event, one of ["worker", "action", "unit", "structure", "upgrade"] 
      * @param {Number} start - The start of the event 
      * @param {Number} end - The end frame of the event, end-start reveal the width of the event
+     * @param {Number} id - The event id, should match the index of the build order element
      */
-    constructor(name, imageSource, type, start, end) {
+    constructor(name, imageSource, type, start, end, id=0) {
         this.name = name
         // Source path of image, not the image itself
         this.imageSource = imageSource
         this.type = type
         this.start = start
         this.end = end
+        this.id = id
     }
 }
 

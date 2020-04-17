@@ -11,8 +11,8 @@ import ActionsSelection from './ActionSelection'
 import Settings from './Settings'
 import Footer from './Footer'
 import {GameLogic} from '../game_logic/gamelogic'
-import {defaultSettings, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder} from  "../constants/helper"
-import {isEqual, cloneDeep} from 'lodash'
+import {defaultSettings, decodeSettings, decodeBuildOrder, createUrlParams} from  "../constants/helper"
+import {cloneDeep} from 'lodash'
 
 // import UNIT_ICONS from "../icons/unit_icons"
 // import UPGRADE_ICONS from "../icons/upgrade_icons"
@@ -91,21 +91,7 @@ export default withRouter(class WebPage extends Component {
         // See router props
         // console.log(this.props);
         
-        let newUrl = `?race=${race}`
-
-        if (!isEqual(settings, defaultSettings)) {
-            // Encode the settings
-            const settingsEncoded = encodeSettings(settings)
-            // const decoded = decodeSettings(settingsEncoded)
-            newUrl += `&settings=${settingsEncoded}`
-        }
-
-        if (buildOrder.length > 0) {
-            // Encode the build order
-            const buildOrderEncoded = encodeBuildOrder(buildOrder)
-            // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
-            newUrl += `&bo=${buildOrderEncoded}`
-        }
+        const newUrl = createUrlParams(race, settings, buildOrder)
 
         // Change current url
         if (pushHistory) {
@@ -253,7 +239,7 @@ export default withRouter(class WebPage extends Component {
             <div className="flex-col h-full w-full bg-gray-500">
                 <Title />
                 <div className="flex flex-row">
-                    <ImportExport />
+                    <ImportExport gamelogic={this.state.gamelogic} />
                     <Settings settings={this.state.settings} updateSettings={this.updateSettings} />
                 </div>
                 <div className="flex flex-row">

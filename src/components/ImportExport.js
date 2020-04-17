@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ReactTooltip from 'react-tooltip';
+import {createUrlParams} from  "../constants/helper"
 
 import CLASSES from '../constants/classes'
 
@@ -62,6 +63,12 @@ export default class ImportExport extends Component {
         })
     }
 
+    onExportShareableLink = (e) => {
+        // Returns the string of the shareable link
+        const gamelogic = this.props.gamelogic
+        const newUrl = createUrlParams(gamelogic.race, gamelogic.settings, gamelogic.bo)
+    }
+
     render() {
         const classes = CLASSES.dropDown
         const classesExportDropdown = this.state.export ? `visible ${classes}` : `hidden ${classes}`
@@ -69,8 +76,9 @@ export default class ImportExport extends Component {
 
         const exportElements = [
             "Copy shareable link",
-            "Copy build order instructions",
-            "Copy SALT encoding"
+            "Copy human instructions",
+            "Copy SALT encoding",
+            "Copy SC2 bot instructions"
         ].map((item) => {
             return (
                 <div key={`${item}`} data-tip={this.state.tooltipText} data-for='importExportTooltip' onMouseLeave={this.onLeaveButton} onClick={(e) => this.onClickExport(e, item)} className={CLASSES.dropDownContainer}>

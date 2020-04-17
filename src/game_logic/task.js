@@ -4,11 +4,12 @@ class Task {
      * @param {Number} totalFramesRequired - How many frames this task takes to complete
      * @param {Number} startFrame - At which frame the task was started (required for creating events) 
      */
-    constructor(totalFramesRequired=0, startFrame=0) {
+    constructor(totalFramesRequired=0, startFrame=0, id=-1) {
         // Once progress reaches 1, the task is supposed to be removed and the unit ends up idle
         // How much total progress is required
         this.totalFramesRequired = totalFramesRequired
         this.startFrame = startFrame
+        this.id = id
         // Automatically set by updateProgress
         this.progress = 0
         this.isCompleted = false

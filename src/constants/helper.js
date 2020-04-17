@@ -1,5 +1,6 @@
 import { pick } from "lodash"
 import lzbase62 from 'lzbase62';
+import {isEqual} from 'lodash'
 
 const {CUSTOMACTIONS_BY_NAME} = require('../constants/customactions')
 const UNIT_ICONS = require("../icons/unit_icons.json")
@@ -143,4 +144,23 @@ const decodeBuildOrder = ((buildOrderEncoded) => {
     return jsonObj
 })
 
-export {defaultSettings, CONVERT_SECONDS_TO_TIME_STRING, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder}
+const createUrlParams = (race, settings, buildOrder=[]) => {
+    let newUrl = `?race=${race}`
+
+    if (!isEqual(settings, defaultSettings)) {
+        // Encode the settings
+        const settingsEncoded = encodeSettings(settings)
+        // const decoded = decodeSettings(settingsEncoded)
+        newUrl += `&settings=${settingsEncoded}`
+    }
+
+    if (buildOrder.length > 0) {
+        // Encode the build order
+        const buildOrderEncoded = encodeBuildOrder(buildOrder)
+        // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
+        newUrl += `&bo=${buildOrderEncoded}`
+    }
+    return newUrl
+}
+
+export {defaultSettings, CONVERT_SECONDS_TO_TIME_STRING, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder, createUrlParams}

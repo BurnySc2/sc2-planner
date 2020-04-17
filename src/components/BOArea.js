@@ -20,14 +20,14 @@ export default class BOArea extends Component {
             return ""
         }
         const myStyle = {
-            "width": `${width * this.props.gamelogic.htmlElementWidthFactor}px`,
+            "width": `${width * this.props.gamelogic.settings.htmlElementWidthFactor}px`,
         }
         return <div key={key} style={myStyle}></div>
     }
     
     render() {
         // console.log(this.props.gamelogic.eventLog)
-        const widthFactor = this.props.gamelogic.htmlElementWidthFactor
+        const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
 
         // Build vertical bars
         const barBgClasses = {}
@@ -125,7 +125,7 @@ export default class BOArea extends Component {
         // Generate HTML for time bar
         const timeIntervalContent = timeBarCalc.map((item, index) => {
             const myStyle = {
-                "width": `${this.timeInterval * this.props.gamelogic.htmlElementWidthFactor * 22.4}px`
+                "width": `${this.timeInterval * this.props.gamelogic.settings.htmlElementWidthFactor * 22.4}px`
             }
             const timeString = CONVERT_SECONDS_TO_TIME_STRING(item.start)
             return <div key={`timeInterval${item.start}`} className={`${CLASSES.boTimeElement} ${CLASSES.typeColor.time} ${CLASSES.hoverColor.time}`} style={myStyle}>{timeString}</div>

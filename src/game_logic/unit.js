@@ -182,7 +182,7 @@ class Unit {
                 // console.log(gamelogic.frame);
                 // console.log(newUnit);
                 gamelogic.eventLog.push(new Event(
-                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "worker", task.startFrame, gamelogic.frame
+                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "worker", task.startFrame, gamelogic.frame, task.id
                 ))
             }
             // Spawn unit
@@ -198,7 +198,7 @@ class Unit {
                 // console.log(gamelogic.frame);
                 // console.log(newUnit);
                 gamelogic.eventLog.push(new Event(
-                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "unit", task.startFrame, gamelogic.frame
+                    newUnit.name, UNIT_ICONS[newUnit.name.toUpperCase()], "unit", task.startFrame, gamelogic.frame, task.id
                 ))
                 unitData = UNITS_BY_NAME[task.newUnit]
                 // Overlord finishes, overlord will have -8 supply
@@ -241,7 +241,7 @@ class Unit {
                 // console.log(gamelogic.frame);
                 // console.log(newUnit);
                 gamelogic.eventLog.push(new Event(
-                    task.newStructure, UNIT_ICONS[task.newStructure.toUpperCase()], "structure", task.startFrame, gamelogic.frame
+                    task.newStructure, UNIT_ICONS[task.newStructure.toUpperCase()], "structure", task.startFrame, gamelogic.frame, task.id
                 ))
                 
             }
@@ -253,7 +253,7 @@ class Unit {
                 gamelogic.upgrades.add(task.newUpgrade)
 
                 gamelogic.eventLog.push(new Event(
-                    task.newUpgrade, UPGRADE_ICONS[task.newUpgrade.toUpperCase()], "upgrade", task.startFrame, gamelogic.frame
+                    task.newUpgrade, UPGRADE_ICONS[task.newUpgrade.toUpperCase()], "upgrade", task.startFrame, gamelogic.frame, task.id
                 ))
             }
             // Morph to unit
@@ -274,7 +274,7 @@ class Unit {
                     }
 
                     gamelogic.eventLog.push(new Event(
-                        targetUnit.name, UNIT_ICONS[targetUnit.name.toUpperCase()], eventType, task.startFrame, gamelogic.frame
+                        targetUnit.name, UNIT_ICONS[targetUnit.name.toUpperCase()], eventType, task.startFrame, gamelogic.frame, task.id
                     ))
                 }
             } 

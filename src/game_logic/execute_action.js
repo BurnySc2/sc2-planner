@@ -99,9 +99,9 @@ const executeAction = (gamelogic, actionItem) => {
         if (gamelogic.waitTime >= 1 * 22.4) {
             gamelogic.waitTime = 0
             actionCompleted = true          
-            const start = gamelogic.frame  - 22.4 * 1
+            const start = gamelogic.frame - 22.4 * 1 + 1
             gamelogic.eventLog.push(new Event(
-                action.name, action.imageSource, "action", start, start + action.duration * 22.4
+                action.name, action.imageSource, "action", start, start + action.duration * 22.4, gamelogic.getEventId()
             ))
             return true
         }
@@ -112,9 +112,9 @@ const executeAction = (gamelogic, actionItem) => {
         if (gamelogic.waitTime >= 5 * 22.4) {
             gamelogic.waitTime = 0
             actionCompleted = true          
-            const start = gamelogic.frame  - 22.4 * 5
+            const start = gamelogic.frame - 22.4 * 5 + 1
             gamelogic.eventLog.push(new Event(
-                action.name, action.imageSource, "action", start, start + action.duration * 22.4
+                action.name, action.imageSource, "action", start, start + action.duration * 22.4, gamelogic.getEventId()
             ))
             return true
         }
@@ -126,7 +126,7 @@ const executeAction = (gamelogic, actionItem) => {
     if (action.internal_name === "convert_gateway_to_warpgate" && gamelogic.upgrades.has("WarpGateResearch")) {
         for (const unit of gamelogic.idleUnits) {
             if (unit.name === "Gateway") {
-                const task = new Task(7 * 22.4, gamelogic.frame)
+                const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.getEventId())
                 task.morphToUnit = "WarpGate"
                 unit.addTask(gamelogic, task)
                 actionCompleted = true
@@ -137,7 +137,7 @@ const executeAction = (gamelogic, actionItem) => {
     if (action.internal_name === "convert_warpgate_to_gateway") {
         for (const unit of gamelogic.idleUnits) {
             if (unit.name === "WarpGate") {
-                const task = new Task(7 * 22.4, gamelogic.frame)
+                const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.getEventId())
                 task.morphToUnit = "Gateway"
                 unit.addTask(gamelogic, task)
                 actionCompleted = true
@@ -150,7 +150,7 @@ const executeAction = (gamelogic, actionItem) => {
             if (dt1.name === "DarkTemplar") {
                 for (const dt2 of gamelogic.idleUnits) {
                     if (dt2.name === "DarkTemplar" && dt1.id !== dt2.id) {
-                        const task = new Task(9 * 22.4, gamelogic.frame)
+                        const task = new Task(9 * 22.4, gamelogic.frame, gamelogic.getEventId())
                         task.morphToUnit = "Archon"
                         dt1.addTask(gamelogic, task)
                         gamelogic.killUnit(dt2)
@@ -166,7 +166,7 @@ const executeAction = (gamelogic, actionItem) => {
             if (ht1.name === "DarkTemplar") {
                 for (const ht2 of gamelogic.idleUnits) {
                     if (ht2.name === "DarkTemplar" && ht1.id !== ht2.id) {
-                        const task = new Task(9 * 22.4, gamelogic.frame)
+                        const task = new Task(9 * 22.4, gamelogic.frame, gamelogic.getEventId())
                         task.morphToUnit = "Archon"
                         ht1.addTask(gamelogic, task)
                         gamelogic.killUnit(ht2)
@@ -182,7 +182,7 @@ const executeAction = (gamelogic, actionItem) => {
             if (dt.name === "DarkTemplar") {
                 for (const ht of gamelogic.idleUnits) {
                     if (ht.name === "HighTemplar") {
-                        const task = new Task(9 * 22.4, gamelogic.frame)
+                        const task = new Task(9 * 22.4, gamelogic.frame, gamelogic.getEventId())
                         task.morphToUnit = "Archon"
                         dt.addTask(gamelogic, task)
                         gamelogic.killUnit(ht)
@@ -247,7 +247,7 @@ const executeAction = (gamelogic, actionItem) => {
         for (const unit of gamelogic.idleUnits) {
             if (unit.name === structureName && !unit.hasAddon() && !unit.isBusy()) {
                 unit.isFlying = true
-                const task = new Task(gamelogic.addonSwapDelay * 22.4, gamelogic.frame)
+                const task = new Task(gamelogic.settings.addonSwapDelay * 22.4, gamelogic.frame, gamelogic.getEventId())
                 if (!attachReactor) {
                     task.addsTechlab = true
                     gamelogic.freeTechlabs -= 1
@@ -289,7 +289,7 @@ const executeAction = (gamelogic, actionItem) => {
         for (const unit of gamelogic.idleUnits) {
             if (unit.name === structureName && ((!dettachReactor && unit.hasTechlab) || (dettachReactor && unit.hasReactor)) && !unit.isBusy()) {
                 unit.isFlying = true
-                const task = new Task(gamelogic.addonSwapDelay * 22.4, gamelogic.frame)
+                const task = new Task(gamelogic.settings.addonSwapDelay * 22.4, gamelogic.frame, gamelogic.getEventId())
                 task.isLanding = true
                 unit.addTask(gamelogic, task)
                 if (!dettachReactor) {
@@ -362,7 +362,7 @@ const executeAction = (gamelogic, actionItem) => {
     if (actionCompleted) {    
         // Add event                  
         gamelogic.eventLog.push(new Event(
-            action.name, action.imageSource, "action", gamelogic.frame, gamelogic.frame + 22.4 * action.duration
+            action.name, action.imageSource, "action", gamelogic.frame, gamelogic.frame + 22.4 * action.duration, gamelogic.getEventId()
         ))
         return true
     }

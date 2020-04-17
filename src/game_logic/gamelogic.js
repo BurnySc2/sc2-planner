@@ -10,6 +10,7 @@ import Unit from "./unit"
 import Event from "./event"
 import Task from "./task"
 import executeAction from "./execute_action"
+import { defaultSettings } from "../constants/helper"
 
 /** Logic of this file:
 Each frame
@@ -23,10 +24,12 @@ Each build order index increment
     Add the current state to snapshots for cached view 
 */
 
+let eventId = 0
 let lastSnapshot = null
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
+
 
 class GameLogic {
     /**
@@ -72,20 +75,24 @@ class GameLogic {
         this.eventLog = []
         // Number of units, will only be saved after every build order index advances - only used for UI purpose on the right side of the website
         this.unitsCount = {}
-
+        eventId = -1
+        lastSnapshot = null
+        
         // Custom settings from the settings page
+        this.settings = {}
+        this.loadSettings(defaultSettings)
         // How many seconds the worker mining should be delayed at game start
-        this.workerStartDelay = 2
+        // this.workerStartDelay = 2
         // How many seconds a worker needs before starting to build a structure
-        this.workerBuildDelay = 1
+        // this.workerBuildDelay = 1
         // How many seconds a worker needs to return back to mining after completing a structure
-        this.workerReturnDelay = 3
+        // this.workerReturnDelay = 3
         // Allow max 40 seocnds frames for all units to be idle, before the game logic aborts and marks the build order as 'not valid' (cc off 12 workers can be started after 35 seconds)
-        this.idleLimit = 15
+        // this.idleLimit = 15
         // HTML element width factor
-        this.htmlElementWidthFactor = 0.3
+        // this.htmlElementWidthFactor = 0.3
         // How long it takes buildings to dettach from addons (lift, fly away and land)
-        this.addonSwapDelay = 3
+        // this.addonSwapDelay = 3
 
         // Update settings from customSettings object, see WebPage.js defaultSettings
         this.loadSettings(customSettings)
@@ -118,6 +125,7 @@ class GameLogic {
         this.idleTime = 0
         this.eventLog = []
         this.unitsCount = {}
+        eventId = -1
         lastSnapshot = null
     }
 
@@ -127,7 +135,7 @@ class GameLogic {
      */
     loadSettings(customSettings) {
         for (let item of customSettings) {
-            this[item.variableName] = item.v
+            this.settings[item.variableName] = item.v
         }
     }
 
@@ -150,6 +158,14 @@ class GameLogic {
      */
     getLastSnapshot() {
         return lastSnapshot
+    }
+
+    /**
+     * 
+     */
+    getEventId = () => {
+        eventId += 1
+        return eventId - 1
     }
 
     /**
@@ -180,7 +196,7 @@ class GameLogic {
         for (let i = 0; i < 12; i++) {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
-            const workerStartDelayTask = new Task(22.4 * this.workerStartDelay, this.frame)
+            const workerStartDelayTask = new Task(22.4 * this.settings.workerStartDelay, this.frame)
             workerStartDelayTask.addMineralWorker = true
             unit.addTask(this, workerStartDelayTask)
             this.units.add(unit)
@@ -206,7 +222,7 @@ class GameLogic {
             // Abort if units idle for too long (waiting for resources), e.g. when making all workers scout and only one more worker is mining, then build a cc will take forever
             if (this.busyUnits.size === 0) {
                 this.idleTime += 1
-                if (this.idleTime >= this.idleLimit * 22.4) {
+                if (this.idleTime >= this.settings.idleLimit * 22.4) {
                     break
                 }
             } else {
@@ -221,13 +237,21 @@ class GameLogic {
         
         // Sort eventList by item.start, but perhaps the reverse is the desired behavior?
         this.eventLog.sort((a, b) => {
-            if (a.start < b.start) {
+            if (a.id < b.id) {
                 return -1
             } 
-            if (a.start > b.start) {
+            if (a.id > b.id) {
                 return 1
             }
             return 0
+        })
+
+        // Test if sorting of events is properly done, that way on-click events work and exporting strings work correctly
+        this.eventLog.forEach((item, index) => {
+            const boItem = this.bo[index]
+            console.assert(item.name === boItem.name);
+            // console.log(item);
+            // console.log(boItem);
         })
     }
 
@@ -439,9 +463,9 @@ class GameLogic {
             if (workerTypes.has(trainerUnit.name)) {
                 this.workersMinerals -= 1
                 // Worker moving to location delay
-                const workerMovingToConstructionSite = new Task(this.workerBuildDelay * 22.4, this.frame)
+                const workerMovingToConstructionSite = new Task(this.settings.workerBuildDelay * 22.4, this.frame)
                 trainerUnit.addTask(this, workerMovingToConstructionSite)
-                buildStartDelay = this.workerBuildDelay * 22.4
+                buildStartDelay = this.settings.workerBuildDelay * 22.4
                 // Since this task is run immediately, it needs to end later when made by probes
                 if (trainerUnit.name === "Probe") {
                     buildTime += buildStartDelay
@@ -450,7 +474,7 @@ class GameLogic {
             
             
             // Create the new task
-            const newTask = new Task(buildTime, this.frame + buildStartDelay)
+            const newTask = new Task(buildTime, this.frame + buildStartDelay, this.getEventId())
             newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
@@ -467,7 +491,7 @@ class GameLogic {
             // Create the builder return task
             if (["Probe", "SCV"].includes(trainerUnit.name)) {
                 // Probe and SCV return to mining after they are done with their task
-                const workerReturnToMinerals = new Task(this.workerReturnDelay * 22.4, this.frame)
+                const workerReturnToMinerals = new Task(this.settings.workerReturnDelay * 22.4, this.frame)
                 workerReturnToMinerals.addMineralWorker = true
                 trainerUnit.addTask(this, workerReturnToMinerals)
             }
@@ -557,7 +581,7 @@ class GameLogic {
             // All requirement checks complete, start the task
             
             const researchTime = this.getTime(upgrade.name, true)
-            const newTask = new Task(researchTime, this.frame)
+            const newTask = new Task(researchTime, this.frame, this.getEventId())
             newTask.newUpgrade = upgrade.name
             researcherStructure.addTask(this, newTask)
             const cost = this.getCost(upgrade.name, true)
