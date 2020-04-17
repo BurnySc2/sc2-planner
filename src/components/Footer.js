@@ -37,7 +37,19 @@ export default class Footer extends Component {
                 <div>Reddit?</div>
                 <div>Idk?</div>
             </div>
-        }
+        },
+        "legal": {
+            name: "Legal",
+            url: "http://blizzard.com/company/about/legal-faq.html",
+            tooltip: <div className="max-w-md">
+                <div>
+                    Most image assets are owned by Blizzard and are used according to http://blizzard.com/company/about/legal-faq.html.
+                </div>
+                <div>
+                    ©Blizzard Entertainment, Inc. All rights reserved. Wings of Liberty, Heart of the Swarm, Legacy of the Void, StarCraft, Brood War, Battle.net, and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries.
+                </div>
+            </div>
+        },
     }
 
     onMouseEnter = (e, item) => {
@@ -47,7 +59,7 @@ export default class Footer extends Component {
     }
     
     render() {
-        const buttons = ["donate", "contribute", "report_bugs", "contact"].map((myKey, index) => {
+        const buttons = ["donate", "contribute", "report_bugs", "contact", "legal"].map((myKey, index) => {
             const item = this.redirect[myKey]
             const mouseEnterFunc = (e) => {
                 this.onMouseEnter(e, 

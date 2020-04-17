@@ -72,7 +72,7 @@ export default class Settings extends Component {
             </div>
         return (
             <div>
-                <ReactTooltip place="bottom" id="settingsTooltip" className={"max-w-xs"}>{this.state.tooltipText}</ReactTooltip>
+                <ReactTooltip place="bottom" id="settingsTooltip" className="max-w-xs">{this.state.tooltipText}</ReactTooltip>
                 {settingsButton}
             </div>
         )
