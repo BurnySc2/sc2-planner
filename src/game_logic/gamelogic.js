@@ -77,11 +77,11 @@ class GameLogic {
         // How many seconds the worker mining should be delayed at game start
         this.workerStartDelay = 2
         // How many seconds a worker needs before starting to build a structure
-        this.workerBuildDelay = 2
+        this.workerBuildDelay = 1
         // How many seconds a worker needs to return back to mining after completing a structure
-        this.workerReturnDelay = 2
+        this.workerReturnDelay = 3
         // Allow max 40 seocnds frames for all units to be idle, before the game logic aborts and marks the build order as 'not valid' (cc off 12 workers can be started after 35 seconds)
-        this.idleLimit = 40
+        this.idleLimit = 15
         // HTML element width factor
         this.htmlElementWidthFactor = 0.3
         // How long it takes buildings to dettach from addons (lift, fly away and land)
@@ -697,7 +697,4 @@ class GameLogic {
     
 }
 
-
 export {Event, GameLogic}
-
-

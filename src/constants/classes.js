@@ -1,4 +1,5 @@
 const CLASSES = {
+    title: "text-4xl font-bold antialiased",
     // Race icon and the items on the right side icons
     raceIcon: "h-8 w-8 m-0 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
     timeIcon: "h-24 w-24 m-0 p-0 z-10",
