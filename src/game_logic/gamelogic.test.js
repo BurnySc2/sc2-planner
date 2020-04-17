@@ -98,6 +98,7 @@ test('Build commandcenter', () => {
     // Test command center - idleLimit cannot be set too low by default
     const bo = [{name: "CommandCenter", type: "structure"}]
     const logic = new GameLogic("terran", bo)
+    logic.idleLimit = 50
     logic.setStart()
     logic.runUntilEnd()
     expect(logic.units.size).toBe(14)
