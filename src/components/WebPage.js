@@ -90,16 +90,23 @@ export default withRouter(class WebPage extends Component {
     updateUrl = (race, settings, buildOrder, pushHistory=false) => {
         // See router props
         // console.log(this.props);
-
-        // Encode the settings
-        const settingsEncoded = encodeSettings(settings)
-        // const decoded = decodeSettings(settingsEncoded)
         
-        // Encode the build order
-        const buildOrderEncoded = encodeBuildOrder(buildOrder)
-        // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
+        let newUrl = `?race=${race}`
 
-        const newUrl = `?race=${race}&settings=${settingsEncoded}&bo=${buildOrderEncoded}`
+        if (!isEqual(settings, defaultSettings)) {
+            // Encode the settings
+            const settingsEncoded = encodeSettings(settings)
+            // const decoded = decodeSettings(settingsEncoded)
+            newUrl += `&settings=${settingsEncoded}`
+        }
+
+        if (buildOrder.length > 0) {
+            // Encode the build order
+            const buildOrderEncoded = encodeBuildOrder(buildOrder)
+            // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
+            newUrl += `&bo=${buildOrderEncoded}`
+        }
+
         // Change current url
         if (pushHistory) {
             this.props.history.push(`${newUrl}`)
@@ -109,14 +116,13 @@ export default withRouter(class WebPage extends Component {
     }
 
     rerunBuildOrder(bo, settings) {
-        const gamelogic = this.state.gamelogic
+        const gamelogic = new GameLogic(this.state.race, bo, settings)
         gamelogic.setStart()
-        gamelogic.bo = bo
-        gamelogic.loadSettings(settings)
         gamelogic.runUntilEnd()
         this.setState({
             bo: bo,
             gamelogic: gamelogic,
+            settings: settings,
         })
     }
 
@@ -133,9 +139,6 @@ export default withRouter(class WebPage extends Component {
         // Re-calculate the whole simulation
         // TODO optimize: only recalculate if settings were changed that affected it
         this.rerunBuildOrder(this.state.bo, settings)
-        this.setState({
-            settings: settings
-        })
         this.updateUrl(this.state.race, settings, this.state.bo)
     }
 
@@ -151,13 +154,9 @@ export default withRouter(class WebPage extends Component {
         })
         
         // If settings are unchanged, change url to just '/race' instead of encoded settings
-        if (isEqual(this.state.settings, defaultSettings)) {
-            // this.props.history.replace(`/${race}`)
-            // this.props.history.push(`/race=${race}`)
-            this.updateUrl(race, [], [], true)
-        } else {
-            this.updateUrl(race, this.state.settings, [], true)
-        }     
+        this.updateUrl(race, this.state.settings, [], true)
+        // this.props.history.replace(`/${race}`)
+        // this.props.history.push(`/race=${race}`)
     }
 
     // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
@@ -165,7 +164,6 @@ export default withRouter(class WebPage extends Component {
         const bo = this.state.bo
         bo.push(item)
         // Re-calculate build order
-        const gamelogic = this.state.gamelogic
 
         // // Caching using snapshots - idk why this isnt working properly
         // const latestSnapshot = gamelogic.getLastSnapshot()
@@ -177,30 +175,23 @@ export default withRouter(class WebPage extends Component {
         
         // Non cached:
         this.rerunBuildOrder(bo, this.state.settings)
-
-        this.setState({
-            bo: bo,
-            gamelogic: gamelogic,
-        })
-
         this.updateUrl(this.state.race, this.state.settings, bo)
     }
     removeItemFromBO = (index) => {
         const bo = this.state.bo
         bo.splice(index, 1)
         
-        const gamelogic = this.state.gamelogic
-        gamelogic.bo = bo
         // TODO load snapshot from shortly before the removed bo index
-        
-        gamelogic.setStart()
         if (bo.length > 0) {
-            gamelogic.runUntilEnd()
+            this.rerunBuildOrder(bo, this.state.settings)
+        } else {
+            const gamelogic = new GameLogic(this.state.race, bo, this.state.settings)
+            gamelogic.setStart()
+            this.setState({
+                bo: bo,
+                gamelogic: gamelogic,
+            })
         }
-
-        this.setState({
-            bo: bo
-        })
 
         this.updateUrl(this.state.race, this.state.settings, bo)
     }
@@ -267,7 +258,7 @@ export default withRouter(class WebPage extends Component {
                 </div>
                 <div className="flex flex-row">
                     <div className="w-9/12">
-                        <div className="flex flex-row bg-indigo-400 m-2 p-2 items-center">
+                        <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
                             <RaceSelection onClick={this.raceSelectionClicked} />
                             <Time 
                             gamelogic={this.state.gamelogic} />

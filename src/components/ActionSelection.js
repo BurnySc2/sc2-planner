@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import ReactTooltip from "react-tooltip";
+import ReactTooltip from 'react-tooltip';
 
 import RESOURCES from '../constants/resources'
 import {CUSTOMACTIONS} from '../constants/customactions'
@@ -176,6 +176,7 @@ export default class ActionsSelection extends Component {
             }
             const icon = this.upgradeIcons[item.name.toUpperCase()]
             const value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
+            // TODO Idea to fix tooltips on race change: add 'hidden' class if upgrade does not belong to this race
             return <div data-tip data-for='actionTooltip' key={item.name} className={this.classString} onMouseEnter={mouseEnterFunc}  onClick={(e) => {this.props.upgradeClick(e, item.name)}}>
                 <img src={icon} alt={item.name} />
                 <div className={CLASSES.actionIconText} style={actionIconTextStyle}>

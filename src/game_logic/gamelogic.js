@@ -399,9 +399,9 @@ class GameLogic {
             // Loop over all idle units and check if they match unit type
             
             const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(trainerUnit.name)
-            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor //&& !unit.name.includes("TechLab") && !unit.name.includes("Reactor")
-            // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
-            
+            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor
+
+            // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva            
             const trainerCanTrainThroughLarva = (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) || (unit.type === "structure" && trainerUnit.name === "Probe")
             morphCondition = morphCondition && !trainerCanTrainThroughLarva 
 
@@ -414,6 +414,7 @@ class GameLogic {
             
             const cost = this.getCost(unit.name)
             if (unit.name === "Zergling") {
+                // Was 0.5 and 25
                 cost.supply = 1
                 cost.minerals = 50
             } else if (morphCondition) {
@@ -441,7 +442,12 @@ class GameLogic {
                 const workerMovingToConstructionSite = new Task(this.workerBuildDelay * 22.4, this.frame)
                 trainerUnit.addTask(this, workerMovingToConstructionSite)
                 buildStartDelay = this.workerBuildDelay * 22.4
+                // Since this task is run immediately, it needs to end later when made by probes
+                if (trainerUnit.name === "Probe") {
+                    buildTime += buildStartDelay
+                }
             }
+            
             
             // Create the new task
             const newTask = new Task(buildTime, this.frame + buildStartDelay)
@@ -455,6 +461,7 @@ class GameLogic {
                     newTask.newStructure = unit.name
                 }
             }
+            
             trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
 
             // Create the builder return task

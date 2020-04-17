@@ -14,7 +14,7 @@ const CLASSES = {
     bo: "flex flex-row bg-green-700 m-1 p-0",
     boItem: "m-0 p-0 h-16 w-16 bg-green-700 border border-black hover:bg-green-400 cursor-move",
     // Build order area in the bottom left
-    boArea: "m-2 overflow-x-auto bg-indigo-400",
+    boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
     // Time bar at the top of the area
     timeBar: "",
     // Build order bars things

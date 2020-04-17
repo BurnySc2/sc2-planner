@@ -32,11 +32,10 @@ export default class Settings extends Component {
 
     render() {
         const classes = CLASSES.dropDown
-        const classesAll = this.state.show ? `visible ${classes}` : `hidden ${classes}`
+        const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
 
         const settingsElements = this.props.settings.map((item, index) => {
             return (
-                // TODO let this value actually be changed: add onChange event which triggers a function in this.props.settingsChange()
                 <div key={index} className={CLASSES.dropDownContainer}>
                     <div className={CLASSES.dropDownLabel}>
                         {item.name}
@@ -46,12 +45,12 @@ export default class Settings extends Component {
             )
         })
 
-        // TODO Add apply button because onChange doesnt work reliably
+        // TODO Add apply button because onChange doesnt work reliably (laggy behavior)
 
         const settingsButton = 
             <div className={CLASSES.buttons} onMouseEnter={this.showSettings} onMouseLeave={this.hideSettings}>
                 Settings
-                <div className={classesAll}>
+                <div className={classesDropdown}>
                     {settingsElements}
                 </div>
             </div>
