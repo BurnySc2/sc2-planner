@@ -26,17 +26,30 @@ export default withRouter(class WebPage extends Component {
         console.log(props);
         
         // Get information from url
-        const urlPath = this.props.location.pathname.split("/")
-        const settingsEncoded = urlPath[2]
-        const boEncoded = urlPath[3]
+        // is "" local dev, file:///home/burny/Github/sc2-planner-react/build/index.html local build, /sc2-planner/ on github pages
+        let path = this.props.location.search
+        // while (path.length > 0 && !path.startsWith("race") && !path.startsWith("terran") && !path.startsWith("zerg")) {
+        //     console.log(path);
+            
+        //     path = path.slice(1, path.length)
+        // }
+        
+        const urlParams = new URLSearchParams(path)
+        const raceUrl = urlParams.get('race');
+        const settingsEncoded = urlParams.get('settings');
+        const boEncoded = urlParams.get('bo');
+        console.log(raceUrl);
+        console.log(settingsEncoded);
+        console.log(boEncoded);
+
         let race = "terran"
-        if (["terran", "protoss", "zerg"].includes(urlPath[1])) {
-            race = urlPath[1]
+        if (["terran", "protoss", "zerg"].includes(raceUrl)) {
+            race = raceUrl
         }
         
         // Decode settings from url
         let settings = cloneDeep(defaultSettings)
-        if (settingsEncoded !== undefined) {
+        if (settingsEncoded) {
             console.log(settingsEncoded);
             const decodedSettings = decodeSettings(settingsEncoded)
             // Override default settings from settings in url
@@ -51,7 +64,7 @@ export default withRouter(class WebPage extends Component {
 
         // Decode build order from url
         let bo = []
-        if (boEncoded !== undefined) {
+        if (boEncoded) {
             console.log(boEncoded);
             bo = decodeBuildOrder(boEncoded)
         }
@@ -94,12 +107,15 @@ export default withRouter(class WebPage extends Component {
         // Encode the settings
         const settingsEncoded = encodeSettings(settings)
         // const decoded = decodeSettings(settingsEncoded)
+        console.log(settingsEncoded);
         
         // Encode the build order
         const buildOrderEncoded = encodeBuildOrder(buildOrder)
         // const buildOrderDecoded = decodebuildOrder(buildOrderEncoded)
+        console.log(buildOrderEncoded);
 
-        const newUrl = `/${race}/${settingsEncoded}/${buildOrderEncoded}`
+        const newUrl = `?race=${race}&settings=${settingsEncoded}&bo=${buildOrderEncoded}`
+        console.log(newUrl);
         // Change current url
         if (pushHistory) {
             this.props.history.push(`${newUrl}`)
@@ -153,7 +169,8 @@ export default withRouter(class WebPage extends Component {
         // If settings are unchanged, change url to just '/race' instead of encoded settings
         if (isEqual(this.state.settings, defaultSettings)) {
             // this.props.history.replace(`/${race}`)
-            this.props.history.push(`/${race}`)
+            // this.props.history.push(`/race=${race}`)
+            this.updateUrl(race, [], [], true)
         } else {
             this.updateUrl(race, this.state.settings, [], true)
         }     

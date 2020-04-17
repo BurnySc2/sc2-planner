@@ -1,7 +1,7 @@
 import { pick } from "lodash"
 import lzbase62 from 'lzbase62';
 
-import {CUSTOMACTIONS_BY_NAME} from '../constants/customactions'
+const {CUSTOMACTIONS_BY_NAME} = require('../constants/customactions')
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 

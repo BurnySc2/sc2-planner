@@ -1,8 +1,8 @@
 
 import Event from "./event"
 import Unit from "./unit"
-import {CUSTOMACTIONS_BY_NAME} from "../constants/customactions"
 import Task from "./task"
+const {CUSTOMACTIONS_BY_NAME} = require('../constants/customactions')
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
