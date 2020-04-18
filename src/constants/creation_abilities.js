@@ -38,7 +38,7 @@ data.Ability.forEach((ability) => {
         CREATION_ABILITIES[ability.id] = trainPlace.produces
         return
     }
-    
+
     // Build abilities, e.g. build nexus
     let buildStructure = ability.target.Build
     if (buildStructure !== undefined && ENABLED_ABILITIES[ability.id] === 1) {
@@ -54,7 +54,7 @@ data.Ability.forEach((ability) => {
         CREATION_ABILITIES[ability.id] = buildGas.produces
         return
     }
-});
+})
 
 // console.log(MORPH_ABILITIES);
 
@@ -64,4 +64,4 @@ data.Ability.forEach((ability) => {
 // Exported:
 // {524, 45}
 
-export {CREATION_ABILITIES, MORPH_ABILITIES}
+export { CREATION_ABILITIES, MORPH_ABILITIES }

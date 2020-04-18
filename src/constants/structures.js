@@ -40,24 +40,54 @@ const ignoreStructure = {
 
 const STRUCTURES = {
     all: data.Unit.filter((item) => {
-        return ignoreStructure[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && item.is_structure
+        return (
+            ignoreStructure[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            item.is_structure
+        )
     }),
     terran: data.Unit.filter((item) => {
-        return ignoreStructure[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && item.is_structure && item.race === "Terran"
+        return (
+            ignoreStructure[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            item.is_structure &&
+            item.race === "Terran"
+        )
     }),
     protoss: data.Unit.filter((item) => {
-        return ignoreStructure[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && item.is_structure && item.race === "Protoss"
+        return (
+            ignoreStructure[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            item.is_structure &&
+            item.race === "Protoss"
+        )
     }),
     zerg: data.Unit.filter((item) => {
-        return ignoreStructure[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && item.is_structure && item.race === "Zerg"
+        return (
+            ignoreStructure[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            item.is_structure &&
+            item.race === "Zerg"
+        )
     }),
 }
 
 // console.log(STRUCTURES.all)
-console.assert(STRUCTURES.all.length === 52, `${STRUCTURES.all.length} is not equal to 52`);
-console.assert(STRUCTURES.terran.length === 20, `${STRUCTURES.terran.length} is not equal to 20`);
-console.assert(STRUCTURES.protoss.length === 15, `${STRUCTURES.protoss.length} is not equal to 15`);
-console.assert(STRUCTURES.zerg.length === 17, `${STRUCTURES.zerg.length} is not equal to 17`);
-
+console.assert(
+    STRUCTURES.all.length === 52,
+    `${STRUCTURES.all.length} is not equal to 52`
+)
+console.assert(
+    STRUCTURES.terran.length === 20,
+    `${STRUCTURES.terran.length} is not equal to 20`
+)
+console.assert(
+    STRUCTURES.protoss.length === 15,
+    `${STRUCTURES.protoss.length} is not equal to 15`
+)
+console.assert(
+    STRUCTURES.zerg.length === 17,
+    `${STRUCTURES.zerg.length} is not equal to 17`
+)
 
 export default STRUCTURES

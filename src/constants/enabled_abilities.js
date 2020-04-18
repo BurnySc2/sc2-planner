@@ -8,8 +8,8 @@ data.Unit.forEach((unit) => {
         // console.log(ability)
         ENABLED_ABILITIES[ability.ability] = 1
         return
-    });
-});
+    })
+})
 
 // console.log(Object.keys(ENABLED_ABILITIES).length)
 // console.log(ENABLED_ABILITIES)

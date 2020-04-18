@@ -11,14 +11,14 @@ data.Ability.forEach((ability) => {
     if (research !== undefined) {
         ABILITY_TO_UPGRADES[ability.id] = research.upgrade
     }
-});
+})
 
 // Maps upgrade_id to upgrade_data
 const upgrade_data = {}
 
 data.Upgrade.forEach((upgrade) => {
     upgrade_data[upgrade.id] = upgrade
-});
+})
 
 // Contains all race specific upgrades
 const UPGRADES = {
@@ -36,7 +36,10 @@ data.Unit.forEach((unit) => {
     unit.abilities.forEach((ability, index) => {
         // console.log(ability)
         const upgrade_id = ABILITY_TO_UPGRADES[ability.ability]
-        if (ENABLED_UPGRADES[upgrade_id] === 1 && alreadyUsedIds[upgrade_id] !== 1) {
+        if (
+            ENABLED_UPGRADES[upgrade_id] === 1 &&
+            alreadyUsedIds[upgrade_id] !== 1
+        ) {
             alreadyUsedIds[upgrade_id] = 1
             // console.log(upgrade_id);
             const upgrade = upgrade_data[upgrade_id]
@@ -44,11 +47,10 @@ data.Unit.forEach((unit) => {
             // console.log(index);
             UPGRADES.all.push(upgrade)
             UPGRADES[unit.race.toLowerCase()].push(upgrade)
-
         }
         return
-    });
-});
+    })
+})
 // console.log(UPGRADES);
 
 const sortFn = (a, b) => {
@@ -65,7 +67,10 @@ UPGRADES.protoss.sort(sortFn)
 UPGRADES.zerg.sort(sortFn)
 
 // Should be enabled 90 upgrades
-console.assert(Object.keys(UPGRADES.all).length === 90, `${Object.keys(UPGRADES.all).length} is not 90`)
+console.assert(
+    Object.keys(UPGRADES.all).length === 90,
+    `${Object.keys(UPGRADES.all).length} is not 90`
+)
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the upgrade is available from an ability
 export default UPGRADES

@@ -7,6 +7,9 @@ data.Upgrade.forEach((upgrade) => {
     UPGRADES_BY_ID[upgrade.id] = upgrade
 })
 
-console.assert(Object.keys(UPGRADES_BY_ID).length === 123, `${Object.keys(UPGRADES_BY_ID).length} is not 123`)
+console.assert(
+    Object.keys(UPGRADES_BY_ID).length === 123,
+    `${Object.keys(UPGRADES_BY_ID).length} is not 123`
+)
 
 export default UPGRADES_BY_ID

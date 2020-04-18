@@ -50,24 +50,55 @@ const ignoreUnits = {
 
 const UNITS = {
     all: data.Unit.filter((item) => {
-        return ignoreUnits[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && !item.is_structure
+        return (
+            ignoreUnits[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            !item.is_structure
+        )
     }),
     terran: data.Unit.filter((item) => {
-        return ignoreUnits[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && !item.is_structure && item.race === "Terran"
+        return (
+            ignoreUnits[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            !item.is_structure &&
+            item.race === "Terran"
+        )
     }),
     protoss: data.Unit.filter((item) => {
-        return ignoreUnits[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && !item.is_structure && item.race === "Protoss"
+        return (
+            ignoreUnits[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            !item.is_structure &&
+            item.race === "Protoss"
+        )
     }),
     zerg: data.Unit.filter((item) => {
-        return ignoreUnits[item.name] !== 1 && ENABLED_UNITS[item.id] === 1 && !item.is_structure && item.race === "Zerg"
+        return (
+            ignoreUnits[item.name] !== 1 &&
+            ENABLED_UNITS[item.id] === 1 &&
+            !item.is_structure &&
+            item.race === "Zerg"
+        )
     }),
 }
 
 // Should be 77 units in total
 // console.log(UNITS.zerg)
-console.assert(UNITS.all.length === 52, `${UNITS.all.length} is not equal to 52`);
-console.assert(UNITS.terran.length === 17, `${UNITS.terran.length} is not equal to 17`);
-console.assert(UNITS.protoss.length === 18, `${UNITS.protoss.length} is not equal to 18`);
-console.assert(UNITS.zerg.length === 17, `${UNITS.zerg.length} is not equal to 17`);
+console.assert(
+    UNITS.all.length === 52,
+    `${UNITS.all.length} is not equal to 52`
+)
+console.assert(
+    UNITS.terran.length === 17,
+    `${UNITS.terran.length} is not equal to 17`
+)
+console.assert(
+    UNITS.protoss.length === 18,
+    `${UNITS.protoss.length} is not equal to 18`
+)
+console.assert(
+    UNITS.zerg.length === 17,
+    `${UNITS.zerg.length} is not equal to 17`
+)
 
 export default UNITS

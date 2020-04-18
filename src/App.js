@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import './index.css';
+import React, { Component } from "react"
+import "./index.css"
 
-import MyRouter from './components/MyRouter';
+import MyRouter from "./components/MyRouter"
 
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <MyRouter />
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="App">
+                <MyRouter />
+            </div>
+        )
+    }
 }
 
-export default App;
+export default App

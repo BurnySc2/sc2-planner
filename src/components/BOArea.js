@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
-import CLASSES from '../constants/classes'
-import {CONVERT_SECONDS_TO_TIME_STRING} from '../constants/helper'
+import React, { Component } from "react"
+import CLASSES from "../constants/classes"
+import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
 
 export default class BOArea extends Component {
     /**
@@ -20,11 +20,13 @@ export default class BOArea extends Component {
             return ""
         }
         const myStyle = {
-            "width": `${width * this.props.gamelogic.settings.htmlElementWidthFactor}px`,
+            width: `${
+                width * this.props.gamelogic.settings.htmlElementWidthFactor
+            }px`,
         }
         return <div key={key} style={myStyle}></div>
     }
-    
+
     render() {
         // console.log(this.props.gamelogic.eventLog)
         const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
@@ -32,16 +34,26 @@ export default class BOArea extends Component {
         // Build vertical bars
         const barBgClasses = {}
         const barClasses = {}
-        
+
         // console.log(this.props.gamelogic.eventLog);
 
-        const verticalBarNames = ["worker", "action", "unit", "structure", "upgrade"]
+        const verticalBarNames = [
+            "worker",
+            "action",
+            "unit",
+            "structure",
+            "upgrade",
+        ]
 
         const verticalContent = []
 
         verticalBarNames.forEach((barType) => {
-            barBgClasses[barType] = `${CLASSES.bgColor[barType]} ${CLASSES.boCol}`
-            barClasses[barType] = `${CLASSES.typeColor[barType]} ${CLASSES.boCol}`
+            barBgClasses[
+                barType
+            ] = `${CLASSES.bgColor[barType]} ${CLASSES.boCol}`
+            barClasses[
+                barType
+            ] = `${CLASSES.typeColor[barType]} ${CLASSES.boCol}`
             // Each bar contains another array
             const verticalCalc = []
             this.props.gamelogic.eventLog.forEach((item) => {
@@ -54,7 +66,6 @@ export default class BOArea extends Component {
                             addedItem = true
                             return
                         }
-                        
                     })
                     if (!addedItem) {
                         // Create new row
@@ -69,29 +80,53 @@ export default class BOArea extends Component {
                 const rowContent = []
                 row.forEach((item, index2) => {
                     // No need to subtract border width because it is part of the html element
-                    const myStyle = {width: widthFactor * (item.end - item.start)}
+                    const myStyle = {
+                        width: widthFactor * (item.end - item.start),
+                    }
                     if (index2 > 0) {
                         const key = `filler${index1}${index2}`
                         const prevElementEnd = row[index2 - 1].end
-                        const fillerElement = this.getFillerElement(item.start - prevElementEnd, key)
+                        const fillerElement = this.getFillerElement(
+                            item.start - prevElementEnd,
+                            key
+                        )
                         rowContent.push(fillerElement)
                     } else if (item.start > 0) {
                         const key = `filler${index1}${index2}`
-                        const fillerElement = this.getFillerElement(item.start, key)
+                        const fillerElement = this.getFillerElement(
+                            item.start,
+                            key
+                        )
                         rowContent.push(fillerElement)
                     }
-                    
+
                     rowContent.push(
-                        <div key={`boArea${barType}${index1}${index2}`} className="flex flex-row">
-                            <div style={myStyle} className={`${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} ${CLASSES.hoverColor[barType]}`}>
-                                <img className={CLASSES.boElementIcon} src={require("../icons/png/" + item.imageSource)} alt={item.name} />
-                                <div className={CLASSES.boElementText}>{item.name}</div>
+                        <div
+                            key={`boArea${barType}${index1}${index2}`}
+                            className="flex flex-row"
+                        >
+                            <div
+                                style={myStyle}
+                                className={`${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} ${CLASSES.hoverColor[barType]}`}
+                            >
+                                <img
+                                    className={CLASSES.boElementIcon}
+                                    src={require("../icons/png/" +
+                                        item.imageSource)}
+                                    alt={item.name}
+                                />
+                                <div className={CLASSES.boElementText}>
+                                    {item.name}
+                                </div>
                             </div>
                         </div>
                     )
                 })
                 return (
-                    <div key={`row${barType}${index1}`} className={CLASSES.boRow}>
+                    <div
+                        key={`row${barType}${index1}`}
+                        className={CLASSES.boRow}
+                    >
                         {rowContent}
                     </div>
                 )
@@ -104,8 +139,15 @@ export default class BOArea extends Component {
             // console.log(verticalContent);
             const bar = verticalContent[index]
             // Hide bar if it has no content to show
-            if (bar.length > 0){
-                return <div key={`verticalBar ${barName}`} className={barBgClasses[barName]}>{bar}</div>
+            if (bar.length > 0) {
+                return (
+                    <div
+                        key={`verticalBar ${barName}`}
+                        className={barBgClasses[barName]}
+                    >
+                        {bar}
+                    </div>
+                )
             }
             return ""
         })
@@ -119,26 +161,38 @@ export default class BOArea extends Component {
         for (let i = 0; i < maxTime / 22.4; i += this.timeInterval) {
             timeBarCalc.push({
                 start: i,
-                end: i + this.timeInterval
+                end: i + this.timeInterval,
             })
         }
         // Generate HTML for time bar
         const timeIntervalContent = timeBarCalc.map((item, index) => {
             const myStyle = {
-                "width": `${this.timeInterval * this.props.gamelogic.settings.htmlElementWidthFactor * 22.4}px`
+                width: `${
+                    this.timeInterval *
+                    this.props.gamelogic.settings.htmlElementWidthFactor *
+                    22.4
+                }px`,
             }
             const timeString = CONVERT_SECONDS_TO_TIME_STRING(item.start)
-            return <div key={`timeInterval${item.start}`} className={`${CLASSES.boTimeElement} ${CLASSES.typeColor.time} ${CLASSES.hoverColor.time}`} style={myStyle}>{timeString}</div>
+            return (
+                <div
+                    key={`timeInterval${item.start}`}
+                    className={`${CLASSES.boTimeElement} ${CLASSES.typeColor.time} ${CLASSES.hoverColor.time}`}
+                    style={myStyle}
+                >
+                    {timeString}
+                </div>
+            )
         })
         // Only show time bar if there are any events to display
-        const timeBarContent = (
-            this.props.gamelogic.eventLog.length > 0 ?
-            <div className={`${CLASSES.boCol} ${CLASSES.bgColor.time}`}>
-                <div className={CLASSES.boRow}>
-                    {timeIntervalContent}
+        const timeBarContent =
+            this.props.gamelogic.eventLog.length > 0 ? (
+                <div className={`${CLASSES.boCol} ${CLASSES.bgColor.time}`}>
+                    <div className={CLASSES.boRow}>{timeIntervalContent}</div>
                 </div>
-            </div> : ""
-        )
+            ) : (
+                ""
+            )
 
         return (
             <div className={CLASSES.boArea}>

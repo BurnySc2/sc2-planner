@@ -10,7 +10,7 @@ data.Ability.forEach((ability) => {
         ENABLED_UPGRADES[research.upgrade] = 1
         return
     }
-});
+})
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the upgrade is available from an ability
 export default ENABLED_UPGRADES

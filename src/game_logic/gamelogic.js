@@ -2,9 +2,9 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 import RESEARCHED_BY from "../constants/researched_by"
-import {incomeMinerals, incomeVespene} from "./income"
+import { incomeMinerals, incomeVespene } from "./income"
 
-import {cloneDeep} from 'lodash'
+import { cloneDeep } from "lodash"
 
 import Unit from "./unit"
 import Event from "./event"
@@ -30,17 +30,16 @@ let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
-
 class GameLogic {
     /**
-     * 
-     * @param {String} race - One of ["terran", "zerg", "protoss"] 
-     * @param {Object[]} bo 
+     *
+     * @param {String} race - One of ["terran", "zerg", "protoss"]
+     * @param {Object[]} bo
      * @param {String} bo[].name - Each build order element has a name, e.g. 'SCV'
-     * @param {String} bo[].type - One of ["worker", "action", "unit", "structure", "upgrade"] 
+     * @param {String} bo[].type - One of ["worker", "action", "unit", "structure", "upgrade"]
      * @param {*} customSettings - See helper.js for default settings
      */
-    constructor(race="terran", bo=[], customSettings=[]) {
+    constructor(race = "terran", bo = [], customSettings = []) {
         this.race = race
         this.bo = bo
         this.boIndex = 0
@@ -77,7 +76,7 @@ class GameLogic {
         this.unitsCount = {}
         eventId = -1
         lastSnapshot = null
-        
+
         // Custom settings from the settings page
         this.settings = {}
         this.loadSettings(defaultSettings)
@@ -97,7 +96,7 @@ class GameLogic {
         // Update settings from customSettings object, see WebPage.js defaultSettings
         this.loadSettings(customSettings)
     }
-    
+
     /**
      * Prepares default properties for this.setStart()
      */
@@ -130,7 +129,7 @@ class GameLogic {
     }
 
     /**
-     * 
+     *
      * @param {Object} customSettings - See helper.js for default settings
      */
     loadSettings(customSettings) {
@@ -142,21 +141,21 @@ class GameLogic {
     exportSettings() {
         // Update default settings from gamelogic.settings object, then return it
         let settingsObject = cloneDeep(defaultSettings)
-        settingsObject.forEach(item => {
+        settingsObject.forEach((item) => {
             item.v = this.settings[item.variableName]
         })
         return settingsObject
     }
 
     /**
-     * 
+     *
      * @param {GameLogic} snapshot - A snapshot of the game logic
      */
     loadFromSnapshotObject(snapshot) {
         console.assert(snapshot, snapshot)
         // TODO Find a better way of overwriting values from snapshot
-        console.log(cloneDeep(this));
-        console.log(cloneDeep(snapshot));
+        console.log(cloneDeep(this))
+        console.log(cloneDeep(snapshot))
         for (let key of Object.keys(snapshot)) {
             this[key] = cloneDeep(snapshot[key])
         }
@@ -170,7 +169,7 @@ class GameLogic {
     }
 
     /**
-     * 
+     *
      */
     getEventId = () => {
         eventId += 1
@@ -205,7 +204,11 @@ class GameLogic {
         for (let i = 0; i < 12; i++) {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
-            const workerStartDelayTask = new Task(22.4 * this.settings.workerStartDelay, this.frame, this.supplyUsed)
+            const workerStartDelayTask = new Task(
+                22.4 * this.settings.workerStartDelay,
+                this.frame,
+                this.supplyUsed
+            )
             workerStartDelayTask.addMineralWorker = true
             unit.addTask(this, workerStartDelayTask)
             this.units.add(unit)
@@ -220,7 +223,8 @@ class GameLogic {
      */
     runUntilEnd() {
         // Runs until all units are idle
-        while (this.frame < 22.4 * 20 * 60) { // Limit to 20 mins
+        while (this.frame < 22.4 * 20 * 60) {
+            // Limit to 20 mins
             this.runFrame()
             this.frame += 1
             // Abort once all units are idle and end of build order is reached
@@ -243,12 +247,12 @@ class GameLogic {
         // if bo item costs gas but no gas mining: tell user that we dont mine gas
         console.assert(this.boIndex >= this.bo.length, cloneDeep(this))
         // console.assert(this.boIndex >= this.bo.length, JSON.stringify(cloneDeep(this), undefined, 4))
-        
+
         // Sort eventList by item.start, but perhaps the reverse is the desired behavior?
         this.eventLog.sort((a, b) => {
             if (a.id < b.id) {
                 return -1
-            } 
+            }
             if (a.id > b.id) {
                 return 1
             }
@@ -260,7 +264,7 @@ class GameLogic {
         // Test if sorting of events is properly done, that way on-click events work and exporting strings work correctly
         this.eventLog.forEach((item, index) => {
             const boItem = this.bo[index]
-            console.assert(item.name === boItem.name);
+            console.assert(item.name === boItem.name)
             // console.log(item);
             // console.log(boItem);
         })
@@ -286,7 +290,7 @@ class GameLogic {
             // Check idle unit who can train / produce / research / execute action
 
             // console.log(this.frame, this.boIndex, boElement);
-            
+
             // Train unit
             if (["worker", "unit"].includes(boElement.type)) {
                 const trained = this.trainUnit(boElement)
@@ -341,7 +345,7 @@ class GameLogic {
     updateUnitsCount() {
         // Counts all available actions and how many units, structures we have and if an upgrade is researched
         this.unitsCount = {}
-        const incrementUnitName = (item, amount=1) => {
+        const incrementUnitName = (item, amount = 1) => {
             if (!this.unitsCount[item]) {
                 this.unitsCount[item] = amount
             } else {
@@ -373,7 +377,7 @@ class GameLogic {
             if (unit.hasSupplyDrop) {
                 incrementUnitName("call_down_supply")
             }
-            // TODO Count actions by dividing energy through action energy cost, e.g. Math.floor(OC / 50) for amount of mule calldown available 
+            // TODO Count actions by dividing energy through action energy cost, e.g. Math.floor(OC / 50) for amount of mule calldown available
             // TODO All drones that are producing a structure should not be counted
         })
         this.upgrades.forEach((upgrade, index) => {
@@ -383,9 +387,9 @@ class GameLogic {
 
     /**
      * The simulation tries to train a unit, builds a structure or morphs a unit
-     * @param {Object} unit - The build order element 
+     * @param {Object} unit - The build order element
      * @param {String} unit.name - For example 'SCV'
-     * @param {String} unit.type - The type of the build order item, one of ["worker", "action", "unit", "structure", "upgrade"] 
+     * @param {String} unit.type - The type of the build order item, one of ["worker", "action", "unit", "structure", "upgrade"]
      */
     trainUnit(unit) {
         // Issue train command of unit type
@@ -394,7 +398,7 @@ class GameLogic {
 
         // Get unit type / structure type that can train this unit
         const trainedInfo = TRAINED_BY[unit.name]
-        let morphCondition = (trainedInfo.isMorph || trainedInfo.consumesUnit)
+        let morphCondition = trainedInfo.isMorph || trainedInfo.consumesUnit
         console.assert(trainedInfo, unit.name)
 
         // Get cost (mineral, vespene, supply)
@@ -411,7 +415,7 @@ class GameLogic {
                 if (structure.name === requiredStructure) {
                     requiredStructureMet = true
                     break
-                } 
+                }
             }
             if (!requiredStructureMet) {
                 return false
@@ -428,26 +432,39 @@ class GameLogic {
             }
 
             // If target is an addon but building structure already has addon: skip
-            if ((unit.name.includes("TechLab") || unit.name.includes("Reactor")) && trainerUnit.hasAddon()) {
+            if (
+                (unit.name.includes("TechLab") ||
+                    unit.name.includes("Reactor")) &&
+                trainerUnit.hasAddon()
+            ) {
                 continue
             }
 
             // Loop over all idle units and check if they match unit type
-            
-            const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(trainerUnit.name)
-            const trainerCanTrainThroughReactor = !trainedInfo.requiresTechlab && trainerUnit.hasReactor && trainerUnit.reactorTasks.length === 0
 
-            // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva            
-            const trainerCanTrainThroughLarva = (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) || (unit.type === "structure" && trainerUnit.name === "Probe")
-            morphCondition = morphCondition && !trainerCanTrainThroughLarva 
+            const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(
+                trainerUnit.name
+            )
+            const trainerCanTrainThroughReactor =
+                !trainedInfo.requiresTechlab &&
+                trainerUnit.hasReactor &&
+                trainerUnit.reactorTasks.length === 0
+
+            // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
+            const trainerCanTrainThroughLarva =
+                (trainedInfo.trainedBy.has("Larva") &&
+                    trainerUnit.larvaCount > 0) ||
+                (unit.type === "structure" && trainerUnit.name === "Probe")
+            morphCondition = morphCondition && !trainerCanTrainThroughLarva
 
             if (
-                !trainerCanTrainThisUnit 
-                && !trainerCanTrainThroughReactor 
-                && !trainerCanTrainThroughLarva) {
+                !trainerCanTrainThisUnit &&
+                !trainerCanTrainThroughReactor &&
+                !trainerCanTrainThroughLarva
+            ) {
                 continue
             }
-            
+
             const cost = this.getCost(unit.name)
             if (unit.name === "Zergling") {
                 // Was 0.5 and 25
@@ -469,13 +486,17 @@ class GameLogic {
             // Add task to unit
             // If trained unit is made by worker: add worker move delay
             let buildTime = this.getTime(unit.name)
-            
+
             // Create the build start delay task
             let buildStartDelay = 0
             if (workerTypes.has(trainerUnit.name)) {
                 this.workersMinerals -= 1
                 // Worker moving to location delay
-                const workerMovingToConstructionSite = new Task(this.settings.workerBuildDelay * 22.4, this.frame, this.supplyUsed)
+                const workerMovingToConstructionSite = new Task(
+                    this.settings.workerBuildDelay * 22.4,
+                    this.frame,
+                    this.supplyUsed
+                )
                 trainerUnit.addTask(this, workerMovingToConstructionSite)
                 buildStartDelay = this.settings.workerBuildDelay * 22.4
                 // Since this task is run immediately, it needs to end later when made by probes
@@ -483,11 +504,16 @@ class GameLogic {
                     buildTime += buildStartDelay
                 }
             }
-            
-            
+
             // Create the new task
-            const newTask = new Task(buildTime, this.frame + buildStartDelay, this.supplyUsed, this.getEventId())
-            newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
+            const newTask = new Task(
+                buildTime,
+                this.frame + buildStartDelay,
+                this.supplyUsed,
+                this.getEventId()
+            )
+            newTask.morphToUnit =
+                morphCondition || trainedInfo.consumesUnit ? unit.name : null
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
                     newTask.newWorker = unit.name
@@ -497,13 +523,22 @@ class GameLogic {
                     newTask.newStructure = unit.name
                 }
             }
-            
-            trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
+
+            trainerUnit.addTask(
+                this,
+                newTask,
+                trainerCanTrainThroughReactor,
+                trainerCanTrainThroughLarva
+            )
 
             // Create the builder return task
             if (["Probe", "SCV"].includes(trainerUnit.name)) {
                 // Probe and SCV return to mining after they are done with their task
-                const workerReturnToMinerals = new Task(this.settings.workerReturnDelay * 22.4, this.frame, this.supplyUsed)
+                const workerReturnToMinerals = new Task(
+                    this.settings.workerReturnDelay * 22.4,
+                    this.frame,
+                    this.supplyUsed
+                )
                 workerReturnToMinerals.addMineralWorker = true
                 trainerUnit.addTask(this, workerReturnToMinerals)
             }
@@ -521,25 +556,25 @@ class GameLogic {
             if (trainerUnit.name === "Drone") {
                 this.supplyUsed -= 1
                 this.supplyLeft += 1
-            }            
+            }
 
             return true
         }
         return false
     }
-    
+
     /**
      * The simulation tries to research an upgrade
      * Nearly the same as trainUnit(unit)
-     * @param {Object} upgrade 
-     * @param {String} upgrade.name 
-     * @param {String} upgrade.type 
+     * @param {Object} upgrade
+     * @param {String} upgrade.name
+     * @param {String} upgrade.type
      */
     researchUpgrade(upgrade) {
         // Issue research command of upgrade type
         console.assert(upgrade.name, JSON.stringify(upgrade, null, 4))
         console.assert(upgrade.type, JSON.stringify(upgrade, null, 4))
-        
+
         // Get cost (mineral, vespene, supply)
         if (!this.canAfford(upgrade)) {
             // console.log(this.frame, this.minerals, this.vespene);
@@ -549,7 +584,7 @@ class GameLogic {
         // Get unit type / structure type that can train this unit
         const researchInfo = RESEARCHED_BY[upgrade.name]
         console.assert(researchInfo, researchInfo)
-        
+
         // Check if requirement is met
         const requiredStructure = researchInfo.requiredStructure
         let requiredStructureMet = requiredStructure === null ? true : false
@@ -558,7 +593,7 @@ class GameLogic {
                 if (structure.name === requiredStructure) {
                     requiredStructureMet = true
                     break
-                } 
+                }
             }
             if (!requiredStructureMet) {
                 return false
@@ -575,25 +610,31 @@ class GameLogic {
                 return false
             }
         }
-        
+
         // The unit/structure that is training the target unit or structure
         for (let researcherStructure of this.idleUnits) {
             console.assert(researcherStructure.name, researcherStructure)
-            
+
             // Unit might no longer be idle while iterating over idleUnits
             if (!researcherStructure.isIdle()) {
                 continue
             }
-            
-            const structureCanResearchUpgrade = researchInfo.researchedBy[researcherStructure.name] === 1
+
+            const structureCanResearchUpgrade =
+                researchInfo.researchedBy[researcherStructure.name] === 1
             if (!structureCanResearchUpgrade) {
                 continue
             }
-            
+
             // All requirement checks complete, start the task
-            
+
             const researchTime = this.getTime(upgrade.name, true)
-            const newTask = new Task(researchTime, this.frame, this.supplyUsed, this.getEventId())
+            const newTask = new Task(
+                researchTime,
+                this.frame,
+                this.supplyUsed,
+                this.getEventId()
+            )
             newTask.newUpgrade = upgrade.name
             researcherStructure.addTask(this, newTask)
             const cost = this.getCost(upgrade.name, true)
@@ -617,7 +658,7 @@ class GameLogic {
             if (!isAlive) {
                 if (unit.name === "MULE") {
                     this.muleCount -= 1
-                } 
+                }
                 this.killUnit(unit)
             }
         })
@@ -630,7 +671,7 @@ class GameLogic {
 
     /**
      * Kills a unit and removes it from the game logic
-     * @param {Unit} unit 
+     * @param {Unit} unit
      */
     killUnit(unit) {
         this.units.delete(unit)
@@ -640,10 +681,10 @@ class GameLogic {
 
     /**
      * Gets the cost of a unit, structure, morph or upgrade
-     * @param {String} unitName 
-     * @param {Boolean} isUpgrade 
+     * @param {String} unitName
+     * @param {Boolean} isUpgrade
      */
-    getCost(unitName, isUpgrade=false) {
+    getCost(unitName, isUpgrade = false) {
         // Gets cost of unit, structure or upgrade
         // TODO get cost of upgrade
         if (isUpgrade) {
@@ -661,13 +702,13 @@ class GameLogic {
             supply: UNITS_BY_NAME[unitName].supply,
         }
     }
-    
+
     /**
      * Gets build or research time of a unit, structure, morph or upgrade
-     * @param {String} unitName 
-     * @param {Boolean} isUpgrade 
+     * @param {String} unitName
+     * @param {Boolean} isUpgrade
      */
-    getTime(unitName, isUpgrade=false) {
+    getTime(unitName, isUpgrade = false) {
         // Get build time of unit or structure, or research time of upgrade (in frames)
         // TODO get time of upgrade
         if (isUpgrade) {
@@ -677,23 +718,33 @@ class GameLogic {
         console.assert(UNITS_BY_NAME[unitName], `${unitName}`)
         return UNITS_BY_NAME[unitName].time
     }
-    
+
     /**
      * Calculates and caches the income based on how many workers (and mules), bases and gas structures we have
      */
     addIncome() {
         // Calculate income based on mineral and gas workers
-        let minerals = mineralIncomeCache[[this.workersMinerals, this.baseCount, this.muleCount]]
+        let minerals =
+            mineralIncomeCache[
+                [this.workersMinerals, this.baseCount, this.muleCount]
+            ]
         if (minerals === undefined) {
-            minerals = incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) / 22.4
-            mineralIncomeCache[[this.workersMinerals, this.baseCount, this.muleCount]] = minerals
-        } 
+            minerals =
+                incomeMinerals(
+                    this.workersMinerals,
+                    this.baseCount,
+                    this.muleCount
+                ) / 22.4
+            mineralIncomeCache[
+                [this.workersMinerals, this.baseCount, this.muleCount]
+            ] = minerals
+        }
 
         let vespene = vespeneIncomeCache[[this.workersVespene, this.gasCount]]
         if (vespene === undefined) {
             vespene = incomeVespene(this.workersVespene, this.gasCount) / 22.4
             vespeneIncomeCache[[this.workersVespene, this.gasCount]] = vespene
-        } 
+        }
         this.minerals += minerals
         this.vespene += vespene
         // this.minerals += incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) / 22.4
@@ -701,9 +752,9 @@ class GameLogic {
     }
 
     /**
-     * @param {Object} unit 
+     * @param {Object} unit
      * @param {String} unit.name
-     * @param {String} unit.type 
+     * @param {String} unit.type
      */
     canAfford(unit) {
         // Input: unit or upgrade object {name: "SCV", type: "worker"}
@@ -717,20 +768,23 @@ class GameLogic {
     }
 
     /**
-     * @param {Object} cost 
-     * @param {Number} cost.minerals 
-     * @param {Number} cost.vespene 
-     * @param {Number} cost.supply 
+     * @param {Object} cost
+     * @param {Number} cost.minerals
+     * @param {Number} cost.vespene
+     * @param {Number} cost.supply
      */
     _canAfford(cost) {
         // Input: cost object
         console.assert(cost.minerals, JSON.stringify(cost, null, 4))
-        if (cost.minerals <= this.minerals && cost.vespene <= this.vespene && (cost.supply < 0 || cost.supply <= this.supplyLeft)) {
+        if (
+            cost.minerals <= this.minerals &&
+            cost.vespene <= this.vespene &&
+            (cost.supply < 0 || cost.supply <= this.supplyLeft)
+        ) {
             return true
         }
         return false
     }
-    
 }
 
-export {Event, GameLogic}
+export { Event, GameLogic }

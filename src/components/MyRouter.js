@@ -1,7 +1,5 @@
-import React, { Component } from 'react'
-import {
-    BrowserRouter as Router,
-  } from "react-router-dom";
+import React, { Component } from "react"
+import { BrowserRouter as Router } from "react-router-dom"
 
 import WebPage from "./WebPage"
 

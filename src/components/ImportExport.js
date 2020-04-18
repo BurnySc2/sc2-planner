@@ -1,10 +1,15 @@
-import React, { Component } from 'react'
-import ReactTooltip from 'react-tooltip';
-import {createUrlParams, CONVERT_SECONDS_TO_TIME_STRING, encodeSALT, decodeSALT} from  "../constants/helper"
+import React, { Component } from "react"
+import ReactTooltip from "react-tooltip"
+import {
+    createUrlParams,
+    CONVERT_SECONDS_TO_TIME_STRING,
+    encodeSALT,
+    decodeSALT,
+} from "../constants/helper"
 
-import CLASSES from '../constants/classes'
-import UNITS_BY_NAME from '../constants/units_by_name'
-import UPGRADE_BY_NAME from '../constants/upgrade_by_name'
+import CLASSES from "../constants/classes"
+import UNITS_BY_NAME from "../constants/units_by_name"
+import UPGRADE_BY_NAME from "../constants/upgrade_by_name"
 
 export default class ImportExport extends Component {
     /**
@@ -33,7 +38,7 @@ export default class ImportExport extends Component {
     onMouseLeave = (e, name) => {
         // On mouse exit: close the above
         this.setState({
-            [name]: false
+            [name]: false,
         })
     }
 
@@ -51,27 +56,30 @@ export default class ImportExport extends Component {
             clipBoardText = this.generateSALTEncoding()
         }
         if (clipBoardText !== "") {
-            navigator.clipboard.writeText(clipBoardText).then(() => {
-                console.log(name);
-                // console.log(clipBoardText);
-            }, () => {
-                console.log("fail");
-            })
-            
+            navigator.clipboard.writeText(clipBoardText).then(
+                () => {
+                    console.log(name)
+                    // console.log(clipBoardText);
+                },
+                () => {
+                    console.log("fail")
+                }
+            )
+
             this.setState({
-                tooltipText: "Copied!"
+                tooltipText: "Copied!",
             })
         }
     }
-    
+
     onClickImport = (e, name) => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
-        navigator.clipboard.readText().then(data => {
+        navigator.clipboard.readText().then((data) => {
             const decodedSALT = decodeSALT(data)
             const race = decodedSALT.race
             const bo = decodedSALT.bo
             this.setState({
-                tooltipText: "Pasted!"
+                tooltipText: "Pasted!",
             })
             this.props.rerunBuildOrder(race, bo, undefined)
             this.props.updateUrl(race, bo, undefined)
@@ -80,34 +88,45 @@ export default class ImportExport extends Component {
 
     onLeaveButton = (e) => {
         this.setState({
-            tooltipText: ""
+            tooltipText: "",
         })
     }
 
     generateShareableLink() {
         // Returns the string of the shareable link
         const gamelogic = this.props.gamelogic
-        const newUrl = createUrlParams(gamelogic.race, gamelogic.exportSettings(), gamelogic.bo)
+        const newUrl = createUrlParams(
+            gamelogic.race,
+            gamelogic.exportSettings(),
+            gamelogic.bo
+        )
         const shareUrl = `https://burnysc2.github.io/sc2-planner/${newUrl}`
         return shareUrl
     }
 
-    generateHumanInstructions(templateString = "$time $supply $action", includeWorkers=this.state.humanReadableIncludeWorkers, includeActions=this.state.humanReadableIncludeActions) {
+    generateHumanInstructions(
+        templateString = "$time $supply $action",
+        includeWorkers = this.state.humanReadableIncludeWorkers,
+        includeActions = this.state.humanReadableIncludeActions
+    ) {
         // Returns a human readable build order instruction
         const gamelogic = this.props.gamelogic
         const instructions = []
-        gamelogic.eventLog.forEach(item => {
+        gamelogic.eventLog.forEach((item) => {
             // console.log(item);
             let instructionString = templateString
             const replaceValues = {
-                "$time": CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4),
+                $time: CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4),
                 // TODO Supply
-                "$supply": item.supply,
-                "$action": item.name,
+                $supply: item.supply,
+                $action: item.name,
             }
             for (let replaceString in replaceValues) {
                 const value = replaceValues[replaceString]
-                instructionString = instructionString.replace(replaceString, value)
+                instructionString = instructionString.replace(
+                    replaceString,
+                    value
+                )
             }
             if (item.type === "action" && includeActions) {
                 instructions.push(instructionString)
@@ -126,12 +145,15 @@ export default class ImportExport extends Component {
         const gamelogic = this.props.gamelogic
         // Reduce instruction to: [name, id, type, supply, time, frame]
         const instructions = []
-        gamelogic.eventLog.forEach(item => {
+        gamelogic.eventLog.forEach((item) => {
             instructions.push({
                 name: item.name,
-                id: item.type === "action" ? -1 : (
-                    item.type === "upgrade" ? UPGRADE_BY_NAME[item.name].id : UNITS_BY_NAME[item.name].id
-                ),
+                id:
+                    item.type === "action"
+                        ? -1
+                        : item.type === "upgrade"
+                        ? UPGRADE_BY_NAME[item.name].id
+                        : UNITS_BY_NAME[item.name].id,
                 type: item.type,
                 supply: item.supply,
                 time: CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4),
@@ -144,7 +166,7 @@ export default class ImportExport extends Component {
 
     generateSALTEncoding() {
         const encodedSalt = encodeSALT(this.props.gamelogic.eventLog)
-        console.log(encodedSalt);
+        console.log(encodedSalt)
         return encodedSalt
     }
 
@@ -159,16 +181,26 @@ export default class ImportExport extends Component {
         return htmlStuff
     }
 
-    updateTemplateStringTooltip(templateString=this.state.templateString, workers=this.state.humanReadableIncludeWorkers, actions=this.state.humanReadableIncludeActions) {
+    updateTemplateStringTooltip(
+        templateString = this.state.templateString,
+        workers = this.state.humanReadableIncludeWorkers,
+        actions = this.state.humanReadableIncludeActions
+    ) {
         this.setState({
-            templateStringTooltip: this.formatListToHtmlLines(this.generateHumanInstructions(templateString, workers, actions))
+            templateStringTooltip: this.formatListToHtmlLines(
+                this.generateHumanInstructions(templateString, workers, actions)
+            ),
         })
     }
 
     render() {
         const classes = CLASSES.dropDown
-        const classesExportDropdown = this.state.export ? `visible ${classes}` : `hidden ${classes}`
-        const classesImportDropdown = this.state.import ? `visible ${classes}` : `hidden ${classes}`
+        const classesExportDropdown = this.state.export
+            ? `visible ${classes}`
+            : `hidden ${classes}`
+        const classesImportDropdown = this.state.import
+            ? `visible ${classes}`
+            : `hidden ${classes}`
 
         const exportElements = [
             "Copy shareable link",
@@ -179,33 +211,77 @@ export default class ImportExport extends Component {
             const otherIcons = []
             if (item === "Copy human instructions") {
                 otherIcons.push(
-                    <div key={item} data-tip data-for='templateStringTooltip'>
-                        <input type="text" className="w-48" onChange={(e)=>{
-                            this.setState({
-                                templateString: e.target.value,
-                                templateStringTooltip: this.formatListToHtmlLines(this.generateHumanInstructions(e.target.value))
-                            })
-                        }} placeholder="$time $supply $action" value={this.state.templateString} />
+                    <div key={item} data-tip data-for="templateStringTooltip">
+                        <input
+                            type="text"
+                            className="w-48"
+                            onChange={(e) => {
+                                this.setState({
+                                    templateString: e.target.value,
+                                    templateStringTooltip: this.formatListToHtmlLines(
+                                        this.generateHumanInstructions(
+                                            e.target.value
+                                        )
+                                    ),
+                                })
+                            }}
+                            placeholder="$time $supply $action"
+                            value={this.state.templateString}
+                        />
 
-                        <input defaultChecked={this.state.humanReadableIncludeWorkers} type="checkbox" onChange={(e)=>{
-                            this.updateTemplateStringTooltip(undefined, e.target.checked)
-                            this.setState({humanReadableIncludeWorkers: e.target.checked})
-                        }} />
+                        <input
+                            defaultChecked={
+                                this.state.humanReadableIncludeWorkers
+                            }
+                            type="checkbox"
+                            onChange={(e) => {
+                                this.updateTemplateStringTooltip(
+                                    undefined,
+                                    e.target.checked
+                                )
+                                this.setState({
+                                    humanReadableIncludeWorkers:
+                                        e.target.checked,
+                                })
+                            }}
+                        />
 
                         <label>Workers</label>
 
-                        <input defaultChecked={this.state.humanReadableIncludeActions} type="checkbox" onChange={(e)=>{
-                            this.updateTemplateStringTooltip(undefined, undefined, e.target.checked)
-                            this.setState({humanReadableIncludeActions: e.target.checked})
-                        }} />
+                        <input
+                            defaultChecked={
+                                this.state.humanReadableIncludeActions
+                            }
+                            type="checkbox"
+                            onChange={(e) => {
+                                this.updateTemplateStringTooltip(
+                                    undefined,
+                                    undefined,
+                                    e.target.checked
+                                )
+                                this.setState({
+                                    humanReadableIncludeActions:
+                                        e.target.checked,
+                                })
+                            }}
+                        />
 
                         <label>Actions</label>
                     </div>
                 )
             }
             return (
-                <div key={`${item}`} data-tip={this.state.tooltipText} data-for='importExportTooltip' className={CLASSES.dropDownContainer}>
-                    <div onMouseLeave={this.onLeaveButton} onClick={(e) => this.onClickExport(e, item)}className={CLASSES.dropDownButton}>
+                <div
+                    key={`${item}`}
+                    data-tip={this.state.tooltipText}
+                    data-for="importExportTooltip"
+                    className={CLASSES.dropDownContainer}
+                >
+                    <div
+                        onMouseLeave={this.onLeaveButton}
+                        onClick={(e) => this.onClickExport(e, item)}
+                        className={CLASSES.dropDownButton}
+                    >
                         {item}
                     </div>
                     {otherIcons}
@@ -213,38 +289,51 @@ export default class ImportExport extends Component {
             )
         })
 
-        const importElements = [
-            "Paste SALT instructions",
-        ].map((item) => {
+        const importElements = ["Paste SALT instructions"].map((item) => {
             return (
-                <div key={`${item}`} data-tip={this.state.tooltipText} data-for='importExportTooltip' onMouseLeave={this.onLeaveButton} onClick={(e) => this.onClickImport(e, item)} className={CLASSES.dropDownContainer}>
-                    <div className={CLASSES.dropDownButton}>
-                        {item}
-                    </div>
+                <div
+                    key={`${item}`}
+                    data-tip={this.state.tooltipText}
+                    data-for="importExportTooltip"
+                    onMouseLeave={this.onLeaveButton}
+                    onClick={(e) => this.onClickImport(e, item)}
+                    className={CLASSES.dropDownContainer}
+                >
+                    <div className={CLASSES.dropDownButton}>{item}</div>
                 </div>
             )
         })
 
-        const exportButton = 
-            <div className={CLASSES.buttons} onMouseEnter={(e) => this.onMouseEnter(e, "export")} onMouseLeave={(e) => this.onMouseLeave(e, "export")}>
+        const exportButton = (
+            <div
+                className={CLASSES.buttons}
+                onMouseEnter={(e) => this.onMouseEnter(e, "export")}
+                onMouseLeave={(e) => this.onMouseLeave(e, "export")}
+            >
                 Export
-                <div className={classesExportDropdown}>
-                    {exportElements}
-                </div>
+                <div className={classesExportDropdown}>{exportElements}</div>
             </div>
+        )
 
-        const importButton = 
-            <div className={CLASSES.buttons} onMouseEnter={(e) => this.onMouseEnter(e, "import")} onMouseLeave={(e) => this.onMouseLeave(e, "import")}>
+        const importButton = (
+            <div
+                className={CLASSES.buttons}
+                onMouseEnter={(e) => this.onMouseEnter(e, "import")}
+                onMouseLeave={(e) => this.onMouseLeave(e, "import")}
+            >
                 Import
-                <div className={classesImportDropdown}>
-                    {importElements}
-                </div>
+                <div className={classesImportDropdown}>{importElements}</div>
             </div>
+        )
 
         return (
             <div className="flex flex-row">
-                <ReactTooltip place="bottom" id="importExportTooltip">{this.state.tooltipText}</ReactTooltip>
-                <ReactTooltip place="bottom" id="templateStringTooltip">{this.state.templateStringTooltip}</ReactTooltip>
+                <ReactTooltip place="bottom" id="importExportTooltip">
+                    {this.state.tooltipText}
+                </ReactTooltip>
+                <ReactTooltip place="bottom" id="templateStringTooltip">
+                    {this.state.templateStringTooltip}
+                </ReactTooltip>
                 {exportButton}
                 {importButton}
             </div>

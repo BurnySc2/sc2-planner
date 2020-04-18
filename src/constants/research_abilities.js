@@ -10,7 +10,7 @@ data.Ability.forEach((ability) => {
         RESEARCH_ABILITIES[ability.id] = research.upgrade
         return
     }
-});
+})
 
 // Returns object with keys as ability id and value as resulting unit id
 
@@ -18,7 +18,9 @@ data.Ability.forEach((ability) => {
 // Exported:
 // {524, 45}
 
-console.assert(Object.keys(RESEARCH_ABILITIES).length === 119, `${Object.keys(RESEARCH_ABILITIES).length} is not 119`)
-
+console.assert(
+    Object.keys(RESEARCH_ABILITIES).length === 119,
+    `${Object.keys(RESEARCH_ABILITIES).length} is not 119`
+)
 
 export default RESEARCH_ABILITIES

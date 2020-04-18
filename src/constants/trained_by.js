@@ -1,4 +1,4 @@
-import {CREATION_ABILITIES, MORPH_ABILITIES} from "./creation_abilities"
+import { CREATION_ABILITIES, MORPH_ABILITIES } from "./creation_abilities"
 import UNITS_BY_ID from "./units_by_id"
 import UPGRADE_BY_ID from "./upgrade_by_id"
 
@@ -18,7 +18,9 @@ data.Unit.forEach((trainingUnit) => {
             let requiredUpgradeId = null
             let requiresTechlab = false
             let isMorph = MORPH_ABILITIES.has(ability.ability)
-            const isFreeMorph = resultingUnit.minerals === trainingUnit.minerals && resultingUnit.gas === trainingUnit.gas
+            const isFreeMorph =
+                resultingUnit.minerals === trainingUnit.minerals &&
+                resultingUnit.gas === trainingUnit.gas
             // Ignore free morphs, e.g. hellbat to hellion is a free morph but adds the armory requirement for hellion
             if (isFreeMorph) {
                 return
@@ -28,7 +30,10 @@ data.Unit.forEach((trainingUnit) => {
             //     console.log(trainingUnit);
             //     console.log(resultingUnit);
             // }
-            let consumesUnit = resultingUnit.race === "Zerg" && resultingUnit.is_structure && !trainingUnit.is_structure
+            let consumesUnit =
+                resultingUnit.race === "Zerg" &&
+                resultingUnit.is_structure &&
+                !trainingUnit.is_structure
             if (Array.isArray(ability.requirements)) {
                 for (let requirement of ability.requirements) {
                     if (requirement.upgrade) {
@@ -43,8 +48,14 @@ data.Unit.forEach((trainingUnit) => {
                 }
             }
 
-            let requiredStructure = requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
-            let requiredUpgrade = requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
+            let requiredStructure =
+                requiredStructureId !== null
+                    ? UNITS_BY_ID[requiredStructureId].name
+                    : null
+            let requiredUpgrade =
+                requiredUpgradeId !== null
+                    ? UPGRADE_BY_ID[requiredUpgradeId].name
+                    : null
 
             // If it doesnt exist: create
             if (TRAINED_BY[resultingUnit.name] === undefined) {
@@ -61,9 +72,17 @@ data.Unit.forEach((trainingUnit) => {
                 // Entry already exists, add training unit to object of 'trainedBy' and update requirement
                 TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
             }
-            TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name].requiredStructure ? requiredStructure : TRAINED_BY[resultingUnit.name].requiredStructure
+            TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[
+                resultingUnit.name
+            ].requiredStructure
+                ? requiredStructure
+                : TRAINED_BY[resultingUnit.name].requiredStructure
 
-            TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[resultingUnit.name].requiredUpgrade ? requiredUpgrade : TRAINED_BY[resultingUnit.name].requiredUpgrade
+            TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[
+                resultingUnit.name
+            ].requiredUpgrade
+                ? requiredUpgrade
+                : TRAINED_BY[resultingUnit.name].requiredUpgrade
             // if (resultingUnit.name === "Zergling") {
             //     console.log(TRAINED_BY[resultingUnit.name]);
             //     console.log(ability);
@@ -74,7 +93,7 @@ data.Unit.forEach((trainingUnit) => {
 })
 
 // console.log(TRAINED_BY);
-    
+
 /**
 {Adept: 
     requiredStructure: "CyberneticsCore",
@@ -87,8 +106,14 @@ data.Unit.forEach((trainingUnit) => {
     consumesUnit: false
 }
  */
-console.assert(Object.keys(TRAINED_BY).length === 111, `${Object.keys(TRAINED_BY).length} is not 111`)
+console.assert(
+    Object.keys(TRAINED_BY).length === 111,
+    `${Object.keys(TRAINED_BY).length} is not 111`
+)
 
-console.assert(TRAINED_BY["Zergling"].requiredStructure === "SpawningPool", TRAINED_BY["Zergling"].requiredStructure)
+console.assert(
+    TRAINED_BY["Zergling"].requiredStructure === "SpawningPool",
+    TRAINED_BY["Zergling"].requiredStructure
+)
 
 export default TRAINED_BY

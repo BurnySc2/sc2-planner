@@ -1,27 +1,31 @@
 import { pick } from "lodash"
-import lzbase62 from 'lzbase62';
-import {isEqual} from 'lodash'
+import lzbase62 from "lzbase62"
+import { isEqual } from "lodash"
 
-import UNITS_BY_NAME from '../constants/units_by_name'
+import UNITS_BY_NAME from "../constants/units_by_name"
 
-const {CUSTOMACTIONS_BY_NAME} = require('../constants/customactions')
+const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
-const CONVERT_SECONDS_TO_TIME_STRING = ((totalSeconds) => {
+const CONVERT_SECONDS_TO_TIME_STRING = (totalSeconds) => {
     totalSeconds = Math.floor(totalSeconds)
     const minutes = `${Math.floor(totalSeconds / 60)}`.padStart(2, "0")
     const seconds = `${totalSeconds % 60}`.padStart(2, "0")
     const timeFormatted = `${minutes}:${seconds}`
     return timeFormatted
-})
+}
 
 const getImageOfItem = (item) => {
     let image = ""
     if (item.type === "upgrade") {
-        image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
+        image = require(`../icons/png/${
+            UPGRADE_ICONS[item.name.toUpperCase()]
+        }`)
     } else if (item.type === "action") {
-        image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
+        image = require(`../icons/png/${
+            CUSTOMACTIONS_BY_NAME[item.name].imageSource
+        }`)
     } else {
         image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
     }
@@ -33,7 +37,8 @@ const defaultSettings = [
         // Pretty name displayed in gui
         name: "Worker start delay",
         // Tooltip popup that shows some information text
-        tooltip: "How many seconds delay there is before the workers start mining minerals at game start.",
+        tooltip:
+            "How many seconds delay there is before the workers start mining minerals at game start.",
         // Internal long variable name used by gamelogic.js
         variableName: "workerStartDelay",
         // Short name for base64 string
@@ -49,7 +54,8 @@ const defaultSettings = [
     },
     {
         name: "Worker build delay",
-        tooltip: "Time for workers before they arrive at the target build location to start construction.",
+        tooltip:
+            "Time for workers before they arrive at the target build location to start construction.",
         variableName: "workerBuildDelay",
         n: "wbd",
         v: 1,
@@ -59,7 +65,8 @@ const defaultSettings = [
     },
     {
         name: "Worker return delay",
-        tooltip: "Time for terran and protoss workers until they arrive back at the minerals after they received a build task.",
+        tooltip:
+            "Time for terran and protoss workers until they arrive back at the minerals after they received a build task.",
         variableName: "workerReturnDelay",
         n: "wrd",
         v: 3,
@@ -69,7 +76,8 @@ const defaultSettings = [
     },
     {
         name: "Addon swap delay",
-        tooltip: "How much time needs to pass before a terran production structure is useable again after swapping it off (or onto) an addon.",
+        tooltip:
+            "How much time needs to pass before a terran production structure is useable again after swapping it off (or onto) an addon.",
         variableName: "addonSwapDelay",
         n: "asd",
         v: 3,
@@ -79,7 +87,8 @@ const defaultSettings = [
     },
     {
         name: "Idle limit",
-        tooltip: "How many seconds until the simulation detected that it got stuck. For example when going '12 pool', workers need to gather a lot of minerals first (simulation is then 'idle' for about 15 seconds). This setting has a huge performance impact on detecting invalid build orders.",
+        tooltip:
+            "How many seconds until the simulation detected that it got stuck. For example when going '12 pool', workers need to gather a lot of minerals first (simulation is then 'idle' for about 15 seconds). This setting has a huge performance impact on detecting invalid build orders.",
         variableName: "idleLimit",
         n: "il",
         v: 15,
@@ -104,7 +113,7 @@ defaultSettings.forEach((item) => {
     settingsDefaultValues[item.n] = item.v
 })
 
-const encodeSettings = ((settingsObject) => {
+const encodeSettings = (settingsObject) => {
     // console.log(settingsObject);
     // Strip away unwanted values
     let strippedObject = settingsObject.map((item) => {
@@ -121,16 +130,16 @@ const encodeSettings = ((settingsObject) => {
     // console.log(encoded);
     // console.log(encoded.length);
     return encoded
-})
+}
 
-const decodeSettings = ((settingsEncoded) => {
+const decodeSettings = (settingsEncoded) => {
     const decodedString = lzbase62.decompress(settingsEncoded)
     const jsonObj = JSON.parse(decodedString)
     // console.log(jsonObj);
     return jsonObj
-})
+}
 
-const encodeBuildOrder = ((buildOrderObject) => {
+const encodeBuildOrder = (buildOrderObject) => {
     // console.log(buildOrderObject);
     let strippedObject = buildOrderObject.map((item) => {
         return pick(item, ["name", "type"])
@@ -138,27 +147,33 @@ const encodeBuildOrder = ((buildOrderObject) => {
     const jsonString = JSON.stringify(strippedObject)
     const encoded = lzbase62.compress(jsonString)
     return encoded
-})
+}
 
-const decodeBuildOrder = ((buildOrderEncoded) => {
+const decodeBuildOrder = (buildOrderEncoded) => {
     const decodedString = lzbase62.decompress(buildOrderEncoded)
     const jsonObj = JSON.parse(decodedString)
     // Load image
     jsonObj.forEach((item) => {
         if (["worker", "unit", "structure"].includes(item.type)) {
-            item.image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
+            item.image = require(`../icons/png/${
+                UNIT_ICONS[item.name.toUpperCase()]
+            }`)
         }
         if (["upgrade"].includes(item.type)) {
-            item.image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
+            item.image = require(`../icons/png/${
+                UPGRADE_ICONS[item.name.toUpperCase()]
+            }`)
         }
         if (["action"].includes(item.type)) {
-            item.image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
+            item.image = require(`../icons/png/${
+                CUSTOMACTIONS_BY_NAME[item.name].imageSource
+            }`)
         }
     })
     return jsonObj
-})
+}
 
-const createUrlParams = (race, settings, buildOrder=[]) => {
+const createUrlParams = (race, settings, buildOrder = []) => {
     let newUrl = `?race=${race}`
 
     if (!settings) {
@@ -189,14 +204,14 @@ const decodeSALT = (saltEncoding) => {
     // TODO Also need to figure out which race the SALT build order is for?!
     let race = undefined
     let bo = [
-        {name: "SCV", type: "worker"},
-        {name: "SupplyDepot", type: "structure"}
+        { name: "SCV", type: "worker" },
+        { name: "SupplyDepot", type: "structure" },
     ]
     // let bo = [
     //     {name: "Probe", type: "worker"},
     //     {name: "Pylon", type: "structure"}
     // ]
-    
+
     // Figure out the race from the build order
     if (bo.length === 0 && !race) {
         race = "terran"
@@ -212,8 +227,19 @@ const decodeSALT = (saltEncoding) => {
 
     return {
         race: race,
-        bo: bo
-}
+        bo: bo,
+    }
 }
 
-export {defaultSettings, CONVERT_SECONDS_TO_TIME_STRING, getImageOfItem, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder, createUrlParams, encodeSALT, decodeSALT}
+export {
+    defaultSettings,
+    CONVERT_SECONDS_TO_TIME_STRING,
+    getImageOfItem,
+    encodeSettings,
+    decodeSettings,
+    encodeBuildOrder,
+    decodeBuildOrder,
+    createUrlParams,
+    encodeSALT,
+    decodeSALT,
+}
