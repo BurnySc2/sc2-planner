@@ -205,7 +205,7 @@ class GameLogic {
         for (let i = 0; i < 12; i++) {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
-            const workerStartDelayTask = new Task(22.4 * this.settings.workerStartDelay, this.frame)
+            const workerStartDelayTask = new Task(22.4 * this.settings.workerStartDelay, this.frame, this.supplyUsed)
             workerStartDelayTask.addMineralWorker = true
             unit.addTask(this, workerStartDelayTask)
             this.units.add(unit)
@@ -254,6 +254,8 @@ class GameLogic {
             }
             return 0
         })
+        console.log(this.eventLog);
+        
 
         // Test if sorting of events is properly done, that way on-click events work and exporting strings work correctly
         this.eventLog.forEach((item, index) => {
@@ -372,6 +374,7 @@ class GameLogic {
                 incrementUnitName("call_down_supply")
             }
             // TODO Count actions by dividing energy through action energy cost, e.g. Math.floor(OC / 50) for amount of mule calldown available 
+            // TODO All drones that are producing a structure should not be counted
         })
         this.upgrades.forEach((upgrade, index) => {
             incrementUnitName(upgrade)
@@ -472,7 +475,7 @@ class GameLogic {
             if (workerTypes.has(trainerUnit.name)) {
                 this.workersMinerals -= 1
                 // Worker moving to location delay
-                const workerMovingToConstructionSite = new Task(this.settings.workerBuildDelay * 22.4, this.frame)
+                const workerMovingToConstructionSite = new Task(this.settings.workerBuildDelay * 22.4, this.frame, this.supplyUsed)
                 trainerUnit.addTask(this, workerMovingToConstructionSite)
                 buildStartDelay = this.settings.workerBuildDelay * 22.4
                 // Since this task is run immediately, it needs to end later when made by probes
@@ -483,7 +486,7 @@ class GameLogic {
             
             
             // Create the new task
-            const newTask = new Task(buildTime, this.frame + buildStartDelay, this.getEventId())
+            const newTask = new Task(buildTime, this.frame + buildStartDelay, this.supplyUsed, this.getEventId())
             newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
@@ -500,7 +503,7 @@ class GameLogic {
             // Create the builder return task
             if (["Probe", "SCV"].includes(trainerUnit.name)) {
                 // Probe and SCV return to mining after they are done with their task
-                const workerReturnToMinerals = new Task(this.settings.workerReturnDelay * 22.4, this.frame)
+                const workerReturnToMinerals = new Task(this.settings.workerReturnDelay * 22.4, this.frame, this.supplyUsed)
                 workerReturnToMinerals.addMineralWorker = true
                 trainerUnit.addTask(this, workerReturnToMinerals)
             }
@@ -590,7 +593,7 @@ class GameLogic {
             // All requirement checks complete, start the task
             
             const researchTime = this.getTime(upgrade.name, true)
-            const newTask = new Task(researchTime, this.frame, this.getEventId())
+            const newTask = new Task(researchTime, this.frame, this.supplyUsed, this.getEventId())
             newTask.newUpgrade = upgrade.name
             researcherStructure.addTask(this, newTask)
             const cost = this.getCost(upgrade.name, true)
