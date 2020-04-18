@@ -5,4 +5,4 @@
 # Deploy
 
 # Other
-Prettify all files `prettier --write "**/*.js"`
+Prettify all .js files `prettier --write "**/*.js"`

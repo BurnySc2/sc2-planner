@@ -353,7 +353,14 @@ class GameLogic {
             }
         }
         this.units.forEach((unit, index) => {
-            incrementUnitName(unit.name)
+            // Reduce drone count by 1 if it received a task to build a structure
+            if (
+                unit.name !== "Drone" ||
+                unit.tasks.length === 0 ||
+                !unit.tasks[unit.tasks.length - 1].morphToUnit
+            ) {
+                incrementUnitName(unit.name)
+            }
             if (unit.hasTechlab) {
                 incrementUnitName(`${unit.name}Techlab`)
             } else if (unit.hasReactor) {
