@@ -1,5 +1,7 @@
 const CLASSES = {
-    title: "text-4xl font-bold antialiased",
+    title: "text-4xl font-bold antialiased cursor-text",
+
+    errorLabel: "text-red-600 text-2xl font-bold",
     // Race icon and the items on the right side icons
     raceIcon:
         "h-8 w-8 m-0 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",

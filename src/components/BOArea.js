@@ -185,15 +185,15 @@ export default class BOArea extends Component {
             )
         })
         // Only show time bar if there are any events to display
-        const timeBarContent =
-            this.props.gamelogic.eventLog.length > 0 ? (
-                <div className={`${CLASSES.boCol} ${CLASSES.bgColor.time}`}>
-                    <div className={CLASSES.boRow}>{timeIntervalContent}</div>
-                </div>
-            ) : (
-                ""
-            )
+        const timeBarContent = (
+            <div className={`${CLASSES.boCol} ${CLASSES.bgColor.time}`}>
+                <div className={CLASSES.boRow}>{timeIntervalContent}</div>
+            </div>
+        )
 
+        if (this.props.gamelogic.eventLog.length === 0) {
+            return <div></div>
+        }
         return (
             <div className={CLASSES.boArea}>
                 {timeBarContent}

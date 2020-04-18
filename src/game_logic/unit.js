@@ -74,6 +74,7 @@ class Unit {
                 this.larvaCount > 0 ||
                 (this.hasReactor && this.reactorTasks.length === 0)) &&
             !this.isFlying
+            && (!workerTypes.has(this.name) || (!this.isMiningGas && !this.isScouting))
         )
     }
 
@@ -155,7 +156,7 @@ class Unit {
             }
 
             // If has inject: spawn larva when frame has been reached
-            if (this.hasInjectUntilFrame >= gamelogic.frame) {
+            if (this.hasInjectUntilFrame <= gamelogic.frame) {
                 this.hasInjectUntilFrame = -1
                 this.larvaCount += 3
             }

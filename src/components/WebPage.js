@@ -10,6 +10,7 @@ import BOArea from "./BOArea"
 import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
 import Footer from "./Footer"
+import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
 import {
     defaultSettings,
@@ -231,7 +232,7 @@ export default withRouter(
             return (
                 <div className="flex-col h-full w-full bg-gray-500">
                     <Title />
-                    <div className="flex flex-row">
+                    <div className="flex flex-row items-center">
                         <ImportExport
                             gamelogic={this.state.gamelogic}
                             rerunBuildOrder={(race, bo, settings) =>
@@ -259,6 +260,7 @@ export default withRouter(
                                 />
                             </div>
                             <BOArea gamelogic={this.state.gamelogic} />
+                            <ErrorMessage gamelogic={this.state.gamelogic} />
                         </div>
                         <div className="w-3/12">
                             <ActionsSelection

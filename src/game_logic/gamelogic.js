@@ -74,6 +74,8 @@ class GameLogic {
         this.eventLog = []
         // Number of units, will only be saved after every build order index advances - only used for UI purpose on the right side of the website
         this.unitsCount = {}
+        // Error message appearing on GUI if build order is invalid
+        this.errorMessage = ""
         eventId = -1
         lastSnapshot = null
 
@@ -259,6 +261,9 @@ class GameLogic {
             return 0
         })
 
+        // if (this.boIndex >= this.bo.length) {
+        //     this.errorMessage = ""
+        // }
         // console.log(this.eventLog);
 
         // Test if sorting of events is properly done, that way on-click events work and exporting strings work correctly
@@ -326,6 +331,7 @@ class GameLogic {
             if (!endOfActions) {
                 // console.log(this.frame);
                 this.boIndex += 1
+                this.errorMessage = ""
                 this.updateUnitsCount()
                 // Each time the boIndex gets incremented, take a snapshot of the current state - this way i can cache the gamelogic and reload it from the state
                 // e.g. bo = [scv, depot, scv]
@@ -409,8 +415,10 @@ class GameLogic {
         console.assert(trainedInfo, unit.name)
 
         // Get cost (mineral, vespene, supply)
-        if (!this.canAfford(unit) && !morphCondition) {
-            // console.log(this.frame, this.minerals, this.vespene);
+        let cost = this.getCost(unit.name)
+        if (!this._canAfford(cost) && !morphCondition) {
+            // Generate error message if not able to afford (missing minerals, vespene or free supply)
+            this.setCostErrorMessage(cost, unit.name)
             return false
         }
 
@@ -425,6 +433,8 @@ class GameLogic {
                 }
             }
             if (!requiredStructureMet) {
+                // Zergling requires spawning pool
+                this.errorMessage = `Required structure '${requiredStructure}' for '${unit.name}' could not be found.`
                 return false
             }
         }
@@ -444,18 +454,20 @@ class GameLogic {
                     unit.name.includes("Reactor")) &&
                 trainerUnit.hasAddon()
             ) {
+                this.errorMessage = `Could not find structure without addon to build '${unit.name}'.`
                 continue
             }
 
             // Loop over all idle units and check if they match unit type
 
-            const trainerCanTrainThisUnit = trainedInfo.trainedBy.has(
-                trainerUnit.name
-            )
+            const trainerCanTrainThisUnit =
+                trainedInfo.trainedBy.has(trainerUnit.name) &&
+                (!trainedInfo.requiresTechlab || trainerUnit.hasTechlab)
             const trainerCanTrainThroughReactor =
                 !trainedInfo.requiresTechlab &&
                 trainerUnit.hasReactor &&
                 trainerUnit.reactorTasks.length === 0
+            // console.log(trainedInfo);
 
             // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
             const trainerCanTrainThroughLarva =
@@ -469,10 +481,10 @@ class GameLogic {
                 !trainerCanTrainThroughReactor &&
                 !trainerCanTrainThroughLarva
             ) {
+                this.errorMessage = `Could not find unit to produce '${unit.name}'.`
                 continue
             }
 
-            const cost = this.getCost(unit.name)
             if (unit.name === "Zergling") {
                 // Was 0.5 and 25
                 cost.supply = 1
@@ -486,6 +498,9 @@ class GameLogic {
                 }
             }
             if (!this._canAfford(cost)) {
+                // This is nearly the same error as above, but this is for a morph
+                // Generate error message if not able to afford (missing minerals, vespene or free supply)
+                this.setCostErrorMessage(cost, unit.name)
                 return false
             }
             // The trainerUnit can train the target unit
@@ -583,8 +598,10 @@ class GameLogic {
         console.assert(upgrade.type, JSON.stringify(upgrade, null, 4))
 
         // Get cost (mineral, vespene, supply)
-        if (!this.canAfford(upgrade)) {
+        const cost = this.getCost(upgrade.name, true)
+        if (!this._canAfford(cost)) {
             // console.log(this.frame, this.minerals, this.vespene);
+            this.setCostErrorMessage(cost, upgrade.name)
             return false
         }
 
@@ -603,9 +620,11 @@ class GameLogic {
                 }
             }
             if (!requiredStructureMet) {
+                this.errorMessage = `Required structure '${requiredStructure}' to research upgrade '${upgrade.name}' could not be found.`
                 return false
             }
         }
+        // console.log(researchInfo);
 
         const requiredUpgrade = researchInfo.requiredUpgrade
         let requiredUpgradeMet = requiredUpgrade === null ? true : false
@@ -614,6 +633,7 @@ class GameLogic {
                 requiredUpgradeMet = true
             }
             if (!requiredUpgradeMet) {
+                this.errorMessage = `Required upgrade '${requiredUpgrade}' to research upgrade '${upgrade.name}' could not be found.`
                 return false
             }
         }
@@ -684,6 +704,29 @@ class GameLogic {
         this.units.delete(unit)
         this.idleUnits.delete(unit)
         this.busyUnits.delete(unit)
+    }
+
+    /**
+     *
+     * @param {Object} cost
+     * @param {Number} cost.minerals
+     * @param {Number} cost.vespene
+     * @param {Number} cost.supply
+     */
+    setCostErrorMessage(cost, unitName) {
+        if (cost.supply > this.supplyLeft) {
+            this.errorMessage = `Missing ${Math.ceil(
+                cost.supply - this.supplyLeft
+            )} supply to produce '${unitName}'.`
+        } else if (cost.vespene > this.vespene) {
+            this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
+                cost.vespene - this.vespene
+            )} vespene.`
+        } else if (cost.minerals > this.minerals) {
+            this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
+                cost.minerals - this.minerals
+            )} minerals.`
+        }
     }
 
     /**

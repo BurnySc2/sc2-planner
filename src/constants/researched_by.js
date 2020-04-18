@@ -5,11 +5,12 @@ import data from "./data.json"
 
 const RESEARCHED_BY = {}
 data.Unit.forEach((researcherUnit) => {
+    if ( researcherUnit.name === "TechLab") {
+        return
+    }
     researcherUnit.abilities.forEach((ability) => {
         const resultingUpgradeId = RESEARCH_ABILITIES[ability.ability]
         const resultingUpgrade = UPGRADE_BY_ID[resultingUpgradeId]
-        // console.log(resultingUpgrade);
-
         if (resultingUpgrade !== undefined) {
             let requiredStructure = null
             let requiredUpgrade = null
@@ -63,8 +64,8 @@ data.Unit.forEach((researcherUnit) => {
 // console.log(RESEARCHED_BY);
 
 console.assert(
-    Object.keys(RESEARCHED_BY).length === 90,
-    `${Object.keys(RESEARCHED_BY).length} is not 90`
+    Object.keys(RESEARCHED_BY).length === 89,
+    `${Object.keys(RESEARCHED_BY).length} is not 89`
 )
 
 export default RESEARCHED_BY

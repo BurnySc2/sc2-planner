@@ -26,12 +26,10 @@ export default class BuildOrder extends Component {
         })
 
         // Hide element if no build order items are present
-        const buildOrderArea =
-            buildOrder.length > 0 ? (
-                <div className={CLASSES.bo}>{buildOrder}</div>
-            ) : (
-                ""
-            )
+        const buildOrderArea = <div className={CLASSES.bo}>{buildOrder}</div>
+        if (buildOrder.length === 0) {
+            return ""
+        }
         return (
             <div className="flex flex-row overflow-x-auto">
                 {buildOrderArea}
