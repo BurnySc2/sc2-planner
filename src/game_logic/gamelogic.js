@@ -254,8 +254,8 @@ class GameLogic {
             }
             return 0
         })
-        console.log(this.eventLog);
-        
+
+        // console.log(this.eventLog);
 
         // Test if sorting of events is properly done, that way on-click events work and exporting strings work correctly
         this.eventLog.forEach((item, index) => {
