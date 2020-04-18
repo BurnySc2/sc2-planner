@@ -7,11 +7,7 @@ import CLASSES from "../constants/classes"
 import UNITS from '../constants/units'
 import STRUCTURES from '../constants/structures'
 import UPGRADES from "../constants/upgrades"
-
-// import UNIT_ICONS from "../icons/unit_icons"
-// import UPGRADE_ICONS from "../icons/upgrade_icons"
-const UNIT_ICONS = require("../icons/unit_icons.json")
-const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
+import {getImageOfItem} from '../constants/helper'
 
 export default class ActionsSelection extends Component {
     constructor(props) {
@@ -20,20 +16,6 @@ export default class ActionsSelection extends Component {
             tooltipText: ""
         }
         this.classString = `${CLASSES.actionIconContainer}`
-
-        // Load unit icons
-        this.unitIcons = {}
-        Object.keys(UNIT_ICONS).forEach((item) => {
-            this.unitIcons[item] = require(`../icons/png/${UNIT_ICONS[item]}`)
-        });
-
-        // Load upgrade icons
-        this.upgradeIcons = {}
-        Object.keys(UPGRADE_ICONS).forEach((item) => {
-            this.upgradeIcons[item] = require(`../icons/png/${UPGRADE_ICONS[item]}`)
-            // console.log(item);
-            // console.log(this.upgradeIcons[item]);
-        });
     }
 
     /**
@@ -105,8 +87,9 @@ export default class ActionsSelection extends Component {
                 )
             }
             const value = latestSnapshot.unitsCount[item.internal_name] ? latestSnapshot.unitsCount[item.internal_name] : ""
+            const icon = getImageOfItem({name: item.name, type: "action"})
             return <div data-tip data-for='actionTooltip' key={item.name} className={this.classString} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.actionClick(e, item)}}>
-                <img src={require("../icons/png/" + item.imageSource)} alt={item.name} />
+                <img src={icon} alt={item.name} />
                 <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                     {value}
                 </div>
@@ -127,7 +110,7 @@ export default class ActionsSelection extends Component {
                     </div>
                 )
             }
-            const icon = this.unitIcons[item.name.toUpperCase()]
+            const icon = getImageOfItem({name: item.name, type: "unit"})
             const value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
             return <div data-tip data-for='actionTooltip' key={item.name}  className={this.classString} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.unitClick(e, item.name)}}>
                 <img src={icon} alt={item.name} />
@@ -150,7 +133,7 @@ export default class ActionsSelection extends Component {
                     </div>
                 )
             }
-            const icon = this.unitIcons[item.name.toUpperCase()]
+            const icon = getImageOfItem({name: item.name, type: "structure"})
             const value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
             return <div data-tip data-for='actionTooltip' key={item.name} className={this.classString} onMouseEnter={mouseEnterFunc} onClick={(e) => {this.props.structureClick(e, item.name)}}>
                 <img src={icon} alt={item.name} />
@@ -173,7 +156,7 @@ export default class ActionsSelection extends Component {
                     </div>
                 )
             }
-            const icon = this.upgradeIcons[item.name.toUpperCase()]
+            const icon = getImageOfItem({name: item.name, type: "upgrade"})
             const value = latestSnapshot.unitsCount[item.name] ? latestSnapshot.unitsCount[item.name] : ""
             // TODO Idea to fix tooltips on race change: add 'hidden' class if upgrade does not belong to this race
             return <div data-tip data-for='actionTooltip' key={item.name} className={this.classString} onMouseEnter={mouseEnterFunc}  onClick={(e) => {this.props.upgradeClick(e, item.name)}}>

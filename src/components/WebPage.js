@@ -14,10 +14,6 @@ import {GameLogic} from '../game_logic/gamelogic'
 import {defaultSettings, decodeSettings, decodeBuildOrder, createUrlParams} from  "../constants/helper"
 import {cloneDeep} from 'lodash'
 
-// import UNIT_ICONS from "../icons/unit_icons"
-// import UPGRADE_ICONS from "../icons/upgrade_icons"
-const UNIT_ICONS = require("../icons/unit_icons.json")
-const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
 export default withRouter(class WebPage extends Component {
@@ -72,22 +68,9 @@ export default withRouter(class WebPage extends Component {
             gamelogic: gamelogic,
             settings: settings
         }
-
-        // Load unit icons
-        this.unitIcons = {}
-        Object.keys(UNIT_ICONS).forEach((item) => {
-            this.unitIcons[item] = require(`../icons/png/${UNIT_ICONS[item]}`)
-        });
-
-        // Load upgrade icons
-        this.upgradeIcons = {}
-        Object.keys(UPGRADE_ICONS).forEach((item) => {
-            this.upgradeIcons[item] = require(`../icons/png/${UPGRADE_ICONS[item]}`)
-        });
-
     }
 
-    updateUrl = (race, settings, buildOrder, pushHistory=false) => {
+    updateUrl = (race, buildOrder, settings, pushHistory=false) => {
         // See router props
         // console.log(this.props);
         
@@ -101,11 +84,16 @@ export default withRouter(class WebPage extends Component {
         }
     }
 
-    rerunBuildOrder(bo, settings) {
-        const gamelogic = new GameLogic(this.state.race, bo, settings)
+    rerunBuildOrder(race, bo, settings) {
+        if (!settings) {
+            settings = cloneDeep(defaultSettings)
+        }
+
+        const gamelogic = new GameLogic(race, bo, settings)
         gamelogic.setStart()
         gamelogic.runUntilEnd()
         this.setState({
+            race: race,
             bo: bo,
             gamelogic: gamelogic,
             settings: settings,
@@ -124,8 +112,8 @@ export default withRouter(class WebPage extends Component {
         
         // Re-calculate the whole simulation
         // TODO optimize: only recalculate if settings were changed that affected it
-        this.rerunBuildOrder(this.state.bo, settings)
-        this.updateUrl(this.state.race, settings, this.state.bo)
+        this.rerunBuildOrder(this.state.race, this.state.bo, settings)
+        this.updateUrl(this.state.race, this.state.bo, settings)
     }
 
     raceSelectionClicked = (e, race) => {
@@ -140,7 +128,7 @@ export default withRouter(class WebPage extends Component {
         })
         
         // If settings are unchanged, change url to just '/race' instead of encoded settings
-        this.updateUrl(race, this.state.settings, [], true)
+        this.updateUrl(race, [], this.state.settings, true)
         // this.props.history.replace(`/${race}`)
         // this.props.history.push(`/race=${race}`)
     }
@@ -160,16 +148,17 @@ export default withRouter(class WebPage extends Component {
         // gamelogic.runUntilEnd()
         
         // Non cached:
-        this.rerunBuildOrder(bo, this.state.settings)
-        this.updateUrl(this.state.race, this.state.settings, bo)
+        this.rerunBuildOrder(this.state.race, bo, this.state.settings)
+        this.updateUrl(this.state.race, bo, this.state.settings)
     }
+
     removeItemFromBO = (index) => {
         const bo = this.state.bo
         bo.splice(index, 1)
         
         // TODO load snapshot from shortly before the removed bo index
         if (bo.length > 0) {
-            this.rerunBuildOrder(bo, this.state.settings)
+            this.rerunBuildOrder(this.state.race, bo, this.state.settings)
         } else {
             const gamelogic = new GameLogic(this.state.race, bo, this.state.settings)
             gamelogic.setStart()
@@ -179,7 +168,7 @@ export default withRouter(class WebPage extends Component {
             })
         }
 
-        this.updateUrl(this.state.race, this.state.settings, bo)
+        this.updateUrl(this.state.race, bo, this.state.settings)
     }
 
     // If a button is pressed in the action selection, add it to the build order
@@ -189,7 +178,6 @@ export default withRouter(class WebPage extends Component {
         this.addItemToBO({
             name: action.name,
             type: "action",
-            image: require(`../icons/png/${action.imageSource}`)
         })
         console.log(action.name);
     }
@@ -199,13 +187,11 @@ export default withRouter(class WebPage extends Component {
             this.addItemToBO({
                 name: unit,
                 type: "worker",
-                image: this.unitIcons[unit.toUpperCase()]
             })
         } else {
             this.addItemToBO({
                 name: unit,
                 type: "unit",
-                image: this.unitIcons[unit.toUpperCase()]
             })
         }
         console.log(unit);
@@ -215,7 +201,6 @@ export default withRouter(class WebPage extends Component {
         this.addItemToBO({
             name: structure,
             type: "structure",
-            image: this.unitIcons[structure.toUpperCase()]
         })
         console.log(structure);
     }
@@ -224,7 +209,6 @@ export default withRouter(class WebPage extends Component {
         this.addItemToBO({
             name: upgrade,
             type: "upgrade",
-            image: this.upgradeIcons[upgrade.toUpperCase()]
         })
         console.log(upgrade);
     }
@@ -239,7 +223,10 @@ export default withRouter(class WebPage extends Component {
             <div className="flex-col h-full w-full bg-gray-500">
                 <Title />
                 <div className="flex flex-row">
-                    <ImportExport gamelogic={this.state.gamelogic} />
+                    <ImportExport 
+                    gamelogic={this.state.gamelogic} 
+                    rerunBuildOrder={(race, bo, settings) => this.rerunBuildOrder(race, bo, settings)}
+                    updateUrl={(race, bo, settings) => this.updateUrl(race, bo, settings, true)} />
                     <Settings settings={this.state.settings} updateSettings={this.updateSettings} />
                 </div>
                 <div className="flex flex-row">

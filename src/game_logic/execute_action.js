@@ -366,7 +366,6 @@ const executeAction = (gamelogic, actionItem) => {
         ))
         return true
     }
-
     
     return false
 }

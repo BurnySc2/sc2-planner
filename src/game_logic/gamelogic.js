@@ -139,6 +139,15 @@ class GameLogic {
         }
     }
 
+    exportSettings() {
+        // Update default settings from gamelogic.settings object, then return it
+        let settingsObject = cloneDeep(defaultSettings)
+        settingsObject.forEach(item => {
+            item.v = this.settings[item.variableName]
+        })
+        return settingsObject
+    }
+
     /**
      * 
      * @param {GameLogic} snapshot - A snapshot of the game logic

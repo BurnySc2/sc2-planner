@@ -2,6 +2,8 @@ import { pick } from "lodash"
 import lzbase62 from 'lzbase62';
 import {isEqual} from 'lodash'
 
+import UNITS_BY_NAME from '../constants/units_by_name'
+
 const {CUSTOMACTIONS_BY_NAME} = require('../constants/customactions')
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
@@ -13,6 +15,18 @@ const CONVERT_SECONDS_TO_TIME_STRING = ((totalSeconds) => {
     const timeFormatted = `${minutes}:${seconds}`
     return timeFormatted
 })
+
+const getImageOfItem = (item) => {
+    let image = ""
+    if (item.type === "upgrade") {
+        image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
+    } else if (item.type === "action") {
+        image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
+    } else {
+        image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
+    }
+    return image
+}
 
 const defaultSettings = [
     {
@@ -147,7 +161,9 @@ const decodeBuildOrder = ((buildOrderEncoded) => {
 const createUrlParams = (race, settings, buildOrder=[]) => {
     let newUrl = `?race=${race}`
 
-    if (!isEqual(settings, defaultSettings)) {
+    if (!settings) {
+        settings = defaultSettings
+    } else if (!isEqual(settings, defaultSettings)) {
         // Encode the settings
         const settingsEncoded = encodeSettings(settings)
         // const decoded = decodeSettings(settingsEncoded)
@@ -163,4 +179,41 @@ const createUrlParams = (race, settings, buildOrder=[]) => {
     return newUrl
 }
 
-export {defaultSettings, CONVERT_SECONDS_TO_TIME_STRING, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder, createUrlParams}
+const encodeSALT = (buildOrder) => {
+    // TODO Encode salt build order
+    return "Some salt build order encoded"
+}
+
+const decodeSALT = (saltEncoding) => {
+    // TODO Decode salt build order from string
+    // TODO Also need to figure out which race the SALT build order is for?!
+    let race = undefined
+    let bo = [
+        {name: "SCV", type: "worker"},
+        {name: "SupplyDepot", type: "structure"}
+    ]
+    // let bo = [
+    //     {name: "Probe", type: "worker"},
+    //     {name: "Pylon", type: "structure"}
+    // ]
+    
+    // Figure out the race from the build order
+    if (bo.length === 0 && !race) {
+        race = "terran"
+    } else if (bo.length > 0 && !race) {
+        for (const item of bo) {
+            if (["worker", "unit", "structure"].includes(item.type)) {
+                const unit = UNITS_BY_NAME[item.name]
+                race = unit.race.toLowerCase()
+                break
+            }
+        }
+    }
+
+    return {
+        race: race,
+        bo: bo
+}
+}
+
+export {defaultSettings, CONVERT_SECONDS_TO_TIME_STRING, getImageOfItem, encodeSettings, decodeSettings, encodeBuildOrder, decodeBuildOrder, createUrlParams, encodeSALT, decodeSALT}

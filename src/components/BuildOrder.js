@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import CLASSES from '../constants/classes'
 
+import {getImageOfItem} from '../constants/helper'
+
 export default class BuildOrder extends Component {
     /**
      * Lists the tooltip order
@@ -11,8 +13,9 @@ export default class BuildOrder extends Component {
     render() {
         // Convert build order items to div elements
         const buildOrder = this.props.bo.map((item, index) => {
+            const image = getImageOfItem(item)
             return <div key={`bo_${index}`} className={CLASSES.boItem}  onClick={(e) => (this.props.removeClick(e, index))}>
-                <img src={item.image} alt={item.name} />
+                <img src={image} alt={item.name} />
             </div>
         })
         

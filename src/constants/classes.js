@@ -56,7 +56,7 @@ const CLASSES = {
     dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
     // Only export import
-    dropDownButton: "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-not-allowed",
+    dropDownButton: "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-move",
     // Only settings
     dropDownLabel: "hover:bg-gray-400 px-2 flex flex-row justify-between",
     dropDownInput: "rounded w-20 mx-2 z-50",
