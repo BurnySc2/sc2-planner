@@ -12,7 +12,7 @@ const CLASSES = {
     actionContainer: "flex flex-wrap bg-gray-600 m-1 p-1",
     // Action icon
     actionIconContainer:
-        "relative h-12 w-12 m-0 p-1 z-10 hover:bg-gray-400 cursor-pointer",
+        "relative h-12 w-12 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
     actionIconText:
         "m-0 p-0 absolute z-40 text-white bg-black select-none text-xs",
 
@@ -41,7 +41,7 @@ const CLASSES = {
         structure: "bg-teal-500",
         upgrade: "bg-purple-600",
     },
-    // Should be 100-300 less than above
+    // Should be 100 to 300 less than above
     hoverColor: {
         time: "hover:bg-orange-400",
         worker: "hover:bg-green-400",

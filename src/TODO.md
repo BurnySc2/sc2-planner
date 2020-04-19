@@ -16,11 +16,13 @@
 - ~~Add supply to tasks and events for easier export~~
 - ~~When drone is building a structure, it is not instantly subtracted from unitscount~~
 - ~~Add error message for user, and highlight till when the build order is valid~~
-- Grey out actions / icons that are not available (locked by techtree)
-- Order the items on the right correctly: units: scv, marine, marauder, reaper, ghost...
+- Add red background to invalid build order elements
 - Add drag and drop to build order
 - Cant make corruptor anymore if spire morphed to greater spire (so need to keep track of tech equivalents)
+- Order the items on the right correctly: units: scv, marine, marauder, reaper, ghost...
 - Add 'remove event' when clicking on items in the boArea bottom left
-- Fix tooltips when switching between races
+- Add amount hints for how many actions are possible (e.g. call down mule amount)
 - Improve GUI
 - Add readme
+- Grey out actions / icons that are not available (locked by techtree)
+- Fix tooltips when switching between races
