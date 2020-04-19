@@ -255,7 +255,7 @@ export default withRouter(
                                 />
                                 <Time gamelogic={this.state.gamelogic} />
                                 <BuildOrder
-                                    bo={this.state.bo}
+                                    gamelogic={this.state.gamelogic}
                                     removeClick={this.buildOrderRemoveClicked}
                                 />
                             </div>

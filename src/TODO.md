@@ -16,7 +16,7 @@
 - ~~Add supply to tasks and events for easier export~~
 - ~~When drone is building a structure, it is not instantly subtracted from unitscount~~
 - ~~Add error message for user, and highlight till when the build order is valid~~
-- Add red background to invalid build order elements
+- ~~Add red background to invalid build order elements~~
 - Add drag and drop to build order
 - Cant make corruptor anymore if spire morphed to greater spire (so need to keep track of tech equivalents)
 - Order the items on the right correctly: units: scv, marine, marauder, reaper, ghost...

@@ -12,12 +12,18 @@ export default class BuildOrder extends Component {
 
     render() {
         // Convert build order items to div elements
-        const buildOrder = this.props.bo.map((item, index) => {
+        const invalidIndex = this.props.gamelogic.boIndex
+        const buildOrder = this.props.gamelogic.bo.map((item, index) => {
             const image = getImageOfItem(item)
+            let myClass = CLASSES.boItem
+            // Build order is invalid after this index, mark background or border red
+            if (index >= invalidIndex) {
+                myClass = CLASSES.boItemInvalid
+            }
             return (
                 <div
                     key={`bo_${index}`}
-                    className={CLASSES.boItem}
+                    className={myClass}
                     onClick={(e) => this.props.removeClick(e, index)}
                 >
                     <img src={image} alt={item.name} />

@@ -19,7 +19,9 @@ const CLASSES = {
     // Icons in the build order at the top
     bo: "flex flex-row bg-green-700 m-1 p-0",
     boItem:
-        "m-0 p-0 h-16 w-16 bg-green-700 border border-black hover:bg-green-400 cursor-move",
+        "m-0 p-0 h-16 w-16 bg-green-700 hover:bg-green-400 cursor-move border border-black",
+    boItemInvalid:
+        "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-400 cursor-move border border-black",
     // Build order area in the bottom left
     boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
     // Time bar at the top of the area
