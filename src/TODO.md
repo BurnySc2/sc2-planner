@@ -22,7 +22,7 @@
 - Order the items on the right correctly: units: scv, marine, marauder, reaper, ghost...
 - Add 'remove event' when clicking on items in the boArea bottom left
 - Add amount hints for how many actions are possible (e.g. call down mule amount)
+- Fix tooltips when switching between races
 - Improve GUI
 - Add readme
 - Grey out actions / icons that are not available (locked by techtree)
-- Fix tooltips when switching between races
