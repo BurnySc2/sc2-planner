@@ -456,7 +456,12 @@ class GameLogic {
         let requiredStructureMet = requiredStructure === null ? true : false
         if (!requiredStructureMet) {
             for (let structure of this.units) {
-                if (structure.name === requiredStructure) {
+                if (
+                    // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
+                    structure.name === requiredStructure ||
+                    requiredStructure === "Spire" ||
+                    structure.name === "GreaterSpire"
+                ) {
                     requiredStructureMet = true
                     break
                 }
