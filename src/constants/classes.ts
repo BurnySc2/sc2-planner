@@ -12,8 +12,8 @@ const CLASSES = {
     errorLabel: "text-red-600 text-2xl font-bold",
     // Race icon and the items on the right side icons
     raceIcon:
-        "h-8 w-8 m-0 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
-    timeIcon: "h-24 w-24 m-0 p-0 z-10",
+        "h-8 w-8 mx-1 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
+    timeIcon: "h-24 w-24 mx-1 p-0 z-10",
     timeText: "absolute z-20 text-white",
 
     // Action selection container
@@ -25,7 +25,7 @@ const CLASSES = {
         "m-0 p-0 absolute z-40 text-white bg-black select-none text-xs",
 
     // Icons in the build order at the top
-    bo: "flex flex-row overflow-x-auto m-0 p-0",
+    bo: "flex flex-row overflow-x-auto mx-1 p-0",
     boItem:
         "m-0 p-0 h-16 w-16 bg-green-700 hover:bg-green-500 cursor-move border border-black",
     boItemDragging:
