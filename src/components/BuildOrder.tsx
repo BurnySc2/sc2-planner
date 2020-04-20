@@ -101,40 +101,42 @@ export default class BuildOrder extends Component<MyProps, MyState> {
 
         // Hide element if no build order items are present
         return (
-            <DragDropContext onDragEnd={this.onDragEnd}>
-                <Droppable droppableId="droppable" direction="horizontal">
-                    {(provided, snapshot) => (
-                        <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={CLASSES.bo}
-                        >
-                            {this.props.gamelogic.bo.map((item, index) => (
-                                <Draggable
-                                    key={`${index}`}
-                                    draggableId={`${index}`}
-                                    index={index}
-                                >
-                                    {(provided, snapshot) => (
-                                        <div
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                            className={getItemClass(
-                                                snapshot.isDragging,
-                                                index
-                                            )}
-                                        >
-                                            {buildOrder[index]}
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
+            <div className={CLASSES.bo}>
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <Droppable droppableId="droppable" direction="horizontal">
+                        {(provided, snapshot) => (
+                            <div
+                                className="flex flex-shrink-0"
+                                ref={provided.innerRef}
+                                {...provided.droppableProps}
+                            >
+                                {this.props.gamelogic.bo.map((item, index) => (
+                                    <Draggable
+                                        key={`${index}`}
+                                        draggableId={`${index}`}
+                                        index={index}
+                                    >
+                                        {(provided, snapshot) => (
+                                            <div
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                                className={getItemClass(
+                                                    snapshot.isDragging,
+                                                    index
+                                                )}
+                                            >
+                                                {buildOrder[index]}
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+            </div>
         )
     }
 }
