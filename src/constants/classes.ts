@@ -25,11 +25,15 @@ const CLASSES = {
         "m-0 p-0 absolute z-40 text-white bg-black select-none text-xs",
 
     // Icons in the build order at the top
-    bo: "flex flex-row bg-green-700 m-1 p-0",
+    bo: "flex flex-row m-0 p-0",
     boItem:
-        "m-0 p-0 h-16 w-16 bg-green-700 hover:bg-green-400 cursor-move border border-black",
+        "m-0 p-0 h-16 w-16 bg-green-700 hover:bg-green-500 cursor-move border border-black",
+    boItemDragging:
+        "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border border-black",
     boItemInvalid:
-        "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-400 cursor-move border border-black",
+        "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-500 cursor-move border border-black",
+    boItemInvalidDragging:
+        "m-0 p-0 h-16 w-16 bg-red-300 cursor-move border border-black",
     // Build order area in the bottom left
     boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
     // Time bar at the top of the area

@@ -279,7 +279,7 @@ class GameLogic {
         // if bo is not valid and current item in bo requires more supply than we have left: tell user that we are out of supply
         // if bo item costs gas but no gas mining: tell user that we dont mine gas
         // @ts-ignore
-        console.assert(this.boIndex >= this.bo.length, cloneDeep(this))
+        // console.assert(this.boIndex >= this.bo.length, cloneDeep(this))
         // console.assert(this.boIndex >= this.bo.length, JSON.stringify(cloneDeep(this), undefined, 4))
 
         // Sort eventList by item.start, but perhaps the reverse is the desired behavior?
