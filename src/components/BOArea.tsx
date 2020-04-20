@@ -6,6 +6,10 @@ import Event from "../game_logic/event"
 
 interface MyProps {
     gamelogic: GameLogic
+    removeClick: (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        index: number
+    ) => void
 }
 
 interface MyState {}
@@ -111,17 +115,18 @@ export default class BOArea extends Component<MyProps, MyState> {
                         rowContent.push(fillerElement)
                     }
 
-                    // TODO Fix me
                     rowContent.push(
                         <div
-                        key={`boArea${barType}${index1}${index2}`}
-                        className="flex flex-row"
+                            key={`boArea${barType}${index1}${index2}`}
+                            className="flex flex-row"
+                            onClick={(e) => this.props.removeClick(e, item.id)}
                         >
                             <div
                                 style={myStyle}
+                                // TODO Fix me
                                 // @ts-ignore
                                 className={`${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} ${CLASSES.hoverColor[barType]}`}
-                                >
+                            >
                                 <img
                                     className={CLASSES.boElementIcon}
                                     src={require("../icons/png/" +

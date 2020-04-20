@@ -25,7 +25,7 @@ const CLASSES = {
         "m-0 p-0 absolute z-40 text-white bg-black select-none text-xs",
 
     // Icons in the build order at the top
-    bo: "flex flex-row overflow-x-scroll m-0 p-0",
+    bo: "flex flex-row overflow-x-auto m-0 p-0",
     boItem:
         "m-0 p-0 h-16 w-16 bg-green-700 hover:bg-green-500 cursor-move border border-black",
     boItemDragging:
