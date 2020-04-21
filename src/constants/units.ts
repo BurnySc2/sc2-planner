@@ -50,57 +50,49 @@ const ignoreUnits = new Set([
     "OverseerSiegeMode",
 ])
 
-const UNITS: { [name: string]: Array<IDataUnit> } = {
-    all: data.Unit.filter((item) => {
-        return (
-            !ignoreUnits.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            !item.is_structure
-        )
-    }),
-    terran: data.Unit.filter((item) => {
-        return (
-            !ignoreUnits.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            !item.is_structure &&
-            item.race === "Terran"
-        )
-    }),
-    protoss: data.Unit.filter((item) => {
-        return (
-            !ignoreUnits.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            !item.is_structure &&
-            item.race === "Protoss"
-        )
-    }),
-    zerg: data.Unit.filter((item) => {
-        return (
-            !ignoreUnits.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            !item.is_structure &&
-            item.race === "Zerg"
-        )
-    }),
+const UNITS: Array<IDataUnit> = data.Unit.filter((item) => {
+    return (
+        !ignoreUnits.has(item.name) &&
+        ENABLED_UNITS.has(item.id) &&
+        !item.is_structure
+    )
+})
+
+const UNIT_NAMES_BY_RACE: {
+    protoss: Set<string>
+    terran: Set<string>
+    zerg: Set<string>
+} = {
+    protoss: new Set(),
+    terran: new Set(),
+    zerg: new Set(),
 }
+UNITS.forEach((item) => {
+    if (item.race === "Terran") {
+        UNIT_NAMES_BY_RACE.terran.add(item.name)
+    }
+    if (item.race === "Protoss") {
+        UNIT_NAMES_BY_RACE.protoss.add(item.name)
+    }
+    if (item.race === "Zerg") {
+        UNIT_NAMES_BY_RACE.zerg.add(item.name)
+    }
+})
 
 // Should be 77 units in total
 // console.log(UNITS.zerg)
+console.assert(UNITS.length === 52, `${UNITS.length} is not equal to 52`)
 console.assert(
-    UNITS.all.length === 52,
-    `${UNITS.all.length} is not equal to 52`
+    UNIT_NAMES_BY_RACE.terran.size === 17,
+    `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 17`
 )
 console.assert(
-    UNITS.terran.length === 17,
-    `${UNITS.terran.length} is not equal to 17`
+    UNIT_NAMES_BY_RACE.protoss.size === 18,
+    `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`
 )
 console.assert(
-    UNITS.protoss.length === 18,
-    `${UNITS.protoss.length} is not equal to 18`
-)
-console.assert(
-    UNITS.zerg.length === 17,
-    `${UNITS.zerg.length} is not equal to 17`
+    UNIT_NAMES_BY_RACE.zerg.size === 17,
+    `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 17`
 )
 
-export default UNITS
+export { UNITS, UNIT_NAMES_BY_RACE }

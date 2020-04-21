@@ -11,12 +11,12 @@ import CLASSES from "../constants/classes"
 import UNITS_BY_NAME from "../constants/units_by_name"
 import UPGRADE_BY_NAME from "../constants/upgrade_by_name"
 import { GameLogic } from "../game_logic/gamelogic"
-import { IBuildOrderElement, ISettingsElement } from "../constants/interfaces"
+import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
     gamelogic: GameLogic
-    rerunBuildOrder: (race: string | undefined, buildOrder: IBuildOrderElement[], settings: ISettingsElement[] |  undefined) => void
-    updateUrl: (race: string | undefined, buildOrder: IBuildOrderElement[], settings: ISettingsElement[] | undefined, pushHistory?: boolean) => void
+    rerunBuildOrder: (race: IAllRaces | undefined, buildOrder: IBuildOrderElement[], settings: ISettingsElement[] |  undefined) => void
+    updateUrl: (race: IAllRaces | undefined, buildOrder: IBuildOrderElement[], settings: ISettingsElement[] | undefined, pushHistory?: boolean) => void
 }
 
 interface MyState {}
@@ -97,7 +97,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
         navigator.clipboard.readText().then((data) => {
             const decodedSALT = decodeSALT(data)
-            const race = decodedSALT.race
+            const race = decodedSALT.race as IAllRaces | undefined
             const bo = decodedSALT.bo
             this.setState({
                 tooltipText: "Pasted!",

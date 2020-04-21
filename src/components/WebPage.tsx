@@ -19,12 +19,17 @@ import {
     createUrlParams,
 } from "../constants/helper"
 import { cloneDeep } from "lodash"
-import { IBuildOrderElement, ISettingsElement, ICustomAction } from "../constants/interfaces"
+import {
+    IBuildOrderElement,
+    ISettingsElement,
+    ICustomAction,
+    IAllRaces,
+} from "../constants/interfaces"
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
 interface MyState {
-    race: string
+    race: IAllRaces
     bo: Array<IBuildOrderElement>
     gamelogic: GameLogic
     settings: Array<ISettingsElement>
@@ -43,9 +48,9 @@ export default withRouter(
             const settingsEncoded: string | null = urlParams.get("settings")
             const boEncoded: string | null = urlParams.get("bo")
 
-            let race: string = "terran"
+            let race: IAllRaces = "terran"
             if (raceUrl && ["terran", "protoss", "zerg"].includes(raceUrl)) {
-                race = raceUrl
+                race = raceUrl as IAllRaces
             }
 
             // Decode settings from url
@@ -106,12 +111,12 @@ export default withRouter(
         }
 
         rerunBuildOrder(
-            race: string | undefined,
+            race: IAllRaces | undefined,
             buildOrder: Array<IBuildOrderElement>,
             settings: Array<ISettingsElement> | undefined
         ) {
             if (!race) {
-                race = "terran"
+                race = "terran" as IAllRaces
             }
             if (!settings) {
                 settings = cloneDeep(defaultSettings)
@@ -129,10 +134,7 @@ export default withRouter(
         }
 
         // TODO Pass the settings to Settings.js and let the user input handle it
-        updateSettings = (
-            fieldKey: string,
-            fieldValue: number
-        ) => {
+        updateSettings = (fieldKey: string, fieldValue: number) => {
             const settings = this.state.settings
             settings.forEach((item) => {
                 if (item.n === fieldKey) {
@@ -146,7 +148,10 @@ export default withRouter(
             this.updateUrl(this.state.race, this.state.bo, settings)
         }
 
-        raceSelectionClicked = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: string) => {
+        raceSelectionClicked = (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            race: IAllRaces
+        ) => {
             // Set race in state after a race selection icon has been pressed
             const gamelogic = new GameLogic(race, [], this.state.settings)
             gamelogic.setStart()
@@ -208,7 +213,10 @@ export default withRouter(
         // If a button is pressed in the action selection, add it to the build order
         // Then re-calculate the resulting time of all the items
         // Then send all items and events to the BOArea
-        actionSelectionActionClicked = (e:React.MouseEvent<HTMLDivElement, MouseEvent>, action: ICustomAction) => {
+        actionSelectionActionClicked = (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            action: ICustomAction
+        ) => {
             this.addItemToBO({
                 name: action.name,
                 type: "action",
@@ -216,7 +224,10 @@ export default withRouter(
             console.log(action.name)
         }
 
-        actionSelectionUnitClicked = (e:React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => {
+        actionSelectionUnitClicked = (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            unit: string
+        ) => {
             if (["SCV", "Probe", "Drone"].indexOf(unit) >= 0) {
                 this.addItemToBO({
                     name: unit,
@@ -231,7 +242,10 @@ export default withRouter(
             console.log(unit)
         }
 
-        actionSelectionStructureClicked = (e:React.MouseEvent<HTMLDivElement, MouseEvent>, structure: string) => {
+        actionSelectionStructureClicked = (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            structure: string
+        ) => {
             this.addItemToBO({
                 name: structure,
                 type: "structure",
@@ -239,7 +253,10 @@ export default withRouter(
             console.log(structure)
         }
 
-        actionSelectionUpgradeClicked = (e:React.MouseEvent<HTMLDivElement, MouseEvent>, upgrade: string) => {
+        actionSelectionUpgradeClicked = (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            upgrade: string
+        ) => {
             this.addItemToBO({
                 name: upgrade,
                 type: "upgrade",
@@ -247,7 +264,10 @@ export default withRouter(
             console.log(upgrade)
         }
 
-        buildOrderRemoveClicked = (e:React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+        buildOrderRemoveClicked = (
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            index: number
+        ) => {
             // console.log(index)
             this.removeItemFromBO(index)
         }
@@ -281,11 +301,22 @@ export default withRouter(
                                 <BuildOrder
                                     gamelogic={this.state.gamelogic}
                                     removeClick={this.buildOrderRemoveClicked}
-                                    rerunBuildOrder={(race, bo) => this.rerunBuildOrder(race, bo, undefined)}
-                                    updateUrl={(race, bo) => this.updateUrl(race, bo, undefined)}
+                                    rerunBuildOrder={(race, bo) =>
+                                        this.rerunBuildOrder(
+                                            race,
+                                            bo,
+                                            undefined
+                                        )
+                                    }
+                                    updateUrl={(race, bo) =>
+                                        this.updateUrl(race, bo, undefined)
+                                    }
                                 />
                             </div>
-                            <BOArea gamelogic={this.state.gamelogic} removeClick={this.buildOrderRemoveClicked} />
+                            <BOArea
+                                gamelogic={this.state.gamelogic}
+                                removeClick={this.buildOrderRemoveClicked}
+                            />
                             <ErrorMessage gamelogic={this.state.gamelogic} />
                         </div>
                         <div className="w-3/12">

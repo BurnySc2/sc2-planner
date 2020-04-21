@@ -2,11 +2,12 @@ import React, { Component } from "react"
 
 import RACES from "../icons/races"
 import CLASSES from "../constants/classes"
+import { IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
     onClick: (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        race: string
+        race: IAllRaces
     ) => void
 }
 
@@ -23,7 +24,7 @@ export default class RaceSelection extends Component<MyProps, MyState> {
 
     onClick = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        race: string
+        race: IAllRaces
     ) => {
         this.props.onClick(e, race)
     }
@@ -31,9 +32,8 @@ export default class RaceSelection extends Component<MyProps, MyState> {
     render() {
         const classString = `${CLASSES.raceIcon}`
 
-        const races = ["protoss", "terran", "zerg"].map((race, index) => {
-            // TODO Fix me
-            // @ts-ignore
+        const allRaces: Array<IAllRaces> = ["protoss", "terran", "zerg"]
+        const races = allRaces.map((race, index) => {
             const item: { name: string; path: string } = RACES[race]
             return (
                 <div

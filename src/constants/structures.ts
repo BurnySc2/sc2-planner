@@ -39,56 +39,51 @@ const ignoreStructure = new Set([
     "NydusCanal",
 ])
 
-const STRUCTURES: { [name: string]: Array<IDataUnit> } = {
-    all: data.Unit.filter((item) => {
-        return (
-            !ignoreStructure.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            item.is_structure
-        )
-    }),
-    terran: data.Unit.filter((item) => {
-        return (
-            !ignoreStructure.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            item.is_structure &&
-            item.race === "Terran"
-        )
-    }),
-    protoss: data.Unit.filter((item) => {
-        return (
-            !ignoreStructure.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            item.is_structure &&
-            item.race === "Protoss"
-        )
-    }),
-    zerg: data.Unit.filter((item) => {
-        return (
-            !ignoreStructure.has(item.name) &&
-            ENABLED_UNITS.has(item.id) &&
-            item.is_structure &&
-            item.race === "Zerg"
-        )
-    }),
+const STRUCTURES: Array<IDataUnit> = data.Unit.filter((item) => {
+    return (
+        !ignoreStructure.has(item.name) &&
+        ENABLED_UNITS.has(item.id) &&
+        item.is_structure
+    )
+})
+
+const STRUCTURE_NAMES_BY_RACE: {
+    protoss: Set<string>
+    terran: Set<string>
+    zerg: Set<string>
+} = {
+    protoss: new Set(),
+    terran: new Set(),
+    zerg: new Set(),
 }
+STRUCTURES.forEach((item) => {
+    if (item.race === "Terran") {
+        STRUCTURE_NAMES_BY_RACE.terran.add(item.name)
+    }
+    if (item.race === "Protoss") {
+        STRUCTURE_NAMES_BY_RACE.protoss.add(item.name)
+    }
+    if (item.race === "Zerg") {
+        STRUCTURE_NAMES_BY_RACE.zerg.add(item.name)
+    }
+})
 
 // console.log(STRUCTURES.all)
 console.assert(
-    STRUCTURES.all.length === 52,
-    `${STRUCTURES.all.length} is not equal to 52`
+    STRUCTURES.length === 52,
+    `${STRUCTURES.length} is not equal to 52`
 )
 console.assert(
-    STRUCTURES.terran.length === 20,
-    `${STRUCTURES.terran.length} is not equal to 20`
+    STRUCTURE_NAMES_BY_RACE.terran.size === 20,
+    `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 20`
 )
 console.assert(
-    STRUCTURES.protoss.length === 15,
-    `${STRUCTURES.protoss.length} is not equal to 15`
+    STRUCTURE_NAMES_BY_RACE.protoss.size === 15,
+    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 15`
 )
 console.assert(
-    STRUCTURES.zerg.length === 17,
-    `${STRUCTURES.zerg.length} is not equal to 17`
+    STRUCTURE_NAMES_BY_RACE.zerg.size === 17,
+    `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 17`
 )
 
-export default STRUCTURES
+export { STRUCTURES, STRUCTURE_NAMES_BY_RACE }

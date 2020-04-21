@@ -1,5 +1,7 @@
 // import {IDataAbility} from "./interfaces"
 
+type IAllRaces =  "zerg" | "terran" | "protoss"
+
 interface ISettingsElement {
     [name: string]: number | string
     n: string
@@ -24,6 +26,7 @@ interface ICustomAction {
     name: string
     imageSource: string
     duration: number
+    race?: IAllRaces | undefined
 }
 
 interface IDataUnit {
@@ -47,6 +50,7 @@ interface IDataUpgrade {
         gas: number
         time: number
     }
+    race?: IAllRaces
 }
 
 interface IDataAbility {
@@ -84,6 +88,7 @@ interface ITrainedBy {
 }
 
 export type {
+    IAllRaces,
     ISettingsElement,
     IBuildOrderElement,
     ICost,

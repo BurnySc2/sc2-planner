@@ -1,6 +1,6 @@
 import ENABLED_UPGRADES from "./enabled_upgrades"
 import data from "./data.json"
-import { IDataUpgrade } from "./interfaces"
+import { IDataUpgrade, IAllRaces } from "./interfaces"
 // const data = require("./data.json")
 
 // Maps ability id to upgrade id
@@ -33,12 +33,7 @@ data.Upgrade.forEach((upgrade) => {
 })
 
 // Contains all race specific upgrades
-const UPGRADES: { [name: string]: Array<IDataUpgrade> } = {
-    all: [],
-    protoss: [],
-    terran: [],
-    zerg: [],
-}
+const UPGRADES: Array<IDataUpgrade> = []
 
 // Store all upgrade ids
 const alreadyUsedIds = new Set()
@@ -57,32 +52,53 @@ data.Unit.forEach((unit) => {
             const upgrade = upgrade_data[upgrade_id]
             // console.log(upgrade);
             // console.log(index);
-            UPGRADES.all.push(upgrade)
-            UPGRADES[unit.race.toLowerCase()].push(upgrade)
+            upgrade.race = unit.race.toLowerCase() as IAllRaces
+            UPGRADES.push(upgrade)
         }
         return
     })
 })
 // console.log(UPGRADES);
 
-const sortFn = (a: IDataUpgrade, b: IDataUpgrade) => {
-    if (a.id < b.id) {
-        return -1
-    } else if (a.id > b.id) {
-        return 1
-    }
-    return 0
+const UPGRADE_NAMES_BY_RACE: {
+    protoss: Set<string>
+    terran: Set<string>
+    zerg: Set<string>
+} = {
+    protoss: new Set(),
+    terran: new Set(),
+    zerg: new Set(),
 }
-UPGRADES.all.sort(sortFn)
-UPGRADES.terran.sort(sortFn)
-UPGRADES.protoss.sort(sortFn)
-UPGRADES.zerg.sort(sortFn)
+UPGRADES.forEach((item) => {
+    if (item.race === "terran") {
+        UPGRADE_NAMES_BY_RACE.terran.add(item.name)
+    }
+    if (item.race === "protoss") {
+        UPGRADE_NAMES_BY_RACE.protoss.add(item.name)
+    }
+    if (item.race === "zerg") {
+        UPGRADE_NAMES_BY_RACE.zerg.add(item.name)
+    }
+})
+
+// const sortFn = (a: IDataUpgrade, b: IDataUpgrade) => {
+//     if (a.id < b.id) {
+//         return -1
+//     } else if (a.id > b.id) {
+//         return 1
+//     }
+//     return 0
+// }
+// UPGRADES.all.sort(sortFn)
+// UPGRADES.terran.sort(sortFn)
+// UPGRADES.protoss.sort(sortFn)
+// UPGRADES.zerg.sort(sortFn)
 
 // Should be enabled 90 upgrades
 console.assert(
-    Object.keys(UPGRADES.all).length === 90,
-    `${Object.keys(UPGRADES.all).length} is not 90`
+    Object.keys(UPGRADES).length === 90,
+    `${Object.keys(UPGRADES).length} is not 90`
 )
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the upgrade is available from an ability
-export default UPGRADES
+export { UPGRADES, UPGRADE_NAMES_BY_RACE }

@@ -4,16 +4,16 @@ import ReactTooltip from "react-tooltip"
 import RESOURCES from "../constants/resources"
 import { CUSTOMACTIONS } from "../constants/customactions"
 import CLASSES from "../constants/classes"
-import UNITS from "../constants/units"
-import STRUCTURES from "../constants/structures"
-import UPGRADES from "../constants/upgrades"
+import { UNITS, UNIT_NAMES_BY_RACE } from "../constants/units"
+import { STRUCTURES, STRUCTURE_NAMES_BY_RACE } from "../constants/structures"
+import { UPGRADES, UPGRADE_NAMES_BY_RACE } from "../constants/upgrades"
 import { getImageOfItem } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
-import { ICustomAction } from "../constants/interfaces"
+import { ICustomAction, IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
     gamelogic: GameLogic
-    race: string
+    race: IAllRaces
     actionClick: (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         action: ICustomAction
@@ -132,54 +132,56 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const customactions = CUSTOMACTIONS.all
-            .concat(CUSTOMACTIONS[this.props.race])
-            .map((item, index) => {
-                // Update tooltip function
-                const mouseEnterFunc = (
-                    e: React.MouseEvent<HTMLDivElement, MouseEvent>
-                ) => {
-                    this.onMouseEnter(
-                        e,
-                        <div className="flex flex-col">
-                            <div>{item.name}</div>
-                        </div>
-                    )
-                }
-                let value: number | string = ""
-                let icon = ""
-                if (latestSnapshot) {
-                    value = latestSnapshot.unitsCount[item.internal_name]
-                        ? latestSnapshot.unitsCount[item.internal_name]
-                        : ""
-                    icon = getImageOfItem({
-                        name: item.name,
-                        type: "action",
-                    })
-                }
-                return (
-                    <div
-                        data-tip
-                        data-for="actionTooltip"
-                        key={item.name}
-                        className={this.classString}
-                        onMouseEnter={mouseEnterFunc}
-                        onClick={(e) => {
-                            this.props.actionClick(e, item)
-                        }}
-                    >
-                        <img src={icon} alt={item.name} />
-                        <div
-                            className={CLASSES.actionIconText}
-                            style={actionIconTextStyle}
-                        >
-                            {value}
-                        </div>
+        const customactions = CUSTOMACTIONS.map((item, index) => {
+            // Update tooltip function
+            const mouseEnterFunc = (
+                e: React.MouseEvent<HTMLDivElement, MouseEvent>
+            ) => {
+                this.onMouseEnter(
+                    e,
+                    <div className="flex flex-col">
+                        <div>{item.name}</div>
                     </div>
                 )
-            })
+            }
+            let value: number | string = ""
+            let icon = ""
+            if (latestSnapshot) {
+                value = latestSnapshot.unitsCount[item.internal_name]
+                    ? latestSnapshot.unitsCount[item.internal_name]
+                    : ""
+                icon = getImageOfItem({
+                    name: item.name,
+                    type: "action",
+                })
+            }
+            const hidden =
+                item.race === undefined || item.race === this.props.race
+                    ? ""
+                    : "hidden"
+            return (
+                <div
+                    data-tip
+                    data-for="actionTooltip"
+                    key={item.name}
+                    className={`${this.classString} ${hidden}`}
+                    onMouseEnter={mouseEnterFunc}
+                    onClick={(e) => {
+                        this.props.actionClick(e, item)
+                    }}
+                >
+                    <img src={icon} alt={item.name} />
+                    <div
+                        className={CLASSES.actionIconText}
+                        style={actionIconTextStyle}
+                    >
+                        {value}
+                    </div>
+                </div>
+            )
+        })
 
-        const units = UNITS[this.props.race].map((item) => {
+        const units = UNITS.map((item, index) => {
             // Update tooltip function
             const mouseEnterFunc = (
                 e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -202,12 +204,15 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 latestSnapshot && latestSnapshot.unitsCount[item.name]
                     ? latestSnapshot.unitsCount[item.name]
                     : ""
+            const hidden = UNIT_NAMES_BY_RACE[this.props.race].has(item.name)
+                ? ""
+                : "hidden"
             return (
                 <div
                     data-tip
                     data-for="actionTooltip"
                     key={item.name}
-                    className={this.classString}
+                    className={`${this.classString} ${hidden}`}
                     onMouseEnter={mouseEnterFunc}
                     onClick={(e) => {
                         this.props.unitClick(e, item.name)
@@ -224,7 +229,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const structures = STRUCTURES[this.props.race].map((item, index) => {
+        const structures = STRUCTURES.map((item, index) => {
             // Update tooltip function
             const mouseEnterFunc = (
                 e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -245,12 +250,17 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 latestSnapshot && latestSnapshot.unitsCount[item.name]
                     ? latestSnapshot.unitsCount[item.name]
                     : ""
+            const hidden = STRUCTURE_NAMES_BY_RACE[this.props.race].has(
+                item.name
+            )
+                ? ""
+                : "hidden"
             return (
                 <div
                     data-tip
                     data-for="actionTooltip"
                     key={item.name}
-                    className={this.classString}
+                    className={`${this.classString} ${hidden}`}
                     onMouseEnter={mouseEnterFunc}
                     onClick={(e) => {
                         this.props.structureClick(e, item.name)
@@ -267,7 +277,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const upgrades = UPGRADES[this.props.race].map((item, index) => {
+        const upgrades = UPGRADES.map((item, index) => {
             // Update tooltip function
             const mouseEnterFunc = (
                 e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -290,13 +300,15 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 latestSnapshot && latestSnapshot.unitsCount[item.name]
                     ? latestSnapshot.unitsCount[item.name]
                     : ""
-            // TODO Idea to fix tooltips on race change: add 'hidden' class if upgrade does not belong to this race
+            const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name)
+                ? ""
+                : "hidden"
             return (
                 <div
                     data-tip
                     data-for="actionTooltip"
                     key={item.name}
-                    className={this.classString}
+                    className={`${this.classString} ${hidden}`}
                     onMouseEnter={mouseEnterFunc}
                     onClick={(e) => {
                         this.props.upgradeClick(e, item.name)

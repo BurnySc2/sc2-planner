@@ -4,7 +4,11 @@ import CLASSES from "../constants/classes"
 import { getImageOfItem } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
-import { IBuildOrderElement, ISettingsElement } from "../constants/interfaces"
+import {
+    IBuildOrderElement,
+    ISettingsElement,
+    IAllRaces,
+} from "../constants/interfaces"
 
 // A function to help us with reordering the result
 // https://www.npmjs.com/package/react-beautiful-dnd
@@ -28,12 +32,12 @@ interface MyProps {
         index: number
     ) => void
     rerunBuildOrder: (
-        race: string | undefined,
+        race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined
     ) => void
     updateUrl: (
-        race: string | undefined,
+        race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined
     ) => void
@@ -66,17 +70,9 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             result.destination.index
         )
 
-        this.props.rerunBuildOrder(
-            this.props.gamelogic.race,
-            items,
-            undefined
-        )
+        this.props.rerunBuildOrder(this.props.gamelogic.race, items, undefined)
 
-        this.props.updateUrl(
-            this.props.gamelogic.race,
-            items,
-            undefined
-        )
+        this.props.updateUrl(this.props.gamelogic.race, items, undefined)
     }
 
     render() {

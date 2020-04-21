@@ -15,6 +15,7 @@ import {
     IBuildOrderElement,
     ISettingsElement,
     ICost,
+    IAllRaces,
 } from "../constants/interfaces"
 
 /** Logic of this file:
@@ -36,7 +37,7 @@ let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
 class GameLogic {
-    race: string
+    race: IAllRaces
     bo: Array<IBuildOrderElement>
     boIndex: number
     minerals: number
@@ -64,7 +65,7 @@ class GameLogic {
     settings: { [name: string]: number }
 
     constructor(
-        race: string = "terran",
+        race: IAllRaces = "terran",
         bo: Array<IBuildOrderElement> = [],
         customSettings: Array<ISettingsElement> = []
     ) {

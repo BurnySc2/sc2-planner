@@ -2,7 +2,7 @@
 import lzbase62 from "lzbase62"
 import { isEqual, pick } from "lodash"
 
-import { ISettingsElement, IBuildOrderElement } from "./interfaces"
+import { ISettingsElement, IBuildOrderElement, IAllRaces } from "./interfaces"
 import UNITS_BY_NAME from "./units_by_name"
 
 const { CUSTOMACTIONS_BY_NAME } = require("./customactions")
@@ -92,9 +92,9 @@ const defaultSettings = [
             "If you think the income calculation is not correct, then you should tweak this setting. Lower value means higher income.",
         variableName: "incomeFactor",
         n: "if",
-        v: 18.5,
+        v: 18,
         min: 0,
-        max: 100,
+        max: 1000,
         step: 0.1,
     },
     {
@@ -227,7 +227,7 @@ const encodeSALT = (buildOrder: Array<IBuildOrderElement>) => {
 const decodeSALT = (saltEncoding: string) => {
     // TODO Decode salt build order from string
     // TODO Also need to figure out which race the SALT build order is for?!
-    let race = undefined
+    let race: IAllRaces | undefined = undefined
     let bo = [
         { name: "SCV", type: "worker" },
         { name: "SupplyDepot", type: "structure" },
@@ -239,12 +239,12 @@ const decodeSALT = (saltEncoding: string) => {
 
     // Figure out the race from the build order
     if (bo.length === 0 && !race) {
-        race = "terran"
+        race = "terran" as IAllRaces
     } else if (bo.length > 0 && !race) {
         for (const item of bo) {
             if (["worker", "unit", "structure"].includes(item.type)) {
                 const unit = UNITS_BY_NAME[item.name]
-                race = unit.race.toLowerCase()
+                race = unit.race.toLowerCase() as IAllRaces
                 break
             }
         }
