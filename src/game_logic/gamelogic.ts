@@ -58,7 +58,6 @@ class GameLogic {
     freeReactors: number
     frame: number
     waitTime: number
-    idleTime: number
     eventLog: Array<Event>
     unitsCount: { [name: string]: number }
     errorMessage: string
@@ -98,8 +97,6 @@ class GameLogic {
         this.frame = 0
         // Keep track of time for action 'do_nothing_5_sec'
         this.waitTime = 0
-        // Keep track of how long all units were idle (waiting for resources)
-        this.idleTime = 0
         this.eventLog = []
         // Number of units, will only be saved after every build order index advances - only used for UI purpose on the right side of the website
         this.unitsCount = {}
@@ -107,6 +104,8 @@ class GameLogic {
         this.errorMessage = ""
         eventId = -1
         lastSnapshot = null
+        mineralIncomeCache = {}
+        vespeneIncomeCache = {}
 
         // Custom settings from the settings page
         this.settings = {}
@@ -123,6 +122,8 @@ class GameLogic {
         // this.htmlElementWidthFactor = 0.3
         // How long it takes buildings to dettach from addons (lift, fly away and land)
         // this.addonSwapDelay = 3
+        // Keep track of how long all units were idle (waiting for resources)
+        // this.idleTime = 0
 
         // Update settings from customSettings object, see WebPage.js defaultSettings
         this.loadSettings(customSettings)
@@ -152,11 +153,12 @@ class GameLogic {
         this.freeReactors = 0
         this.frame = 0
         this.waitTime = 0
-        this.idleTime = 0
         this.eventLog = []
         this.unitsCount = {}
         eventId = -1
         lastSnapshot = null
+        mineralIncomeCache = {}
+        vespeneIncomeCache = {}
     }
 
     /**
@@ -229,6 +231,7 @@ class GameLogic {
             workerName = "Drone"
         }
         const townhall = new Unit(townhallName)
+        townhall.energy = 50
         if (this.race === "zerg") {
             townhall.larvaCount = 3
         }
@@ -267,12 +270,12 @@ class GameLogic {
 
             // Abort if units idle for too long (waiting for resources), e.g. when making all workers scout and only one more worker is mining, then build a cc will take forever
             if (this.busyUnits.size === 0) {
-                this.idleTime += 1
-                if (this.idleTime >= this.settings.idleLimit * 22.4) {
+                this.settings.idleTime += 1
+                if (this.settings.idleTime >= this.settings.idleLimit * 22.4) {
                     break
                 }
             } else {
-                this.idleTime = 0
+                this.settings.idleTime = 0
             }
         }
         // TODO better assertion statements
@@ -390,6 +393,9 @@ class GameLogic {
                 this.unitsCount[item] += amount
             }
         }
+        // Count of HT and DT for archon
+        let htCount = 0
+        let dtCount = 0
         this.units.forEach((unit, index) => {
             // Reduce drone count by 1 if it received a task to build a structure
             if (
@@ -419,12 +425,88 @@ class GameLogic {
                 // Amount of scouting workers
                 incrementUnitName("worker_to_scout")
             }
-            if (unit.hasSupplyDrop) {
-                incrementUnitName("call_down_supply")
+            // Count actions by dividing energy through action energy cost, e.g. Math.floor(OC / 50) for amount of mule calldown available
+            // Protoss
+
+            if (unit.name === "Nexus") {
+                const amount = Math.floor(unit.energy / 50)
+                incrementUnitName("chronoboost_busy_nexus", amount)
+                incrementUnitName("chronoboost_busy_gateway", amount)
+                incrementUnitName("chronoboost_busy_warpgate", amount)
+                incrementUnitName("chronoboost_busy_cybercore", amount)
+                incrementUnitName("chronoboost_busy_forge", amount)
             }
-            // TODO Count actions by dividing energy through action energy cost, e.g. Math.floor(OC / 50) for amount of mule calldown available
-            // TODO All drones that are producing a structure should not be counted
+            if (unit.name === "Gateway" && this.upgrades.has("WarpGate")) {
+                incrementUnitName("convert_gateway_to_warpgate")
+            }
+            if (unit.name === "WarpGate") {
+                incrementUnitName("convert_warpgate_to_gateway")
+            }
+            if (unit.name === "HighTemplar") {
+                htCount += 1
+            }
+            if (unit.name === "DarkTemplar") {
+                dtCount += 1
+            }
+            // Terran
+            if (unit.name === "OrbitalCommand") {
+                const amount = Math.floor(unit.energy / 50)
+                incrementUnitName("call_down_mule", amount)
+                incrementUnitName("call_down_supply", amount)
+            }
+            if (this.freeTechlabs > 0) {
+                if (unit.name === "Barracks" && !unit.hasAddon()) {
+                    incrementUnitName("attach_barracks_to_free_techlab")
+                }
+                if (unit.name === "Factory" && !unit.hasAddon()) {
+                    incrementUnitName("attach_factory_to_free_techlab")
+                }
+                if (unit.name === "Starport" && !unit.hasAddon()) {
+                    incrementUnitName("attach_starport_to_free_techlab")
+                }
+            }
+            if (this.freeReactors > 0) {
+                if (unit.name === "Barracks" && !unit.hasAddon()) {
+                    incrementUnitName("attach_barracks_to_free_reactor")
+                }
+                if (unit.name === "Factory" && !unit.hasAddon()) {
+                    incrementUnitName("attach_factory_to_free_reactor")
+                }
+                if (unit.name === "Starport" && !unit.hasAddon()) {
+                    incrementUnitName("attach_starport_to_free_reactor")
+                }
+            }
+            if (unit.name === "Barracks" && unit.hasTechlab) {
+                incrementUnitName("dettach_barracks_from_techlab")
+            }
+            if (unit.name === "Barracks" && unit.hasReactor) {
+                incrementUnitName("dettach_barracks_from_reactor")
+            }
+            if (unit.name === "Factory" && unit.hasTechlab) {
+                incrementUnitName("dettach_factory_from_techlab")
+            }
+            if (unit.name === "Factory" && unit.hasReactor) {
+                incrementUnitName("dettach_factory_from_reactor")
+            }
+            if (unit.name === "Starport" && unit.hasTechlab) {
+                incrementUnitName("dettach_starport_from_techlab")
+            }
+            if (unit.name === "Starport" && unit.hasReactor) {
+                incrementUnitName("dettach_starport_from_reactor")
+            }
+            // Zerg
+            if (unit.name === "Queen") {
+                const amount = Math.floor(unit.energy / 25)
+                incrementUnitName("inject", amount)
+                incrementUnitName("creep_tumor", amount)
+            }
         })
+        incrementUnitName("morph_archon_from_dt_dt", Math.floor(dtCount / 2))
+        incrementUnitName("morph_archon_from_ht_ht", Math.floor(htCount / 2))
+        incrementUnitName(
+            "morph_archon_from_ht_dt",
+            Math.floor((htCount + dtCount) / 2)
+        )
         this.upgrades.forEach((upgrade, index) => {
             incrementUnitName(upgrade)
         })
@@ -532,6 +614,7 @@ class GameLogic {
                 if (costTrainer.supply > 0) {
                     cost.supply -= costTrainer.supply
                 }
+                
             }
             if (!this._canAfford(cost)) {
                 // This is nearly the same error as above, but this is for a morph
@@ -615,7 +698,6 @@ class GameLogic {
                 this.supplyUsed -= 1
                 this.supplyLeft += 1
             }
-
             return true
         }
         return false
@@ -752,6 +834,13 @@ class GameLogic {
         }
     }
 
+    increaseMaxSupply(amount: number) {
+        const remainingTillMaxSupply = 200 - this.supplyCap
+        const increaseAmount = Math.min(amount, remainingTillMaxSupply)
+        this.supplyCap += increaseAmount
+        this.supplyLeft += increaseAmount
+    }
+
     /**
      * Gets the cost of a unit, structure, morph or upgrade
      */
@@ -805,7 +894,7 @@ class GameLogic {
                     this.workersMinerals,
                     this.baseCount,
                     this.muleCount
-                ) / 22.4
+                ) / this.settings.incomeFactor
             mineralIncomeCache[
                 // TODO Fix me: array[number] cannot be used as index type
                 // @ts-ignore
@@ -817,7 +906,7 @@ class GameLogic {
         // @ts-ignore
         let vespene = vespeneIncomeCache[[this.workersVespene, this.gasCount]]
         if (vespene === undefined) {
-            vespene = incomeVespene(this.workersVespene, this.gasCount) / 22.4
+            vespene = incomeVespene(this.workersVespene, this.gasCount) / this.settings.incomeFactor
             // TODO Fix me: array[number] cannot be used as index type
             // @ts-ignore
             vespeneIncomeCache[[this.workersVespene, this.gasCount]] = vespene

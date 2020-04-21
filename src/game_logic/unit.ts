@@ -150,8 +150,8 @@ class Unit {
     /**
      * Activates chronoboost, automatically calculates when it should run out
      */
-    addChrono(frame: number) {
-        this.hasChronoUntilFrame = frame + 20 * 22.4
+    addChrono(startFrame: number) {
+        this.hasChronoUntilFrame = startFrame + 20 * 22.4
     }
 
     /**
@@ -174,7 +174,7 @@ class Unit {
             }
 
             // If has inject: spawn larva when frame has been reached
-            if (this.hasInjectUntilFrame <= gamelogic.frame) {
+            if (this.hasInjectUntilFrame !== -1 && this.hasInjectUntilFrame <= gamelogic.frame) {
                 this.hasInjectUntilFrame = -1
                 this.larvaCount += 3
             }
@@ -237,10 +237,7 @@ class Unit {
                 unitData = UNITS_BY_NAME[task.newUnit]
                 // Overlord finishes, overlord will have -8 supply
                 if (unitData.supply < 0) {
-                    gamelogic.supplyCap += -unitData.supply
-                    gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
-                    gamelogic.supplyLeft =
-                        gamelogic.supplyCap - gamelogic.supplyUsed
+                    gamelogic.increaseMaxSupply(-unitData.supply)
                 }
             }
             // Spawn structure
@@ -394,7 +391,10 @@ class Unit {
             return !item.isCompleted
         })
 
-        // TODO expire chrono?
+        // Expire chrono
+        if (this.hasChronoUntilFrame !== -1 && this.hasChronoUntilFrame <= gamelogic.frame) {
+            this.hasChronoUntilFrame = -1
+        }
 
         // Turn units idle if they have no more tasks (or reactor has no task or there is larva), and vice versa
         if (this.isIdle()) {

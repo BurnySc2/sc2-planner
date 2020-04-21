@@ -45,7 +45,7 @@ const defaultSettings = [
         // Short name for base64 string
         n: "wsd",
         // The given value
-        v: 2,
+        v: 6,
         // Min value in GUI
         min: 0,
         // Max value in GUI
@@ -70,7 +70,7 @@ const defaultSettings = [
             "Time for terran and protoss workers until they arrive back at the minerals after they received a build task.",
         variableName: "workerReturnDelay",
         n: "wrd",
-        v: 3,
+        v: 5,
         min: 0,
         max: 100,
         step: 0.5,
@@ -87,12 +87,23 @@ const defaultSettings = [
         step: 0.5,
     },
     {
+        name: "Income factor",
+        tooltip:
+            "If you think the income calculation is not correct, then you should tweak this setting. Lower value means higher income.",
+        variableName: "incomeFactor",
+        n: "if",
+        v: 18.5,
+        min: 0,
+        max: 100,
+        step: 0.1,
+    },
+    {
         name: "Idle limit",
         tooltip:
             "How many seconds until the simulation detected that it got stuck. For example when going '12 pool', workers need to gather a lot of minerals first (simulation is then 'idle' for about 15 seconds). This setting has a huge performance impact on detecting invalid build orders.",
         variableName: "idleLimit",
         n: "il",
-        v: 30,
+        v: 60,
         min: 0,
         max: 600,
         step: 5,

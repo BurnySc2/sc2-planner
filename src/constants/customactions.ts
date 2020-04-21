@@ -138,14 +138,37 @@ const CUSTOMACTIONS: { [name: string]: Array<ICustomAction> } = {
         // },
     ],
     protoss: [
-        // {
-        //     // TODO chrono other buildings: gate, warpgate, forge, cybercore, twilight, stargate, fleet beacon, robo, robo bay
-        //     // Perhaps use drag and drop to select which to target? select event which is connected to task start and unit id which executes that task, then from game logic try to chrono that unit
-        //     internal_name: "chrono_nexus",
-        //     name: "Chrono Nexus",
-        //     imageSource: "btn-ability-spearofadun-chronosurge.png",
-        //     duration: 20,
-        // },
+        {
+            // TODO chrono other buildings: gate, warpgate, forge, cybercore, twilight, stargate, fleet beacon, robo, robo bay
+            internal_name: "chronoboost_busy_nexus",
+            name: "Chrono Nexus",
+            imageSource: "btn-ability-spearofadun-chronosurge.png",
+            duration: 20,
+        },
+        {
+            internal_name: "chronoboost_busy_gateway",
+            name: "Chrono Gateway",
+            imageSource: "btn-ability-spearofadun-chronosurge.png",
+            duration: 20,
+        },
+        {
+            internal_name: "chronoboost_busy_warpgate",
+            name: "Chrono Warpgate",
+            imageSource: "btn-ability-spearofadun-chronosurge.png",
+            duration: 20,
+        },
+        {
+            internal_name: "chronoboost_busy_cybercore",
+            name: "Chrono Cybernetics Core",
+            imageSource: "btn-ability-spearofadun-chronosurge.png",
+            duration: 20,
+        },
+        {
+            internal_name: "chronoboost_busy_forge",
+            name: "Chrono Forge",
+            imageSource: "btn-ability-spearofadun-chronosurge.png",
+            duration: 20,
+        },
         {
             internal_name: "convert_gateway_to_warpgate",
             name: "Gate to Warpgate",

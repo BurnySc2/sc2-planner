@@ -154,6 +154,106 @@ const executeAction = (
 
     // PROTOSS
 
+    if (action.internal_name === "chronoboost_busy_nexus") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (target.name === "Nexus" && target.hasChronoUntilFrame === -1) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
+    if (action.internal_name === "chronoboost_busy_gateway") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (target.name === "Gateway" && target.hasChronoUntilFrame === -1) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
+    if (action.internal_name === "chronoboost_busy_warpgate") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (target.name === "WarpGate" && target.hasChronoUntilFrame === -1) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
+    if (action.internal_name === "chronoboost_busy_cybercore") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (target.name === "CyberneticsCore" && target.hasChronoUntilFrame === -1) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
+    if (action.internal_name === "chronoboost_busy_forge") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (target.name === "Forge" && target.hasChronoUntilFrame === -1) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
     if (action.internal_name === "convert_gateway_to_warpgate") {
         gamelogic.errorMessage = `Required upgrade 'WarpGateResearch' not researched.`
         if (gamelogic.upgrades.has("WarpGateResearch")) {
@@ -280,14 +380,16 @@ const executeAction = (
     if (action.internal_name === "call_down_supply") {
         gamelogic.errorMessage = `Could not find an orbital command.`
         for (const unit of gamelogic.idleUnits) {
+            gamelogic.errorMessage = `Could not find a depopt with no supply drop.`
             // Find orbital with >=50 energy
             if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
-                unit.energy -= 50
                 // Spawn temporary unit mule
                 // TODO Might want to add mule spawn delay later? (2-3 seconds)
                 for (const depot of gamelogic.units) {
                     if (depot.name === "SupplyDepot" && !depot.hasSupplyDrop) {
+                        unit.energy -= 50
                         depot.hasSupplyDrop = true
+                        gamelogic.increaseMaxSupply(8)
                         break
                     }
                 }
@@ -346,7 +448,6 @@ const executeAction = (
     if (action.internal_name === "attach_barracks_to_free_reactor") {
         attach_to_addon("Barracks", true)
     }
-
     if (action.internal_name === "attach_factory_to_free_techlab") {
         attach_to_addon("Factory")
     }
