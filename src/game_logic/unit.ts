@@ -337,6 +337,9 @@ class Unit {
                         )
                     }
                 }
+                if (task.morphToUnit === "Hatchery") {
+                    gamelogic.increaseMaxSupply(6)
+                }
             }
             // Attach addon
             if (task.addsTechlab) {

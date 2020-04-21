@@ -598,6 +598,16 @@ class GameLogic {
                 (unit.type === "structure" && trainerUnit.name === "Probe")
             morphCondition = morphCondition && !trainerCanTrainThroughLarva
 
+            // Unit has to be produced through main unit queue, but if unit is busy: dont train
+            if (
+                !trainerCanTrainThroughLarva &&
+                !trainerCanTrainThroughReactor
+            ) {
+                if (trainerUnit.tasks.length > 0) {
+                    continue
+                }
+            }
+
             if (
                 !trainerCanTrainThisUnit &&
                 !trainerCanTrainThroughReactor &&
@@ -710,7 +720,6 @@ class GameLogic {
                 workerReturnToMinerals.addMineralWorker = true
                 trainerUnit.addTask(this, workerReturnToMinerals)
             }
-            // TODO If trainerUnit is a worker: reduce mineral worker count by 1 and add it by 1 once the task is complete
             if (trainerCanTrainThroughLarva) {
                 trainerUnit.larvaCount -= 1
             }
@@ -725,6 +734,7 @@ class GameLogic {
                 this.supplyUsed -= 1
                 this.supplyLeft += 1
             }
+
             return true
         }
         return false
