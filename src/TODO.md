@@ -22,8 +22,8 @@
 -   ~~Add 'remove event' when clicking on items in the boArea bottom left~~
 -   ~~Cant make corruptor anymore if spire morphed to greater spire (so need to keep track of tech equivalents)~~
 -   ~~Add chronoboost~~
+-   ~~Add amount hints for how many actions are possible (e.g. call down mule amount)~~
 -   Order the items on the right correctly: units: scv, marine, marauder, reaper, ghost...
--   Add amount hints for how many actions are possible (e.g. call down mule amount)
 -   Fix tooltips when switching between races
 -   Change Website icon
 -   Improve GUI
