@@ -27,7 +27,12 @@ interface MyProps {
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         index: number
     ) => void
-    rearrangeBuildOrder: (
+    rerunBuildOrder: (
+        race: string | undefined,
+        buildOrder: IBuildOrderElement[],
+        settings: ISettingsElement[] | undefined
+    ) => void
+    updateUrl: (
         race: string | undefined,
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined
@@ -61,7 +66,13 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             result.destination.index
         )
 
-        this.props.rearrangeBuildOrder(
+        this.props.rerunBuildOrder(
+            this.props.gamelogic.race,
+            items,
+            undefined
+        )
+
+        this.props.updateUrl(
             this.props.gamelogic.race,
             items,
             undefined

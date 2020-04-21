@@ -281,7 +281,8 @@ export default withRouter(
                                 <BuildOrder
                                     gamelogic={this.state.gamelogic}
                                     removeClick={this.buildOrderRemoveClicked}
-                                    rearrangeBuildOrder={(race, bo) => this.rerunBuildOrder(race, bo, undefined)}
+                                    rerunBuildOrder={(race, bo) => this.rerunBuildOrder(race, bo, undefined)}
+                                    updateUrl={(race, bo) => this.updateUrl(race, bo, undefined)}
                                 />
                             </div>
                             <BOArea gamelogic={this.state.gamelogic} removeClick={this.buildOrderRemoveClicked} />
