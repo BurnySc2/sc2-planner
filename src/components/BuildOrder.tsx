@@ -70,9 +70,9 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             result.destination.index
         )
 
-        this.props.rerunBuildOrder(this.props.gamelogic.race, items, undefined)
+        this.props.rerunBuildOrder(this.props.gamelogic.race, items, this.props.gamelogic.exportSettings())
 
-        this.props.updateUrl(this.props.gamelogic.race, items, undefined)
+        this.props.updateUrl(this.props.gamelogic.race, items, this.props.gamelogic.exportSettings())
     }
 
     render() {

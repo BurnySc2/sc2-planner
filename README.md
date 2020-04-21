@@ -6,7 +6,11 @@ You can create build orders for [StarCraft 2 Legacy of the Void](https://starcra
 
 # Demo
 
-You can [find a live version here](https://burnysc2.github.io/sc2-planner/?&race=terran&bo=tLuDriteRdVrisSritDsbtGrisEritkuBtgxNEtnfibViriuFsExfptlggcuBsctVgfkxnKtjkilTkli2MyMrxfesatRiiRTbjyo9ritCVWZe2TuByJ9risLuArgslyKDrgtXRzVL4jtkZfezSttR2a2SxiJtleZkxgMsntiS2RtRcsbtfddReUz4fxmHsbtVekyXMxsW3YtcrgtUfne5PtFskd0L7tDlggcuBsctVgf5Cy2esltRiZe2J01ZysfsezhD2VuByofyIfsa4Kti3LtbjCVyRFyQ9xfgsntiS5qtRcsbtfddReUyu9risktZWkrg0GIrgtWi3Xrg0MRxPDtZfex2MsexiFuBrg2FxzDtVVxzkzOfsb5ZtcrgtUfnergsltFskdyMcsgtV2qxTExjJtle6axhtzRfxfVtN)
+You can [find a live version here](https://burnysc2.github.io/sc2-planner)
+
+## Examples
+
+[Reaper expand into reactored hellions example](https://burnysc2.github.io/sc2-planner/?&race=terran&bo=tLuDriteRdVrisSritDsbtGrisEritkuBtgxNEtnfibViriuFsExfptlggcuBsctVgfkxnKtjkilTkli2MyMrxfesatRiiRTbjyo9ritCVWZe2TuByJ9risLuArgslyKDrgtXRzVL4jtkZfezSttR2a2SxiJtleZkxgMsntiS2RtRcsbtfddReUz4fxmHsbtVekyXMxsW3YtcrgtUfne5PtFskd0L7tDlggcuBsctVgf5Cy2e51tWZe3AuBxnfsltRixnD1fazWfse0LD2VyogyIfsLuA6jzLDrgtXRj1ncsa4xti2Wtbj5jy4Fy39xfgsntiS6UtRcsbtfddReUyug2qtig3GtkzY9risktZWkrg0tIrgtWi4Brg0zR1hSsexiFuBrg2FxzDtVVxzkzOfsb6DtcrgtUfnergsltFskdyMcsgtV2qxTExjJtleZ6RxhszRfxf9zl5tN)
 
 # Building it yourself
 
@@ -48,8 +52,9 @@ Prettify all .ts files:
 
 # TODO
 
-Tasks that still need to be done, also see [issues page](https://github.com/BurnySc2/sc2-planner/issues):
+Tasks that still need to be done, also see the [issues page](https://github.com/BurnySc2/sc2-planner/issues):
 
+-   Overhaul income function - it does not seem to be accurate
 -   Change Website icon
 -   Improve GUI looks
 -   Add SALT encoding and decoding

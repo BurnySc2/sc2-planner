@@ -301,15 +301,11 @@ export default withRouter(
                                 <BuildOrder
                                     gamelogic={this.state.gamelogic}
                                     removeClick={this.buildOrderRemoveClicked}
-                                    rerunBuildOrder={(race, bo) =>
-                                        this.rerunBuildOrder(
-                                            race,
-                                            bo,
-                                            undefined
-                                        )
+                                    rerunBuildOrder={(race, bo, settings) =>
+                                        this.rerunBuildOrder(race, bo, settings)
                                     }
-                                    updateUrl={(race, bo) =>
-                                        this.updateUrl(race, bo, undefined)
+                                    updateUrl={(race, bo, settings) =>
+                                        this.updateUrl(race, bo, settings)
                                     }
                                 />
                             </div>
