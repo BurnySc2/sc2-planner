@@ -4,6 +4,10 @@ type IAllRaces = "zerg" | "terran" | "protoss"
 
 type IBarTypes = "worker" | "action" | "unit" | "structure" | "upgrade"
 
+type IButton = "donate" | "contribute" | "report_bugs" | "contact" | "legal"
+
+type IReplaceString = "$time" | "$supply" | "$action"
+
 interface ISettingsElement {
     [name: string]: number | string
     n: string
@@ -90,6 +94,7 @@ interface ITrainedBy {
 export type {
     IAllRaces,
     IBarTypes,
+    IButton,
     ISettingsElement,
     IBuildOrderElement,
     ICost,

@@ -136,16 +136,13 @@ export default class ImportExport extends Component<MyProps, MyState> {
         gamelogic.eventLog.forEach((item) => {
             // console.log(item);
             let instructionString = templateString
-            const replaceValues = {
+            const replaceValues: {[name: string]: string} = {
                 $time: CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4),
-                // TODO Supply
-                $supply: item.supply,
+                $supply: `${item.supply}`,
                 $action: item.name,
             }
             for (let replaceString in replaceValues) {
-                // TODO Fix me
-                // @ts-ignore
-                const value: string = replaceValues[replaceString]
+                const value = replaceValues[replaceString]
                 instructionString = instructionString.replace(
                     replaceString,
                     value

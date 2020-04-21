@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import ReactTooltip from "react-tooltip"
 
 import CLASSES from "../constants/classes"
+import { IButton } from "../constants/interfaces"
 
 interface MyProps {}
 
@@ -72,7 +73,7 @@ export default class Footer extends Component<MyProps, MyState> {
         e:
             | React.MouseEvent<HTMLDivElement, MouseEvent>
             | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-        item: string
+        item: string | JSX.Element
     ) => {
         this.setState({
             tooltipText: item,
@@ -80,16 +81,15 @@ export default class Footer extends Component<MyProps, MyState> {
     }
 
     render() {
-        const buttons = [
+        const buttonNames: Array<IButton> = [
             "donate",
             "contribute",
             "report_bugs",
             "contact",
             "legal",
-        ].map((myKey, index) => {
-            // TODO Fix me
-            // @ts-ignore
-            const item: { [name: string]: string } = this.redirect[myKey]
+        ]
+        const buttons = buttonNames.map((myKey, index) => {
+            const item = this.redirect[myKey]
             const mouseEnterFunc = (
                 e:
                     | React.MouseEvent<HTMLDivElement, MouseEvent>

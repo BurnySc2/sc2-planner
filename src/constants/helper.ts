@@ -119,10 +119,10 @@ const defaultSettings = [
         step: 0.01,
     },
 ]
-const settingsDefaultValues: Array<ISettingsElement> = []
+const settingsDefaultValues: { [name: string]: number } = {}
 defaultSettings.forEach((item) => {
     // TODO Fix type annotation
-    // @ts-ignore
+    // @ts-ignor
     settingsDefaultValues[item.n] = item.v
 })
 
@@ -134,8 +134,6 @@ const encodeSettings = (settingsObject: Array<ISettingsElement>) => {
     })
     // If they are default values, strip them away
     strippedObject = strippedObject.filter((item) => {
-        // TODO Fix me
-        // @ts-ignore
         return settingsDefaultValues[item.n] !== item.v
     })
     // console.log(strippedObject);
