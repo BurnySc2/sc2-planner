@@ -562,6 +562,8 @@ class GameLogic {
         }
 
         // The unit/structure that is training the target unit or structure
+        // TODO Sort units, e.g. try to train marines first from reactor barracks, then normal barracks, then techlab barracks
+        // ^ The same for warpgate first, then gateway
         for (let trainerUnit of this.idleUnits) {
             // Unit might no longer be idle while iterating over idleUnits
             if (!trainerUnit.isIdle()) {
