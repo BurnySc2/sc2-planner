@@ -823,7 +823,7 @@ class GameLogic {
             )
             newTask.newUpgrade = upgrade.name
             researcherStructure.addTask(this, newTask, canBeResearchedByAddon)
-            
+
             const cost = this.getCost(upgrade.name, true)
             this.minerals -= cost.minerals
             this.vespene -= cost.vespene

@@ -381,10 +381,7 @@ class Unit {
         }
         // Update the task of the unit's reactor
         if (this.addonTasks.length > 0) {
-            const taskCompleted = this.updateTask(
-                gamelogic,
-                this.addonTasks[0]
-            )
+            const taskCompleted = this.updateTask(gamelogic, this.addonTasks[0])
             if (taskCompleted) {
                 this.addonTasks.shift()
             }
