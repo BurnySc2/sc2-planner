@@ -61,7 +61,7 @@ const defaultSettings = [
         n: "wbd",
         v: 1,
         min: 0,
-        max: 100,
+        max: 1000,
         step: 0.5,
     },
     {
@@ -70,9 +70,9 @@ const defaultSettings = [
             "Time for terran and protoss workers until they arrive back at the minerals after they received a build task.",
         variableName: "workerReturnDelay",
         n: "wrd",
-        v: 5,
+        v: 10,
         min: 0,
-        max: 100,
+        max: 1000,
         step: 0.5,
     },
     {
@@ -83,7 +83,7 @@ const defaultSettings = [
         n: "asd",
         v: 3,
         min: 0,
-        max: 100,
+        max: 1000,
         step: 0.5,
     },
     {
@@ -92,7 +92,7 @@ const defaultSettings = [
             "If you think the income calculation is not correct, then you should tweak this setting. Lower value means higher income.",
         variableName: "incomeFactor",
         n: "if",
-        v: 18,
+        v: 22.4,
         min: 0,
         max: 1000,
         step: 0.1,

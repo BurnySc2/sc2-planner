@@ -1,20 +1,20 @@
-/**
- * @param {Number} workers
- * @param {Number} bases
- * @param {Number} mules
- */
+// Mule: 211 minerals per minute (real time), source: https://youtu.be/kmxeG8I5p1Y?t=14s
+// source: http://www.teamliquid.net/forum/sc2-strategy/140055-scientifically-measuring-mining-speed
+
 const incomeMinerals = (
     workers: number,
     bases: number,
     mules: number = 0
 ): number => {
-    // Returns mineral income per second. """
-    if ((workers === 0 || mules === 0) && bases === 0) {
+    // Returns mineral income per second.
+    if (workers === 0 && mules === 0 && bases === 0) {
         return 0
     }
+    // How many close and far mineral patches there are per base
     const amount_close_patches = 5
     const amount_far_patches = 3
     const full_saturation = 3 * (amount_close_patches + amount_far_patches)
+    // Ignore workers that oversaturate a base (more than 24 workers)
     workers = Math.min(full_saturation * bases, workers)
     if (bases > 1) {
         const w1 = Math.floor(workers / bases)
@@ -33,19 +33,20 @@ const incomeMinerals = (
     const income_third_worker_far_patch = 102 - 78
     const income_workers_far_patch = 39
     const income_workers_close_patch = 45
-    if (workers > full_saturation - amount_close_patches) {
-        third_worker_close_patch = workers - (24 - amount_far_patches)
+    // Add workers as third workers to close patches
+    if (workers > 19) {
+        third_worker_close_patch = workers - 19
         workers -= third_worker_close_patch
     }
-    if (workers > full_saturation - amount_close_patches - amount_far_patches) {
-        third_worker_far_patch =
-            workers - 2 * (amount_close_patches + amount_far_patches)
+    if (workers > 16) {
+        third_worker_far_patch = workers - 16
         workers -= third_worker_far_patch
     }
-    if (workers > 2 * amount_close_patches) {
-        const workers_far_patch = workers - 2 * amount_close_patches
+    if (workers > 10) {
+        workers_far_patch = workers - 10
         workers -= workers_far_patch
     }
+    // Amount of workers on close patch
     const workers_close_patch = workers
     let income_per_min = 0
     const array = [
@@ -57,16 +58,13 @@ const incomeMinerals = (
     array.forEach((value) => {
         income_per_min += value
     })
-    const mule_rate = 211 / 1.4
-    return (1.4 * income_per_min) / 60 + (1.4 * mules * mule_rate) / 60
+    // Income per second
+    const mule_rate = 225 / 64
+    return (1.4 * income_per_min) / 60 + mules * mule_rate
 }
 
-/**
- * @param {Number} workers
- * @param {Number} geysers
- */
 const incomeVespene = (workers: number, geysers: number): number => {
-    // Returns vespene income per second. """
+    // Returns vespene income per second.
     if (workers === 0 || geysers === 0) {
         return 0
     }
