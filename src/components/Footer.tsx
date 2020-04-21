@@ -20,7 +20,7 @@ export default class Footer extends Component<MyProps, MyState> {
     redirect = {
         donate: {
             name: "Donate",
-            url: "https://www.google.de", // paypal url?
+            url: "https://www.paypal.me/BurnySc2", // paypal url
             tooltip: "Paypal",
         },
         contribute: {
@@ -35,14 +35,12 @@ export default class Footer extends Component<MyProps, MyState> {
         },
         contact: {
             name: "Contact",
-            url: "", // popup with discord#tag
+            url: "",
             tooltip: (
                 <div>
                     <div>Discord: BuRny#8752</div>
-                    <div>Twitter?</div>
-                    <div>Email?</div>
-                    <div>Reddit?</div>
-                    <div>Idk?</div>
+                    <div>Twitter: https://twitter.com/Buuurny</div>
+                    <div>Reddit: BurnySc2</div>
                 </div>
             ),
         },

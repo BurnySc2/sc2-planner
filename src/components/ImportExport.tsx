@@ -233,7 +233,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
             "Copy shareable link",
             "Copy human instructions",
             "Copy SC2 bot instructions",
-            "Copy SALT encoding",
+            // "Copy SALT encoding",
         ].map((item) => {
             const otherIcons = []
             if (item === "Copy human instructions") {
@@ -316,7 +316,9 @@ export default class ImportExport extends Component<MyProps, MyState> {
             )
         })
 
-        const importElements = ["Paste SALT instructions"].map((item) => {
+        const importElements = [
+            // "Paste SALT instructions"
+        ].map((item) => {
             return (
                 <div
                     key={`${item}`}
