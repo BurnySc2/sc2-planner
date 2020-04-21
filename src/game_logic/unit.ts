@@ -27,12 +27,12 @@ class Unit {
     hasInjectUntilFrame = -1
     nextLarvaSpawn = -1
     larvaCount = 0
-    larvaTasks: Array<Task>
+    backgroundTask: Array<Task>
     hasSupplyDrop = false
     hasTechlab = false
     hasReactor = false
     isFlying = false
-    reactorTasks: Array<Task>
+    addonTasks: Array<Task>
 
     constructor(name: string) {
         this.name = name
@@ -50,14 +50,14 @@ class Unit {
         this.hasInjectUntilFrame = -1
         this.nextLarvaSpawn = -1
         this.larvaCount = 0
-        this.larvaTasks = []
+        this.backgroundTask = []
         // Terran depot
         this.hasSupplyDrop = false
         // Terran production structures
         this.hasTechlab = false
         this.hasReactor = false
         this.isFlying = false
-        this.reactorTasks = []
+        this.addonTasks = []
     }
 
     /**
@@ -77,11 +77,11 @@ class Unit {
         gamelogic.busyUnits.add(this)
 
         if (taskForReactor) {
-            this.reactorTasks.push(task)
+            this.addonTasks.push(task)
             return
         }
         if (taskForLarva) {
-            this.larvaTasks.push(task)
+            this.backgroundTask.push(task)
             return
         }
         this.tasks.push(task)
@@ -94,7 +94,7 @@ class Unit {
         return (
             (this.tasks.length === 0 ||
                 this.larvaCount > 0 ||
-                (this.hasReactor && this.reactorTasks.length === 0)) &&
+                (this.hasAddon() && this.addonTasks.length === 0)) &&
             !this.isFlying &&
             (!workerTypes.has(this.name) ||
                 (!this.isMiningGas && !this.isScouting))
@@ -107,8 +107,8 @@ class Unit {
     isBusy() {
         return (
             this.tasks.length > 0 ||
-            this.larvaTasks.length > 0 ||
-            (this.hasReactor && this.reactorTasks.length > 0)
+            this.backgroundTask.length > 0 ||
+            this.addonTasks.length > 0
         )
     }
 
@@ -380,21 +380,21 @@ class Unit {
             }
         }
         // Update the task of the unit's reactor
-        if (this.reactorTasks.length > 0) {
+        if (this.addonTasks.length > 0) {
             const taskCompleted = this.updateTask(
                 gamelogic,
-                this.reactorTasks[0]
+                this.addonTasks[0]
             )
             if (taskCompleted) {
-                this.reactorTasks.shift()
+                this.addonTasks.shift()
             }
         }
         // Larva is linked to the zerg townhalls: update all of them
-        this.larvaTasks.forEach((task) => {
+        this.backgroundTask.forEach((task) => {
             this.updateTask(gamelogic, task)
         })
         // Remove completed tasks
-        this.larvaTasks = this.larvaTasks.filter((item) => {
+        this.backgroundTask = this.backgroundTask.filter((item) => {
             return !item.isCompleted
         })
 

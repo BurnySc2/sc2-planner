@@ -589,7 +589,7 @@ class GameLogic {
                 trainedInfo.trainedBy.has(trainerUnit.name) &&
                 !trainedInfo.requiresTechlab &&
                 trainerUnit.hasReactor &&
-                trainerUnit.reactorTasks.length === 0
+                trainerUnit.addonTasks.length === 0
 
             // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
             const trainerCanTrainThroughLarva =
@@ -789,7 +789,9 @@ class GameLogic {
             }
         }
 
+        this.errorMessage = `Could not find a structure to research upgrade '${upgrade.name}'.`
         // The unit/structure that is training the target unit or structure
+
         for (let researcherStructure of this.idleUnits) {
             // Unit might no longer be idle while iterating over idleUnits
             if (!researcherStructure.isIdle()) {
@@ -799,7 +801,14 @@ class GameLogic {
             const structureCanResearchUpgrade = researchInfo.researchedBy.has(
                 researcherStructure.name
             )
-            if (!structureCanResearchUpgrade) {
+
+            const canBeResearchedByAddon =
+                researcherStructure.hasTechlab &&
+                researchInfo.researchedBy.has(
+                    `${researcherStructure.name}TechLab`
+                )
+
+            if (!structureCanResearchUpgrade && !canBeResearchedByAddon) {
                 continue
             }
 
@@ -813,7 +822,8 @@ class GameLogic {
                 this.getEventId()
             )
             newTask.newUpgrade = upgrade.name
-            researcherStructure.addTask(this, newTask)
+            researcherStructure.addTask(this, newTask, canBeResearchedByAddon)
+            
             const cost = this.getCost(upgrade.name, true)
             this.minerals -= cost.minerals
             this.vespene -= cost.vespene
