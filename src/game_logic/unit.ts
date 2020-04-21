@@ -174,7 +174,10 @@ class Unit {
             }
 
             // If has inject: spawn larva when frame has been reached
-            if (this.hasInjectUntilFrame !== -1 && this.hasInjectUntilFrame <= gamelogic.frame) {
+            if (
+                this.hasInjectUntilFrame !== -1 &&
+                this.hasInjectUntilFrame <= gamelogic.frame
+            ) {
                 this.hasInjectUntilFrame = -1
                 this.larvaCount += 3
             }
@@ -320,18 +323,19 @@ class Unit {
                     if (unitData.needs_geyser) {
                         gamelogic.gasCount += 1
                     }
-
-                    gamelogic.eventLog.push(
-                        new Event(
-                            targetUnit.name,
-                            UNIT_ICONS[targetUnit.name.toUpperCase()],
-                            eventType,
-                            task.startFrame,
-                            gamelogic.frame,
-                            task.id,
-                            task.startSupply
+                    if (!["Archon"].includes(task.morphToUnit)) {
+                        gamelogic.eventLog.push(
+                            new Event(
+                                targetUnit.name,
+                                UNIT_ICONS[targetUnit.name.toUpperCase()],
+                                eventType,
+                                task.startFrame,
+                                gamelogic.frame,
+                                task.id,
+                                task.startSupply
+                            )
                         )
-                    )
+                    }
                 }
             }
             // Attach addon
@@ -392,7 +396,10 @@ class Unit {
         })
 
         // Expire chrono
-        if (this.hasChronoUntilFrame !== -1 && this.hasChronoUntilFrame <= gamelogic.frame) {
+        if (
+            this.hasChronoUntilFrame !== -1 &&
+            this.hasChronoUntilFrame <= gamelogic.frame
+        ) {
             this.hasChronoUntilFrame = -1
         }
 

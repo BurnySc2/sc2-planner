@@ -3,6 +3,7 @@ import CLASSES from "../constants/classes"
 import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import Event from "../game_logic/event"
+import { IBarTypes } from "../constants/interfaces"
 
 interface MyProps {
     gamelogic: GameLogic
@@ -50,7 +51,7 @@ export default class BOArea extends Component<MyProps, MyState> {
 
         // console.log(this.props.gamelogic.eventLog);
 
-        const verticalBarNames = [
+        const verticalBarNames: Array<IBarTypes> = [
             "worker",
             "action",
             "unit",
@@ -61,12 +62,8 @@ export default class BOArea extends Component<MyProps, MyState> {
         const verticalContent: Array<Array<JSX.Element>> = []
 
         verticalBarNames.forEach((barType) => {
-            // TODO Fix me
-            // @ts-ignore
             const bgColor: string = CLASSES.bgColor[barType]
             barBgClasses[barType] = `${bgColor} ${CLASSES.boCol}`
-            // TODO Fix me
-            // @ts-ignore
             const typeColor: string = CLASSES.typeColor[barType]
             barClasses[barType] = `${typeColor} ${CLASSES.boCol}`
             // Each bar contains another array
@@ -114,7 +111,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                         )
                         rowContent.push(fillerElement)
                     }
-
+                    
                     rowContent.push(
                         <div
                             key={`boArea${barType}${index1}${index2}`}
@@ -123,8 +120,6 @@ export default class BOArea extends Component<MyProps, MyState> {
                         >
                             <div
                                 style={myStyle}
-                                // TODO Fix me
-                                // @ts-ignore
                                 className={`${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} ${CLASSES.hoverColor[barType]}`}
                             >
                                 <img

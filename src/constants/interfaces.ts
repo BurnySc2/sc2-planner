@@ -1,6 +1,8 @@
 // import {IDataAbility} from "./interfaces"
 
-type IAllRaces =  "zerg" | "terran" | "protoss"
+type IAllRaces = "zerg" | "terran" | "protoss"
+
+type IBarTypes = "worker" | "action" | "unit" | "structure" | "upgrade"
 
 interface ISettingsElement {
     [name: string]: number | string
@@ -11,8 +13,6 @@ interface ISettingsElement {
 interface IBuildOrderElement {
     name: string
     type: string
-    // TODO Fix me
-    image?: any
 }
 
 interface ICost {
@@ -89,6 +89,7 @@ interface ITrainedBy {
 
 export type {
     IAllRaces,
+    IBarTypes,
     ISettingsElement,
     IBuildOrderElement,
     ICost,

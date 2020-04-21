@@ -1,6 +1,7 @@
 import ENABLED_UNITS from "./enabled_units"
 import data from "./data.json"
 import { IDataUnit } from "./interfaces"
+import { iconSortStructureFunction } from "./icon_order"
 // const data = require("./data.json")
 
 /**
@@ -67,6 +68,8 @@ STRUCTURES.forEach((item) => {
         STRUCTURE_NAMES_BY_RACE.zerg.add(item.name)
     }
 })
+
+STRUCTURES.sort(iconSortStructureFunction)
 
 // console.log(STRUCTURES.all)
 console.assert(

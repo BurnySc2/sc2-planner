@@ -1,6 +1,7 @@
 import ENABLED_UNITS from "./enabled_units"
 import data from "./data.json"
 import { IDataUnit } from "./interfaces"
+import { iconSortUnitFunction } from "./icon_order"
 
 // const data = require("./data.json")
 
@@ -57,6 +58,8 @@ const UNITS: Array<IDataUnit> = data.Unit.filter((item) => {
         !item.is_structure
     )
 })
+
+UNITS.sort(iconSortUnitFunction)
 
 const UNIT_NAMES_BY_RACE: {
     protoss: Set<string>

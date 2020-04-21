@@ -303,12 +303,14 @@ class GameLogic {
         // console.log(this.eventLog);
 
         // Test if sorting of events is properly done, that way on-click events work and exporting strings work correctly
-        this.eventLog.forEach((item, index) => {
-            const boItem = this.bo[index]
-            console.assert(item.name === boItem.name)
-            // console.log(item);
-            // console.log(boItem);
-        })
+        // this.eventLog.forEach((item, index) => {
+        //     const boItem = this.bo[index]
+        //     // console.log(item);
+        //     // console.log(boItem);
+        //     // console.assert(item.name === boItem.name)
+        //     // console.log(item);
+        //     // console.log(boItem);
+        // })
     }
 
     /**
@@ -399,8 +401,9 @@ class GameLogic {
         let dtCount = 0
         this.units.forEach((unit, index) => {
             // Reduce drone count by 1 if it received a task to build a structure
+            // Reduce HT or DT count by 1 if it is busy morphing to archon
             if (
-                unit.name !== "Drone" ||
+                !["Drone", "HighTemplar", "DarkTemplar"].includes(unit.name) ||
                 unit.tasks.length === 0 ||
                 !unit.tasks[unit.tasks.length - 1].morphToUnit
             ) {
@@ -504,10 +507,7 @@ class GameLogic {
         })
         incrementUnitName("morph_archon_from_dt_dt", Math.floor(dtCount / 2))
         incrementUnitName("morph_archon_from_ht_ht", Math.floor(htCount / 2))
-        incrementUnitName(
-            "morph_archon_from_ht_dt",
-            Math.floor((htCount + dtCount) / 2)
-        )
+        incrementUnitName("morph_archon_from_ht_dt", Math.min(htCount, dtCount))
         this.upgrades.forEach((upgrade, index) => {
             incrementUnitName(upgrade)
         })
@@ -615,7 +615,6 @@ class GameLogic {
                 if (costTrainer.supply > 0) {
                     cost.supply -= costTrainer.supply
                 }
-                
             }
             if (!this._canAfford(cost)) {
                 // This is nearly the same error as above, but this is for a morph
@@ -666,12 +665,36 @@ class GameLogic {
                 }
             }
 
-            trainerUnit.addTask(
-                this,
-                newTask,
-                trainerCanTrainThroughReactor,
-                trainerCanTrainThroughLarva
-            )
+            if (trainerUnit.name === "WarpGate") {
+                // Training through warpgate reduces train time to 4 seconds
+                newTask.totalFramesRequired = 3.6 * 22.4
+                trainerUnit.addTask(
+                    this,
+                    newTask,
+                    trainerCanTrainThroughReactor,
+                    true
+                )
+                // Add the warpgate recover time which can be sped up through chrono
+                trainerUnit.addTask(
+                    this,
+                    new Task(
+                        this.warpgateRecoverTime(unit.name),
+                        this.frame,
+                        this.supplyUsed,
+                        this.getEventId()
+                    ),
+                    trainerCanTrainThroughReactor,
+                    trainerCanTrainThroughLarva
+                )
+            } else {
+                // Add normal task to unit, add to reactor if unit has reactor, add to larva if unit has larva
+                trainerUnit.addTask(
+                    this,
+                    newTask,
+                    trainerCanTrainThroughReactor,
+                    trainerCanTrainThroughLarva
+                )
+            }
 
             // Create the builder return task
             if (["Probe", "SCV"].includes(trainerUnit.name)) {
@@ -879,6 +902,21 @@ class GameLogic {
     }
 
     /**
+     * Recover time of warp gates when creating a specific unit, how long the warp gate will be on cooldown after warping in a specific unit
+     */
+    warpgateRecoverTime(unitName: string) {
+        const recoverTimes: { [name: string]: number } = {
+            Zealot: 20 * 22.4,
+            Adept: 20 * 22.4,
+            Stalker: 23 * 22.4,
+            Sentry: 23 * 22.4,
+            DarkTemplar: 32 * 22.4,
+            HighTemplar: 32 * 22.4,
+        }
+        return recoverTimes[unitName]
+    }
+
+    /**
      * Calculates and caches the income based on how many workers (and mules), bases and gas structures we have
      */
     addIncome() {
@@ -907,7 +945,9 @@ class GameLogic {
         // @ts-ignore
         let vespene = vespeneIncomeCache[[this.workersVespene, this.gasCount]]
         if (vespene === undefined) {
-            vespene = incomeVespene(this.workersVespene, this.gasCount) / this.settings.incomeFactor
+            vespene =
+                incomeVespene(this.workersVespene, this.gasCount) /
+                this.settings.incomeFactor
             // TODO Fix me: array[number] cannot be used as index type
             // @ts-ignore
             vespeneIncomeCache[[this.workersVespene, this.gasCount]] = vespene

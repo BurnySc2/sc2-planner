@@ -159,8 +159,12 @@ const executeAction = (
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 // Find target
+                gamelogic.errorMessage = "No busy Nexus could be found."
                 for (const target of gamelogic.busyUnits) {
-                    if (target.name === "Nexus" && target.hasChronoUntilFrame === -1) {
+                    if (
+                        target.name === "Nexus" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -178,9 +182,13 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage = "No busy Gateway could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (target.name === "Gateway" && target.hasChronoUntilFrame === -1) {
+                    if (
+                        target.name === "Gateway" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -198,9 +206,13 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage = "No busy Warpgate could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (target.name === "WarpGate" && target.hasChronoUntilFrame === -1) {
+                    if (
+                        target.name === "WarpGate" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -218,9 +230,14 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage =
+                    "No busy Cybernetics Core could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (target.name === "CyberneticsCore" && target.hasChronoUntilFrame === -1) {
+                    if (
+                        target.name === "CyberneticsCore" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -238,9 +255,13 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage = "No busy Forge could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (target.name === "Forge" && target.hasChronoUntilFrame === -1) {
+                    if (
+                        target.name === "Forge" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -307,8 +328,12 @@ const executeAction = (
                         dt1.addTask(gamelogic, task)
                         gamelogic.killUnit(dt2)
                         actionCompleted = true
+                        break
                     }
                 }
+            }
+            if (actionCompleted) {
+                break
             }
         }
     }
@@ -316,9 +341,9 @@ const executeAction = (
     if (action.internal_name === "morph_archon_from_ht_ht") {
         gamelogic.errorMessage = `Could not find two high templars.`
         for (const ht1 of gamelogic.idleUnits) {
-            if (ht1.name === "DarkTemplar") {
+            if (ht1.name === "HighTemplar") {
                 for (const ht2 of gamelogic.idleUnits) {
-                    if (ht2.name === "DarkTemplar" && ht1.id !== ht2.id) {
+                    if (ht2.name === "HighTemplar" && ht1.id !== ht2.id) {
                         const task = new Task(
                             9 * 22.4,
                             gamelogic.frame,
@@ -329,8 +354,12 @@ const executeAction = (
                         ht1.addTask(gamelogic, task)
                         gamelogic.killUnit(ht2)
                         actionCompleted = true
+                        break
                     }
                 }
+            }
+            if (actionCompleted) {
+                break
             }
         }
     }
@@ -351,8 +380,12 @@ const executeAction = (
                         dt.addTask(gamelogic, task)
                         gamelogic.killUnit(ht)
                         actionCompleted = true
+                        break
                     }
                 }
+            }
+            if (actionCompleted) {
+                break
             }
         }
     }

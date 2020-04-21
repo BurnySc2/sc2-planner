@@ -201,7 +201,7 @@ const CUSTOMACTIONS: Array<ICustomAction> = [
         race: "protoss",
     },
     {
-        internal_name: "morph_archon_from_dt_dt",
+        internal_name: "morph_archon_from_ht_ht",
         name: "Morph Archon HT+HT",
         imageSource: "btn-unit-protoss-archon.png",
         duration: 9,
@@ -240,14 +240,12 @@ const CUSTOMACTIONS: Array<ICustomAction> = [
 
 // Create an object with customaction.name as key and the action as value for quick lookup
 const CUSTOMACTIONS_BY_NAME: { [name: string]: ICustomAction } = {}
-for (const race in CUSTOMACTIONS) {
-    CUSTOMACTIONS.forEach((customAction) => {
-        // console.log(customAction);
-        CUSTOMACTIONS_BY_NAME[customAction.name] = customAction
-        // Load image from path
-        // customAction["image"] = require(`../icons/png/${customAction.path}`)
-    })
-}
+CUSTOMACTIONS.forEach((customAction) => {
+    // console.log(customAction);
+    CUSTOMACTIONS_BY_NAME[customAction.name] = customAction
+    // Load image from path
+    // customAction["image"] = require(`../icons/png/${customAction.path}`)
+})
 
 // console.log(CUSTOMACTIONS);
 

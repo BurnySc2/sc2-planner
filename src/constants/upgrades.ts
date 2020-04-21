@@ -1,6 +1,7 @@
 import ENABLED_UPGRADES from "./enabled_upgrades"
 import data from "./data.json"
 import { IDataUpgrade, IAllRaces } from "./interfaces"
+import { iconSortUpgradeFunction } from "./icon_order"
 // const data = require("./data.json")
 
 // Maps ability id to upgrade id
@@ -58,7 +59,8 @@ data.Unit.forEach((unit) => {
         return
     })
 })
-// console.log(UPGRADES);
+// console.log(UPGRADES)
+UPGRADES.sort(iconSortUpgradeFunction)
 
 const UPGRADE_NAMES_BY_RACE: {
     protoss: Set<string>

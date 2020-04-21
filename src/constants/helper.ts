@@ -169,24 +169,6 @@ const decodeBuildOrder = (
 ): Array<IBuildOrderElement> => {
     const decodedString = lzbase62.decompress(buildOrderEncoded)
     const jsonObj: Array<IBuildOrderElement> = JSON.parse(decodedString)
-    // Load image
-    jsonObj.forEach((item) => {
-        if (["worker", "unit", "structure"].includes(item.type)) {
-            item.image = require(`../icons/png/${
-                UNIT_ICONS[item.name.toUpperCase()]
-            }`)
-        }
-        if (["upgrade"].includes(item.type)) {
-            item.image = require(`../icons/png/${
-                UPGRADE_ICONS[item.name.toUpperCase()]
-            }`)
-        }
-        if (["action"].includes(item.type)) {
-            item.image = require(`../icons/png/${
-                CUSTOMACTIONS_BY_NAME[item.name].imageSource
-            }`)
-        }
-    })
     return jsonObj
 }
 
