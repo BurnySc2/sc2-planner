@@ -111,7 +111,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                         )
                         rowContent.push(fillerElement)
                     }
-                    
+
                     rowContent.push(
                         <div
                             key={`boArea${barType}${index1}${index2}`}

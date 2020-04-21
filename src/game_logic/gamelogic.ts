@@ -209,7 +209,7 @@ class GameLogic {
      */
     getEventId = () => {
         eventId += 1
-        return eventId - 1
+        return eventId
     }
 
     /**

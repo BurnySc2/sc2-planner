@@ -70,7 +70,7 @@ const CLASSES = {
     boTimeElement:
         "z-40 flex flex-shrink-0 items-center border-l border-r border-black",
     boElementContainer:
-        "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black cursor-move",
+        "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
 
