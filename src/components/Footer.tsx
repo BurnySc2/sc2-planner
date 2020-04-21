@@ -118,6 +118,8 @@ export default class Footer extends Component<MyProps, MyState> {
                         onMouseEnter={mouseEnterFunc}
                         className={CLASSES.buttons}
                         href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                     >
                         {item.name}
                     </a>

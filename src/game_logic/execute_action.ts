@@ -34,7 +34,7 @@ const executeAction = (
     }
 
     if (action.internal_name === "worker_to_gas") {
-        gamelogic.errorMessage = `Could not find a worker that is mining minerals.`
+        gamelogic.errorMessage = `Could not find a worker that is mining minerals or a gas structure.`
         if (gamelogic.workersMinerals > 0) {
             for (const unit of gamelogic.idleUnits) {
                 if (
@@ -53,7 +53,7 @@ const executeAction = (
     }
 
     if (action.internal_name === "3worker_to_gas") {
-        gamelogic.errorMessage = `Could not find three worker that are mining minerals.`
+        gamelogic.errorMessage = `Could not find three worker that are mining minerals or a gas structure.`
         if (gamelogic.workersMinerals >= 3) {
             const mineralWorkers = []
             for (const unit of gamelogic.idleUnits) {
