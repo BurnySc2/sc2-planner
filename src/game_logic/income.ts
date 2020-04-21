@@ -19,11 +19,9 @@ const incomeMinerals = (
     if (bases > 1) {
         const w1 = Math.floor(workers / bases)
         const w2 = workers % bases
-        return (
-            bases * incomeMinerals(w1, 1) +
-            w2 * (incomeMinerals(w1 + 1, 1) - incomeMinerals(w1, 1)) +
-            incomeMinerals(0, 1, mules)
-        )
+        const base1Income = incomeMinerals(w1 + w2, 1, mules)
+        const otherBasesIncome = incomeMinerals(w1, bases - 1)
+        return base1Income + otherBasesIncome
     }
     let third_worker_close_patch = 0
     let third_worker_far_patch = 0

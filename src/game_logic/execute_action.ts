@@ -21,7 +21,7 @@ const executeAction = (
     if (action.internal_name === "worker_to_mins") {
         gamelogic.errorMessage = `Could not find a worker that is mining vespene.`
         if (gamelogic.workersVespene > 0) {
-            for (const unit of gamelogic.idleUnits) {
+            for (const unit of gamelogic.units) {
                 if (workerTypes.has(unit.name) && unit.isMiningGas) {
                     unit.isMiningGas = false
                     gamelogic.workersMinerals += 1
@@ -280,7 +280,7 @@ const executeAction = (
         if (gamelogic.upgrades.has("WarpGateResearch")) {
             gamelogic.errorMessage = `Could not find a gateway.`
             for (const unit of gamelogic.idleUnits) {
-                if (unit.name === "Gateway") {
+                if (unit.name === "Gateway" && !unit.isBusy()) {
                     const task = new Task(
                         7 * 22.4,
                         gamelogic.frame,
@@ -290,6 +290,7 @@ const executeAction = (
                     task.morphToUnit = "WarpGate"
                     unit.addTask(gamelogic, task)
                     actionCompleted = true
+                    break
                 }
             }
         }
@@ -308,6 +309,7 @@ const executeAction = (
                 task.morphToUnit = "Gateway"
                 unit.addTask(gamelogic, task)
                 actionCompleted = true
+                break
             }
         }
     }
