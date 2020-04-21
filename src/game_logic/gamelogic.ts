@@ -586,6 +586,7 @@ class GameLogic {
                 trainedInfo.trainedBy.has(trainerUnit.name) &&
                 (!trainedInfo.requiresTechlab || trainerUnit.hasTechlab)
             const trainerCanTrainThroughReactor =
+                trainedInfo.trainedBy.has(trainerUnit.name) &&
                 !trainedInfo.requiresTechlab &&
                 trainerUnit.hasReactor &&
                 trainerUnit.reactorTasks.length === 0

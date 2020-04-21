@@ -6,7 +6,7 @@ You can create build orders for [StarCraft 2 Legacy of the Void](https://starcra
 
 # Demo
 
-You can [find a live version here](https://burnysc2.github.io/sc2-planner/?&race=terran&bo=tLuDriteRdVrisSritDsbtGrisEritkuBtgxNEtnfibViriuFsExfptlggcuBsctVgfkxnKtjkilTkli2MyMrxfesatRiiRTbjyo9ritCVWZe2TuByJ9risLuArgslyKDrgtXRzVL4jtkZfezSttR2a2SxiJtleZkxgMsntiS2RtRcsbtfddReUz4fxmHsbtVekyXMxsLtN)
+You can [find a live version here](https://burnysc2.github.io/sc2-planner/?&race=terran&bo=tLuDriteRdVrisSritDsbtGrisEritkuBtgxNEtnfibViriuFsExfptlggcuBsctVgfkxnKtjkilTkli2MyMrxfesatRiiRTbjyo9ritCVWZe2TuByJ9risLuArgslyKDrgtXRzVL4jtkZfezSttR2a2SxiJtleZkxgMsntiS2RtRcsbtfddReUz4fxmHsbtVekyXMxsW3YtcrgtUfne5PtFskd0L7tDlggcuBsctVgf5Cy2esltRiZe2J01ZysfsezhD2VuByofyIfsa4Kti3LtbjCVyRFyQ9xfgsntiS5qtRcsbtfddReUyu9risktZWkrg0GIrgtWi3Xrg0MRxPDtZfex2MsexiFuBrg2FxzDtVVxzkzOfsb5ZtcrgtUfnergsltFskdyMcsgtV2qxTExjJtle6axhtzRfxfVtN)
 
 # Building it yourself
 
@@ -15,6 +15,7 @@ You can [find a live version here](https://burnysc2.github.io/sc2-planner/?&race
 [Node](https://nodejs.org/en/download/) is required to create this static website.
 
 ## Setup
+
 Install packages:
 
 `npm install`
@@ -35,7 +36,7 @@ To deploy in `/build` directory:
 
 # Copyright
 
-Most image assets are owned by Blizzard and are used according to http://blizzard.com/company/about/legal-faq.html. 
+Most image assets are owned by Blizzard and are used according to http://blizzard.com/company/about/legal-faq.html.
 
 ©Blizzard Entertainment, Inc. All rights reserved. Wings of Liberty, Heart of the Swarm, Legacy of the Void, StarCraft, Brood War, Battle.net, and Blizzard Entertainment are trademarks or registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries.
 
@@ -43,12 +44,13 @@ Most image assets are owned by Blizzard and are used according to http://blizzar
 
 Prettify all .ts files:
 
- `prettier --write "**/*.ts"`
+`prettier --write "**/*.ts"`
 
 # TODO
 
-Tasks that still need to be done:
-- Change Website icon
-- Improve GUI looks
-- Add SALT encoding and decoding
-- Grey out actions / icons that are currently not available (locked by techtree)
+Tasks that still need to be done, also see [issues page](https://github.com/BurnySc2/sc2-planner/issues):
+
+-   Change Website icon
+-   Improve GUI looks
+-   Add SALT encoding and decoding
+-   Grey out actions / icons that are currently not available (locked by techtree)
