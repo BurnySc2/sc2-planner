@@ -29,16 +29,10 @@ data.Unit.forEach((trainingUnit) => {
                 let requiredUpgradeId = null
                 let requiresTechlab = false
                 let isMorph = MORPH_ABILITIES.has(ability.ability)
-                // TODO Remove once oracle cost is fixed in data.json
-                if (resultingUnit.name === "Oracle") {
-                    resultingUnit.minerals = 150
-                    resultingUnit.gas = 150
-                    console.log(resultingUnit);
-                    
-                }
                 const isFreeMorph =
                     resultingUnit.minerals === trainingUnit.minerals &&
-                    resultingUnit.gas === trainingUnit.gas
+                    resultingUnit.gas === trainingUnit.gas &&
+                    resultingUnit.is_structure === trainingUnit.is_structure
                 // Ignore free morphs, e.g. hellbat to hellion is a free morph but adds the armory requirement for hellion
                 if (isFreeMorph) {
                     return
@@ -112,7 +106,7 @@ data.Unit.forEach((trainingUnit) => {
     )
 })
 
-console.log(TRAINED_BY["Oracle"])
+// console.log(TRAINED_BY["Oracle"])
 
 /**
 {Adept: 
@@ -127,8 +121,8 @@ console.log(TRAINED_BY["Oracle"])
 }
  */
 console.assert(
-    Object.keys(TRAINED_BY).length === 111,
-    `${Object.keys(TRAINED_BY).length} is not 111`
+    Object.keys(TRAINED_BY).length === 114,
+    `${Object.keys(TRAINED_BY).length} is not 114`
 )
 
 console.assert(
