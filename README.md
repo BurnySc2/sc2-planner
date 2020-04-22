@@ -66,8 +66,6 @@ Prettify all .ts files:
 
 Tasks that still need to be done, also see the [issues page](https://github.com/BurnySc2/sc2-planner/issues):
 
--   Overhaul income function - it does not seem to be accurate
--   Change Website icon
 -   Improve GUI looks
 -   Add SALT encoding and decoding
 -   Grey out actions / icons that are currently not available (locked by techtree)
