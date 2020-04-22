@@ -309,7 +309,7 @@ const executeAction = (
                         7 * 22.4,
                         gamelogic.frame,
                         gamelogic.supplyUsed,
-                        gamelogic.getEventId()
+                        -1
                     )
                     task.morphToUnit = "WarpGate"
                     unit.addTask(gamelogic, task)
@@ -328,7 +328,7 @@ const executeAction = (
                     7 * 22.4,
                     gamelogic.frame,
                     gamelogic.supplyUsed,
-                    gamelogic.getEventId()
+                    -1
                 )
                 task.morphToUnit = "Gateway"
                 unit.addTask(gamelogic, task)
@@ -348,7 +348,7 @@ const executeAction = (
                             9 * 22.4,
                             gamelogic.frame,
                             gamelogic.supplyUsed,
-                            gamelogic.getEventId()
+                            -1
                         )
                         task.morphToUnit = "Archon"
                         dt1.addTask(gamelogic, task)
@@ -374,7 +374,7 @@ const executeAction = (
                             9 * 22.4,
                             gamelogic.frame,
                             gamelogic.supplyUsed,
-                            gamelogic.getEventId()
+                            -1
                         )
                         task.morphToUnit = "Archon"
                         ht1.addTask(gamelogic, task)
@@ -400,7 +400,7 @@ const executeAction = (
                             9 * 22.4,
                             gamelogic.frame,
                             gamelogic.supplyUsed,
-                            gamelogic.getEventId()
+                            -1
                         )
                         task.morphToUnit = "Archon"
                         dt.addTask(gamelogic, task)

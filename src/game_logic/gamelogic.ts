@@ -660,12 +660,13 @@ class GameLogic {
                 }
             }
 
+            const taskId = this.getEventId()
             // Create the new task
             const newTask = new Task(
                 buildTime,
                 this.frame + buildStartDelay,
                 this.supplyUsed,
-                this.getEventId()
+                taskId
             )
             newTask.morphToUnit =
                 morphCondition || trainedInfo.consumesUnit ? unit.name : null
@@ -695,7 +696,7 @@ class GameLogic {
                         this.warpgateRecoverTime(unit.name),
                         this.frame,
                         this.supplyUsed,
-                        this.getEventId()
+                        taskId
                     ),
                     trainerCanTrainThroughReactor,
                     trainerCanTrainThroughLarva
