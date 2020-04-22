@@ -146,7 +146,7 @@ test("Build OC and call down MULE", () => {
         { name: "SupplyDepot", type: "structure" },
         { name: "Barracks", type: "structure" },
         { name: "OrbitalCommand", type: "structure" },
-        { name: "Call down MULE", type: "action" },
+        { name: "call_down_mule", type: "action" },
     ]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
@@ -161,7 +161,7 @@ test("Test if able to create a gas unit (reaper)", () => {
         { name: "SupplyDepot", type: "structure" },
         { name: "Barracks", type: "structure" },
         { name: "Refinery", type: "structure" },
-        { name: "3x Mine gas", type: "action" },
+        { name: "3worker_to_gas", type: "action" },
         { name: "Reaper", type: "unit" },
     ]
     const logic = new GameLogic("terran", bo)
@@ -176,7 +176,7 @@ test("Test if able to research +1 from ebay", () => {
     const bo = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
-        { name: "3x Mine gas", type: "action" },
+        { name: "3worker_to_gas", type: "action" },
         { name: "EngineeringBay", type: "structure" },
         { name: "TerranInfantryWeaponsLevel1", type: "upgrade" },
     ]
@@ -194,8 +194,8 @@ test("Test if able to research +2 from ebay after requirements are met", () => {
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
         { name: "Refinery", type: "structure" },
-        { name: "3x Mine gas", type: "action" },
-        { name: "3x Mine gas", type: "action" },
+        { name: "3worker_to_gas", type: "action" },
+        { name: "3worker_to_gas", type: "action" },
         { name: "Barracks", type: "structure" },
         { name: "Factory", type: "structure" },
         { name: "EngineeringBay", type: "structure" },
@@ -213,30 +213,30 @@ test("Test if able to research +2 from ebay after requirements are met", () => {
     expect(logic.eventLog.length).toBe(12)
 })
 
-// test('Test if able upgrade to PF', () => {
-//     // Morph CC to OC, then call down a mule
-//     const bo = [
-//         {name: "SupplyDepot", type: "structure"},
-//         {name: "Refinery", type: "structure"},
-//         {name: "Refinery", type: "structure"},
-//         {name: "EngineeringBay", type: "structure"},
-//         {name: "3x Mine gas", type: "action"},
-//         {name: "3x Mine gas", type: "action"},
-//         {name: "PlanetaryFortress", type: "structure"},
-//     ]
-//     const logic = new GameLogic("terran", bo)
-//     logic.setStart()
-//     logic.runUntilEnd()
-//     let pfCount = 0
-//     logic.units.forEach(unit => {
-//         if (unit.name === "PlanetaryFortress") {
-//             pfCount += 1
-//         }
-//     })
-//     expect(pfCount).toBe(1)
-//     expect(logic.units.size).toBe(17)
-//     expect(logic.eventLog.length).toBe(7)
-// });
+test("Test if able upgrade to PF", () => {
+    // Morph CC to OC, then call down a mule
+    const bo = [
+        { name: "SupplyDepot", type: "structure" },
+        { name: "Refinery", type: "structure" },
+        { name: "Refinery", type: "structure" },
+        { name: "EngineeringBay", type: "structure" },
+        { name: "3worker_to_gas", type: "action" },
+        { name: "3worker_to_gas", type: "action" },
+        { name: "PlanetaryFortress", type: "structure" },
+    ]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    let pfCount = 0
+    logic.units.forEach((unit) => {
+        if (unit.name === "PlanetaryFortress") {
+            pfCount += 1
+        }
+    })
+    expect(pfCount).toBe(1)
+    expect(logic.units.size).toBe(17)
+    expect(logic.eventLog.length).toBe(7)
+})
 
 test("Test if able lift Barracks from reactor and let factory attach to it", () => {
     // Morph CC to OC, then call down a mule
@@ -244,11 +244,11 @@ test("Test if able lift Barracks from reactor and let factory attach to it", () 
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
         { name: "Barracks", type: "structure" },
-        { name: "3x Mine gas", type: "action" },
+        { name: "3worker_to_gas", type: "action" },
         { name: "BarracksReactor", type: "structure" },
         { name: "Factory", type: "structure" },
-        { name: "Lift Barracks from Reactor", type: "action" },
-        { name: "Factory to free Reactor", type: "action" },
+        { name: "dettach_barracks_from_reactor", type: "action" },
+        { name: "attach_factory_to_free_reactor", type: "action" },
     ]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
