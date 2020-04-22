@@ -18,11 +18,11 @@ You can [find a live version here](https://burnysc2.github.io/sc2-planner)
 
 ### Protoss
 
-[Gateway expand into 1gas 7gate chargelot allin](https://burnysc2.github.io/sc2-planner/?&race=protoss&bo=uDritmrisSJEritSf2HtL2NtZU2HsQM2PtkuBtgV2KritnfibViriuFsExagsOIxaJtjkilTkli2Mx3ixaasKzaDxaHtR3RtZfeyuKsKyu1sOyUKzo9zoKznYxzasNRzKbsP0h207bsIyU1sK11K0ipxaLtlgXiRUysKsONzM9zM3yR9xa7sO1UZsIzIYxZyzg0sOKxaJtjkil3UtliziKxd9xd9xdY1IKxdSsKO1lYxa9xa9xai0cdxd9xdasPLxdJtleZkxY9xY9xY9xYSsKxYKtR57tZfexa9zc9xY9xY9xY9xYltNuF)
+[Gateway expand into 1 gas 7 gate chargelot allin](https://burnysc2.github.io/sc2-planner/?&race=protoss&bo=uDritmrisSJEritSf2HtL2NtZU2HsQM2PtkuBtgV2KritnfibViriuFsExagsOIxaJtjkilTkli2Mx3ixaasKzaDxaHtR3RtZfeyuKsKyu1sOyUKzo9zoKznYxzasNRzKbsP0h207bsIyU1sK11K0ipxaLtlgXiRUysKsONzM9zM3yR9xa7sO1UZsIzIYxZyzg0sOKxaJtjkil3UtliziKxd9xd9xdY1IKxdSsKO1lYxa9xa9xai0cdxd9xdasPLxdJtleZkxY9xY9xY9xYSsKxYKtR57tZfexa9zc9xY9xY9xY9xYltNuF)
 
 ### Zerg
 
-[17 Hatch, 17 Pool, 16 gas](https://burnysc2.github.io/sc2-planner/?&race=zerg&bo=uDritmrisSJEritSf2HtL2NtZUxODsIM2QtkuBtgV2LritnfibViriuFsExbIsOxbJtleZkxZLx0bxb9xbSsQzKKtjkilTkli2Mx4ksRx4bsQQyY2xb2sKxZJtR3ttZfeySm1EKtleZkxZKsKxZxsINxZotNuF)
+[17 Hatch, 17 pool, 16 gas](https://burnysc2.github.io/sc2-planner/?&race=zerg&bo=uDritmrisSJEritSf2HtL2NtZUxODsIM2QtkuBtgV2LritnfibViriuFsExbIsOxbJtleZkxZLx0bxb9xbSsQzKKtjkilTkli2Mx4ksRx4bsQQyY2xb2sKxZJtR3ttZfeySm1EKtleZkxZKsKxZxsINxZotNuF)
 
 # Building it yourself
 

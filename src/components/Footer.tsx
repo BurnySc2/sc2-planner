@@ -21,7 +21,7 @@ export default class Footer extends Component<MyProps, MyState> {
         donate: {
             name: "Donate",
             url: "https://www.paypal.me/BurnySc2", // paypal url
-            tooltip: "Paypal",
+            tooltip: "https://www.paypal.me/BurnySc2",
         },
         contribute: {
             name: "Contribute",

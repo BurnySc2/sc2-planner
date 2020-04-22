@@ -59,6 +59,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                 </div>
             ),
         })
+        // TODO This should probably be done somewhere else, so that it is called less often
         ReactTooltip.rebuild()
     }
 
