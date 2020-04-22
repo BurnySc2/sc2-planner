@@ -5,6 +5,7 @@ import { GameLogic } from "../game_logic/gamelogic"
 import Event from "../game_logic/event"
 import { IBarTypes } from "../constants/interfaces"
 import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
+import ReactTooltip from "react-tooltip"
 
 interface MyProps {
     gamelogic: GameLogic
@@ -16,7 +17,9 @@ interface MyProps {
     changeHoverIndex: (index: number) => void
 }
 
-interface MyState {}
+interface MyState {
+    tooltipText: string | JSX.Element
+}
 
 export default class BOArea extends Component<MyProps, MyState> {
     timeInterval: number
@@ -30,13 +33,40 @@ export default class BOArea extends Component<MyProps, MyState> {
         super(props)
         // TODO Perhaps set time interval as props so it can be set in settings?
         this.timeInterval = 20
+
+        this.state = {
+            tooltipText: "",
+        }
     }
 
-    onMouseEnter(index: number) {
-        this.props.changeHoverIndex(index)
+    onMouseEnter(item: Event) {
+        this.props.changeHoverIndex(item.id)
+        const startTime = CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4)
+        const endTime =
+            item.type === "action"
+                ? ""
+                : CONVERT_SECONDS_TO_TIME_STRING(item.end / 22.4)
+        // const itemName = item.type === "action" ? CUSTOMACTIONS_BY_NAME[item.name].name : item.name
+
+        const finishText = endTime === "" ? "" : `Finish: ${endTime}`
+
+        this.setState({
+            tooltipText: (
+                <div className="flex flex-col text-center">
+                    <div>Start: {startTime}</div>
+                    <div>{finishText}</div>
+                    <div>Supply: {item.supply}</div>
+                </div>
+            ),
+        })
+        ReactTooltip.rebuild()
     }
+
     onMouseLeave() {
         this.props.changeHoverIndex(-1)
+        this.setState({
+            tooltipText: "",
+        })
     }
 
     getFillerElement(width: number, key: string) {
@@ -64,7 +94,6 @@ export default class BOArea extends Component<MyProps, MyState> {
         // Build vertical bars
         const barBgClasses: { [name: string]: string } = {}
         const barClasses: { [name: string]: string } = {}
-
 
         const verticalBarNames: Array<IBarTypes> = [
             "worker",
@@ -101,7 +130,6 @@ export default class BOArea extends Component<MyProps, MyState> {
                 }
             })
 
-
             const verticalBar = verticalCalc.map((row, index1) => {
                 const rowContent: Array<JSX.Element | string> = []
                 row.forEach((item, index2) => {
@@ -133,9 +161,11 @@ export default class BOArea extends Component<MyProps, MyState> {
 
                     rowContent.push(
                         <div
-                            key={`boArea${barType}${index1}${index2}`}
+                            key={`boArea${barType}${index1}${index2}${item.name}${item.id}`}
                             className="flex flex-row"
-                            onMouseEnter={(e) => this.onMouseEnter(item.id)}
+                            data-tip
+                            data-for="boAreaTooltip"
+                            onMouseEnter={(e) => this.onMouseEnter(item)}
                             onMouseLeave={(e) => this.onMouseLeave()}
                             onClick={(e) => this.props.removeClick(e, item.id)}
                         >
@@ -229,6 +259,9 @@ export default class BOArea extends Component<MyProps, MyState> {
         }
         return (
             <div className={CLASSES.boArea}>
+                <ReactTooltip place="bottom" id="boAreaTooltip">
+                    {this.state.tooltipText}
+                </ReactTooltip>
                 {timeBarContent}
                 {verticalBarsContent}
             </div>

@@ -236,7 +236,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             ) => {
                 this.onMouseEnter(
                     e,
-                    <div className="flex flex-col text-left">
+                    <div className="flex flex-col text-center">
                         <div>Build structure</div>
                         <div>{item.name}</div>
                         <div>Minerals: {item.minerals}</div>
@@ -284,7 +284,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             ) => {
                 this.onMouseEnter(
                     e,
-                    <div className="flex flex-col">
+                    <div className="flex flex-col text-center">
                         <div>Research upgrade</div>
                         <div>{item.name}</div>
                         <div>Minerals: {item.cost.minerals}</div>
