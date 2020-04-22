@@ -275,6 +275,30 @@ const executeAction = (
         }
     }
 
+    if (action.internal_name === "chronoboost_busy_stargate") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage = "No busy Stargate could be found."
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (
+                        target.name === "Stargate" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
     if (action.internal_name === "convert_gateway_to_warpgate") {
         gamelogic.errorMessage = `Required upgrade 'WarpGateResearch' not researched.`
         if (gamelogic.upgrades.has("WarpGateResearch")) {

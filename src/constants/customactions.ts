@@ -213,6 +213,14 @@ const CUSTOMACTIONS: Array<ICustomAction> = [
         id: 25,
     },
     {
+        internal_name: "chronoboost_busy_stargate",
+        name: "Chrono Stargate",
+        imageSource: "btn-ability-spearofadun-chronosurge.png",
+        duration: 20,
+        race: "protoss",
+        id: 33,
+    },
+    {
         internal_name: "convert_gateway_to_warpgate",
         name: "Gate to Warpgate",
         imageSource: "btn-building-protoss-warpgate.png",
