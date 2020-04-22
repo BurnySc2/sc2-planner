@@ -296,21 +296,6 @@ class GameLogic {
             }
             return 0
         })
-
-        // if (this.boIndex >= this.bo.length) {
-        //     this.errorMessage = ""
-        // }
-        // console.log(this.eventLog);
-
-        // Test if sorting of events is properly done, that way on-click events work and exporting strings work correctly
-        // this.eventLog.forEach((item, index) => {
-        //     const boItem = this.bo[index]
-        //     // console.log(item);
-        //     // console.log(boItem);
-        //     // console.assert(item.name === boItem.name)
-        //     // console.log(item);
-        //     // console.log(boItem);
-        // })
     }
 
     /**
@@ -331,8 +316,6 @@ class GameLogic {
             const boElement = this.bo[this.boIndex]
             // Check requirements
             // Check idle unit who can train / produce / research / execute action
-
-            // console.log(this.frame, this.boIndex, boElement);
 
             // Train unit
             if (["worker", "unit"].includes(boElement.type)) {
@@ -367,7 +350,6 @@ class GameLogic {
             }
 
             if (!endOfActions) {
-                // console.log(this.frame);
                 this.boIndex += 1
                 this.errorMessage = ""
                 this.updateUnitsCount()
@@ -754,7 +736,6 @@ class GameLogic {
         // Get cost (mineral, vespene, supply)
         const cost = this.getCost(upgrade.name, true)
         if (!this._canAfford(cost)) {
-            // console.log(this.frame, this.minerals, this.vespene);
             this.setCostErrorMessage(cost, upgrade.name)
             return false
         }
@@ -777,8 +758,6 @@ class GameLogic {
                 return false
             }
         }
-        // console.log(researchInfo);
-
         const requiredUpgrade = researchInfo.requiredUpgrade
         let requiredUpgradeMet = requiredUpgrade === null ? true : false
         if (requiredUpgrade && !requiredUpgradeMet) {

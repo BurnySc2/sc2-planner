@@ -130,8 +130,7 @@ defaultSettings.forEach((item) => {
     settingsDefaultValues[item.n] = item.v
 })
 
-const encodeSettings = (settingsObject: Array<ISettingsElement>) => {
-    // console.log(settingsObject);
+const encodeSettings = (settingsObject: Array<ISettingsElement>): string => {
     // Strip away unwanted values
     let strippedObject = settingsObject.map((item) => {
         return pick(item, ["n", "v"])
@@ -140,24 +139,20 @@ const encodeSettings = (settingsObject: Array<ISettingsElement>) => {
     strippedObject = strippedObject.filter((item) => {
         return settingsDefaultValues[item.n] !== item.v
     })
-    // console.log(strippedObject);
     const jsonString = JSON.stringify(strippedObject)
-    // console.log(jsonString);
     const encoded = lzbase62.compress(jsonString)
-    // console.log(encoded);
-    // console.log(encoded.length);
     return encoded
 }
 
 const decodeSettings = (settingsEncoded: string): Array<ISettingsElement> => {
     const decodedString = lzbase62.decompress(settingsEncoded)
     const jsonObj = JSON.parse(decodedString)
-    // console.log(jsonObj);
     return jsonObj
 }
 
-const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>) => {
-    // console.log(buildOrderObject);
+const encodeBuildOrder = (
+    buildOrderObject: Array<IBuildOrderElement>
+): string => {
     let compactArray: Array<{
         id: number
         type: string
@@ -219,7 +214,7 @@ const createUrlParams = (
     race: string | undefined,
     settings: Array<ISettingsElement> | undefined,
     buildOrder: Array<IBuildOrderElement> = []
-) => {
+): string => {
     let newUrl = `?`
     if (!race) {
         race = "terran"
@@ -244,7 +239,7 @@ const createUrlParams = (
     return newUrl
 }
 
-const encodeSALT = (buildOrder: Array<IBuildOrderElement>) => {
+const encodeSALT = (buildOrder: Array<IBuildOrderElement>): string => {
     // TODO Encode salt build order
     return "Some salt build order encoded"
 }

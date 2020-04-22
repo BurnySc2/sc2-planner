@@ -204,8 +204,6 @@ class Unit {
                 gamelogic.units.add(newUnit)
                 gamelogic.idleUnits.add(newUnit)
                 gamelogic.workersMinerals += 1
-                // console.log(gamelogic.frame);
-                // console.log(newUnit);
                 gamelogic.eventLog.push(
                     new Event(
                         newUnit.name,
@@ -228,8 +226,6 @@ class Unit {
                     gamelogic.units.add(newUnit)
                     gamelogic.idleUnits.add(newUnit)
                 }
-                // console.log(gamelogic.frame);
-                // console.log(newUnit);
                 gamelogic.eventLog.push(
                     new Event(
                         newUnit.name,
@@ -278,8 +274,6 @@ class Unit {
                     }
                 }
 
-                // console.log(gamelogic.frame);
-                // console.log(newUnit);
                 gamelogic.eventLog.push(
                     new Event(
                         task.newStructure,

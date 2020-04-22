@@ -90,8 +90,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         if (clipBoardText !== "") {
             navigator.clipboard.writeText(clipBoardText).then(
                 () => {
-                    console.log(name)
-                    // console.log(clipBoardText);
+                    // console.log(name)
                 },
                 () => {
                     console.log("fail")
@@ -148,7 +147,6 @@ export default class ImportExport extends Component<MyProps, MyState> {
         const gamelogic = this.props.gamelogic
         const instructions: Array<string> = []
         gamelogic.eventLog.forEach((item) => {
-            // console.log(item);
             let instructionString = templateString
             let itemName = item.name
             if (item.type === "action") {
@@ -175,7 +173,6 @@ export default class ImportExport extends Component<MyProps, MyState> {
                 instructions.push(instructionString)
             }
         })
-        // console.log(instructions);
         return instructions
     }
 
@@ -206,7 +203,6 @@ export default class ImportExport extends Component<MyProps, MyState> {
                 frame: Math.floor(item.start),
             })
         })
-        // console.log(instructions);
         return JSON.stringify(instructions, null, 4)
     }
 

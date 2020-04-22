@@ -72,8 +72,6 @@ data.Unit.forEach((researcherUnit) => {
 }
  */
 
-// console.log(RESEARCHED_BY);
-
 console.assert(
     Object.keys(RESEARCHED_BY).length === 89,
     `${Object.keys(RESEARCHED_BY).length} is not 89`

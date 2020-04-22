@@ -10,7 +10,6 @@ data.Ability.forEach((ability) => {
         // Train abilities, e.g. probe
         let train: { produces: number } | undefined = target.Train
         if (train && ENABLED_ABILITIES.has(ability.id)) {
-            // console.log(train)
             ENABLED_UNITS.add(train.produces)
             return
         }
@@ -18,7 +17,6 @@ data.Ability.forEach((ability) => {
         // Morph abilities, e.g. lurker
         let morph = target.Morph
         if (morph !== undefined && ENABLED_ABILITIES.has(ability.id)) {
-            // console.log(morph)
             ENABLED_UNITS.add(morph.produces)
             return
         }
@@ -26,7 +24,6 @@ data.Ability.forEach((ability) => {
         // Instant build abilities, e.g. reactor
         let build = target.BuildInstant
         if (build !== undefined && ENABLED_ABILITIES.has(ability.id)) {
-            // console.log(build)
             ENABLED_UNITS.add(build.produces)
             return
         }
@@ -34,7 +31,6 @@ data.Ability.forEach((ability) => {
         // Train place abilities, e.g. warp in stalker
         let trainPlace = target.TrainPlace
         if (trainPlace !== undefined && ENABLED_ABILITIES.has(ability.id)) {
-            // console.log(trainPlace)
             ENABLED_UNITS.add(trainPlace.produces)
             return
         }
@@ -42,7 +38,6 @@ data.Ability.forEach((ability) => {
         // Build abilities, e.g. build nexus
         let buildStructure = target.Build
         if (buildStructure !== undefined && ENABLED_ABILITIES.has(ability.id)) {
-            // console.log(buildStructure)
             ENABLED_UNITS.add(buildStructure.produces)
             return
         }
@@ -50,7 +45,6 @@ data.Ability.forEach((ability) => {
         // Build abilities, e.g. build refinery
         let buildGas = target.BuildOnUnit
         if (buildGas !== undefined && ENABLED_ABILITIES.has(ability.id)) {
-            // console.log(buildStructure)
             ENABLED_UNITS.add(buildGas.produces)
             return
         }

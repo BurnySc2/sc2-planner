@@ -48,8 +48,6 @@ test("Build depot", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    // console.log(logic.units);
-
     expect(logic.units.size).toBe(14)
     expect(logic.eventLog.length).toBe(1)
 })

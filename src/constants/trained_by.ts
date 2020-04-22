@@ -7,7 +7,6 @@ import data from "./data.json"
 // const data = require("./data.json")
 
 const TRAINED_BY: ITrainedBy = {}
-// console.log(CREATION_ABILITIES)
 
 data.Unit.forEach((trainingUnit) => {
     trainingUnit.abilities.forEach(
@@ -37,11 +36,6 @@ data.Unit.forEach((trainingUnit) => {
                 if (isFreeMorph) {
                     return
                 }
-                // if (isMorph) {
-                //     console.log("--------");
-                //     console.log(trainingUnit);
-                //     console.log(resultingUnit);
-                // }
                 let consumesUnit =
                     resultingUnit.race === "Zerg" &&
                     resultingUnit.is_structure &&
@@ -96,17 +90,10 @@ data.Unit.forEach((trainingUnit) => {
                 ].requiredUpgrade
                     ? requiredUpgrade
                     : TRAINED_BY[resultingUnit.name].requiredUpgrade
-                // if (resultingUnit.name === "Zergling") {
-                //     console.log(TRAINED_BY[resultingUnit.name]);
-                //     console.log(ability);
-                //     console.log(requiredStructure);
-                // }
             }
         }
     )
 })
-
-// console.log(TRAINED_BY["Oracle"])
 
 /**
 {Adept: 

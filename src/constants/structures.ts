@@ -71,7 +71,6 @@ STRUCTURES.forEach((item) => {
 
 STRUCTURES.sort(iconSortStructureFunction)
 
-// console.log(STRUCTURES.all)
 console.assert(
     STRUCTURES.length === 52,
     `${STRUCTURES.length} is not equal to 52`

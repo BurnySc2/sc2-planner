@@ -15,7 +15,6 @@ data.Ability.forEach(
         id: number
         target: { Research: { upgrade: number } }
     }) => {
-        // console.log(unit)
         const target = ability.target
         if (typeof target !== "string") {
             const research = target.Research
@@ -40,26 +39,20 @@ const UPGRADES: Array<IDataUpgrade> = []
 const alreadyUsedIds = new Set()
 
 data.Unit.forEach((unit) => {
-    // console.log(unit)
     unit.abilities.forEach((ability, index) => {
-        // console.log(ability)
         const upgrade_id = ABILITY_TO_UPGRADES[ability.ability]
         if (
             ENABLED_UPGRADES.has(upgrade_id) &&
             !alreadyUsedIds.has(upgrade_id)
         ) {
             alreadyUsedIds.add(upgrade_id)
-            // console.log(upgrade_id);
             const upgrade = upgrade_data[upgrade_id]
-            // console.log(upgrade);
-            // console.log(index);
             upgrade.race = unit.race.toLowerCase() as IAllRaces
             UPGRADES.push(upgrade)
         }
         return
     })
 })
-// console.log(UPGRADES)
 UPGRADES.sort(iconSortUpgradeFunction)
 
 const UPGRADE_NAMES_BY_RACE: {

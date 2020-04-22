@@ -34,7 +34,6 @@ export default class Time extends Component<MyProps, MyState> {
             fontSize: "x-large",
         }
         // Get the time in a 00:00 format
-        // console.log(this.props.time)
         const lastSnapshot = this.props.gamelogic.getLastSnapshot()
             ? this.props.gamelogic.getLastSnapshot()
             : this.props.gamelogic

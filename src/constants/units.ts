@@ -83,7 +83,6 @@ UNITS.forEach((item) => {
 })
 
 // Should be 77 units in total
-// console.log(UNITS.zerg)
 console.assert(UNITS.length === 52, `${UNITS.length} is not equal to 52`)
 console.assert(
     UNIT_NAMES_BY_RACE.terran.size === 17,

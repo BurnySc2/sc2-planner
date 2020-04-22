@@ -8,7 +8,6 @@ data.Ability.forEach((ability) => {
     if (typeof target !== "string") {
         let research = target.Research
         if (research !== undefined) {
-            // console.log(research)
             RESEARCH_ABILITIES[ability.id] = research.upgrade
             return
         }

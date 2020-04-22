@@ -59,14 +59,12 @@ export default class BOArea extends Component<MyProps, MyState> {
     }
 
     render() {
-        // console.log(this.props.gamelogic.eventLog)
         const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
 
         // Build vertical bars
         const barBgClasses: { [name: string]: string } = {}
         const barClasses: { [name: string]: string } = {}
 
-        // console.log(this.props.gamelogic.eventLog);
 
         const verticalBarNames: Array<IBarTypes> = [
             "worker",
@@ -103,7 +101,6 @@ export default class BOArea extends Component<MyProps, MyState> {
                 }
             })
 
-            // console.log(verticalCalc);
 
             const verticalBar = verticalCalc.map((row, index1) => {
                 const rowContent: Array<JSX.Element | string> = []
@@ -173,7 +170,6 @@ export default class BOArea extends Component<MyProps, MyState> {
         })
 
         const verticalBarsContent = verticalBarNames.map((barName, index) => {
-            // console.log(verticalContent);
             const bar = verticalContent[index]
             // Hide bar if it has no content to show
             if (bar.length > 0) {

@@ -100,8 +100,6 @@ export default withRouter(
             pushHistory = false
         ) => {
             // See router props
-            // console.log(this.props);
-
             const newUrl = createUrlParams(race, settings, buildOrder)
 
             // Change current url
@@ -225,7 +223,6 @@ export default withRouter(
                 name: action.internal_name,
                 type: "action",
             })
-            console.log(action.internal_name)
         }
 
         actionSelectionUnitClicked = (
@@ -243,7 +240,6 @@ export default withRouter(
                     type: "unit",
                 })
             }
-            console.log(unit)
         }
 
         actionSelectionStructureClicked = (
@@ -254,7 +250,6 @@ export default withRouter(
                 name: structure,
                 type: "structure",
             })
-            console.log(structure)
         }
 
         actionSelectionUpgradeClicked = (
@@ -265,14 +260,12 @@ export default withRouter(
                 name: upgrade,
                 type: "upgrade",
             })
-            console.log(upgrade)
         }
 
         buildOrderRemoveClicked = (
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             index: number
         ) => {
-            // console.log(index)
             this.removeItemFromBO(index)
         }
 
