@@ -30,6 +30,7 @@ interface ICustomAction {
     name: string
     imageSource: string
     duration: number
+    id: number
     race?: IAllRaces | undefined
 }
 

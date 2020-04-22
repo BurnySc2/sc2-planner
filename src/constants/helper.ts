@@ -4,6 +4,10 @@ import { isEqual, pick } from "lodash"
 
 import { ISettingsElement, IBuildOrderElement, IAllRaces } from "./interfaces"
 import UNITS_BY_NAME from "./units_by_name"
+import UPGRADES_BY_NAME from "./upgrade_by_name"
+import UPGRADES_BY_ID from "./upgrade_by_id"
+import { CUSTOMACTIONS_BY_ID } from "./customactions"
+import UNITS_BY_ID from "./units_by_id"
 
 const { CUSTOMACTIONS_BY_NAME } = require("./customactions")
 const UNIT_ICONS = require("../icons/unit_icons.json")
@@ -154,10 +158,25 @@ const decodeSettings = (settingsEncoded: string): Array<ISettingsElement> => {
 
 const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>) => {
     // console.log(buildOrderObject);
-    let strippedObject = buildOrderObject.map((item) => {
-        return pick(item, ["name", "type"])
+    let compactArray: Array<{
+        id: number
+        type: string
+    }> = []
+    buildOrderObject.forEach((item) => {
+        if (item.type === "action") {
+            const action = CUSTOMACTIONS_BY_NAME[item.name]
+            compactArray.push({ id: action.id, type: item.type })
+        }
+        if (["worker", "unit", "structure"].includes(item.type)) {
+            const unit = UNITS_BY_NAME[item.name]
+            compactArray.push({ id: unit.id, type: item.type })
+        }
+        if (item.type === "upgrade") {
+            const upgrade = UPGRADES_BY_NAME[item.name]
+            compactArray.push({ id: upgrade.id, type: item.type })
+        }
     })
-    const jsonString = JSON.stringify(strippedObject)
+    const jsonString = JSON.stringify({ v: 1, bo: compactArray })
     const encoded = lzbase62.compress(jsonString)
     return encoded
 }
@@ -166,8 +185,31 @@ const decodeBuildOrder = (
     buildOrderEncoded: string
 ): Array<IBuildOrderElement> => {
     const decodedString = lzbase62.decompress(buildOrderEncoded)
-    const jsonObj: Array<IBuildOrderElement> = JSON.parse(decodedString)
-    return jsonObj
+    const jsonObj: {
+        v: number
+        bo: Array<{
+            id: number
+            type: string
+        }>
+    } = JSON.parse(decodedString)
+    const buildOrderDecoded: Array<IBuildOrderElement> = []
+    if (jsonObj.v === 1) {
+        jsonObj.bo.forEach((item) => {
+            if (item.type === "action") {
+                const action = CUSTOMACTIONS_BY_ID[item.id]
+                buildOrderDecoded.push({ name: action.name, type: item.type })
+            }
+            if (["worker", "unit", "structure"].includes(item.type)) {
+                const unit = UNITS_BY_ID[item.id]
+                buildOrderDecoded.push({ name: unit.name, type: item.type })
+            }
+            if (item.type === "upgrade") {
+                const upgrade = UPGRADES_BY_ID[item.id]
+                buildOrderDecoded.push({ name: upgrade.name, type: item.type })
+            }
+        })
+    }
+    return buildOrderDecoded
 }
 
 const createUrlParams = (
