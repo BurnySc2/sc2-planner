@@ -29,6 +29,13 @@ data.Unit.forEach((trainingUnit) => {
                 let requiredUpgradeId = null
                 let requiresTechlab = false
                 let isMorph = MORPH_ABILITIES.has(ability.ability)
+                // TODO Remove once oracle cost is fixed in data.json
+                if (resultingUnit.name === "Oracle") {
+                    resultingUnit.minerals = 150
+                    resultingUnit.gas = 150
+                    console.log(resultingUnit);
+                    
+                }
                 const isFreeMorph =
                     resultingUnit.minerals === trainingUnit.minerals &&
                     resultingUnit.gas === trainingUnit.gas
@@ -105,7 +112,7 @@ data.Unit.forEach((trainingUnit) => {
     )
 })
 
-// console.log(TRAINED_BY);
+console.log(TRAINED_BY["Oracle"])
 
 /**
 {Adept: 
