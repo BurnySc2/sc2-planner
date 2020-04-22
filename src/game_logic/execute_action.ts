@@ -484,7 +484,7 @@ const executeAction = (
                     gamelogic.settings.addonSwapDelay * 22.4,
                     gamelogic.frame,
                     gamelogic.supplyUsed,
-                    gamelogic.getEventId()
+                    -1
                 )
                 if (!attachReactor) {
                     task.addsTechlab = true
@@ -543,7 +543,7 @@ const executeAction = (
                     gamelogic.settings.addonSwapDelay * 22.4,
                     gamelogic.frame,
                     gamelogic.supplyUsed,
-                    gamelogic.getEventId()
+                    -1
                 )
                 task.isLanding = true
                 unit.addTask(gamelogic, task)
