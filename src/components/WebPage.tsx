@@ -33,6 +33,7 @@ interface MyState {
     bo: Array<IBuildOrderElement>
     gamelogic: GameLogic
     settings: Array<ISettingsElement>
+    hoverIndex: number
 }
 
 export default withRouter(
@@ -88,6 +89,7 @@ export default withRouter(
                 bo: bo,
                 gamelogic: gamelogic,
                 settings: settings,
+                hoverIndex: -1,
             }
         }
 
@@ -130,6 +132,7 @@ export default withRouter(
                 bo: buildOrder,
                 gamelogic: gamelogic,
                 settings: settings,
+                hoverIndex: -1,
             })
         }
 
@@ -204,6 +207,7 @@ export default withRouter(
                 this.setState({
                     bo: bo,
                     gamelogic: gamelogic,
+                    hoverIndex: -1,
                 })
             }
 
@@ -272,6 +276,12 @@ export default withRouter(
             this.removeItemFromBO(index)
         }
 
+        changeHoverIndex = (index: number) => {
+            this.setState({
+                hoverIndex: index,
+            })
+        }
+
         render() {
             return (
                 <div className="flex-col h-full w-full bg-gray-500">
@@ -300,6 +310,7 @@ export default withRouter(
                                 <Time gamelogic={this.state.gamelogic} />
                                 <BuildOrder
                                     gamelogic={this.state.gamelogic}
+                                    hoverIndex={this.state.hoverIndex}
                                     removeClick={this.buildOrderRemoveClicked}
                                     rerunBuildOrder={(race, bo, settings) =>
                                         this.rerunBuildOrder(race, bo, settings)
@@ -307,11 +318,18 @@ export default withRouter(
                                     updateUrl={(race, bo, settings) =>
                                         this.updateUrl(race, bo, settings)
                                     }
+                                    changeHoverIndex={(index) => {
+                                        this.changeHoverIndex(index)
+                                    }}
                                 />
                             </div>
                             <BOArea
                                 gamelogic={this.state.gamelogic}
+                                hoverIndex={this.state.hoverIndex}
                                 removeClick={this.buildOrderRemoveClicked}
+                                changeHoverIndex={(index) => {
+                                    this.changeHoverIndex(index)
+                                }}
                             />
                             <ErrorMessage gamelogic={this.state.gamelogic} />
                         </div>

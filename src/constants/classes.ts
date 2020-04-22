@@ -34,6 +34,8 @@ const CLASSES = {
         "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-500 cursor-move border border-black",
     boItemInvalidDragging:
         "m-0 p-0 h-16 w-16 bg-red-300 cursor-move border border-black",
+    boItemHighlighting:
+        "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border border-black",
     // Build order area in the bottom left
     boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
     // Time bar at the top of the area
@@ -57,12 +59,12 @@ const CLASSES = {
     },
     // Should be 100 to 300 less than above
     hoverColor: {
-        time: "hover:bg-orange-400",
-        worker: "hover:bg-green-400",
-        action: "hover:bg-red-400",
-        unit: "hover:bg-pink-300",
-        structure: "hover:bg-teal-300",
-        upgrade: "hover:bg-purple-400",
+        time: "bg-orange-400",
+        worker: "bg-green-400",
+        action: "bg-red-400",
+        unit: "bg-pink-300",
+        structure: "bg-teal-300",
+        upgrade: "bg-purple-400",
     },
     // Would like to add margin to boCol but doesnt allow me
     boCol: "flex table-row m-0 p-0 border border-black",

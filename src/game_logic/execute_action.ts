@@ -98,7 +98,7 @@ const executeAction = (
     if (action.internal_name === "worker_from_scout") {
         gamelogic.errorMessage = `Could not find a worker that is scouting.`
         if (gamelogic.workersScouting > 0) {
-            for (const unit of gamelogic.idleUnits) {
+            for (const unit of gamelogic.units) {
                 if (workerTypes.has(unit.name) && unit.isScouting) {
                     unit.isScouting = false
                     gamelogic.workersMinerals += 1

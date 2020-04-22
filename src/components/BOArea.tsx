@@ -8,10 +8,12 @@ import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 interface MyProps {
     gamelogic: GameLogic
+    hoverIndex: number
     removeClick: (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         index: number
     ) => void
+    changeHoverIndex: (index: number) => void
 }
 
 interface MyState {}
@@ -30,6 +32,13 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.timeInterval = 20
     }
 
+    onMouseEnter(index: number) {
+        this.props.changeHoverIndex(index)
+    }
+    onMouseLeave() {
+        this.props.changeHoverIndex(-1)
+    }
+
     getFillerElement(width: number, key: string) {
         if (width === 0) {
             return ""
@@ -40,6 +49,13 @@ export default class BOArea extends Component<MyProps, MyState> {
             }px`,
         }
         return <div key={key} style={myStyle}></div>
+    }
+
+    getClass(barType: IBarTypes, index: number) {
+        if (index === this.props.hoverIndex) {
+            return `${CLASSES.boElementContainer} ${CLASSES.hoverColor[barType]}`
+        }
+        return `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`
     }
 
     render() {
@@ -122,11 +138,13 @@ export default class BOArea extends Component<MyProps, MyState> {
                         <div
                             key={`boArea${barType}${index1}${index2}`}
                             className="flex flex-row"
+                            onMouseEnter={(e) => this.onMouseEnter(item.id)}
+                            onMouseLeave={(e) => this.onMouseLeave()}
                             onClick={(e) => this.props.removeClick(e, item.id)}
                         >
                             <div
                                 style={myStyle}
-                                className={`${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} ${CLASSES.hoverColor[barType]}`}
+                                className={this.getClass(barType, item.id)}
                             >
                                 <img
                                     className={CLASSES.boElementIcon}

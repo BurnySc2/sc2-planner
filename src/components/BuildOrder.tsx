@@ -27,6 +27,7 @@ const reorder = (
 
 interface MyProps {
     gamelogic: GameLogic
+    hoverIndex: number
     removeClick: (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         index: number
@@ -41,6 +42,7 @@ interface MyProps {
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined
     ) => void
+    changeHoverIndex: (index: number) => void
 }
 
 interface MyState {
@@ -58,6 +60,13 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         this.onDragEnd = this.onDragEnd.bind(this)
     }
 
+    onMouseEnter(index: number) {
+        this.props.changeHoverIndex(index)
+    }
+    onMouseLeave() {
+        this.props.changeHoverIndex(-1)
+    }
+
     onDragEnd(result: any) {
         // Dropped outside the list
         if (!result.destination) {
@@ -70,9 +79,17 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             result.destination.index
         )
 
-        this.props.rerunBuildOrder(this.props.gamelogic.race, items, this.props.gamelogic.exportSettings())
+        this.props.rerunBuildOrder(
+            this.props.gamelogic.race,
+            items,
+            this.props.gamelogic.exportSettings()
+        )
 
-        this.props.updateUrl(this.props.gamelogic.race, items, this.props.gamelogic.exportSettings())
+        this.props.updateUrl(
+            this.props.gamelogic.race,
+            items,
+            this.props.gamelogic.exportSettings()
+        )
     }
 
     render() {
@@ -84,7 +101,11 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         const buildOrder = this.props.gamelogic.bo.map((item, index) => {
             const image = getImageOfItem(item)
             return (
-                <div onClick={(e: any) => this.props.removeClick(e, index)}>
+                <div
+                    onMouseEnter={(e) => this.onMouseEnter(index)}
+                    onMouseLeave={(e) => this.onMouseLeave()}
+                    onClick={(e: any) => this.props.removeClick(e, index)}
+                >
                     <img src={image} alt={item.name} />
                 </div>
             )
@@ -98,6 +119,8 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                     return CLASSES.boItemInvalidDragging
                 }
                 return CLASSES.boItemDragging
+            } else if (index === this.props.hoverIndex) {
+                return CLASSES.boItemHighlighting
             } else {
                 if (index >= this.props.gamelogic.boIndex) {
                     return CLASSES.boItemInvalid
