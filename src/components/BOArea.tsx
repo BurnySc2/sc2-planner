@@ -4,6 +4,7 @@ import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import Event from "../game_logic/event"
 import { IBarTypes } from "../constants/interfaces"
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 interface MyProps {
     gamelogic: GameLogic
@@ -112,6 +113,11 @@ export default class BOArea extends Component<MyProps, MyState> {
                         rowContent.push(fillerElement)
                     }
 
+                    let itemName = item.name
+                    if (item.type === "action") {
+                        itemName = CUSTOMACTIONS_BY_NAME[item.name].name
+                    }
+
                     rowContent.push(
                         <div
                             key={`boArea${barType}${index1}${index2}`}
@@ -126,10 +132,10 @@ export default class BOArea extends Component<MyProps, MyState> {
                                     className={CLASSES.boElementIcon}
                                     src={require("../icons/png/" +
                                         item.imageSource)}
-                                    alt={item.name}
+                                    alt={itemName}
                                 />
                                 <div className={CLASSES.boElementText}>
-                                    {item.name}
+                                    {itemName}
                                 </div>
                             </div>
                         </div>

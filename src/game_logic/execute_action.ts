@@ -118,7 +118,7 @@ const executeAction = (
             const start = gamelogic.frame - 22.4 * 1 + 1
             gamelogic.eventLog.push(
                 new Event(
-                    action.name,
+                    action.internal_name,
                     action.imageSource,
                     "action",
                     start,
@@ -139,7 +139,7 @@ const executeAction = (
             const start = gamelogic.frame - 22.4 * 5 + 1
             gamelogic.eventLog.push(
                 new Event(
-                    action.name,
+                    action.internal_name,
                     action.imageSource,
                     "action",
                     start,
@@ -600,7 +600,7 @@ const executeAction = (
         // Add event
         gamelogic.eventLog.push(
             new Event(
-                action.name,
+                action.internal_name,
                 action.imageSource,
                 "action",
                 gamelogic.frame,

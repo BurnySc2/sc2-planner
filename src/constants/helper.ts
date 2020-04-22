@@ -197,7 +197,10 @@ const decodeBuildOrder = (
         jsonObj.bo.forEach((item) => {
             if (item.type === "action") {
                 const action = CUSTOMACTIONS_BY_ID[item.id]
-                buildOrderDecoded.push({ name: action.name, type: item.type })
+                buildOrderDecoded.push({
+                    name: action.internal_name,
+                    type: item.type,
+                })
             }
             if (["worker", "unit", "structure"].includes(item.type)) {
                 const unit = UNITS_BY_ID[item.id]

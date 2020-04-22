@@ -151,7 +151,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     ? latestSnapshot.unitsCount[item.internal_name]
                     : ""
                 icon = getImageOfItem({
-                    name: item.name,
+                    name: item.internal_name,
                     type: "action",
                 })
             }

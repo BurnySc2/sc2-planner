@@ -276,7 +276,7 @@ const CUSTOMACTIONS_BY_NAME: { [name: string]: ICustomAction } = {}
 const CUSTOMACTIONS_BY_ID: { [name: number]: ICustomAction } = {}
 CUSTOMACTIONS.forEach((customAction) => {
     // console.log(customAction);
-    CUSTOMACTIONS_BY_NAME[customAction.name] = customAction
+    CUSTOMACTIONS_BY_NAME[customAction.internal_name] = customAction
     CUSTOMACTIONS_BY_ID[customAction.id] = customAction
     // Load image from path
     // customAction["image"] = require(`../icons/png/${customAction.path}`)

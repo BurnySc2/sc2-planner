@@ -218,10 +218,10 @@ export default withRouter(
             action: ICustomAction
         ) => {
             this.addItemToBO({
-                name: action.name,
+                name: action.internal_name,
                 type: "action",
             })
-            console.log(action.name)
+            console.log(action.internal_name)
         }
 
         actionSelectionUnitClicked = (
