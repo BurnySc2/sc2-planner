@@ -44,7 +44,7 @@ To test:
 
 To start dev server:
 
-`npm start`
+`npm run start`
 
 To deploy in `/build` directory:
 

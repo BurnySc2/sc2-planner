@@ -188,8 +188,12 @@ class Unit {
      * Progresses a task by 1 frame
      * If a task was completed, this function will fire events
      */
-    updateTask(gamelogic: GameLogic, task: Task) {
-        task.updateProgress(this.hasChrono(gamelogic.frame))
+    updateTask(gamelogic: GameLogic, task: Task, isMainTask = false) {
+        if (isMainTask) {
+            task.updateProgress(this.hasChrono(gamelogic.frame))
+        } else {
+            task.updateProgress()
+        }
         // Remove first task if completed
         if (task.isCompleted) {
             let unitData
@@ -374,7 +378,11 @@ class Unit {
 
         // Update normal unit task
         if (this.tasks.length > 0) {
-            const taskCompleted = this.updateTask(gamelogic, this.tasks[0])
+            const taskCompleted = this.updateTask(
+                gamelogic,
+                this.tasks[0],
+                true
+            )
             if (taskCompleted) {
                 this.tasks.shift()
             }
