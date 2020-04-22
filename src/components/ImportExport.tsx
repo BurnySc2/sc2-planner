@@ -11,12 +11,26 @@ import CLASSES from "../constants/classes"
 import UNITS_BY_NAME from "../constants/units_by_name"
 import UPGRADE_BY_NAME from "../constants/upgrade_by_name"
 import { GameLogic } from "../game_logic/gamelogic"
-import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
+import {
+    IBuildOrderElement,
+    ISettingsElement,
+    IAllRaces,
+} from "../constants/interfaces"
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 interface MyProps {
     gamelogic: GameLogic
-    rerunBuildOrder: (race: IAllRaces | undefined, buildOrder: IBuildOrderElement[], settings: ISettingsElement[] |  undefined) => void
-    updateUrl: (race: IAllRaces | undefined, buildOrder: IBuildOrderElement[], settings: ISettingsElement[] | undefined, pushHistory?: boolean) => void
+    rerunBuildOrder: (
+        race: IAllRaces | undefined,
+        buildOrder: IBuildOrderElement[],
+        settings: ISettingsElement[] | undefined
+    ) => void
+    updateUrl: (
+        race: IAllRaces | undefined,
+        buildOrder: IBuildOrderElement[],
+        settings: ISettingsElement[] | undefined,
+        pushHistory?: boolean
+    ) => void
 }
 
 interface MyState {}
@@ -136,10 +150,15 @@ export default class ImportExport extends Component<MyProps, MyState> {
         gamelogic.eventLog.forEach((item) => {
             // console.log(item);
             let instructionString = templateString
-            const replaceValues: {[name: string]: string} = {
+            let itemName = item.name
+            if (item.type === "action") {
+                const action = CUSTOMACTIONS_BY_NAME[item.name]
+                itemName = action.name
+            }
+            const replaceValues: { [name: string]: string } = {
                 $time: CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4),
                 $supply: `${item.supply}`,
-                $action: item.name,
+                $action: itemName,
             }
             for (let replaceString in replaceValues) {
                 const value = replaceValues[replaceString]
