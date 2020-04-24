@@ -418,7 +418,7 @@ const executeAction = (
 
     if (action.internal_name === "call_down_mule") {
         gamelogic.errorMessage = `Could not find an orbital command.`
-        for (const unit of gamelogic.idleUnits) {
+        for (const unit of gamelogic.units) {
             // Find orbital with >=50 energy
             if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
                 unit.energy -= 50
@@ -436,7 +436,7 @@ const executeAction = (
 
     if (action.internal_name === "call_down_supply") {
         gamelogic.errorMessage = `Could not find an orbital command.`
-        for (const unit of gamelogic.idleUnits) {
+        for (const unit of gamelogic.units) {
             gamelogic.errorMessage = `Could not find a depopt with no supply drop.`
             // Find orbital with >=50 energy
             if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
