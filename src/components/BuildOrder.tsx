@@ -94,21 +94,15 @@ export default class BuildOrder extends Component<MyProps, MyState> {
 
     render() {
         // Convert build order items to div elements
+
+        // Hide element if no build order items are present
         if (this.props.gamelogic.bo.length === 0) {
             return ""
         }
 
         const buildOrder = this.props.gamelogic.bo.map((item, index) => {
             const image = getImageOfItem(item)
-            return (
-                <div
-                    onMouseEnter={(e) => this.onMouseEnter(index)}
-                    onMouseLeave={(e) => this.onMouseLeave()}
-                    onClick={(e: any) => this.props.removeClick(e, index)}
-                >
-                    <img src={image} alt={item.name} />
-                </div>
-            )
+            return <img src={image} alt={item.name} />
         })
 
         const getItemClass = (dragging: boolean, index: number) => {
@@ -129,7 +123,6 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             }
         }
 
-        // Hide element if no build order items are present
         return (
             <div className={CLASSES.bo}>
                 <DragDropContext onDragEnd={this.onDragEnd}>
@@ -155,6 +148,18 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                                                     snapshot.isDragging,
                                                     index
                                                 )}
+                                                onMouseEnter={(e) =>
+                                                    this.onMouseEnter(index)
+                                                }
+                                                onMouseLeave={(e) =>
+                                                    this.onMouseLeave()
+                                                }
+                                                onClick={(e: any) => {
+                                                    this.props.removeClick(
+                                                        e,
+                                                        index
+                                                    )
+                                                }}
                                             >
                                                 {buildOrder[index]}
                                             </div>
