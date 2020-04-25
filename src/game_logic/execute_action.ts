@@ -35,13 +35,13 @@ const executeAction = (
 
     if (action.internal_name === "worker_to_gas") {
         gamelogic.errorMessage = `Could not find a worker that is mining minerals or a gas structure.`
-        if (gamelogic.workersMinerals > 0) {
+        if (
+            gamelogic.workersMinerals > 0 &&
+            gamelogic.gasCount > 0 &&
+            gamelogic.workersVespene + 1 <= gamelogic.gasCount * 3
+        ) {
             for (const unit of gamelogic.idleUnits) {
-                if (
-                    gamelogic.gasCount > 0 &&
-                    workerTypes.has(unit.name) &&
-                    unit.isMiningMinerals()
-                ) {
+                if (workerTypes.has(unit.name) && unit.isMiningMinerals()) {
                     unit.isMiningGas = true
                     gamelogic.workersMinerals -= 1
                     gamelogic.workersVespene += 1
@@ -54,15 +54,15 @@ const executeAction = (
 
     if (action.internal_name === "3worker_to_gas") {
         gamelogic.errorMessage = `Could not find three worker that are mining minerals or a gas structure.`
-        if (gamelogic.workersMinerals >= 3) {
+        if (
+            gamelogic.workersMinerals >= 3 &&
+            gamelogic.gasCount > 0 &&
+            gamelogic.workersVespene + 3 <= gamelogic.gasCount * 3
+        ) {
             const mineralWorkers = []
             for (const unit of gamelogic.idleUnits) {
                 // Find 3 workers that are mining minerals
-                if (
-                    gamelogic.gasCount > 0 &&
-                    workerTypes.has(unit.name) &&
-                    unit.isMiningMinerals()
-                ) {
+                if (workerTypes.has(unit.name) && unit.isMiningMinerals()) {
                     mineralWorkers.push(unit)
                     if (mineralWorkers.length === 3) {
                         mineralWorkers.forEach((worker) => {

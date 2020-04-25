@@ -69,3 +69,6 @@ Tasks that still need to be done, also see the [issues page](https://github.com/
 -   Improve GUI looks
 -   Add SALT encoding and decoding
 -   Grey out actions / icons that are currently not available (locked by techtree)
+-   Sort zerg townhalls by how much larva it has (build units from hatchery first which has the most free larva)
+-   Sort terran production structures by: `has reactor`, `has no addon`, `has techlab` when trying to queue new units that do not require a techlab.
+-   Add snapshots [as described here](https://www.reddit.com/r/starcraft2/comments/g66i2p/build_order_planner_website/foeu08a/) so that you can click the time bar and it shows you the status of resources and amount of units at a certain time
