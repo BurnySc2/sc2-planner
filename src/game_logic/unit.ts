@@ -314,7 +314,12 @@ class Unit {
                 if (!["WarpGate", "Gateway"].includes(task.morphToUnit)) {
                     // Drone morphing to hatch or extractor
                     unitData = UNITS_BY_NAME[task.morphToUnit]
-                    if (unitData.is_townhall) {
+                    if (
+                        unitData.is_townhall &&
+                        !["OrbitalCommand", "PlanetaryFortress"].includes(
+                            this.name
+                        )
+                    ) {
                         gamelogic.baseCount += 1
                     }
 

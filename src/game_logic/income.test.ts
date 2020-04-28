@@ -11,10 +11,19 @@ test("Get mineral income of 16 Workers", () => {
     expect(incomeMinerals(16, 1) * 4 * 60).toBeLessThan(3660)
 })
 
+test("Get mineral income of 24 Workers", () => {
+    expect(incomeMinerals(24, 1) * 4 * 60).toBeGreaterThan(3620)
+    expect(incomeMinerals(24, 1) * 4 * 60).toBeLessThan(1.25 * 3660)
+})
+
 test("Get mineral income of 48 Workers on 3 bases", () => {
-    // Benchmark: 16 workers on minerals mining for 4 minutes: 3640 minerals
-    expect(incomeMinerals(3 * 16, 3 * 1) * 4 * 60).toBeGreaterThan(3 * 3620)
-    expect(incomeMinerals(3 * 16, 3 * 1) * 4 * 60).toBeLessThan(3 * 3660)
+    expect(incomeMinerals(48, 3) * 4 * 60).toBeGreaterThan(3 * 3620)
+    expect(incomeMinerals(48, 3) * 4 * 60).toBeLessThan(3 * 3660)
+})
+
+test("Get mineral income of 72 Workers on 3 bases", () => {
+    expect(incomeMinerals(72, 3 * 1) * 4 * 60).toBeGreaterThan(3 * 3620)
+    expect(incomeMinerals(72, 3 * 1) * 4 * 60).toBeLessThan(1.25 * 3 * 3660)
 })
 
 test("Get mineral income of one MULE", () => {
