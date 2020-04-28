@@ -526,12 +526,18 @@ class GameLogic {
                     // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
                     // And hatch requirement: spawning pool (but we have a lair or hive)
                     // And lair requirement: infestation pit (but we have hive)
+                    // And CC requirement: ebay (but we have only orbitals)
                     structure.name === requiredStructure ||
                     (requiredStructure === "Spire" &&
                         structure.name === "GreaterSpire") ||
                     (requiredStructure === "Hatchery" &&
                         ["Lair", "Hive"].includes(structure.name)) ||
-                    (requiredStructure === "Lair" && structure.name === "Hive")
+                    (requiredStructure === "Lair" &&
+                        structure.name === "Hive") ||
+                    (requiredStructure === "CommandCenter" &&
+                        ["PlanetaryFortress", "OrbitalCommand"].includes(
+                            structure.name
+                        ))
                 ) {
                     requiredStructureMet = true
                     break
