@@ -527,6 +527,7 @@ class GameLogic {
                     // And hatch requirement: spawning pool (but we have a lair or hive)
                     // And lair requirement: infestation pit (but we have hive)
                     // And CC requirement: ebay (but we have only orbitals)
+                    // And Cybercore requirement: gateway (but we have only warpgates)
                     structure.name === requiredStructure ||
                     (requiredStructure === "Spire" &&
                         structure.name === "GreaterSpire") ||
@@ -537,7 +538,9 @@ class GameLogic {
                     (requiredStructure === "CommandCenter" &&
                         ["PlanetaryFortress", "OrbitalCommand"].includes(
                             structure.name
-                        ))
+                        )) ||
+                    (requiredStructure === "Gateway" &&
+                        structure.name === "WarpGate")
                 ) {
                     requiredStructureMet = true
                     break
