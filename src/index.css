@@ -3648,6 +3648,24 @@ video {
   order: 0;
 }
 
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-none {
+  float: none;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 .clear-left {
   clear: left;
 }
@@ -10943,6 +10961,12 @@ video {
     white-space: normal;
   }
 
+  .sm\:appearance-none {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  }
+
   .sm\:bg-fixed {
     background-attachment: fixed;
   }
@@ -13929,6 +13953,24 @@ video {
 
   .sm\:order-none {
     order: 0;
+  }
+
+  .sm\:float-right {
+    float: right;
+  }
+
+  .sm\:float-left {
+    float: left;
+  }
+
+  .sm\:float-none {
+    float: none;
+  }
+
+  .sm\:clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
   }
 
   .sm\:clear-left {
@@ -21227,6 +21269,12 @@ video {
     white-space: normal;
   }
 
+  .md\:appearance-none {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  }
+
   .md\:bg-fixed {
     background-attachment: fixed;
   }
@@ -24213,6 +24261,24 @@ video {
 
   .md\:order-none {
     order: 0;
+  }
+
+  .md\:float-right {
+    float: right;
+  }
+
+  .md\:float-left {
+    float: left;
+  }
+
+  .md\:float-none {
+    float: none;
+  }
+
+  .md\:clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
   }
 
   .md\:clear-left {
@@ -31511,6 +31577,12 @@ video {
     white-space: normal;
   }
 
+  .lg\:appearance-none {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  }
+
   .lg\:bg-fixed {
     background-attachment: fixed;
   }
@@ -34497,6 +34569,24 @@ video {
 
   .lg\:order-none {
     order: 0;
+  }
+
+  .lg\:float-right {
+    float: right;
+  }
+
+  .lg\:float-left {
+    float: left;
+  }
+
+  .lg\:float-none {
+    float: none;
+  }
+
+  .lg\:clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
   }
 
   .lg\:clear-left {
@@ -41795,6 +41885,12 @@ video {
     white-space: normal;
   }
 
+  .xl\:appearance-none {
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+  }
+
   .xl\:bg-fixed {
     background-attachment: fixed;
   }
@@ -44781,6 +44877,24 @@ video {
 
   .xl\:order-none {
     order: 0;
+  }
+
+  .xl\:float-right {
+    float: right;
+  }
+
+  .xl\:float-left {
+    float: left;
+  }
+
+  .xl\:float-none {
+    float: none;
+  }
+
+  .xl\:clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
   }
 
   .xl\:clear-left {
