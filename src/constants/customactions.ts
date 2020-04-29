@@ -213,12 +213,28 @@ const CUSTOMACTIONS: Array<ICustomAction> = [
         id: 25,
     },
     {
+        internal_name: "chronoboost_busy_robo",
+        name: "Chrono Robotics Facility",
+        imageSource: "btn-ability-spearofadun-chronosurge.png",
+        duration: 20,
+        race: "protoss",
+        id: 34,
+    },
+    {
         internal_name: "chronoboost_busy_stargate",
         name: "Chrono Stargate",
         imageSource: "btn-ability-spearofadun-chronosurge.png",
         duration: 20,
         race: "protoss",
         id: 33,
+    },
+    {
+        internal_name: "chronoboost_busy_twilight",
+        name: "Chrono Twilight Council",
+        imageSource: "btn-ability-spearofadun-chronosurge.png",
+        duration: 20,
+        race: "protoss",
+        id: 35,
     },
     {
         internal_name: "convert_gateway_to_warpgate",
