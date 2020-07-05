@@ -359,6 +359,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
             </div>
         )
 
+        // eslint-disable-next-line
         const importButton = (
             <div
                 className={CLASSES.buttons}
