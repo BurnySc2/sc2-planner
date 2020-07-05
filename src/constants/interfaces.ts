@@ -1,5 +1,3 @@
-// import {IDataAbility} from "./interfaces"
-
 type IAllRaces = "zerg" | "terran" | "protoss"
 
 type IBarTypes = "worker" | "action" | "unit" | "structure" | "upgrade"
@@ -93,6 +91,7 @@ interface ITrainedBy {
 }
 
 export type {
+    IReplaceString,
     IAllRaces,
     IBarTypes,
     IButton,

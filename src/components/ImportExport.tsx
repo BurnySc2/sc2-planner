@@ -379,7 +379,8 @@ export default class ImportExport extends Component<MyProps, MyState> {
                     {this.state.templateStringTooltip}
                 </ReactTooltip>
                 {exportButton}
-                {importButton}
+                {/* TODO Re-enable import button if there are features available that use the import button */}
+                {/* {importButton} */}
             </div>
         )
     }
