@@ -6,15 +6,26 @@ export default class Title extends Component {
     render() {
         return (
             <div>
-                <a
-                    className={CLASSES.title}
-                    href="https://burnysc2.github.io/sc2-planner/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    SC2-Planner - The StarCraft II Build Planner
-                </a>
-                <div className={CLASSES.titleVersion}>For patch 5.0.3</div>
+                <div>
+                    <a
+                        className={CLASSES.title}
+                        href="https://burnysc2.github.io/sc2-planner/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        SC2-Planner - The StarCraft II Build Planner
+                    </a>
+                </div>
+                <div>
+                    <a
+                        className={CLASSES.titleVersion}
+                        href="https://liquipedia.net/starcraft2/Patch_5.0.2"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        For patch 5.0.3
+                    </a>
+                </div>
             </div>
         )
     }

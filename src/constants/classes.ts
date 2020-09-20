@@ -1,6 +1,6 @@
 const CLASSES = {
-    title: "text-4xl font-bold antialiased hover:text-blue-600",
-    titleVersion: "text-base italic antialiased",
+    title: "mx-2 text-3xl font-bold antialiased hover:text-blue-600",
+    titleVersion: "mx-2 text-xs italic antialiased",
 
     errorLabel: "text-red-600 text-2xl font-bold",
     // Race icon and the items on the right side icons
