@@ -1,13 +1,6 @@
-// type BarName = "time" | "worker" | "action" | "unit" | "structure" | "upgrade"
-// const CLASSES: {
-//     [name: string]: string | { [name in BarName]: string }
-//     bgColor: { [name in BarName]: string }
-//     typeColor: { [name in BarName]: string }
-//     hoverColor: { [name in BarName]: string }
-// } = {
-
 const CLASSES = {
-    title: "text-4xl font-bold antialiased cursor-text",
+    title: "text-4xl font-bold antialiased hover:text-blue-600",
+    titleVersion: "text-base italic antialiased",
 
     errorLabel: "text-red-600 text-2xl font-bold",
     // Race icon and the items on the right side icons

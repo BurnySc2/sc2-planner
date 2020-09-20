@@ -172,42 +172,6 @@
             "allow_autocast": false,
             "allow_minimap": false,
             "buff": [],
-            "cast_range": 1.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 26,
-            "name": "EFFECT_SPRAY_TERRAN",
-            "target": "Point"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 1.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 28,
-            "name": "EFFECT_SPRAY_ZERG",
-            "target": "Point"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 1.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 30,
-            "name": "EFFECT_SPRAY_PROTOSS",
-            "target": "Point"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
             "cast_range": 0.0,
             "cooldown": 0,
             "effect": [],
@@ -252,7 +216,8 @@
             "name": "MORPHTOINFESTEDTERRAN_INFESTEDTERRANS",
             "target": {
                 "Morph": {
-                    "produces": 7
+                    "produces": 7,
+                    "produces_name": "INFESTORTERRAN"
                 }
             }
         },
@@ -280,7 +245,8 @@
             "name": "FLEETBEACONRESEARCH_RESEARCHINTERCEPTORLAUNCHSPEEDUPGRADE",
             "target": {
                 "Research": {
-                    "upgrade": 1
+                    "upgrade": 1,
+                    "upgrade_name": "CARRIERLAUNCHSPEEDUPGRADE"
                 }
             }
         },
@@ -296,7 +262,8 @@
             "name": "RESEARCH_PHOENIXANIONPULSECRYSTALS",
             "target": {
                 "Research": {
-                    "upgrade": 99
+                    "upgrade": 99,
+                    "upgrade_name": "PHOENIXRANGEUPGRADE"
                 }
             }
         },
@@ -312,7 +279,8 @@
             "name": "FLEETBEACONRESEARCH_TEMPESTRANGEUPGRADE",
             "target": {
                 "Research": {
-                    "upgrade": 100
+                    "upgrade": 100,
+                    "upgrade_name": "TEMPESTRANGEUPGRADE"
                 }
             }
         },
@@ -328,7 +296,25 @@
             "name": "FLEETBEACONRESEARCH_RESEARCHVOIDRAYSPEEDUPGRADE",
             "target": {
                 "Research": {
-                    "upgrade": 288
+                    "upgrade": 288,
+                    "upgrade_name": "VOIDRAYSPEEDUPGRADE"
+                }
+            }
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 49,
+            "name": "FLEETBEACONRESEARCH_TEMPESTRESEARCHGROUNDATTACKUPGRADE",
+            "target": {
+                "Research": {
+                    "upgrade": 296,
+                    "upgrade_name": "TEMPESTGROUNDATTACKUPGRADE"
                 }
             }
         },
@@ -380,7 +366,8 @@
             "name": "MORPHZERGLINGTOBANELING_BANELING",
             "target": {
                 "Morph": {
-                    "produces": 9
+                    "produces": 9,
+                    "produces_name": "BANELING"
                 }
             }
         },
@@ -404,7 +391,7 @@
             "allow_autocast": false,
             "allow_minimap": false,
             "buff": [],
-            "cast_range": 9.0,
+            "cast_range": 10.0,
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
@@ -628,7 +615,8 @@
             "name": "SPAWNCHANGELING_SPAWNCHANGELING",
             "target": {
                 "Train": {
-                    "produces": 12
+                    "produces": 12,
+                    "produces_name": "CHANGELING"
                 }
             }
         },
@@ -716,7 +704,8 @@
             "name": "RESEARCH_GLIALREGENERATION",
             "target": {
                 "Research": {
-                    "upgrade": 2
+                    "upgrade": 2,
+                    "upgrade_name": "GLIALRECONSTITUTION"
                 }
             }
         },
@@ -732,7 +721,8 @@
             "name": "RESEARCH_TUNNELINGCLAWS",
             "target": {
                 "Research": {
-                    "upgrade": 3
+                    "upgrade": 3,
+                    "upgrade_name": "TUNNELINGCLAWS"
                 }
             }
         },
@@ -748,7 +738,8 @@
             "name": "ROACHWARRENRESEARCH_ROACHSUPPLY",
             "target": {
                 "Research": {
-                    "upgrade": 120
+                    "upgrade": 120,
+                    "upgrade_name": "ROACHSUPPLY"
                 }
             }
         },
@@ -836,7 +827,8 @@
             "name": "RESEARCH_ANABOLICSYNTHESIS",
             "target": {
                 "Research": {
-                    "upgrade": 88
+                    "upgrade": 88,
+                    "upgrade_name": "ANABOLICSYNTHESIS"
                 }
             }
         },
@@ -852,7 +844,8 @@
             "name": "RESEARCH_CHITINOUSPLATING",
             "target": {
                 "Research": {
-                    "upgrade": 4
+                    "upgrade": 4,
+                    "upgrade_name": "CHITINOUSPLATING"
                 }
             }
         },
@@ -1084,7 +1077,8 @@
             "name": "TERRANBUILD_COMMANDCENTER",
             "target": {
                 "Build": {
-                    "produces": 18
+                    "produces": 18,
+                    "produces_name": "COMMANDCENTER"
                 }
             }
         },
@@ -1100,7 +1094,8 @@
             "name": "TERRANBUILD_SUPPLYDEPOT",
             "target": {
                 "Build": {
-                    "produces": 19
+                    "produces": 19,
+                    "produces_name": "SUPPLYDEPOT"
                 }
             }
         },
@@ -1116,7 +1111,8 @@
             "name": "TERRANBUILD_REFINERY",
             "target": {
                 "BuildOnUnit": {
-                    "produces": 20
+                    "produces": 20,
+                    "produces_name": "REFINERY"
                 }
             }
         },
@@ -1132,7 +1128,8 @@
             "name": "TERRANBUILD_BARRACKS",
             "target": {
                 "Build": {
-                    "produces": 21
+                    "produces": 21,
+                    "produces_name": "BARRACKS"
                 }
             }
         },
@@ -1148,7 +1145,8 @@
             "name": "TERRANBUILD_ENGINEERINGBAY",
             "target": {
                 "Build": {
-                    "produces": 22
+                    "produces": 22,
+                    "produces_name": "ENGINEERINGBAY"
                 }
             }
         },
@@ -1164,7 +1162,8 @@
             "name": "TERRANBUILD_MISSILETURRET",
             "target": {
                 "Build": {
-                    "produces": 23
+                    "produces": 23,
+                    "produces_name": "MISSILETURRET"
                 }
             }
         },
@@ -1180,7 +1179,8 @@
             "name": "TERRANBUILD_BUNKER",
             "target": {
                 "Build": {
-                    "produces": 24
+                    "produces": 24,
+                    "produces_name": "BUNKER"
                 }
             }
         },
@@ -1196,7 +1196,8 @@
             "name": "TERRANBUILD_SENSORTOWER",
             "target": {
                 "Build": {
-                    "produces": 25
+                    "produces": 25,
+                    "produces_name": "SENSORTOWER"
                 }
             }
         },
@@ -1212,7 +1213,8 @@
             "name": "TERRANBUILD_GHOSTACADEMY",
             "target": {
                 "Build": {
-                    "produces": 26
+                    "produces": 26,
+                    "produces_name": "GHOSTACADEMY"
                 }
             }
         },
@@ -1228,7 +1230,8 @@
             "name": "TERRANBUILD_FACTORY",
             "target": {
                 "Build": {
-                    "produces": 27
+                    "produces": 27,
+                    "produces_name": "FACTORY"
                 }
             }
         },
@@ -1244,7 +1247,8 @@
             "name": "TERRANBUILD_STARPORT",
             "target": {
                 "Build": {
-                    "produces": 28
+                    "produces": 28,
+                    "produces_name": "STARPORT"
                 }
             }
         },
@@ -1260,7 +1264,8 @@
             "name": "TERRANBUILD_ARMORY",
             "target": {
                 "Build": {
-                    "produces": 29
+                    "produces": 29,
+                    "produces_name": "ARMORY"
                 }
             }
         },
@@ -1276,7 +1281,8 @@
             "name": "TERRANBUILD_FUSIONCORE",
             "target": {
                 "Build": {
-                    "produces": 30
+                    "produces": 30,
+                    "produces_name": "FUSIONCORE"
                 }
             }
         },
@@ -1352,7 +1358,8 @@
             "name": "SIEGEMODE_SIEGEMODE",
             "target": {
                 "Morph": {
-                    "produces": 32
+                    "produces": 32,
+                    "produces_name": "SIEGETANKSIEGED"
                 }
             }
         },
@@ -1368,7 +1375,8 @@
             "name": "UNSIEGE_UNSIEGE",
             "target": {
                 "Morph": {
-                    "produces": 33
+                    "produces": 33,
+                    "produces_name": "SIEGETANK"
                 }
             }
         },
@@ -1468,7 +1476,8 @@
             "name": "MORPH_VIKINGASSAULTMODE",
             "target": {
                 "Morph": {
-                    "produces": 34
+                    "produces": 34,
+                    "produces_name": "VIKINGASSAULT"
                 }
             }
         },
@@ -1484,7 +1493,8 @@
             "name": "MORPH_VIKINGFIGHTERMODE",
             "target": {
                 "Morph": {
-                    "produces": 35
+                    "produces": 35,
+                    "produces_name": "VIKINGFIGHTER"
                 }
             }
         },
@@ -1572,7 +1582,8 @@
             "name": "LIFT_COMMANDCENTER",
             "target": {
                 "Morph": {
-                    "produces": 36
+                    "produces": 36,
+                    "produces_name": "COMMANDCENTERFLYING"
                 }
             }
         },
@@ -1588,7 +1599,8 @@
             "name": "LAND_COMMANDCENTER",
             "target": {
                 "MorphPlace": {
-                    "produces": 18
+                    "produces": 18,
+                    "produces_name": "COMMANDCENTER"
                 }
             }
         },
@@ -1648,7 +1660,8 @@
             "name": "LIFT_BARRACKS",
             "target": {
                 "Morph": {
-                    "produces": 46
+                    "produces": 46,
+                    "produces_name": "BARRACKSFLYING"
                 }
             }
         },
@@ -1708,7 +1721,8 @@
             "name": "LIFT_FACTORY",
             "target": {
                 "Morph": {
-                    "produces": 43
+                    "produces": 43,
+                    "produces_name": "FACTORYFLYING"
                 }
             }
         },
@@ -1768,7 +1782,8 @@
             "name": "LIFT_STARPORT",
             "target": {
                 "Morph": {
-                    "produces": 44
+                    "produces": 44,
+                    "produces_name": "STARPORTFLYING"
                 }
             }
         },
@@ -1784,7 +1799,8 @@
             "name": "LAND_FACTORY",
             "target": {
                 "MorphPlace": {
-                    "produces": 27
+                    "produces": 27,
+                    "produces_name": "FACTORY"
                 }
             }
         },
@@ -1800,7 +1816,8 @@
             "name": "LAND_STARPORT",
             "target": {
                 "MorphPlace": {
-                    "produces": 28
+                    "produces": 28,
+                    "produces_name": "STARPORT"
                 }
             }
         },
@@ -1816,7 +1833,8 @@
             "name": "COMMANDCENTERTRAIN_SCV",
             "target": {
                 "Train": {
-                    "produces": 45
+                    "produces": 45,
+                    "produces_name": "SCV"
                 }
             }
         },
@@ -1832,7 +1850,8 @@
             "name": "LAND_BARRACKS",
             "target": {
                 "MorphPlace": {
-                    "produces": 21
+                    "produces": 21,
+                    "produces_name": "BARRACKS"
                 }
             }
         },
@@ -1848,7 +1867,8 @@
             "name": "MORPH_SUPPLYDEPOT_LOWER",
             "target": {
                 "Morph": {
-                    "produces": 47
+                    "produces": 47,
+                    "produces_name": "SUPPLYDEPOTLOWERED"
                 }
             }
         },
@@ -1864,7 +1884,8 @@
             "name": "MORPH_SUPPLYDEPOT_RAISE",
             "target": {
                 "Morph": {
-                    "produces": 19
+                    "produces": 19,
+                    "produces_name": "SUPPLYDEPOT"
                 }
             }
         },
@@ -1880,7 +1901,8 @@
             "name": "BARRACKSTRAIN_MARINE",
             "target": {
                 "Train": {
-                    "produces": 48
+                    "produces": 48,
+                    "produces_name": "MARINE"
                 }
             }
         },
@@ -1896,7 +1918,8 @@
             "name": "BARRACKSTRAIN_REAPER",
             "target": {
                 "Train": {
-                    "produces": 49
+                    "produces": 49,
+                    "produces_name": "REAPER"
                 }
             }
         },
@@ -1912,7 +1935,8 @@
             "name": "BARRACKSTRAIN_GHOST",
             "target": {
                 "Train": {
-                    "produces": 50
+                    "produces": 50,
+                    "produces_name": "GHOST"
                 }
             }
         },
@@ -1928,7 +1952,8 @@
             "name": "BARRACKSTRAIN_MARAUDER",
             "target": {
                 "Train": {
-                    "produces": 51
+                    "produces": 51,
+                    "produces_name": "MARAUDER"
                 }
             }
         },
@@ -1944,7 +1969,8 @@
             "name": "FACTORYTRAIN_SIEGETANK",
             "target": {
                 "Train": {
-                    "produces": 33
+                    "produces": 33,
+                    "produces_name": "SIEGETANK"
                 }
             }
         },
@@ -1960,7 +1986,8 @@
             "name": "FACTORYTRAIN_THOR",
             "target": {
                 "Train": {
-                    "produces": 52
+                    "produces": 52,
+                    "produces_name": "THOR"
                 }
             }
         },
@@ -1976,7 +2003,8 @@
             "name": "FACTORYTRAIN_HELLION",
             "target": {
                 "Train": {
-                    "produces": 53
+                    "produces": 53,
+                    "produces_name": "HELLION"
                 }
             }
         },
@@ -1992,7 +2020,8 @@
             "name": "TRAIN_HELLBAT",
             "target": {
                 "Train": {
-                    "produces": 484
+                    "produces": 484,
+                    "produces_name": "HELLIONTANK"
                 }
             }
         },
@@ -2008,7 +2037,8 @@
             "name": "TRAIN_CYCLONE",
             "target": {
                 "Train": {
-                    "produces": 692
+                    "produces": 692,
+                    "produces_name": "CYCLONE"
                 }
             }
         },
@@ -2024,7 +2054,8 @@
             "name": "FACTORYTRAIN_WIDOWMINE",
             "target": {
                 "Train": {
-                    "produces": 498
+                    "produces": 498,
+                    "produces_name": "WIDOWMINE"
                 }
             }
         },
@@ -2040,7 +2071,8 @@
             "name": "STARPORTTRAIN_MEDIVAC",
             "target": {
                 "Train": {
-                    "produces": 54
+                    "produces": 54,
+                    "produces_name": "MEDIVAC"
                 }
             }
         },
@@ -2056,7 +2088,8 @@
             "name": "STARPORTTRAIN_BANSHEE",
             "target": {
                 "Train": {
-                    "produces": 55
+                    "produces": 55,
+                    "produces_name": "BANSHEE"
                 }
             }
         },
@@ -2072,7 +2105,8 @@
             "name": "STARPORTTRAIN_RAVEN",
             "target": {
                 "Train": {
-                    "produces": 56
+                    "produces": 56,
+                    "produces_name": "RAVEN"
                 }
             }
         },
@@ -2088,7 +2122,8 @@
             "name": "STARPORTTRAIN_BATTLECRUISER",
             "target": {
                 "Train": {
-                    "produces": 57
+                    "produces": 57,
+                    "produces_name": "BATTLECRUISER"
                 }
             }
         },
@@ -2104,7 +2139,8 @@
             "name": "STARPORTTRAIN_VIKINGFIGHTER",
             "target": {
                 "Train": {
-                    "produces": 35
+                    "produces": 35,
+                    "produces_name": "VIKINGFIGHTER"
                 }
             }
         },
@@ -2120,7 +2156,8 @@
             "name": "STARPORTTRAIN_LIBERATOR",
             "target": {
                 "Train": {
-                    "produces": 689
+                    "produces": 689,
+                    "produces_name": "LIBERATOR"
                 }
             }
         },
@@ -2136,7 +2173,8 @@
             "name": "RESEARCH_HISECAUTOTRACKING",
             "target": {
                 "Research": {
-                    "upgrade": 5
+                    "upgrade": 5,
+                    "upgrade_name": "HISECAUTOTRACKING"
                 }
             }
         },
@@ -2152,7 +2190,8 @@
             "name": "RESEARCH_TERRANSTRUCTUREARMORUPGRADE",
             "target": {
                 "Research": {
-                    "upgrade": 6
+                    "upgrade": 6,
+                    "upgrade_name": "TERRANBUILDINGARMOR"
                 }
             }
         },
@@ -2168,7 +2207,8 @@
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 7
+                    "upgrade": 7,
+                    "upgrade_name": "TERRANINFANTRYWEAPONSLEVEL1"
                 }
             }
         },
@@ -2184,7 +2224,8 @@
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 8
+                    "upgrade": 8,
+                    "upgrade_name": "TERRANINFANTRYWEAPONSLEVEL2"
                 }
             }
         },
@@ -2200,7 +2241,8 @@
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 9
+                    "upgrade": 9,
+                    "upgrade_name": "TERRANINFANTRYWEAPONSLEVEL3"
                 }
             }
         },
@@ -2216,7 +2258,8 @@
             "name": "RESEARCH_NEOSTEELFRAME",
             "target": {
                 "Research": {
-                    "upgrade": 10
+                    "upgrade": 10,
+                    "upgrade_name": "NEOSTEELFRAME"
                 }
             }
         },
@@ -2232,7 +2275,8 @@
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 11
+                    "upgrade": 11,
+                    "upgrade_name": "TERRANINFANTRYARMORSLEVEL1"
                 }
             }
         },
@@ -2248,7 +2292,8 @@
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 12
+                    "upgrade": 12,
+                    "upgrade_name": "TERRANINFANTRYARMORSLEVEL2"
                 }
             }
         },
@@ -2264,7 +2309,8 @@
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 13
+                    "upgrade": 13,
+                    "upgrade_name": "TERRANINFANTRYARMORSLEVEL3"
                 }
             }
         },
@@ -2292,7 +2338,8 @@
             "name": "BARRACKSTECHLABRESEARCH_STIMPACK",
             "target": {
                 "Research": {
-                    "upgrade": 15
+                    "upgrade": 15,
+                    "upgrade_name": "STIMPACK"
                 }
             }
         },
@@ -2308,7 +2355,8 @@
             "name": "RESEARCH_COMBATSHIELD",
             "target": {
                 "Research": {
-                    "upgrade": 16
+                    "upgrade": 16,
+                    "upgrade_name": "SHIELDWALL"
                 }
             }
         },
@@ -2324,7 +2372,8 @@
             "name": "RESEARCH_CONCUSSIVESHELLS",
             "target": {
                 "Research": {
-                    "upgrade": 17
+                    "upgrade": 17,
+                    "upgrade_name": "PUNISHERGRENADES"
                 }
             }
         },
@@ -2340,7 +2389,8 @@
             "name": "RESEARCH_INFERNALPREIGNITER",
             "target": {
                 "Research": {
-                    "upgrade": 19
+                    "upgrade": 19,
+                    "upgrade_name": "HIGHCAPACITYBARRELS"
                 }
             }
         },
@@ -2356,7 +2406,8 @@
             "name": "FACTORYTECHLABRESEARCH_RESEARCHTRANSFORMATIONSERVOS",
             "target": {
                 "Research": {
-                    "upgrade": 98
+                    "upgrade": 98,
+                    "upgrade_name": "TRANSFORMATIONSERVOS"
                 }
             }
         },
@@ -2372,7 +2423,8 @@
             "name": "RESEARCH_DRILLINGCLAWS",
             "target": {
                 "Research": {
-                    "upgrade": 122
+                    "upgrade": 122,
+                    "upgrade_name": "DRILLCLAWS"
                 }
             }
         },
@@ -2388,7 +2440,8 @@
             "name": "FACTORYTECHLABRESEARCH_RESEARCHLOCKONRANGEUPGRADE",
             "target": {
                 "Research": {
-                    "upgrade": 123
+                    "upgrade": 123,
+                    "upgrade_name": "CYCLONELOCKONRANGEUPGRADE"
                 }
             }
         },
@@ -2404,7 +2457,8 @@
             "name": "RESEARCH_SMARTSERVOS",
             "target": {
                 "Research": {
-                    "upgrade": 289
+                    "upgrade": 289,
+                    "upgrade_name": "SMARTSERVOS"
                 }
             }
         },
@@ -2420,7 +2474,8 @@
             "name": "FACTORYTECHLABRESEARCH_RESEARCHARMORPIERCINGROCKETS",
             "target": {
                 "Research": {
-                    "upgrade": 290
+                    "upgrade": 290,
+                    "upgrade_name": "ARMORPIERCINGROCKETS"
                 }
             }
         },
@@ -2436,7 +2491,8 @@
             "name": "RESEARCH_CYCLONERAPIDFIRELAUNCHERS",
             "target": {
                 "Research": {
-                    "upgrade": 291
+                    "upgrade": 291,
+                    "upgrade_name": "CYCLONERAPIDFIRELAUNCHERS"
                 }
             }
         },
@@ -2452,7 +2508,8 @@
             "name": "RESEARCH_CYCLONELOCKONDAMAGE",
             "target": {
                 "Research": {
-                    "upgrade": 144
+                    "upgrade": 144,
+                    "upgrade_name": "CYCLONELOCKONDAMAGEUPGRADE"
                 }
             }
         },
@@ -2468,7 +2525,8 @@
             "name": "RESEARCH_BANSHEECLOAKINGFIELD",
             "target": {
                 "Research": {
-                    "upgrade": 20
+                    "upgrade": 20,
+                    "upgrade_name": "BANSHEECLOAK"
                 }
             }
         },
@@ -2484,7 +2542,8 @@
             "name": "STARPORTTECHLABRESEARCH_RESEARCHMEDIVACENERGYUPGRADE",
             "target": {
                 "Research": {
-                    "upgrade": 21
+                    "upgrade": 21,
+                    "upgrade_name": "MEDIVACCADUCEUSREACTOR"
                 }
             }
         },
@@ -2500,7 +2559,8 @@
             "name": "RESEARCH_RAVENCORVIDREACTOR",
             "target": {
                 "Research": {
-                    "upgrade": 22
+                    "upgrade": 22,
+                    "upgrade_name": "RAVENCORVIDREACTOR"
                 }
             }
         },
@@ -2516,7 +2576,8 @@
             "name": "STARPORTTECHLABRESEARCH_RESEARCHSEEKERMISSILE",
             "target": {
                 "Research": {
-                    "upgrade": 23
+                    "upgrade": 23,
+                    "upgrade_name": "HUNTERSEEKER"
                 }
             }
         },
@@ -2532,7 +2593,8 @@
             "name": "STARPORTTECHLABRESEARCH_RESEARCHDURABLEMATERIALS",
             "target": {
                 "Research": {
-                    "upgrade": 24
+                    "upgrade": 24,
+                    "upgrade_name": "DURABLEMATERIALS"
                 }
             }
         },
@@ -2548,7 +2610,8 @@
             "name": "RESEARCH_BANSHEEHYPERFLIGHTROTORS",
             "target": {
                 "Research": {
-                    "upgrade": 136
+                    "upgrade": 136,
+                    "upgrade_name": "BANSHEESPEED"
                 }
             }
         },
@@ -2564,7 +2627,8 @@
             "name": "STARPORTTECHLABRESEARCH_RESEARCHLIBERATORAGMODE",
             "target": {
                 "Research": {
-                    "upgrade": 125
+                    "upgrade": 125,
+                    "upgrade_name": "LIBERATORMORPH"
                 }
             }
         },
@@ -2580,7 +2644,8 @@
             "name": "STARPORTTECHLABRESEARCH_RESEARCHRAPIDDEPLOYMENT",
             "target": {
                 "Research": {
-                    "upgrade": 137
+                    "upgrade": 137,
+                    "upgrade_name": "MEDIVACRAPIDDEPLOYMENT"
                 }
             }
         },
@@ -2596,7 +2661,8 @@
             "name": "RESEARCH_RAVENRECALIBRATEDEXPLOSIVES",
             "target": {
                 "Research": {
-                    "upgrade": 138
+                    "upgrade": 138,
+                    "upgrade_name": "RAVENRECALIBRATEDEXPLOSIVES"
                 }
             }
         },
@@ -2612,7 +2678,8 @@
             "name": "STARPORTTECHLABRESEARCH_RAVENRESEARCHENHANCEDMUNITIONS",
             "target": {
                 "Research": {
-                    "upgrade": 292
+                    "upgrade": 292,
+                    "upgrade_name": "RAVENENHANCEDMUNITIONS"
                 }
             }
         },
@@ -2628,7 +2695,8 @@
             "name": "RESEARCH_PERSONALCLOAKING",
             "target": {
                 "Research": {
-                    "upgrade": 25
+                    "upgrade": 25,
+                    "upgrade_name": "PERSONALCLOAKING"
                 }
             }
         },
@@ -2644,7 +2712,8 @@
             "name": "GHOSTACADEMYRESEARCH_RESEARCHGHOSTENERGYUPGRADE",
             "target": {
                 "Research": {
-                    "upgrade": 26
+                    "upgrade": 26,
+                    "upgrade_name": "GHOSTMOEBIUSREACTOR"
                 }
             }
         },
@@ -2660,7 +2729,8 @@
             "name": "GHOSTACADEMYRESEARCH_RESEARCHENHANCEDSHOCKWAVES",
             "target": {
                 "Research": {
-                    "upgrade": 296
+                    "upgrade": 297,
+                    "upgrade_name": "ENHANCEDSHOCKWAVES"
                 }
             }
         },
@@ -2676,7 +2746,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEPLATINGLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 27
+                    "upgrade": 27,
+                    "upgrade_name": "TERRANVEHICLEARMORSLEVEL1"
                 }
             }
         },
@@ -2692,7 +2763,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEPLATINGLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 28
+                    "upgrade": 28,
+                    "upgrade_name": "TERRANVEHICLEARMORSLEVEL2"
                 }
             }
         },
@@ -2708,7 +2780,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEPLATINGLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 29
+                    "upgrade": 29,
+                    "upgrade_name": "TERRANVEHICLEARMORSLEVEL3"
                 }
             }
         },
@@ -2724,7 +2797,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 30
+                    "upgrade": 30,
+                    "upgrade_name": "TERRANVEHICLEWEAPONSLEVEL1"
                 }
             }
         },
@@ -2740,7 +2814,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 31
+                    "upgrade": 31,
+                    "upgrade_name": "TERRANVEHICLEWEAPONSLEVEL2"
                 }
             }
         },
@@ -2756,7 +2831,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 32
+                    "upgrade": 32,
+                    "upgrade_name": "TERRANVEHICLEWEAPONSLEVEL3"
                 }
             }
         },
@@ -2772,7 +2848,8 @@
             "name": "ARMORYRESEARCH_TERRANSHIPPLATINGLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 33
+                    "upgrade": 33,
+                    "upgrade_name": "TERRANSHIPARMORSLEVEL1"
                 }
             }
         },
@@ -2788,7 +2865,8 @@
             "name": "ARMORYRESEARCH_TERRANSHIPPLATINGLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 34
+                    "upgrade": 34,
+                    "upgrade_name": "TERRANSHIPARMORSLEVEL2"
                 }
             }
         },
@@ -2804,7 +2882,8 @@
             "name": "ARMORYRESEARCH_TERRANSHIPPLATINGLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 35
+                    "upgrade": 35,
+                    "upgrade_name": "TERRANSHIPARMORSLEVEL3"
                 }
             }
         },
@@ -2820,7 +2899,8 @@
             "name": "ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 36
+                    "upgrade": 36,
+                    "upgrade_name": "TERRANSHIPWEAPONSLEVEL1"
                 }
             }
         },
@@ -2836,7 +2916,8 @@
             "name": "ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 37
+                    "upgrade": 37,
+                    "upgrade_name": "TERRANSHIPWEAPONSLEVEL2"
                 }
             }
         },
@@ -2852,7 +2933,8 @@
             "name": "ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 38
+                    "upgrade": 38,
+                    "upgrade_name": "TERRANSHIPWEAPONSLEVEL3"
                 }
             }
         },
@@ -2868,7 +2950,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 116
+                    "upgrade": 116,
+                    "upgrade_name": "TERRANVEHICLEANDSHIPARMORSLEVEL1"
                 }
             }
         },
@@ -2884,7 +2967,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 117
+                    "upgrade": 117,
+                    "upgrade_name": "TERRANVEHICLEANDSHIPARMORSLEVEL2"
                 }
             }
         },
@@ -2900,7 +2984,8 @@
             "name": "ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 118
+                    "upgrade": 118,
+                    "upgrade_name": "TERRANVEHICLEANDSHIPARMORSLEVEL3"
                 }
             }
         },
@@ -2916,7 +3001,8 @@
             "name": "PROTOSSBUILD_NEXUS",
             "target": {
                 "Build": {
-                    "produces": 59
+                    "produces": 59,
+                    "produces_name": "NEXUS"
                 }
             }
         },
@@ -2932,7 +3018,8 @@
             "name": "PROTOSSBUILD_PYLON",
             "target": {
                 "Build": {
-                    "produces": 60
+                    "produces": 60,
+                    "produces_name": "PYLON"
                 }
             }
         },
@@ -2948,7 +3035,8 @@
             "name": "PROTOSSBUILD_ASSIMILATOR",
             "target": {
                 "BuildOnUnit": {
-                    "produces": 61
+                    "produces": 61,
+                    "produces_name": "ASSIMILATOR"
                 }
             }
         },
@@ -2964,7 +3052,8 @@
             "name": "PROTOSSBUILD_GATEWAY",
             "target": {
                 "Build": {
-                    "produces": 62
+                    "produces": 62,
+                    "produces_name": "GATEWAY"
                 }
             }
         },
@@ -2980,7 +3069,8 @@
             "name": "PROTOSSBUILD_FORGE",
             "target": {
                 "Build": {
-                    "produces": 63
+                    "produces": 63,
+                    "produces_name": "FORGE"
                 }
             }
         },
@@ -2996,7 +3086,8 @@
             "name": "PROTOSSBUILD_FLEETBEACON",
             "target": {
                 "Build": {
-                    "produces": 64
+                    "produces": 64,
+                    "produces_name": "FLEETBEACON"
                 }
             }
         },
@@ -3012,7 +3103,8 @@
             "name": "PROTOSSBUILD_TWILIGHTCOUNCIL",
             "target": {
                 "Build": {
-                    "produces": 65
+                    "produces": 65,
+                    "produces_name": "TWILIGHTCOUNCIL"
                 }
             }
         },
@@ -3028,7 +3120,8 @@
             "name": "PROTOSSBUILD_PHOTONCANNON",
             "target": {
                 "Build": {
-                    "produces": 66
+                    "produces": 66,
+                    "produces_name": "PHOTONCANNON"
                 }
             }
         },
@@ -3044,7 +3137,8 @@
             "name": "PROTOSSBUILD_STARGATE",
             "target": {
                 "Build": {
-                    "produces": 67
+                    "produces": 67,
+                    "produces_name": "STARGATE"
                 }
             }
         },
@@ -3060,7 +3154,8 @@
             "name": "PROTOSSBUILD_TEMPLARARCHIVE",
             "target": {
                 "Build": {
-                    "produces": 68
+                    "produces": 68,
+                    "produces_name": "TEMPLARARCHIVE"
                 }
             }
         },
@@ -3076,7 +3171,8 @@
             "name": "PROTOSSBUILD_DARKSHRINE",
             "target": {
                 "Build": {
-                    "produces": 69
+                    "produces": 69,
+                    "produces_name": "DARKSHRINE"
                 }
             }
         },
@@ -3092,7 +3188,8 @@
             "name": "PROTOSSBUILD_ROBOTICSBAY",
             "target": {
                 "Build": {
-                    "produces": 70
+                    "produces": 70,
+                    "produces_name": "ROBOTICSBAY"
                 }
             }
         },
@@ -3108,7 +3205,8 @@
             "name": "PROTOSSBUILD_ROBOTICSFACILITY",
             "target": {
                 "Build": {
-                    "produces": 71
+                    "produces": 71,
+                    "produces_name": "ROBOTICSFACILITY"
                 }
             }
         },
@@ -3124,7 +3222,8 @@
             "name": "PROTOSSBUILD_CYBERNETICSCORE",
             "target": {
                 "Build": {
-                    "produces": 72
+                    "produces": 72,
+                    "produces_name": "CYBERNETICSCORE"
                 }
             }
         },
@@ -3140,7 +3239,8 @@
             "name": "BUILD_SHIELDBATTERY",
             "target": {
                 "Build": {
-                    "produces": 1910
+                    "produces": 1910,
+                    "produces_name": "SHIELDBATTERY"
                 }
             }
         },
@@ -3216,7 +3316,8 @@
             "name": "GATEWAYTRAIN_ZEALOT",
             "target": {
                 "Train": {
-                    "produces": 73
+                    "produces": 73,
+                    "produces_name": "ZEALOT"
                 }
             }
         },
@@ -3232,7 +3333,8 @@
             "name": "GATEWAYTRAIN_STALKER",
             "target": {
                 "Train": {
-                    "produces": 74
+                    "produces": 74,
+                    "produces_name": "STALKER"
                 }
             }
         },
@@ -3248,7 +3350,8 @@
             "name": "GATEWAYTRAIN_HIGHTEMPLAR",
             "target": {
                 "Train": {
-                    "produces": 75
+                    "produces": 75,
+                    "produces_name": "HIGHTEMPLAR"
                 }
             }
         },
@@ -3264,7 +3367,8 @@
             "name": "GATEWAYTRAIN_DARKTEMPLAR",
             "target": {
                 "Train": {
-                    "produces": 76
+                    "produces": 76,
+                    "produces_name": "DARKTEMPLAR"
                 }
             }
         },
@@ -3280,7 +3384,8 @@
             "name": "GATEWAYTRAIN_SENTRY",
             "target": {
                 "Train": {
-                    "produces": 77
+                    "produces": 77,
+                    "produces_name": "SENTRY"
                 }
             }
         },
@@ -3296,7 +3401,8 @@
             "name": "TRAIN_ADEPT",
             "target": {
                 "Train": {
-                    "produces": 311
+                    "produces": 311,
+                    "produces_name": "ADEPT"
                 }
             }
         },
@@ -3312,7 +3418,8 @@
             "name": "STARGATETRAIN_PHOENIX",
             "target": {
                 "Train": {
-                    "produces": 78
+                    "produces": 78,
+                    "produces_name": "PHOENIX"
                 }
             }
         },
@@ -3328,7 +3435,8 @@
             "name": "STARGATETRAIN_CARRIER",
             "target": {
                 "Train": {
-                    "produces": 79
+                    "produces": 79,
+                    "produces_name": "CARRIER"
                 }
             }
         },
@@ -3344,7 +3452,8 @@
             "name": "STARGATETRAIN_VOIDRAY",
             "target": {
                 "Train": {
-                    "produces": 80
+                    "produces": 80,
+                    "produces_name": "VOIDRAY"
                 }
             }
         },
@@ -3360,7 +3469,8 @@
             "name": "STARGATETRAIN_ORACLE",
             "target": {
                 "Train": {
-                    "produces": 495
+                    "produces": 495,
+                    "produces_name": "ORACLE"
                 }
             }
         },
@@ -3376,7 +3486,8 @@
             "name": "STARGATETRAIN_TEMPEST",
             "target": {
                 "Train": {
-                    "produces": 496
+                    "produces": 496,
+                    "produces_name": "TEMPEST"
                 }
             }
         },
@@ -3392,7 +3503,8 @@
             "name": "ROBOTICSFACILITYTRAIN_WARPPRISM",
             "target": {
                 "Train": {
-                    "produces": 81
+                    "produces": 81,
+                    "produces_name": "WARPPRISM"
                 }
             }
         },
@@ -3408,7 +3520,8 @@
             "name": "ROBOTICSFACILITYTRAIN_OBSERVER",
             "target": {
                 "Train": {
-                    "produces": 82
+                    "produces": 82,
+                    "produces_name": "OBSERVER"
                 }
             }
         },
@@ -3424,7 +3537,8 @@
             "name": "ROBOTICSFACILITYTRAIN_COLOSSUS",
             "target": {
                 "Train": {
-                    "produces": 4
+                    "produces": 4,
+                    "produces_name": "COLOSSUS"
                 }
             }
         },
@@ -3440,7 +3554,8 @@
             "name": "ROBOTICSFACILITYTRAIN_IMMORTAL",
             "target": {
                 "Train": {
-                    "produces": 83
+                    "produces": 83,
+                    "produces_name": "IMMORTAL"
                 }
             }
         },
@@ -3456,7 +3571,8 @@
             "name": "TRAIN_DISRUPTOR",
             "target": {
                 "Train": {
-                    "produces": 694
+                    "produces": 694,
+                    "produces_name": "DISRUPTOR"
                 }
             }
         },
@@ -3472,7 +3588,8 @@
             "name": "NEXUSTRAIN_PROBE",
             "target": {
                 "Train": {
-                    "produces": 84
+                    "produces": 84,
+                    "produces_name": "PROBE"
                 }
             }
         },
@@ -3560,7 +3677,8 @@
             "name": "FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 39
+                    "upgrade": 39,
+                    "upgrade_name": "PROTOSSGROUNDWEAPONSLEVEL1"
                 }
             }
         },
@@ -3576,7 +3694,8 @@
             "name": "FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 40
+                    "upgrade": 40,
+                    "upgrade_name": "PROTOSSGROUNDWEAPONSLEVEL2"
                 }
             }
         },
@@ -3592,7 +3711,8 @@
             "name": "FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 41
+                    "upgrade": 41,
+                    "upgrade_name": "PROTOSSGROUNDWEAPONSLEVEL3"
                 }
             }
         },
@@ -3608,7 +3728,8 @@
             "name": "FORGERESEARCH_PROTOSSGROUNDARMORLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 42
+                    "upgrade": 42,
+                    "upgrade_name": "PROTOSSGROUNDARMORSLEVEL1"
                 }
             }
         },
@@ -3624,7 +3745,8 @@
             "name": "FORGERESEARCH_PROTOSSGROUNDARMORLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 43
+                    "upgrade": 43,
+                    "upgrade_name": "PROTOSSGROUNDARMORSLEVEL2"
                 }
             }
         },
@@ -3640,7 +3762,8 @@
             "name": "FORGERESEARCH_PROTOSSGROUNDARMORLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 44
+                    "upgrade": 44,
+                    "upgrade_name": "PROTOSSGROUNDARMORSLEVEL3"
                 }
             }
         },
@@ -3656,7 +3779,8 @@
             "name": "FORGERESEARCH_PROTOSSSHIELDSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 45
+                    "upgrade": 45,
+                    "upgrade_name": "PROTOSSSHIELDSLEVEL1"
                 }
             }
         },
@@ -3672,7 +3796,8 @@
             "name": "FORGERESEARCH_PROTOSSSHIELDSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 46
+                    "upgrade": 46,
+                    "upgrade_name": "PROTOSSSHIELDSLEVEL2"
                 }
             }
         },
@@ -3688,7 +3813,8 @@
             "name": "FORGERESEARCH_PROTOSSSHIELDSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 47
+                    "upgrade": 47,
+                    "upgrade_name": "PROTOSSSHIELDSLEVEL3"
                 }
             }
         },
@@ -3704,7 +3830,8 @@
             "name": "RESEARCH_GRAVITICBOOSTER",
             "target": {
                 "Research": {
-                    "upgrade": 48
+                    "upgrade": 48,
+                    "upgrade_name": "OBSERVERGRAVITICBOOSTER"
                 }
             }
         },
@@ -3720,7 +3847,8 @@
             "name": "RESEARCH_GRAVITICDRIVE",
             "target": {
                 "Research": {
-                    "upgrade": 49
+                    "upgrade": 49,
+                    "upgrade_name": "GRAVITICDRIVE"
                 }
             }
         },
@@ -3736,7 +3864,8 @@
             "name": "RESEARCH_EXTENDEDTHERMALLANCE",
             "target": {
                 "Research": {
-                    "upgrade": 50
+                    "upgrade": 50,
+                    "upgrade_name": "EXTENDEDTHERMALLANCE"
                 }
             }
         },
@@ -3752,7 +3881,8 @@
             "name": "ROBOTICSBAYRESEARCH_RESEARCHIMMORTALREVIVE",
             "target": {
                 "Research": {
-                    "upgrade": 121
+                    "upgrade": 121,
+                    "upgrade_name": "IMMORTALREVIVE"
                 }
             }
         },
@@ -3768,7 +3898,8 @@
             "name": "RESEARCH_PSISTORM",
             "target": {
                 "Research": {
-                    "upgrade": 52
+                    "upgrade": 52,
+                    "upgrade_name": "PSISTORMTECH"
                 }
             }
         },
@@ -3784,7 +3915,8 @@
             "name": "ZERGBUILD_HATCHERY",
             "target": {
                 "Build": {
-                    "produces": 86
+                    "produces": 86,
+                    "produces_name": "HATCHERY"
                 }
             }
         },
@@ -3800,7 +3932,8 @@
             "name": "ZERGBUILD_CREEPTUMOR",
             "target": {
                 "Build": {
-                    "produces": 87
+                    "produces": 87,
+                    "produces_name": "CREEPTUMOR"
                 }
             }
         },
@@ -3816,7 +3949,8 @@
             "name": "ZERGBUILD_EXTRACTOR",
             "target": {
                 "BuildOnUnit": {
-                    "produces": 88
+                    "produces": 88,
+                    "produces_name": "EXTRACTOR"
                 }
             }
         },
@@ -3832,7 +3966,8 @@
             "name": "ZERGBUILD_SPAWNINGPOOL",
             "target": {
                 "Build": {
-                    "produces": 89
+                    "produces": 89,
+                    "produces_name": "SPAWNINGPOOL"
                 }
             }
         },
@@ -3848,7 +3983,8 @@
             "name": "ZERGBUILD_EVOLUTIONCHAMBER",
             "target": {
                 "Build": {
-                    "produces": 90
+                    "produces": 90,
+                    "produces_name": "EVOLUTIONCHAMBER"
                 }
             }
         },
@@ -3864,7 +4000,8 @@
             "name": "ZERGBUILD_HYDRALISKDEN",
             "target": {
                 "Build": {
-                    "produces": 91
+                    "produces": 91,
+                    "produces_name": "HYDRALISKDEN"
                 }
             }
         },
@@ -3880,7 +4017,8 @@
             "name": "ZERGBUILD_SPIRE",
             "target": {
                 "Build": {
-                    "produces": 92
+                    "produces": 92,
+                    "produces_name": "SPIRE"
                 }
             }
         },
@@ -3896,7 +4034,8 @@
             "name": "ZERGBUILD_ULTRALISKCAVERN",
             "target": {
                 "Build": {
-                    "produces": 93
+                    "produces": 93,
+                    "produces_name": "ULTRALISKCAVERN"
                 }
             }
         },
@@ -3912,7 +4051,8 @@
             "name": "ZERGBUILD_INFESTATIONPIT",
             "target": {
                 "Build": {
-                    "produces": 94
+                    "produces": 94,
+                    "produces_name": "INFESTATIONPIT"
                 }
             }
         },
@@ -3928,7 +4068,8 @@
             "name": "ZERGBUILD_NYDUSNETWORK",
             "target": {
                 "Build": {
-                    "produces": 95
+                    "produces": 95,
+                    "produces_name": "NYDUSNETWORK"
                 }
             }
         },
@@ -3944,7 +4085,8 @@
             "name": "ZERGBUILD_BANELINGNEST",
             "target": {
                 "Build": {
-                    "produces": 96
+                    "produces": 96,
+                    "produces_name": "BANELINGNEST"
                 }
             }
         },
@@ -3960,7 +4102,8 @@
             "name": "BUILD_LURKERDEN",
             "target": {
                 "Build": {
-                    "produces": 504
+                    "produces": 504,
+                    "produces_name": "LURKERDENMP"
                 }
             }
         },
@@ -3976,7 +4119,8 @@
             "name": "ZERGBUILD_ROACHWARREN",
             "target": {
                 "Build": {
-                    "produces": 97
+                    "produces": 97,
+                    "produces_name": "ROACHWARREN"
                 }
             }
         },
@@ -3992,7 +4136,8 @@
             "name": "ZERGBUILD_SPINECRAWLER",
             "target": {
                 "Build": {
-                    "produces": 98
+                    "produces": 98,
+                    "produces_name": "SPINECRAWLER"
                 }
             }
         },
@@ -4008,7 +4153,8 @@
             "name": "ZERGBUILD_SPORECRAWLER",
             "target": {
                 "Build": {
-                    "produces": 99
+                    "produces": 99,
+                    "produces_name": "SPORECRAWLER"
                 }
             }
         },
@@ -4060,7 +4206,8 @@
             "name": "RESEARCH_ZERGMELEEWEAPONSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 53
+                    "upgrade": 53,
+                    "upgrade_name": "ZERGMELEEWEAPONSLEVEL1"
                 }
             }
         },
@@ -4076,7 +4223,8 @@
             "name": "RESEARCH_ZERGMELEEWEAPONSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 54
+                    "upgrade": 54,
+                    "upgrade_name": "ZERGMELEEWEAPONSLEVEL2"
                 }
             }
         },
@@ -4092,7 +4240,8 @@
             "name": "RESEARCH_ZERGMELEEWEAPONSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 55
+                    "upgrade": 55,
+                    "upgrade_name": "ZERGMELEEWEAPONSLEVEL3"
                 }
             }
         },
@@ -4108,7 +4257,8 @@
             "name": "RESEARCH_ZERGGROUNDARMORLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 56
+                    "upgrade": 56,
+                    "upgrade_name": "ZERGGROUNDARMORSLEVEL1"
                 }
             }
         },
@@ -4124,7 +4274,8 @@
             "name": "RESEARCH_ZERGGROUNDARMORLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 57
+                    "upgrade": 57,
+                    "upgrade_name": "ZERGGROUNDARMORSLEVEL2"
                 }
             }
         },
@@ -4140,7 +4291,8 @@
             "name": "RESEARCH_ZERGGROUNDARMORLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 58
+                    "upgrade": 58,
+                    "upgrade_name": "ZERGGROUNDARMORSLEVEL3"
                 }
             }
         },
@@ -4156,7 +4308,8 @@
             "name": "RESEARCH_ZERGMISSILEWEAPONSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 59
+                    "upgrade": 59,
+                    "upgrade_name": "ZERGMISSILEWEAPONSLEVEL1"
                 }
             }
         },
@@ -4172,7 +4325,8 @@
             "name": "RESEARCH_ZERGMISSILEWEAPONSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 60
+                    "upgrade": 60,
+                    "upgrade_name": "ZERGMISSILEWEAPONSLEVEL2"
                 }
             }
         },
@@ -4188,7 +4342,8 @@
             "name": "RESEARCH_ZERGMISSILEWEAPONSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 61
+                    "upgrade": 61,
+                    "upgrade_name": "ZERGMISSILEWEAPONSLEVEL3"
                 }
             }
         },
@@ -4204,7 +4359,8 @@
             "name": "EVOLUTIONCHAMBERRESEARCH_EVOLVEPROPULSIVEPERISTALSIS",
             "target": {
                 "Research": {
-                    "upgrade": 301
+                    "upgrade": 302,
+                    "upgrade_name": "SECRETEDCOATING"
                 }
             }
         },
@@ -4220,7 +4376,8 @@
             "name": "UPGRADETOLAIR_LAIR",
             "target": {
                 "Morph": {
-                    "produces": 100
+                    "produces": 100,
+                    "produces_name": "LAIR"
                 }
             }
         },
@@ -4248,7 +4405,8 @@
             "name": "UPGRADETOHIVE_HIVE",
             "target": {
                 "Morph": {
-                    "produces": 101
+                    "produces": 101,
+                    "produces_name": "HIVE"
                 }
             }
         },
@@ -4276,7 +4434,8 @@
             "name": "UPGRADETOGREATERSPIRE_GREATERSPIRE",
             "target": {
                 "Morph": {
-                    "produces": 102
+                    "produces": 102,
+                    "produces_name": "GREATERSPIRE"
                 }
             }
         },
@@ -4304,7 +4463,8 @@
             "name": "RESEARCH_PNEUMATIZEDCARAPACE",
             "target": {
                 "Research": {
-                    "upgrade": 62
+                    "upgrade": 62,
+                    "upgrade_name": "OVERLORDSPEED"
                 }
             }
         },
@@ -4320,7 +4480,8 @@
             "name": "LAIRRESEARCH_EVOLVEVENTRALSACKS",
             "target": {
                 "Research": {
-                    "upgrade": 63
+                    "upgrade": 63,
+                    "upgrade_name": "OVERLORDTRANSPORT"
                 }
             }
         },
@@ -4336,7 +4497,8 @@
             "name": "RESEARCH_BURROW",
             "target": {
                 "Research": {
-                    "upgrade": 64
+                    "upgrade": 64,
+                    "upgrade_name": "BURROW"
                 }
             }
         },
@@ -4352,7 +4514,8 @@
             "name": "RESEARCH_ZERGLINGADRENALGLANDS",
             "target": {
                 "Research": {
-                    "upgrade": 65
+                    "upgrade": 65,
+                    "upgrade_name": "ZERGLINGATTACKSPEED"
                 }
             }
         },
@@ -4368,7 +4531,8 @@
             "name": "RESEARCH_ZERGLINGMETABOLICBOOST",
             "target": {
                 "Research": {
-                    "upgrade": 66
+                    "upgrade": 66,
+                    "upgrade_name": "ZERGLINGMOVEMENTSPEED"
                 }
             }
         },
@@ -4384,7 +4548,8 @@
             "name": "RESEARCH_GROOVEDSPINES",
             "target": {
                 "Research": {
-                    "upgrade": 134
+                    "upgrade": 134,
+                    "upgrade_name": "EVOLVEGROOVEDSPINES"
                 }
             }
         },
@@ -4400,7 +4565,8 @@
             "name": "RESEARCH_MUSCULARAUGMENTS",
             "target": {
                 "Research": {
-                    "upgrade": 135
+                    "upgrade": 135,
+                    "upgrade_name": "EVOLVEMUSCULARAUGMENTS"
                 }
             }
         },
@@ -4416,7 +4582,8 @@
             "name": "RESEARCH_ZERGFLYERATTACKLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 68
+                    "upgrade": 68,
+                    "upgrade_name": "ZERGFLYERWEAPONSLEVEL1"
                 }
             }
         },
@@ -4432,7 +4599,8 @@
             "name": "RESEARCH_ZERGFLYERATTACKLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 69
+                    "upgrade": 69,
+                    "upgrade_name": "ZERGFLYERWEAPONSLEVEL2"
                 }
             }
         },
@@ -4448,7 +4616,8 @@
             "name": "RESEARCH_ZERGFLYERATTACKLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 70
+                    "upgrade": 70,
+                    "upgrade_name": "ZERGFLYERWEAPONSLEVEL3"
                 }
             }
         },
@@ -4464,7 +4633,8 @@
             "name": "RESEARCH_ZERGFLYERARMORLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 71
+                    "upgrade": 71,
+                    "upgrade_name": "ZERGFLYERARMORSLEVEL1"
                 }
             }
         },
@@ -4480,7 +4650,8 @@
             "name": "RESEARCH_ZERGFLYERARMORLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 72
+                    "upgrade": 72,
+                    "upgrade_name": "ZERGFLYERARMORSLEVEL2"
                 }
             }
         },
@@ -4496,7 +4667,8 @@
             "name": "RESEARCH_ZERGFLYERARMORLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 73
+                    "upgrade": 73,
+                    "upgrade_name": "ZERGFLYERARMORSLEVEL3"
                 }
             }
         },
@@ -4512,7 +4684,8 @@
             "name": "LARVATRAIN_DRONE",
             "target": {
                 "Morph": {
-                    "produces": 104
+                    "produces": 104,
+                    "produces_name": "DRONE"
                 }
             }
         },
@@ -4528,7 +4701,8 @@
             "name": "LARVATRAIN_ZERGLING",
             "target": {
                 "Morph": {
-                    "produces": 105
+                    "produces": 105,
+                    "produces_name": "ZERGLING"
                 }
             }
         },
@@ -4544,7 +4718,8 @@
             "name": "LARVATRAIN_OVERLORD",
             "target": {
                 "Morph": {
-                    "produces": 106
+                    "produces": 106,
+                    "produces_name": "OVERLORD"
                 }
             }
         },
@@ -4560,7 +4735,8 @@
             "name": "LARVATRAIN_HYDRALISK",
             "target": {
                 "Morph": {
-                    "produces": 107
+                    "produces": 107,
+                    "produces_name": "HYDRALISK"
                 }
             }
         },
@@ -4576,7 +4752,8 @@
             "name": "LARVATRAIN_MUTALISK",
             "target": {
                 "Morph": {
-                    "produces": 108
+                    "produces": 108,
+                    "produces_name": "MUTALISK"
                 }
             }
         },
@@ -4592,7 +4769,8 @@
             "name": "LARVATRAIN_ULTRALISK",
             "target": {
                 "Morph": {
-                    "produces": 109
+                    "produces": 109,
+                    "produces_name": "ULTRALISK"
                 }
             }
         },
@@ -4608,7 +4786,8 @@
             "name": "LARVATRAIN_ROACH",
             "target": {
                 "Morph": {
-                    "produces": 110
+                    "produces": 110,
+                    "produces_name": "ROACH"
                 }
             }
         },
@@ -4624,7 +4803,8 @@
             "name": "LARVATRAIN_INFESTOR",
             "target": {
                 "Morph": {
-                    "produces": 111
+                    "produces": 111,
+                    "produces_name": "INFESTOR"
                 }
             }
         },
@@ -4640,7 +4820,8 @@
             "name": "LARVATRAIN_CORRUPTOR",
             "target": {
                 "Morph": {
-                    "produces": 112
+                    "produces": 112,
+                    "produces_name": "CORRUPTOR"
                 }
             }
         },
@@ -4656,7 +4837,8 @@
             "name": "LARVATRAIN_VIPER",
             "target": {
                 "Morph": {
-                    "produces": 499
+                    "produces": 499,
+                    "produces_name": "VIPER"
                 }
             }
         },
@@ -4672,7 +4854,8 @@
             "name": "TRAIN_SWARMHOST",
             "target": {
                 "Train": {
-                    "produces": 494
+                    "produces": 494,
+                    "produces_name": "SWARMHOSTMP"
                 }
             }
         },
@@ -4688,7 +4871,8 @@
             "name": "MORPHTOBROODLORD_BROODLORD",
             "target": {
                 "Morph": {
-                    "produces": 114
+                    "produces": 114,
+                    "produces_name": "BROODLORD"
                 }
             }
         },
@@ -4716,7 +4900,8 @@
             "name": "BURROWDOWN_BANELING",
             "target": {
                 "Morph": {
-                    "produces": 115
+                    "produces": 115,
+                    "produces_name": "BANELINGBURROWED"
                 }
             }
         },
@@ -4744,7 +4929,8 @@
             "name": "BURROWUP_BANELING",
             "target": {
                 "Morph": {
-                    "produces": 9
+                    "produces": 9,
+                    "produces_name": "BANELING"
                 }
             }
         },
@@ -4760,7 +4946,8 @@
             "name": "BURROWDOWN_DRONE",
             "target": {
                 "Morph": {
-                    "produces": 116
+                    "produces": 116,
+                    "produces_name": "DRONEBURROWED"
                 }
             }
         },
@@ -4788,7 +4975,8 @@
             "name": "BURROWUP_DRONE",
             "target": {
                 "Morph": {
-                    "produces": 104
+                    "produces": 104,
+                    "produces_name": "DRONE"
                 }
             }
         },
@@ -4804,7 +4992,8 @@
             "name": "BURROWDOWN_HYDRALISK",
             "target": {
                 "Morph": {
-                    "produces": 117
+                    "produces": 117,
+                    "produces_name": "HYDRALISKBURROWED"
                 }
             }
         },
@@ -4832,7 +5021,8 @@
             "name": "BURROWUP_HYDRALISK",
             "target": {
                 "Morph": {
-                    "produces": 107
+                    "produces": 107,
+                    "produces_name": "HYDRALISK"
                 }
             }
         },
@@ -4848,7 +5038,8 @@
             "name": "BURROWDOWN_ROACH",
             "target": {
                 "Morph": {
-                    "produces": 118
+                    "produces": 118,
+                    "produces_name": "ROACHBURROWED"
                 }
             }
         },
@@ -4876,7 +5067,8 @@
             "name": "BURROWUP_ROACH",
             "target": {
                 "Morph": {
-                    "produces": 110
+                    "produces": 110,
+                    "produces_name": "ROACH"
                 }
             }
         },
@@ -4892,7 +5084,8 @@
             "name": "BURROWDOWN_ZERGLING",
             "target": {
                 "Morph": {
-                    "produces": 119
+                    "produces": 119,
+                    "produces_name": "ZERGLINGBURROWED"
                 }
             }
         },
@@ -4920,7 +5113,8 @@
             "name": "BURROWUP_ZERGLING",
             "target": {
                 "Morph": {
-                    "produces": 105
+                    "produces": 105,
+                    "produces_name": "ZERGLING"
                 }
             }
         },
@@ -4936,7 +5130,8 @@
             "name": "BURROWDOWN_INFESTORTERRAN",
             "target": {
                 "Morph": {
-                    "produces": 120
+                    "produces": 120,
+                    "produces_name": "INFESTORTERRANBURROWED"
                 }
             }
         },
@@ -4952,7 +5147,8 @@
             "name": "BURROWUP_INFESTORTERRAN",
             "target": {
                 "Morph": {
-                    "produces": 7
+                    "produces": 7,
+                    "produces_name": "INFESTORTERRAN"
                 }
             }
         },
@@ -5028,7 +5224,8 @@
             "name": "WARPGATETRAIN_ZEALOT",
             "target": {
                 "TrainPlace": {
-                    "produces": 73
+                    "produces": 73,
+                    "produces_name": "ZEALOT"
                 }
             }
         },
@@ -5044,7 +5241,8 @@
             "name": "WARPGATETRAIN_STALKER",
             "target": {
                 "TrainPlace": {
-                    "produces": 74
+                    "produces": 74,
+                    "produces_name": "STALKER"
                 }
             }
         },
@@ -5060,7 +5258,8 @@
             "name": "WARPGATETRAIN_HIGHTEMPLAR",
             "target": {
                 "TrainPlace": {
-                    "produces": 75
+                    "produces": 75,
+                    "produces_name": "HIGHTEMPLAR"
                 }
             }
         },
@@ -5076,7 +5275,8 @@
             "name": "WARPGATETRAIN_DARKTEMPLAR",
             "target": {
                 "TrainPlace": {
-                    "produces": 76
+                    "produces": 76,
+                    "produces_name": "DARKTEMPLAR"
                 }
             }
         },
@@ -5092,7 +5292,8 @@
             "name": "WARPGATETRAIN_SENTRY",
             "target": {
                 "TrainPlace": {
-                    "produces": 77
+                    "produces": 77,
+                    "produces_name": "SENTRY"
                 }
             }
         },
@@ -5108,7 +5309,8 @@
             "name": "TRAINWARP_ADEPT",
             "target": {
                 "TrainPlace": {
-                    "produces": 311
+                    "produces": 311,
+                    "produces_name": "ADEPT"
                 }
             }
         },
@@ -5124,7 +5326,8 @@
             "name": "BURROWDOWN_QUEEN",
             "target": {
                 "Morph": {
-                    "produces": 125
+                    "produces": 125,
+                    "produces_name": "QUEENBURROWED"
                 }
             }
         },
@@ -5152,7 +5355,8 @@
             "name": "BURROWUP_QUEEN",
             "target": {
                 "Morph": {
-                    "produces": 126
+                    "produces": 126,
+                    "produces_name": "QUEEN"
                 }
             }
         },
@@ -5216,7 +5420,8 @@
             "name": "BURROWDOWN_INFESTOR",
             "target": {
                 "Morph": {
-                    "produces": 127
+                    "produces": 127,
+                    "produces_name": "INFESTORBURROWED"
                 }
             }
         },
@@ -5244,7 +5449,8 @@
             "name": "BURROWUP_INFESTOR",
             "target": {
                 "Morph": {
-                    "produces": 111
+                    "produces": 111,
+                    "produces_name": "INFESTOR"
                 }
             }
         },
@@ -5260,7 +5466,8 @@
             "name": "MORPH_OVERSEER",
             "target": {
                 "Morph": {
-                    "produces": 129
+                    "produces": 129,
+                    "produces_name": "OVERSEER"
                 }
             }
         },
@@ -5288,7 +5495,8 @@
             "name": "UPGRADETOPLANETARYFORTRESS_PLANETARYFORTRESS",
             "target": {
                 "Morph": {
-                    "produces": 130
+                    "produces": 130,
+                    "produces_name": "PLANETARYFORTRESS"
                 }
             }
         },
@@ -5316,7 +5524,8 @@
             "name": "RESEARCH_PATHOGENGLANDS",
             "target": {
                 "Research": {
-                    "upgrade": 74
+                    "upgrade": 74,
+                    "upgrade_name": "INFESTORENERGYUPGRADE"
                 }
             }
         },
@@ -5332,7 +5541,8 @@
             "name": "RESEARCH_NEURALPARASITE",
             "target": {
                 "Research": {
-                    "upgrade": 101
+                    "upgrade": 101,
+                    "upgrade_name": "NEURALPARASITE"
                 }
             }
         },
@@ -5348,7 +5558,8 @@
             "name": "INFESTATIONPITRESEARCH_RESEARCHLOCUSTLIFETIMEINCREASE",
             "target": {
                 "Research": {
-                    "upgrade": 102
+                    "upgrade": 102,
+                    "upgrade_name": "LOCUSTLIFETIMEINCREASE"
                 }
             }
         },
@@ -5364,7 +5575,8 @@
             "name": "INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD",
             "target": {
                 "Research": {
-                    "upgrade": 297
+                    "upgrade": 298,
+                    "upgrade_name": "MICROBIALSHROUD"
                 }
             }
         },
@@ -5380,7 +5592,8 @@
             "name": "RESEARCH_CENTRIFUGALHOOKS",
             "target": {
                 "Research": {
-                    "upgrade": 75
+                    "upgrade": 75,
+                    "upgrade_name": "CENTRIFICALHOOKS"
                 }
             }
         },
@@ -5396,7 +5609,8 @@
             "name": "BURROWDOWN_ULTRALISK",
             "target": {
                 "Morph": {
-                    "produces": 131
+                    "produces": 131,
+                    "produces_name": "ULTRALISKBURROWED"
                 }
             }
         },
@@ -5412,7 +5626,8 @@
             "name": "BURROWUP_ULTRALISK",
             "target": {
                 "Morph": {
-                    "produces": 109
+                    "produces": 109,
+                    "produces_name": "ULTRALISK"
                 }
             }
         },
@@ -5428,7 +5643,8 @@
             "name": "UPGRADETOORBITAL_ORBITALCOMMAND",
             "target": {
                 "Morph": {
-                    "produces": 132
+                    "produces": 132,
+                    "produces_name": "ORBITALCOMMAND"
                 }
             }
         },
@@ -5456,7 +5672,8 @@
             "name": "MORPH_WARPGATE",
             "target": {
                 "Morph": {
-                    "produces": 133
+                    "produces": 133,
+                    "produces_name": "WARPGATE"
                 }
             }
         },
@@ -5484,7 +5701,8 @@
             "name": "MORPH_GATEWAY",
             "target": {
                 "Morph": {
-                    "produces": 62
+                    "produces": 62,
+                    "produces_name": "GATEWAY"
                 }
             }
         },
@@ -5512,7 +5730,8 @@
             "name": "LIFT_ORBITALCOMMAND",
             "target": {
                 "Morph": {
-                    "produces": 134
+                    "produces": 134,
+                    "produces_name": "ORBITALCOMMANDFLYING"
                 }
             }
         },
@@ -5528,7 +5747,8 @@
             "name": "LAND_ORBITALCOMMAND",
             "target": {
                 "MorphPlace": {
-                    "produces": 132
+                    "produces": 132,
+                    "produces_name": "ORBITALCOMMAND"
                 }
             }
         },
@@ -5568,7 +5788,8 @@
             "name": "MORPH_WARPPRISMPHASINGMODE",
             "target": {
                 "Morph": {
-                    "produces": 136
+                    "produces": 136,
+                    "produces_name": "WARPPRISMPHASING"
                 }
             }
         },
@@ -5596,7 +5817,8 @@
             "name": "MORPH_WARPPRISMTRANSPORTMODE",
             "target": {
                 "Morph": {
-                    "produces": 81
+                    "produces": 81,
+                    "produces_name": "WARPPRISM"
                 }
             }
         },
@@ -5624,7 +5846,8 @@
             "name": "RESEARCH_BATTLECRUISERWEAPONREFIT",
             "target": {
                 "Research": {
-                    "upgrade": 76
+                    "upgrade": 76,
+                    "upgrade_name": "BATTLECRUISERENABLESPECIALIZATIONS"
                 }
             }
         },
@@ -5640,7 +5863,8 @@
             "name": "FUSIONCORERESEARCH_RESEARCHBALLISTICRANGE",
             "target": {
                 "Research": {
-                    "upgrade": 140
+                    "upgrade": 140,
+                    "upgrade_name": "LIBERATORAGRANGEUPGRADE"
                 }
             }
         },
@@ -5656,7 +5880,8 @@
             "name": "FUSIONCORERESEARCH_RESEARCHRAPIDREIGNITIONSYSTEM",
             "target": {
                 "Research": {
-                    "upgrade": 139
+                    "upgrade": 139,
+                    "upgrade_name": "MEDIVACINCREASESPEEDBOOST"
                 }
             }
         },
@@ -5672,7 +5897,8 @@
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 78
+                    "upgrade": 78,
+                    "upgrade_name": "PROTOSSAIRWEAPONSLEVEL1"
                 }
             }
         },
@@ -5688,7 +5914,8 @@
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 79
+                    "upgrade": 79,
+                    "upgrade_name": "PROTOSSAIRWEAPONSLEVEL2"
                 }
             }
         },
@@ -5704,7 +5931,8 @@
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 80
+                    "upgrade": 80,
+                    "upgrade_name": "PROTOSSAIRWEAPONSLEVEL3"
                 }
             }
         },
@@ -5720,7 +5948,8 @@
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL1",
             "target": {
                 "Research": {
-                    "upgrade": 81
+                    "upgrade": 81,
+                    "upgrade_name": "PROTOSSAIRARMORSLEVEL1"
                 }
             }
         },
@@ -5736,7 +5965,8 @@
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL2",
             "target": {
                 "Research": {
-                    "upgrade": 82
+                    "upgrade": 82,
+                    "upgrade_name": "PROTOSSAIRARMORSLEVEL2"
                 }
             }
         },
@@ -5752,7 +5982,8 @@
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL3",
             "target": {
                 "Research": {
-                    "upgrade": 83
+                    "upgrade": 83,
+                    "upgrade_name": "PROTOSSAIRARMORSLEVEL3"
                 }
             }
         },
@@ -5768,7 +5999,8 @@
             "name": "RESEARCH_WARPGATE",
             "target": {
                 "Research": {
-                    "upgrade": 84
+                    "upgrade": 84,
+                    "upgrade_name": "WARPGATERESEARCH"
                 }
             }
         },
@@ -5784,7 +6016,8 @@
             "name": "CYBERNETICSCORERESEARCH_RESEARCHHALLUCINATION",
             "target": {
                 "Research": {
-                    "upgrade": 85
+                    "upgrade": 85,
+                    "upgrade_name": "HALTECH"
                 }
             }
         },
@@ -5800,7 +6033,8 @@
             "name": "RESEARCH_CHARGE",
             "target": {
                 "Research": {
-                    "upgrade": 86
+                    "upgrade": 86,
+                    "upgrade_name": "CHARGE"
                 }
             }
         },
@@ -5816,7 +6050,8 @@
             "name": "RESEARCH_BLINK",
             "target": {
                 "Research": {
-                    "upgrade": 87
+                    "upgrade": 87,
+                    "upgrade_name": "BLINKTECH"
                 }
             }
         },
@@ -5832,7 +6067,8 @@
             "name": "RESEARCH_ADEPTRESONATINGGLAIVES",
             "target": {
                 "Research": {
-                    "upgrade": 130
+                    "upgrade": 130,
+                    "upgrade_name": "ADEPTPIERCINGATTACK"
                 }
             }
         },
@@ -5848,7 +6084,8 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICSURGE",
             "target": {
                 "Research": {
-                    "upgrade": 298
+                    "upgrade": 299,
+                    "upgrade_name": "SUNDERINGIMPACT"
                 }
             }
         },
@@ -5864,7 +6101,8 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHAMPLIFIEDSHIELDING",
             "target": {
                 "Research": {
-                    "upgrade": 299
+                    "upgrade": 300,
+                    "upgrade_name": "AMPLIFIEDSHIELDING"
                 }
             }
         },
@@ -5880,7 +6118,8 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICAMPLIFIERS",
             "target": {
                 "Research": {
-                    "upgrade": 300
+                    "upgrade": 301,
+                    "upgrade_name": "PSIONICAMPLIFIERS"
                 }
             }
         },
@@ -5960,7 +6199,8 @@
             "name": "BURROWCREEPTUMORDOWN_BURROWDOWN",
             "target": {
                 "Morph": {
-                    "produces": 137
+                    "produces": 137,
+                    "produces_name": "CREEPTUMORBURROWED"
                 }
             }
         },
@@ -5988,7 +6228,8 @@
             "name": "BARRACKSTECHLABMORPH_TECHLABBARRACKS",
             "target": {
                 "Morph": {
-                    "produces": 5
+                    "produces": 5,
+                    "produces_name": "TECHLAB"
                 }
             }
         },
@@ -6004,7 +6245,8 @@
             "name": "FACTORYTECHLABMORPH_TECHLABFACTORY",
             "target": {
                 "Morph": {
-                    "produces": 5
+                    "produces": 5,
+                    "produces_name": "TECHLAB"
                 }
             }
         },
@@ -6020,7 +6262,8 @@
             "name": "STARPORTTECHLABMORPH_TECHLABSTARPORT",
             "target": {
                 "Morph": {
-                    "produces": 5
+                    "produces": 5,
+                    "produces_name": "TECHLAB"
                 }
             }
         },
@@ -6036,7 +6279,8 @@
             "name": "BARRACKSREACTORMORPH_REACTOR",
             "target": {
                 "Morph": {
-                    "produces": 6
+                    "produces": 6,
+                    "produces_name": "REACTOR"
                 }
             }
         },
@@ -6052,7 +6296,8 @@
             "name": "FACTORYREACTORMORPH_REACTOR",
             "target": {
                 "Morph": {
-                    "produces": 6
+                    "produces": 6,
+                    "produces_name": "REACTOR"
                 }
             }
         },
@@ -6068,7 +6313,8 @@
             "name": "STARPORTREACTORMORPH_REACTOR",
             "target": {
                 "Morph": {
-                    "produces": 6
+                    "produces": 6,
+                    "produces_name": "REACTOR"
                 }
             }
         },
@@ -6156,7 +6402,8 @@
             "name": "BUILD_CREEPTUMOR_QUEEN",
             "target": {
                 "Build": {
-                    "produces": 138
+                    "produces": 138,
+                    "produces_name": "CREEPTUMORQUEEN"
                 }
             }
         },
@@ -6184,7 +6431,8 @@
             "name": "SPINECRAWLERUPROOT_SPINECRAWLERUPROOT",
             "target": {
                 "Morph": {
-                    "produces": 139
+                    "produces": 139,
+                    "produces_name": "SPINECRAWLERUPROOTED"
                 }
             }
         },
@@ -6212,7 +6460,8 @@
             "name": "SPORECRAWLERUPROOT_SPORECRAWLERUPROOT",
             "target": {
                 "Morph": {
-                    "produces": 140
+                    "produces": 140,
+                    "produces_name": "SPORECRAWLERUPROOTED"
                 }
             }
         },
@@ -6240,7 +6489,8 @@
             "name": "SPINECRAWLERROOT_SPINECRAWLERROOT",
             "target": {
                 "MorphPlace": {
-                    "produces": 98
+                    "produces": 98,
+                    "produces_name": "SPINECRAWLER"
                 }
             }
         },
@@ -6268,7 +6518,8 @@
             "name": "SPORECRAWLERROOT_SPORECRAWLERROOT",
             "target": {
                 "MorphPlace": {
-                    "produces": 99
+                    "produces": 99,
+                    "produces_name": "SPORECRAWLER"
                 }
             }
         },
@@ -6296,7 +6547,8 @@
             "name": "BUILD_CREEPTUMOR_TUMOR",
             "target": {
                 "Build": {
-                    "produces": 87
+                    "produces": 87,
+                    "produces_name": "CREEPTUMOR"
                 }
             }
         },
@@ -6324,7 +6576,8 @@
             "name": "BUILDAUTOTURRET_AUTOTURRET",
             "target": {
                 "Build": {
-                    "produces": 31
+                    "produces": 31,
+                    "produces_name": "AUTOTURRET"
                 }
             }
         },
@@ -6340,7 +6593,8 @@
             "name": "MORPH_ARCHON",
             "target": {
                 "Morph": {
-                    "produces": 141
+                    "produces": 141,
+                    "produces_name": "ARCHON"
                 }
             }
         },
@@ -6368,7 +6622,8 @@
             "name": "BUILD_NYDUSWORM",
             "target": {
                 "Build": {
-                    "produces": 142
+                    "produces": 142,
+                    "produces_name": "NYDUSCANAL"
                 }
             }
         },
@@ -6384,7 +6639,8 @@
             "name": "BUILDNYDUSCANAL_SUMMONNYDUSCANALATTACKER",
             "target": {
                 "Build": {
-                    "produces": 491
+                    "produces": 491,
+                    "produces_name": "NYDUSCANALATTACKER"
                 }
             }
         },
@@ -6496,7 +6752,8 @@
             "name": "MORPHTOGHOSTNOVA_MOVE",
             "target": {
                 "Morph": {
-                    "produces": 145
+                    "produces": 145,
+                    "produces_name": "GHOSTNOVA"
                 }
             }
         },
@@ -6560,7 +6817,8 @@
             "name": "MORPH_MOTHERSHIP",
             "target": {
                 "Morph": {
-                    "produces": 10
+                    "produces": 10,
+                    "produces_name": "MOTHERSHIP"
                 }
             }
         },
@@ -6624,7 +6882,8 @@
             "name": "MORPH_HELLION",
             "target": {
                 "Morph": {
-                    "produces": 53
+                    "produces": 53,
+                    "produces_name": "HELLION"
                 }
             }
         },
@@ -6652,7 +6911,8 @@
             "name": "MORPH_HELLBAT",
             "target": {
                 "Morph": {
-                    "produces": 484
+                    "produces": 484,
+                    "produces_name": "HELLIONTANK"
                 }
             }
         },
@@ -6668,7 +6928,8 @@
             "name": "BURROWDOWN_SWARMHOST",
             "target": {
                 "Morph": {
-                    "produces": 493
+                    "produces": 493,
+                    "produces_name": "SWARMHOSTBURROWEDMP"
                 }
             }
         },
@@ -6696,7 +6957,8 @@
             "name": "BURROWUP_SWARMHOST",
             "target": {
                 "Morph": {
-                    "produces": 494
+                    "produces": 494,
+                    "produces_name": "SWARMHOSTMP"
                 }
             }
         },
@@ -6940,7 +7202,8 @@
             "name": "BURROWDOWN_WIDOWMINE",
             "target": {
                 "Morph": {
-                    "produces": 500
+                    "produces": 500,
+                    "produces_name": "WIDOWMINEBURROWED"
                 }
             }
         },
@@ -6968,7 +7231,8 @@
             "name": "BURROWUP_WIDOWMINE",
             "target": {
                 "Morph": {
-                    "produces": 498
+                    "produces": 498,
+                    "produces_name": "WIDOWMINE"
                 }
             }
         },
@@ -7008,7 +7272,8 @@
             "name": "BURROWDOWN_LURKER",
             "target": {
                 "Morph": {
-                    "produces": 503
+                    "produces": 503,
+                    "produces_name": "LURKERMPBURROWED"
                 }
             }
         },
@@ -7036,7 +7301,8 @@
             "name": "BURROWUP_LURKER",
             "target": {
                 "Morph": {
-                    "produces": 502
+                    "produces": 502,
+                    "produces_name": "LURKERMP"
                 }
             }
         },
@@ -7244,7 +7510,8 @@
             "name": "MORPHTORAVAGER_RAVAGER",
             "target": {
                 "Morph": {
-                    "produces": 688
+                    "produces": 688,
+                    "produces_name": "RAVAGER"
                 }
             }
         },
@@ -7272,7 +7539,8 @@
             "name": "MORPH_LURKER",
             "target": {
                 "Morph": {
-                    "produces": 502
+                    "produces": 502,
+                    "produces_name": "LURKERMP"
                 }
             }
         },
@@ -7312,7 +7580,8 @@
             "name": "BURROWDOWN_RAVAGER",
             "target": {
                 "Morph": {
-                    "produces": 690
+                    "produces": 690,
+                    "produces_name": "RAVAGERBURROWED"
                 }
             }
         },
@@ -7340,7 +7609,8 @@
             "name": "BURROWUP_RAVAGER",
             "target": {
                 "Morph": {
-                    "produces": 688
+                    "produces": 688,
+                    "produces_name": "RAVAGER"
                 }
             }
         },
@@ -7416,7 +7686,8 @@
             "name": "MORPH_THORHIGHIMPACTMODE",
             "target": {
                 "Morph": {
-                    "produces": 691
+                    "produces": 691,
+                    "produces_name": "THORAP"
                 }
             }
         },
@@ -7444,7 +7715,8 @@
             "name": "MORPH_THOREXPLOSIVEMODE",
             "target": {
                 "Morph": {
-                    "produces": 52
+                    "produces": 52,
+                    "produces_name": "THOR"
                 }
             }
         },
@@ -7520,7 +7792,8 @@
             "name": "LOCUSTMPFLYINGMORPHTOGROUND_LOCUSTMPFLYINGSWOOP",
             "target": {
                 "Morph": {
-                    "produces": 489
+                    "produces": 489,
+                    "produces_name": "LOCUSTMP"
                 }
             }
         },
@@ -7536,7 +7809,8 @@
             "name": "LOCUSTMPMORPHTOAIR_LOCUSTMPFLYINGSWOOP",
             "target": {
                 "Morph": {
-                    "produces": 693
+                    "produces": 693,
+                    "produces_name": "LOCUSTMPFLYING"
                 }
             }
         },
@@ -7648,7 +7922,8 @@
             "name": "MORPHTOGUARDIANMP_MORPHTOGUARDIANMP",
             "target": {
                 "Morph": {
-                    "produces": 727
+                    "produces": 727,
+                    "produces_name": "GUARDIANMP"
                 }
             }
         },
@@ -7676,7 +7951,8 @@
             "name": "MORPHTODEVOURERMP_MORPHTODEVOURERMP",
             "target": {
                 "Morph": {
-                    "produces": 729
+                    "produces": 729,
+                    "produces_name": "DEVOURERMP"
                 }
             }
         },
@@ -7740,7 +8016,8 @@
             "name": "DEFILERMPBURROW_BURROWDOWN",
             "target": {
                 "Morph": {
-                    "produces": 730
+                    "produces": 730,
+                    "produces_name": "DEFILERMPBURROWED"
                 }
             }
         },
@@ -7768,7 +8045,8 @@
             "name": "DEFILERMPUNBURROW_BURROWUP",
             "target": {
                 "Morph": {
-                    "produces": 731
+                    "produces": 731,
+                    "produces_name": "DEFILERMP"
                 }
             }
         },
@@ -7820,7 +8098,8 @@
             "name": "BUILD_STASISTRAP",
             "target": {
                 "Build": {
-                    "produces": 732
+                    "produces": 732,
+                    "produces_name": "ORACLESTASISTRAP"
                 }
             }
         },
@@ -7884,7 +8163,8 @@
             "name": "PURIFICATIONNOVAMORPHBACK_PURIFICATIONNOVA",
             "target": {
                 "Morph": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -7924,7 +8204,8 @@
             "name": "LIBERATORMORPHTOAG_LIBERATORAGMODE",
             "target": {
                 "Morph": {
-                    "produces": 734
+                    "produces": 734,
+                    "produces_name": "LIBERATORAG"
                 }
             }
         },
@@ -7940,7 +8221,8 @@
             "name": "LIBERATORMORPHTOAA_LIBERATORAAMODE",
             "target": {
                 "Morph": {
-                    "produces": 689
+                    "produces": 689,
+                    "produces_name": "LIBERATOR"
                 }
             }
         },
@@ -7956,7 +8238,8 @@
             "name": "MORPH_LIBERATORAGMODE",
             "target": {
                 "MorphPlace": {
-                    "produces": 734
+                    "produces": 734,
+                    "produces_name": "LIBERATORAG"
                 }
             }
         },
@@ -7972,7 +8255,8 @@
             "name": "MORPH_LIBERATORAAMODE",
             "target": {
                 "Morph": {
-                    "produces": 689
+                    "produces": 689,
+                    "produces_name": "LIBERATOR"
                 }
             }
         },
@@ -8088,7 +8372,8 @@
             "name": "MORPH_OVERLORDTRANSPORT",
             "target": {
                 "Morph": {
-                    "produces": 893
+                    "produces": 893,
+                    "produces_name": "OVERLORDTRANSPORT"
                 }
             }
         },
@@ -8128,7 +8413,8 @@
             "name": "PURIFYMORPHPYLON_MOTHERSHIPCOREWEAPON",
             "target": {
                 "Morph": {
-                    "produces": 894
+                    "produces": 894,
+                    "produces_name": "PYLONOVERCHARGED"
                 }
             }
         },
@@ -8144,7 +8430,8 @@
             "name": "PURIFYMORPHPYLONBACK_MOTHERSHIPCOREWEAPON",
             "target": {
                 "Morph": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -8160,7 +8447,8 @@
             "name": "RESEARCH_SHADOWSTRIKE",
             "target": {
                 "Research": {
-                    "upgrade": 141
+                    "upgrade": 141,
+                    "upgrade_name": "DARKTEMPLARBLINKUPGRADE"
                 }
             }
         },
@@ -8200,7 +8488,8 @@
             "name": "BURROWDOWN",
             "target": {
                 "Morph": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -8216,7 +8505,8 @@
             "name": "BURROWUP",
             "target": {
                 "Morph": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -8400,7 +8690,8 @@
             "name": "LAND",
             "target": {
                 "MorphPlace": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -8416,7 +8707,8 @@
             "name": "LIFT",
             "target": {
                 "Morph": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -8432,7 +8724,8 @@
             "name": "MORPH_ROOT",
             "target": {
                 "MorphPlace": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -8448,7 +8741,8 @@
             "name": "MORPH_UPROOT",
             "target": {
                 "Morph": {
-                    "produces": 0
+                    "produces": 0,
+                    "produces_name": "Unknown"
                 }
             }
         },
@@ -8464,7 +8758,8 @@
             "name": "BUILD_TECHLAB",
             "target": {
                 "BuildInstant": {
-                    "produces": 5
+                    "produces": 5,
+                    "produces_name": "TECHLAB"
                 }
             }
         },
@@ -8480,21 +8775,10 @@
             "name": "BUILD_REACTOR",
             "target": {
                 "BuildInstant": {
-                    "produces": 6
+                    "produces": 6,
+                    "produces_name": "REACTOR"
                 }
             }
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 1.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3684,
-            "name": "EFFECT_SPRAY",
-            "target": "Point"
         },
         {
             "allow_autocast": true,
@@ -8580,7 +8864,8 @@
             "name": "BUILD_CREEPTUMOR",
             "target": {
                 "Build": {
-                    "produces": 87
+                    "produces": 87,
+                    "produces_name": "CREEPTUMOR"
                 }
             }
         },
@@ -8608,7 +8893,8 @@
             "name": "RESEARCH_ADAPTIVETALONS",
             "target": {
                 "Research": {
-                    "upgrade": 293
+                    "upgrade": 293,
+                    "upgrade_name": "DIGGINGCLAWS"
                 }
             }
         },
@@ -8624,7 +8910,8 @@
             "name": "LURKERDENRESEARCH_RESEARCHLURKERRANGE",
             "target": {
                 "Research": {
-                    "upgrade": 127
+                    "upgrade": 127,
+                    "upgrade_name": "LURKERRANGE"
                 }
             }
         },
@@ -8640,7 +8927,8 @@
             "name": "MORPH_OBSERVERMODE",
             "target": {
                 "Morph": {
-                    "produces": 82
+                    "produces": 82,
+                    "produces_name": "OBSERVER"
                 }
             }
         },
@@ -8656,7 +8944,8 @@
             "name": "MORPH_SURVEILLANCEMODE",
             "target": {
                 "Morph": {
-                    "produces": 1911
+                    "produces": 1911,
+                    "produces_name": "OBSERVERSIEGEMODE"
                 }
             }
         },
@@ -8672,7 +8961,8 @@
             "name": "MORPH_OVERSIGHTMODE",
             "target": {
                 "Morph": {
-                    "produces": 1912
+                    "produces": 1912,
+                    "produces_name": "OVERSEERSIEGEMODE"
                 }
             }
         },
@@ -8688,7 +8978,8 @@
             "name": "MORPH_OVERSEERMODE",
             "target": {
                 "Morph": {
-                    "produces": 129
+                    "produces": 129,
+                    "produces_name": "OVERSEER"
                 }
             }
         },
@@ -8762,18 +9053,6 @@
             "energy_cost": 0,
             "id": 3763,
             "name": "INFESTORENSNARE_INFESTORENSNARE",
-            "target": "Unit"
-        },
-        {
-            "allow_autocast": true,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 6.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3765,
-            "name": "EFFECT_RESTORE",
             "target": "Unit"
         },
         {
@@ -9000,8 +9279,32 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
+            "id": 3797,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY1",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
             "id": 3798,
-            "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPLEFTGREEN_CANCEL",
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY2",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3799,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY3",
             "target": "None"
         },
         {
@@ -9013,8 +9316,164 @@
             "effect": [],
             "energy_cost": 0,
             "id": 3800,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY4",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3801,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY5",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3802,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY6",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3803,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY7",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3804,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY8",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3805,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY9",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3806,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY10",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3807,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY11",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3808,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY12",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3809,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY13",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3810,
+            "name": "LOADOUTSPRAY_LOADOUTSPRAY14",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3967,
+            "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPLEFTGREEN_CANCEL",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3970,
             "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPRIGHTGREEN_CANCEL",
             "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 500.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4107,
+            "name": "BATTERYOVERCHARGE_BATTERYOVERCHARGE",
+            "target": "Unit"
         },
         {
             "allow_autocast": false,
@@ -9024,13 +9483,33 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 3801,
+            "id": 4109,
             "name": "AMORPHOUSARMORCLOUD_AMORPHOUSARMORCLOUD",
-            "target": {
-                "MorphPlace": {
-                    "produces": 0
-                }
-            }
+            "target": "Point"
+        },
+        {
+            "allow_autocast": true,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 6.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4111,
+            "name": "SHIELDBATTERYRECHARGEEX5_SHIELDBATTERYRECHARGE",
+            "target": "Unit"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4112,
+            "name": "SHIELDBATTERYRECHARGEEX5_STOP",
+            "target": "None"
         }
     ],
     "Unit": [
@@ -10155,6 +10634,58 @@
             "supply": 0.0,
             "time": 560.0,
             "weapons": []
+        },
+        {
+            "abilities": [
+                {
+                    "ability": 4
+                },
+                {
+                    "ability": 23
+                },
+                {
+                    "ability": 1
+                }
+            ],
+            "accepts_addon": false,
+            "armor": 0.0,
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
+            "detection_range": 11.0,
+            "gas": 0,
+            "id": 23,
+            "is_addon": false,
+            "is_flying": false,
+            "is_structure": true,
+            "is_townhall": false,
+            "is_worker": false,
+            "max_health": 250.0,
+            "minerals": 100,
+            "name": "MissileTurret",
+            "needs_creep": false,
+            "needs_geyser": false,
+            "needs_power": false,
+            "race": "Terran",
+            "radius": 1.125,
+            "sight": 11.0,
+            "size": 0,
+            "speed_creep_mul": 1.0,
+            "supply": 0.0,
+            "time": 400.0,
+            "weapons": [
+                {
+                    "attacks": 2,
+                    "bonuses": [],
+                    "cooldown": 0.86083984375,
+                    "damage_per_hit": 12.0,
+                    "damage_splash": 0,
+                    "range": 7.0,
+                    "target_type": "Air"
+                }
+            ]
         },
         {
             "abilities": [
@@ -11321,9 +11852,6 @@
                     "ability": 23
                 },
                 {
-                    "ability": 26
-                },
-                {
                     "ability": 295
                 },
                 {
@@ -12294,6 +12822,9 @@
                     "ability": 1006
                 },
                 {
+                    "ability": 4107
+                },
+                {
                     "ability": 3755
                 },
                 {
@@ -12610,6 +13141,9 @@
                 },
                 {
                     "ability": 48
+                },
+                {
+                    "ability": 49
                 }
             ],
             "accepts_addon": false,
@@ -13634,7 +14168,7 @@
             "is_worker": false,
             "max_health": 150.0,
             "max_shield": 100.0,
-            "minerals": 250,
+            "minerals": 200,
             "name": "VoidRay",
             "needs_creep": false,
             "needs_geyser": false,
@@ -13643,10 +14177,10 @@
             "radius": 1.0,
             "sight": 10.0,
             "size": 0,
-            "speed": 2.5,
+            "speed": 2.75,
             "speed_creep_mul": 1.0,
             "supply": 4.0,
-            "time": 960.0,
+            "time": 832.0,
             "weapons": []
         },
         {
@@ -13846,9 +14380,6 @@
                 },
                 {
                     "ability": 23
-                },
-                {
-                    "ability": 30
                 },
                 {
                     "ability": 298
@@ -14139,7 +14670,7 @@
             "accepts_addon": false,
             "armor": 0.0,
             "attributes": [
-                "Armored",
+                "Light",
                 "Biological",
                 "Structure"
             ],
@@ -14519,9 +15050,6 @@
                 },
                 {
                     "ability": 1455
-                },
-                {
-                    "ability": 1457
                 }
             ],
             "accepts_addon": false,
@@ -15063,9 +15591,6 @@
                 },
                 {
                     "ability": 23
-                },
-                {
-                    "ability": 28
                 },
                 {
                     "ability": 1152
@@ -15680,6 +16205,9 @@
                     "ability": 74
                 },
                 {
+                    "ability": 4109
+                },
+                {
                     "ability": 1
                 },
                 {
@@ -15703,14 +16231,6 @@
                     "requirements": [
                         {
                             "upgrade": 64
-                        }
-                    ]
-                },
-                {
-                    "ability": 3801,
-                    "requirements": [
-                        {
-                            "upgrade": 297
                         }
                     ]
                 }
@@ -16286,7 +16806,7 @@
                     "cooldown": 1.0,
                     "damage_per_hit": 9.0,
                     "damage_splash": 0,
-                    "range": 8.0,
+                    "range": 7.0,
                     "target_type": "Air"
                 },
                 {
@@ -16815,7 +17335,7 @@
             "accepts_addon": false,
             "armor": 0.0,
             "attributes": [
-                "Armored",
+                "Light",
                 "Biological",
                 "Structure"
             ],
@@ -16854,7 +17374,7 @@
             "accepts_addon": false,
             "armor": 0.0,
             "attributes": [
-                "Armored",
+                "Light",
                 "Biological",
                 "Structure"
             ],
@@ -20391,17 +20911,7 @@
             "weapons": []
         },
         {
-            "abilities": [
-                {
-                    "ability": 4
-                },
-                {
-                    "ability": 3765
-                },
-                {
-                    "ability": 1
-                }
-            ],
+            "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
             "attributes": [
@@ -20617,7 +21127,6 @@
             "needs_creep": false,
             "needs_geyser": true,
             "needs_power": false,
-            "normal_mode": 20,
             "race": "Terran",
             "radius": 1.6875,
             "sight": 9.0,
@@ -20636,7 +21145,7 @@
                 "Structure"
             ],
             "gas": 0,
-            "id": 1980,
+            "id": 1994,
             "is_addon": false,
             "is_flying": false,
             "is_structure": true,
@@ -20649,7 +21158,6 @@
             "needs_creep": false,
             "needs_geyser": true,
             "needs_power": false,
-            "normal_mode": 61,
             "race": "Protoss",
             "radius": 1.6875,
             "sight": 9.0,
@@ -20669,7 +21177,7 @@
                 "Structure"
             ],
             "gas": 0,
-            "id": 1981,
+            "id": 1995,
             "is_addon": false,
             "is_flying": false,
             "is_structure": true,
@@ -20681,7 +21189,6 @@
             "needs_creep": false,
             "needs_geyser": true,
             "needs_power": false,
-            "normal_mode": 88,
             "race": "Zerg",
             "radius": 1.6875,
             "sight": 9.0,
@@ -21750,10 +22257,10 @@
             "cost": {
                 "gas": 150,
                 "minerals": 150,
-                "time": 1760.0
+                "time": 2240.0
             },
             "id": 296,
-            "name": "EnhancedShockwaves"
+            "name": "TempestGroundAttackUpgrade"
         },
         {
             "cost": {
@@ -21762,6 +22269,15 @@
                 "time": 1760.0
             },
             "id": 297,
+            "name": "EnhancedShockwaves"
+        },
+        {
+            "cost": {
+                "gas": 150,
+                "minerals": 150,
+                "time": 1760.0
+            },
+            "id": 298,
             "name": "MicrobialShroud"
         },
         {
@@ -21770,7 +22286,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 298,
+            "id": 299,
             "name": "SunderingImpact"
         },
         {
@@ -21779,7 +22295,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 299,
+            "id": 300,
             "name": "AmplifiedShielding"
         },
         {
@@ -21788,7 +22304,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 300,
+            "id": 301,
             "name": "PsionicAmplifiers"
         },
         {
@@ -21797,7 +22313,7 @@
                 "minerals": 100,
                 "time": 1280.0
             },
-            "id": 301,
+            "id": 302,
             "name": "SecretedCoating"
         }
     ]

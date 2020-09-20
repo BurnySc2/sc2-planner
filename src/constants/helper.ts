@@ -23,16 +23,23 @@ const CONVERT_SECONDS_TO_TIME_STRING = (totalSeconds: number) => {
 
 const getImageOfItem = (item: { name: string; type: string }): string => {
     let image = ""
-    if (item.type === "upgrade") {
-        image = require(`../icons/png/${
-            UPGRADE_ICONS[item.name.toUpperCase()]
-        }`)
-    } else if (item.type === "action") {
-        image = require(`../icons/png/${
-            CUSTOMACTIONS_BY_NAME[item.name].imageSource
-        }`)
-    } else {
-        image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
+    try {
+        if (item.type === "upgrade") {
+            image = require(`../icons/png/${
+                UPGRADE_ICONS[item.name.toUpperCase()]
+            }`)
+        } else if (item.type === "action") {
+            image = require(`../icons/png/${
+                CUSTOMACTIONS_BY_NAME[item.name].imageSource
+            }`)
+        } else {
+            image = require(`../icons/png/${
+                UNIT_ICONS[item.name.toUpperCase()]
+            }`)
+        }
+    } catch {
+        console.error(`Missing image for: ${item.name}`)
+    } finally {
     }
     return image
 }

@@ -1,8 +1,8 @@
 To get the icons as .png files:
 
-- Install StarCraft 2
+- Install and update StarCraft 2
 - Download CascView from http://www.zezula.net/en/casc/main.html
-- Run CascView and open directory `.../Program Files (x86)/StarCraft II/SC2Data/data`
+- Run CascView and open CASC storage `.../Program Files (x86)/StarCraft II/SC2Data/data`
 - If on linux, use wine to run it
 - Use the search tool and search for file mask `*\btn*.dds`
 - Extract all those files

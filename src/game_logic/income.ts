@@ -32,9 +32,12 @@ const incomeMinerals = (
 
     const income_workers_far_patch = 32
     const income_third_worker_far_patch = 32
-    
+
     const income_workers_close_patch = 46
-    const income_third_worker_close_patch = Math.max(0, 102 - 2 * income_workers_close_patch)
+    const income_third_worker_close_patch = Math.max(
+        0,
+        102 - 2 * income_workers_close_patch
+    )
 
     // Add workers as third workers to close patches
     if (workers > 19) {

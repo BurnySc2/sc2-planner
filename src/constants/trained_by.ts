@@ -108,8 +108,8 @@ data.Unit.forEach((trainingUnit) => {
 }
  */
 console.assert(
-    Object.keys(TRAINED_BY).length === 114,
-    `${Object.keys(TRAINED_BY).length} is not 114`
+    Object.keys(TRAINED_BY).length === 115,
+    `${Object.keys(TRAINED_BY).length} is not 115`
 )
 
 console.assert(
