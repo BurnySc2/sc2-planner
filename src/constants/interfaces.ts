@@ -29,7 +29,7 @@ interface ICustomAction {
     imageSource: string
     duration: number
     id: number
-    race?: IAllRaces | undefined
+    race?: IAllRaces | string
 }
 
 interface IDataUnit {
