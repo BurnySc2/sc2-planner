@@ -14,6 +14,6 @@ To get the icons as .png files:
         convert "$file" "$(basename "$file" .dds).png"
     done
     ```
-- Copy the resulting .png files in the `src/icons/icons_all` subfolder
+- Copy the resulting .png files to the `src/icons/icons_all` subfolder (create it if it doesn't exist)
 - Run the script `copy_icons.py` which automatically copies all the needed button icons to the `src/icons/png` subfolder
 

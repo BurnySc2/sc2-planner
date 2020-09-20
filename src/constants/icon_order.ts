@@ -94,11 +94,12 @@ const structurePriority: { [name: string]: number } = {
     StarportTechLab: 14,
     StarportReactor: 15,
     EngineeringBay: 20,
-    Armory: 21,
+    Armory: 22,
     Bunker: 25,
     GhostAcademy: 26,
     FusionCore: 28,
-    SensorTower: 20,
+    SensorTower: 21,
+    MissileTurret: 20,
 
     // Zerg
     Hatchery: 1,
@@ -146,8 +147,9 @@ const upgradePriority: { [name: string]: number } = {
     BlinkTech: 18,
     PhoenixRangeUpgrade: 24,
     AdeptPiercingAttack: 19,
-    DarkTemplarBlinkUpgrade: 26,
+    DarkTemplarBlinkUpgrade: 27,
     VoidRaySpeedUpgrade: 25,
+    TempestGroundAttackUpgrade: 26,
 
     // Terran
     HiSecAutoTracking: 60,
