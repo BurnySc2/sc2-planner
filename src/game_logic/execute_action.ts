@@ -298,6 +298,30 @@ const executeAction = (
         }
     }
 
+    if (action.internal_name === "chronoboost_busy_robotics_bay") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage = "No busy Robotics Bay could be found."
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (
+                        target.name === "RoboticsBay" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
     if (action.internal_name === "chronoboost_busy_stargate") {
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
@@ -307,6 +331,30 @@ const executeAction = (
                 for (const target of gamelogic.busyUnits) {
                     if (
                         target.name === "Stargate" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
+    if (action.internal_name === "chronoboost_busy_fleet_beacon") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage = "No busy Fleet Beacon could be found."
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (
+                        target.name === "FleetBeacon" &&
                         target.hasChronoUntilFrame === -1
                     ) {
                         target.addChrono(gamelogic.frame)
@@ -332,6 +380,55 @@ const executeAction = (
                 for (const target of gamelogic.busyUnits) {
                     if (
                         target.name === "TwilightCouncil" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
+    if (action.internal_name === "chronoboost_busy_templar_archive") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage =
+                    "No busy Templar Archive could be found."
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (
+                        target.name === "TemplarArchive" &&
+                        target.hasChronoUntilFrame === -1
+                    ) {
+                        target.addChrono(gamelogic.frame)
+                        unit.energy -= 50
+                        actionCompleted = true
+                        break
+                    }
+                }
+            }
+            if (actionCompleted) {
+                break
+            }
+        }
+    }
+
+    if (action.internal_name === "chronoboost_busy_dark_shrine") {
+        // Find nexus with 50 energy
+        for (const unit of gamelogic.units) {
+            if (unit.name === "Nexus" && unit.energy >= 50) {
+                gamelogic.errorMessage = "No busy Dark Shrine could be found."
+                // Find target
+                for (const target of gamelogic.busyUnits) {
+                    if (
+                        target.name === "DarkShrine" &&
                         target.hasChronoUntilFrame === -1
                     ) {
                         target.addChrono(gamelogic.frame)

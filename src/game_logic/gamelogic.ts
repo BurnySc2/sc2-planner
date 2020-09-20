@@ -424,6 +424,10 @@ class GameLogic {
                 incrementUnitName("chronoboost_busy_robo", amount)
                 incrementUnitName("chronoboost_busy_stargate", amount)
                 incrementUnitName("chronoboost_busy_twilight", amount)
+                incrementUnitName("chronoboost_busy_dark_shrine", amount)
+                incrementUnitName("chronoboost_busy_templar_archive", amount)
+                incrementUnitName("chronoboost_busy_fleet_beacon", amount)
+                incrementUnitName("chronoboost_busy_robotics_bay", amount)
             }
             if (unit.name === "Gateway" && this.upgrades.has("WarpGate")) {
                 incrementUnitName("convert_gateway_to_warpgate")
