@@ -39,15 +39,15 @@ export default class Settings extends Component<MyProps, MyState> {
         })
     }
 
-    onChange = (
-        e: ChangeEvent<HTMLInputElement>,
-        itemShortName: string
-    ) => {
+    onChange = (e: ChangeEvent<HTMLInputElement>, itemShortName: string) => {
         const newValue = parseFloat(e.target.value)
         this.props.updateSettings(itemShortName, newValue)
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
+    onMouseEnter = (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        item: JSX.Element
+    ) => {
         this.setState({
             tooltipText: item,
         })
@@ -60,7 +60,9 @@ export default class Settings extends Component<MyProps, MyState> {
             : `hidden ${classes}`
 
         const settingsElements = this.props.settings.map((item, index) => {
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (
+                e: React.MouseEvent<HTMLDivElement, MouseEvent>
+            ) => {
                 this.onMouseEnter(e, <div>{item.tooltip}</div>)
             }
             return (
