@@ -9,13 +9,13 @@ const CLASSES = {
     timeIcon: "h-24 w-24 mx-1 p-0 z-10",
     timeText: "absolute z-20 text-white",
 
-    // Action selection container
+    // Action selection container on the right
     actionContainer: "flex flex-wrap bg-gray-600 m-1 p-1",
     // Action icon
     actionIconContainer:
         "relative h-12 w-12 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
     actionIconText:
-        "m-0 p-0 absolute z-40 text-white bg-black select-none text-xs",
+        "m-0 p-0 absolute z-40 text-white bg-black rounded select-none text-xs",
 
     // Icons in the build order at the top
     bo: "flex flex-row overflow-x-auto mx-1 p-0",
