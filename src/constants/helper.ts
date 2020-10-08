@@ -1,6 +1,7 @@
 // @ts-ignore
 import lzbase62 from "lzbase62"
 import { isEqual, pick } from "lodash"
+import { Base64 } from "js-base64"
 
 import { ISettingsElement, IBuildOrderElement, IAllRaces } from "./interfaces"
 import UNITS_BY_NAME from "./units_by_name"
@@ -8,6 +9,9 @@ import UPGRADES_BY_NAME from "./upgrade_by_name"
 import UPGRADES_BY_ID from "./upgrade_by_id"
 import { CUSTOMACTIONS_BY_ID } from "./customactions"
 import UNITS_BY_ID from "./units_by_id"
+
+const jsonpack = require("jsonpack")
+const pako = require("pako")
 
 const { CUSTOMACTIONS_BY_NAME } = require("./customactions")
 const UNIT_ICONS = require("../icons/unit_icons.json")
@@ -178,42 +182,85 @@ const encodeBuildOrder = (
             compactArray.push({ id: upgrade.id, type: item.type })
         }
     })
-    const jsonString = JSON.stringify({ v: 1, bo: compactArray })
-    const encoded = lzbase62.compress(jsonString)
+
+    /*
+    Simple example of how to compress with zlib and gzip to get the same results as with python
+
+    JS:
+    import pako, Base64
+    https://www.npmjs.com/package/pako 
+    https://www.npmjs.com/package/js-base64
+    let my_string = JSON.stringify({"version": 1})
+    let zlib_compressed = pako.deflate(my_string)
+    let gzip_compressed = pako.gzip(my_string)
+    let zlib_b64 = Base64.fromUint8Array(zlib_compressed)
+    let gzip_b64 = Base64.fromUint8Array(gzip_compressed)
+
+    Python with same results:
+    import json, zlib, gzip
+    my_string = json.dumps({"version": 1}, separators=(',', ':'))
+    zlib_compressed = zlib.compress(my_string.encode())
+    gzip_compressed = glib.compress(my_string.encode())
+    zlib_b64 = base64.b64encode(zlib_compressed)
+    gzip_b64 = base64.b64encode(gzip_compressed)
+    */
+    const compressed = jsonpack.pack(compactArray)
+    // Version byte of '001'
+    const encoded = "001" + btoa(compressed)
     return encoded
 }
 
 const decodeBuildOrder = (
     buildOrderEncoded: string
 ): Array<IBuildOrderElement> => {
-    const decodedString = lzbase62.decompress(buildOrderEncoded)
-    const jsonObj: {
-        v: number
-        bo: Array<{
-            id: number
-            type: string
-        }>
-    } = JSON.parse(decodedString)
-    const buildOrderDecoded: Array<IBuildOrderElement> = []
-    if (jsonObj.v === 1) {
-        jsonObj.bo.forEach((item) => {
-            if (item.type === "action") {
-                const action = CUSTOMACTIONS_BY_ID[item.id]
-                buildOrderDecoded.push({
-                    name: action.internal_name,
-                    type: item.type,
-                })
-            }
-            if (["worker", "unit", "structure"].includes(item.type)) {
-                const unit = UNITS_BY_ID[item.id]
-                buildOrderDecoded.push({ name: unit.name, type: item.type })
-            }
-            if (item.type === "upgrade") {
-                const upgrade = UPGRADES_BY_ID[item.id]
-                buildOrderDecoded.push({ name: upgrade.name, type: item.type })
-            }
-        })
+    let buildOrderDecoded: Array<IBuildOrderElement> = []
+    let bo: Array<{
+        id: number
+        type: string
+    }> = []
+
+    if (buildOrderEncoded.startsWith("001")) {
+        // Versions with bytes "001" at the start
+        const decoded = atob(buildOrderEncoded.substr(3))
+        bo = jsonpack.unpack(decoded)
+    } else if (buildOrderEncoded.startsWith("002")) {
+        // Versions with bytes "002" at the start
+        const zlib_b64 = buildOrderEncoded.substr(3)
+        const zlib_compressed = Base64.toUint8Array(zlib_b64)
+        const jsonString = pako.inflate(zlib_compressed, { to: "string" })
+        bo = JSON.parse(jsonString)
+    } else {
+        // First published version
+        const decodedString = lzbase62.decompress(buildOrderEncoded)
+        const jsonObj: {
+            v: number
+            bo: Array<{
+                id: number
+                type: string
+            }>
+        } = JSON.parse(decodedString)
+        bo = jsonObj.bo
     }
+
+    // Decode
+    // TODO Verify that each item in the build order is known
+    bo.forEach((item) => {
+        if (item.type === "action") {
+            const action = CUSTOMACTIONS_BY_ID[item.id]
+            buildOrderDecoded.push({
+                name: action.internal_name,
+                type: item.type,
+            })
+        }
+        if (["worker", "unit", "structure"].includes(item.type)) {
+            const unit = UNITS_BY_ID[item.id]
+            buildOrderDecoded.push({ name: unit.name, type: item.type })
+        }
+        if (item.type === "upgrade") {
+            const upgrade = UPGRADES_BY_ID[item.id]
+            buildOrderDecoded.push({ name: upgrade.name, type: item.type })
+        }
+    })    
     return buildOrderDecoded
 }
 
