@@ -603,6 +603,19 @@ const executeAction = (
         }
     }
 
+    if (action.internal_name === "salvage_bunker") {
+        gamelogic.errorMessage = `Could not find a Bunker.`
+        for (const unit of gamelogic.units) {
+            // Find any bunker
+            if (unit.name === "Bunker") {
+                gamelogic.killUnit(unit)
+                actionCompleted = true
+                gamelogic.minerals += 75
+                break
+            }
+        }
+    }
+
     // ATTACH TERRAN PRODUCTION TO FREE ADDONS
 
     const attach_to_addon = (structureName: string, attachReactor = false) => {

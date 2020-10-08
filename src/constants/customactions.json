@@ -64,6 +64,14 @@
         "id": 8
     },
     {
+        "internal_name": "salvage_bunker",
+        "name": "Salvage",
+        "imageSource": "btn-building-terran-bunker.png",
+        "duration": 15,
+        "race": "terran",
+        "id": 40
+    },
+    {
         "internal_name": "attach_barracks_to_free_techlab",
         "name": "Barracks to free Techlab",
         "imageSource": "btn-building-terran-barracks.png",

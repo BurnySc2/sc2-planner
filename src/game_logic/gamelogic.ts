@@ -488,6 +488,9 @@ class GameLogic {
             if (unit.name === "Starport" && unit.hasReactor) {
                 incrementUnitName("dettach_starport_from_reactor")
             }
+            if (unit.name === "Bunker") {
+                incrementUnitName("salvage_bunker")
+            }
             // Zerg
             if (unit.name === "Queen") {
                 const amount = Math.floor(unit.energy / 25)
