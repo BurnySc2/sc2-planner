@@ -71,7 +71,10 @@ export default withRouter(
             // Decode build order from url
             let bo: Array<IBuildOrderElement> = []
             if (boEncoded) {
-                bo = decodeBuildOrder(boEncoded)
+                // Replace spaces with plus signs because somehow this is not retrieved
+                let search = " "
+                let replacement = "+"
+                bo = decodeBuildOrder(boEncoded.split(search).join(replacement))
             }
 
             // Start the game logic with given settings and build order
