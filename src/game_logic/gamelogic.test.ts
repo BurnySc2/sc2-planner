@@ -133,7 +133,7 @@ test("Build 2 drones, 1 overlord, 4 drones", () => {
     const logic = new GameLogic("zerg", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(20)
+    expect(logic.units.size).toBe(21)
     expect(logic.eventLog.length).toBe(7)
     expect(logic.supplyCap).toBe(22)
 })
