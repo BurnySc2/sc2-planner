@@ -205,9 +205,12 @@ const encodeBuildOrder = (
     gzip_b64 = base64.b64encode(gzip_compressed)
     */
 
-    let jsonString = JSON.stringify(compactArray)
-    let compressed = pako.deflate(jsonString)
-    let encoded = "002" + Base64.fromUint8Array(compressed)
+    const jsonString = JSON.stringify({ v: 1, bo: compactArray })
+    const encoded = lzbase62.compress(jsonString)
+
+    // let jsonString = JSON.stringify(compactArray)
+    // let compressed = pako.deflate(jsonString)
+    // let encoded = "002" + Base64.fromUint8Array(compressed)
     return encoded
 }
 
@@ -226,10 +229,15 @@ const decodeBuildOrder = (
         bo = jsonpack.unpack(decoded)
     } else if (buildOrderEncoded.startsWith("002")) {
         // Versions with bytes "002" at the start
+        console.log(buildOrderEncoded)
         const zlib_b64 = buildOrderEncoded.substr(3)
+        console.log(zlib_b64)
         const zlib_compressed = Base64.toUint8Array(zlib_b64)
+        console.log(zlib_compressed)
         const jsonString = pako.inflate(zlib_compressed, { to: "string" })
+        console.log(jsonString)
         bo = JSON.parse(jsonString)
+        console.log(bo)
     } else {
         // First published version
         const decodedString = lzbase62.decompress(buildOrderEncoded)
@@ -261,7 +269,7 @@ const decodeBuildOrder = (
             const upgrade = UPGRADES_BY_ID[item.id]
             buildOrderDecoded.push({ name: upgrade.name, type: item.type })
         }
-    })    
+    })
     return buildOrderDecoded
 }
 
