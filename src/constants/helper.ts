@@ -204,9 +204,10 @@ const encodeBuildOrder = (
     zlib_b64 = base64.b64encode(zlib_compressed)
     gzip_b64 = base64.b64encode(gzip_compressed)
     */
-    const compressed = jsonpack.pack(compactArray)
-    // Version byte of '001'
-    const encoded = "001" + btoa(compressed)
+
+    let jsonString = JSON.stringify(compactArray)
+    let compressed = pako.deflate(jsonString)
+    let encoded = "002" + Base64.fromUint8Array(compressed)
     return encoded
 }
 
