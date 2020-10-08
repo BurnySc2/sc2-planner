@@ -230,6 +230,7 @@ class GameLogic {
         if (this.race === "zerg") {
             townhallName = "Hatchery"
             workerName = "Drone"
+            this.units.add(new Unit("Overlord"))
         }
         const townhall = new Unit(townhallName)
         townhall.energy = 50
