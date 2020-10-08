@@ -2,7 +2,7 @@
 
 This is a (hopefully better) remake of the [original (but deprecated) sc2planner](http://web.archive.org/web/20130815065430/http://www.sc2planner.com/?v=hots#P) from scratch, written in [React](https://reactjs.org/) and [Typescript](https://www.typescriptlang.org/).
 
-You can create build orders for [StarCraft 2 Legacy of the Void](https://starcraft2.com/en-us/), and this application will calculate at the time those actions can be executed.
+You can create build orders for [StarCraft 2 Legacy of the Void](https://starcraft2.com/en-us/), and this web-application will simulate/calculate the time at which those actions can be executed.
 
 # Demo
 
@@ -49,6 +49,10 @@ To start dev server:
 To deploy in `/build` directory:
 
 `npm run build`
+
+## Update
+
+To update to the current patch, a freshly generated `data.json` from [SC2 Techtree](https://github.com/BurnySc2/sc2-techtree) is required and needs to be placed in `src/constants/data.json`. If a new unit, structure or upgrade was introduced, then its icon needs to be placed in the `src/icons/png` directory.
 
 # Copyright
 
