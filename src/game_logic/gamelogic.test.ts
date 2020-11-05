@@ -138,6 +138,19 @@ test("Build 2 drones, 1 overlord, 4 drones", () => {
     expect(logic.supplyCap).toBe(22)
 })
 
+test("Test spore requirements", () => {
+    const bo = [
+        { name: "SpawningPool", type: "structure" },
+        { name: "SporeCrawler", type: "structure" },
+    ]
+    const logic = new GameLogic("zerg", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(2)
+    expect(logic.supplyCap).toBe(14)
+})
+
 test("Build OC and call down MULE", () => {
     // Morph CC to OC, then call down a mule
     const bo = [
