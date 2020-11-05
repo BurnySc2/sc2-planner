@@ -172,6 +172,42 @@
             "allow_autocast": false,
             "allow_minimap": false,
             "buff": [],
+            "cast_range": 1.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 26,
+            "name": "EFFECT_SPRAY_TERRAN",
+            "target": "Point"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 1.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 28,
+            "name": "EFFECT_SPRAY_ZERG",
+            "target": "Point"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 1.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 30,
+            "name": "EFFECT_SPRAY_PROTOSS",
+            "target": "Point"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
             "cast_range": 0.0,
             "cooldown": 0,
             "effect": [],
@@ -8781,6 +8817,18 @@
             }
         },
         {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 1.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 3684,
+            "name": "EFFECT_SPRAY",
+            "target": "Point"
+        },
+        {
             "allow_autocast": true,
             "allow_minimap": false,
             "buff": [],
@@ -9269,174 +9317,6 @@
             "energy_cost": 0,
             "id": 3796,
             "name": "UNLOADUNIT",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3797,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY1",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3798,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY2",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3799,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY3",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3800,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY4",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3801,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY5",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3802,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY6",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3803,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY7",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3804,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY8",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3805,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY9",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3806,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY10",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3807,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY11",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3808,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY12",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3809,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY13",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 3810,
-            "name": "LOADOUTSPRAY_LOADOUTSPRAY14",
             "target": "None"
         },
         {
@@ -11850,6 +11730,9 @@
                 },
                 {
                     "ability": 23
+                },
+                {
+                    "ability": 26
                 },
                 {
                     "ability": 295
@@ -14382,6 +14265,9 @@
                     "ability": 23
                 },
                 {
+                    "ability": 30
+                },
+                {
                     "ability": 298
                 },
                 {
@@ -15593,6 +15479,9 @@
                     "ability": 23
                 },
                 {
+                    "ability": 28
+                },
+                {
                     "ability": 1152
                 },
                 {
@@ -15696,7 +15585,7 @@
                     "ability": 1167,
                     "requirements": [
                         {
-                            "building": 90
+                            "building": 89
                         }
                     ]
                 },
