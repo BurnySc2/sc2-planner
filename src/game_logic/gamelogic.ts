@@ -794,7 +794,7 @@ class GameLogic {
 
         for (let researcherStructure of this.idleUnits) {
             // Unit might no longer be idle while iterating over idleUnits
-            if (!researcherStructure.isIdle()) {
+            if (researcherStructure.tasks.length !== 0) {
                 continue
             }
 
@@ -822,6 +822,7 @@ class GameLogic {
                 this.getEventId()
             )
             newTask.newUpgrade = upgrade.name
+            
             researcherStructure.addTask(this, newTask, canBeResearchedByAddon)
 
             const cost = this.getCost(upgrade.name, true)
