@@ -28,6 +28,7 @@ const reorder = (
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
+    insertIndex: number
     removeClick: (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         index: number
@@ -43,6 +44,7 @@ interface MyProps {
         settings: ISettingsElement[] | undefined
     ) => void
     changeHoverIndex: (index: number) => void
+    changeInsertIndex: (index: number) => void
 }
 
 interface MyState {
@@ -123,6 +125,61 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             }
         }
 
+        let buildOrderItems: JSX.Element[] = []
+        let seperatorClass =
+            this.props.insertIndex === 0
+                ? CLASSES.boItemSeperatorSelected
+                : CLASSES.boItemSeperator
+        buildOrderItems.push(
+            <div
+                key={`seperator0`}
+                className={seperatorClass}
+                onClick={(e: any) => {
+                    this.props.changeInsertIndex(0)
+                }}
+            />
+        )
+
+        this.props.gamelogic.bo.forEach((item, index) => {
+            buildOrderItems.push(
+                <Draggable
+                    key={`${index}`}
+                    draggableId={`${index}`}
+                    index={index}
+                >
+                    {(provided, snapshot) => (
+                        <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className={getItemClass(snapshot.isDragging, index)}
+                            onMouseEnter={(e) => this.onMouseEnter(index)}
+                            onMouseLeave={(e) => this.onMouseLeave()}
+                            onClick={(e: any) => {
+                                this.props.removeClick(e, index)
+                            }}
+                        >
+                            {buildOrder[index]}
+                        </div>
+                    )}
+                </Draggable>
+            )
+
+            seperatorClass =
+                this.props.insertIndex === index + 1
+                    ? CLASSES.boItemSeperatorSelected
+                    : CLASSES.boItemSeperator
+            buildOrderItems.push(
+                <div
+                    key={`seperator${index + 1}`}
+                    className={seperatorClass}
+                    onClick={(e: any) => {
+                        this.props.changeInsertIndex(index + 1)
+                    }}
+                />
+            )
+        })
+
         return (
             <div className={CLASSES.bo}>
                 <DragDropContext onDragEnd={this.onDragEnd}>
@@ -133,39 +190,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >
-                                {this.props.gamelogic.bo.map((item, index) => (
-                                    <Draggable
-                                        key={`${index}`}
-                                        draggableId={`${index}`}
-                                        index={index}
-                                    >
-                                        {(provided, snapshot) => (
-                                            <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                className={getItemClass(
-                                                    snapshot.isDragging,
-                                                    index
-                                                )}
-                                                onMouseEnter={(e) =>
-                                                    this.onMouseEnter(index)
-                                                }
-                                                onMouseLeave={(e) =>
-                                                    this.onMouseLeave()
-                                                }
-                                                onClick={(e: any) => {
-                                                    this.props.removeClick(
-                                                        e,
-                                                        index
-                                                    )
-                                                }}
-                                            >
-                                                {buildOrder[index]}
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
+                                {buildOrderItems}
                                 {provided.placeholder}
                             </div>
                         )}

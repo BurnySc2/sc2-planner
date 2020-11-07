@@ -31,7 +31,6 @@ Each build order index increment
 */
 
 let eventId = 0
-let lastSnapshot: GameLogic | null = null
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
@@ -60,7 +59,7 @@ class GameLogic {
     frame: number
     waitTime: number
     eventLog: Array<Event>
-    unitsCount: { [name: string]: number }
+    unitsCountArray: Array<{ [name: string]: number }>
     errorMessage: string
     settings: { [name: string]: number }
 
@@ -100,11 +99,10 @@ class GameLogic {
         this.waitTime = 0
         this.eventLog = []
         // Number of units, will only be saved after every build order index advances - only used for UI purpose on the right side of the website
-        this.unitsCount = {}
+        this.unitsCountArray = []
         // Error message appearing on GUI if build order is invalid
         this.errorMessage = ""
         eventId = -1
-        lastSnapshot = null
         mineralIncomeCache = {}
         vespeneIncomeCache = {}
 
@@ -155,9 +153,8 @@ class GameLogic {
         this.frame = 0
         this.waitTime = 0
         this.eventLog = []
-        this.unitsCount = {}
+        this.unitsCountArray = []
         eventId = -1
-        lastSnapshot = null
         mineralIncomeCache = {}
         vespeneIncomeCache = {}
     }
@@ -183,31 +180,8 @@ class GameLogic {
 
     /**
      *
-     * @param {GameLogic} snapshot - A snapshot of the game logic
      */
-    loadFromSnapshotObject(snapshot: GameLogic) {
-        console.assert(snapshot, `${snapshot}`)
-        // TODO Find a better way of overwriting values from snapshot
-        console.log(cloneDeep(this))
-        console.log(cloneDeep(snapshot))
-        for (let key of Object.keys(snapshot)) {
-            // TODO Fix me
-            // @ts-ignore
-            this[key] = cloneDeep(snapshot[key])
-        }
-    }
-
-    /**
-     * Returns a GameLogic object back
-     */
-    getLastSnapshot() {
-        return lastSnapshot
-    }
-
-    /**
-     *
-     */
-    getEventId = () => {
+    getEventId() {
         eventId += 1
         return eventId
     }
@@ -251,7 +225,7 @@ class GameLogic {
             unit.addTask(this, workerStartDelayTask)
             this.units.add(unit)
         }
-        this.updateUnitsCount()
+        this.unitsCountArray.push(this.updateUnitsCount())
     }
 
     /**
@@ -353,15 +327,11 @@ class GameLogic {
             if (!endOfActions) {
                 this.boIndex += 1
                 this.errorMessage = ""
-                this.updateUnitsCount()
+                this.unitsCountArray.push(this.updateUnitsCount())
                 // Each time the boIndex gets incremented, take a snapshot of the current state - this way i can cache the gamelogic and reload it from the state
                 // e.g. bo = [scv, depot, scv]
                 // and i want to remove depot, i can resume from cached state of index 0
 
-                const clone = cloneDeep(this)
-                // // Need to add one frame here
-                clone.frame += 1
-                lastSnapshot = clone
             }
         }
     }
@@ -371,12 +341,12 @@ class GameLogic {
      */
     updateUnitsCount() {
         // Counts all available actions and how many units, structures we have and if an upgrade is researched
-        this.unitsCount = {}
+        let unitsCount: { [name: string]: number } = {}
         const incrementUnitName = (item: string, amount = 1) => {
-            if (!this.unitsCount[item]) {
-                this.unitsCount[item] = amount
+            if (!unitsCount[item]) {
+                unitsCount[item] = amount
             } else {
-                this.unitsCount[item] += amount
+                unitsCount[item] += amount
             }
         }
         // Count of HT and DT for archon
@@ -504,6 +474,15 @@ class GameLogic {
         this.upgrades.forEach((upgrade, index) => {
             incrementUnitName(upgrade)
         })
+
+        // Also add minerals, vespene and supply as this acts like a 'snapshot' when selecting at which index to insert a new build order item
+        incrementUnitName("minerals", this.minerals)
+        incrementUnitName("vespene", this.vespene)
+        incrementUnitName("supplyused", this.supplyUsed)
+        incrementUnitName("supplycap", this.supplyCap)
+        incrementUnitName("frame", this.frame)
+
+        return unitsCount
     }
 
     /**
@@ -529,7 +508,7 @@ class GameLogic {
 
         // Check if requirement is met
         const requiredStructure = trainedInfo.requiredStructure
-        let requiredStructureMet = requiredStructure === null ? true : false
+        let requiredStructureMet = requiredStructure === null
         if (!requiredStructureMet) {
             for (let structure of this.units) {
                 if (
@@ -894,7 +873,6 @@ class GameLogic {
      */
     getCost(unitName: string, isUpgrade = false): ICost {
         // Gets cost of unit, structure or upgrade
-        // TODO get cost of upgrade
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
             return {
@@ -916,7 +894,6 @@ class GameLogic {
      */
     getTime(unitName: string, isUpgrade = false) {
         // Get build time of unit or structure, or research time of upgrade (in frames)
-        // TODO get time of upgrade
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
             return UPGRADES_BY_NAME[unitName].cost.time

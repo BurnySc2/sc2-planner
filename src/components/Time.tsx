@@ -34,15 +34,12 @@ export default class Time extends Component<MyProps, MyState> {
             fontSize: "x-large",
         }
         // Get the time in a 00:00 format
-        const lastSnapshot = this.props.gamelogic.getLastSnapshot()
-            ? this.props.gamelogic.getLastSnapshot()
-            : this.props.gamelogic
-        let timeEndOfBO = ""
-        if (lastSnapshot) {
-            timeEndOfBO = CONVERT_SECONDS_TO_TIME_STRING(
-                lastSnapshot.frame / 22.4
-            )
-        }
+        const frameOfLastAction = this.props.gamelogic.unitsCountArray[
+            this.props.gamelogic.unitsCountArray.length - 1
+        ].frame
+        const timeEndOfBO = CONVERT_SECONDS_TO_TIME_STRING(
+            frameOfLastAction / 22.4
+        )
         const timeEndOfEvents = CONVERT_SECONDS_TO_TIME_STRING(
             this.props.gamelogic.frame / 22.4
         )

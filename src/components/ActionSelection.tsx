@@ -14,6 +14,7 @@ import { ICustomAction, IAllRaces } from "../constants/interfaces"
 interface MyProps {
     gamelogic: GameLogic
     race: IAllRaces
+    insertIndex: number
     actionClick: (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         action: ICustomAction
@@ -57,11 +58,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
     }
 
     render() {
-        let latestSnapshot: GameLogic | null = this.props.gamelogic.getLastSnapshot()
-        // Is undefined on first frame = when build order is empty
-        if (!latestSnapshot) {
-            latestSnapshot = this.props.gamelogic
-        }
+        let gameLogic: GameLogic = this.props.gamelogic
+        // If the build order has more items than the gamelogic was able to parse (e.g. requirement not met of some item), then the insertIndex might be higher than max allowed, = bug
+        let infoIndex = Math.min(
+            this.props.insertIndex,
+            gameLogic.unitsCountArray.length - 1
+        )
+        let unitsCount = gameLogic.unitsCountArray[infoIndex]
 
         const actionIconTextStyle = {
             bottom: "0%",
@@ -96,24 +99,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
         const resources = resourcesAvailble.map((item, index) => {
             // Instead of getting the status when the last element finished, get the state after the last build order index was started
             let value: number | string = ""
-            if (latestSnapshot) {
-                if (item.name.includes("Supply")) {
-                    value = `${latestSnapshot.supplyUsed}/${latestSnapshot.supplyCap}`
-                } else if (item.name === "Larva") {
-                    value = latestSnapshot.unitsCount[item.name]
-                        ? latestSnapshot.unitsCount[item.name]
-                        : ""
-                } else if (item.name === "MULE") {
-                    value = latestSnapshot.unitsCount[item.name]
-                        ? latestSnapshot.unitsCount[item.name]
-                        : ""
-                } else {
-                    value = `${Math.round(
-                        // TODO Fix me
-                        // @ts-ignore
-                        latestSnapshot[item.name.toLowerCase()]
-                    )}`
-                }
+            if (item.name.includes("Supply")) {
+                value = `${unitsCount["supplyused"]}/${unitsCount["supplycap"]}`
+            } else if (["Larva", "MULE"].includes(item.name)) {
+                value = unitsCount[item.name]
+            } else {
+                // Minerals and vespene
+                value = `${Math.round(unitsCount[item.name.toLowerCase()])}`
             }
 
             return (
@@ -144,17 +136,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     </div>
                 )
             }
-            let value: number | string = ""
+            let value: number | undefined = unitsCount[item.internal_name]
             let icon = ""
-            if (latestSnapshot) {
-                value = latestSnapshot.unitsCount[item.internal_name]
-                    ? latestSnapshot.unitsCount[item.internal_name]
-                    : ""
-                icon = getImageOfItem({
-                    name: item.internal_name,
-                    type: "action",
-                })
-            }
+            icon = getImageOfItem({
+                name: item.internal_name,
+                type: "action",
+            })
+
             const hidden =
                 item.race === undefined || item.race === this.props.race
                     ? ""
@@ -200,10 +188,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             }
             const icon = getImageOfItem({ name: item.name, type: "unit" })
 
-            const value =
-                latestSnapshot && latestSnapshot.unitsCount[item.name]
-                    ? latestSnapshot.unitsCount[item.name]
-                    : ""
+            const value = unitsCount[item.name]
             const hidden = UNIT_NAMES_BY_RACE[this.props.race].has(item.name)
                 ? ""
                 : "hidden"
@@ -246,10 +231,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "structure" })
-            const value =
-                latestSnapshot && latestSnapshot.unitsCount[item.name]
-                    ? latestSnapshot.unitsCount[item.name]
-                    : ""
+            const value = unitsCount[item.name]
             const hidden = STRUCTURE_NAMES_BY_RACE[this.props.race].has(
                 item.name
             )
@@ -296,10 +278,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "upgrade" })
-            const value =
-                latestSnapshot && latestSnapshot.unitsCount[item.name]
-                    ? latestSnapshot.unitsCount[item.name]
-                    : ""
+            const value = unitsCount[item.name]
             const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name)
                 ? ""
                 : "hidden"

@@ -34,6 +34,7 @@ interface MyState {
     gamelogic: GameLogic
     settings: Array<ISettingsElement>
     hoverIndex: number
+    insertIndex: number
 }
 
 export default withRouter(
@@ -92,7 +93,10 @@ export default withRouter(
                 bo: bo,
                 gamelogic: gamelogic,
                 settings: settings,
+                // Index the mouse is hovering over
                 hoverIndex: -1,
+                // Index at which new build order items should be inserted (selected index)
+                insertIndex: 0,
             }
         }
 
@@ -164,6 +168,7 @@ export default withRouter(
                 race: race,
                 bo: [],
                 gamelogic: gamelogic,
+                insertIndex: 0,
             })
 
             // If settings are unchanged, change url to just '/race' instead of encoded settings
@@ -175,7 +180,7 @@ export default withRouter(
         // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
         addItemToBO = (item: IBuildOrderElement) => {
             const bo = this.state.bo
-            bo.push(item)
+            bo.splice(this.state.insertIndex, 0, item)
             // Re-calculate build order
 
             // // Caching using snapshots - idk why this isnt working properly
@@ -189,6 +194,8 @@ export default withRouter(
             // Non cached:
             this.rerunBuildOrder(this.state.race, bo, this.state.settings)
             this.updateUrl(this.state.race, bo, this.state.settings)
+            // Increment index because we appended a new build order item
+            this.setState({ insertIndex: this.state.insertIndex + 1 })
         }
 
         removeItemFromBO = (index: number) => {
@@ -213,6 +220,11 @@ export default withRouter(
             }
 
             this.updateUrl(this.state.race, bo, this.state.settings)
+
+            // Decrement index because we removed a build order item
+            if (this.state.insertIndex > this.state.hoverIndex) {
+                this.setState({ insertIndex: this.state.insertIndex - 1 })
+            }
         }
 
         // If a button is pressed in the action selection, add it to the build order
@@ -278,6 +290,56 @@ export default withRouter(
             })
         }
 
+        changeInsertIndex = (index: number) => {
+            this.setState({
+                insertIndex: index,
+            })
+        }
+
+        handleKeyDown = (e: any) => {
+            // Handle keyboard presses: Arrow keys (left / right) to change insert-index
+            let currentIndex = this.state.insertIndex
+            let targetIndex = currentIndex
+            // Move to the right with arrow key right, allow ctrl and shift modifiers
+            if (!["ArrowLeft", "ArrowRight"].includes(e.key) || e.repeat) {
+                return
+            }
+
+            if (e.ctrlKey && e.key === "ArrowLeft") {
+                // Move all the way to the left if ctrl + left arrow
+                targetIndex = 0
+            } else if (e.ctrlKey && e.key === "ArrowRight") {
+                // Move all the way to the right if ctrl + right arrow
+                targetIndex = this.state.gamelogic.boIndex
+            } else {
+                let moveAmount = 1
+                // Allow shift modifier to move in steps of 5
+                if (e.shiftKey) {
+                    moveAmount = 5
+                }
+                if (e.key === "ArrowLeft") {
+                    moveAmount = -moveAmount
+                }
+                targetIndex = Math.max(
+                    0,
+                    Math.min(
+                        this.state.gamelogic.boIndex,
+                        currentIndex + moveAmount
+                    )
+                )
+            }
+            // TODO Move the scroll bar
+            this.changeInsertIndex(targetIndex)
+        }
+
+        componentDidMount() {
+            window.addEventListener("keydown", this.handleKeyDown)
+        }
+
+        componentWillUnmount() {
+            window.removeEventListener("keydown", this.handleKeyDown)
+        }
+
         render() {
             return (
                 <div className="flex-col h-full w-full bg-gray-500">
@@ -307,6 +369,7 @@ export default withRouter(
                                 <BuildOrder
                                     gamelogic={this.state.gamelogic}
                                     hoverIndex={this.state.hoverIndex}
+                                    insertIndex={this.state.insertIndex}
                                     removeClick={this.buildOrderRemoveClicked}
                                     rerunBuildOrder={(race, bo, settings) =>
                                         this.rerunBuildOrder(race, bo, settings)
@@ -316,6 +379,9 @@ export default withRouter(
                                     }
                                     changeHoverIndex={(index) => {
                                         this.changeHoverIndex(index)
+                                    }}
+                                    changeInsertIndex={(index) => {
+                                        this.changeInsertIndex(index)
                                     }}
                                 />
                             </div>
@@ -333,6 +399,7 @@ export default withRouter(
                             <ActionsSelection
                                 gamelogic={this.state.gamelogic}
                                 race={this.state.race}
+                                insertIndex={this.state.insertIndex}
                                 actionClick={this.actionSelectionActionClicked}
                                 unitClick={this.actionSelectionUnitClicked}
                                 structureClick={
