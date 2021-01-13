@@ -20,8 +20,7 @@ const CONVERT_SECONDS_TO_TIME_STRING = (totalSeconds: number) => {
     totalSeconds = Math.floor(totalSeconds)
     const minutes = `${Math.floor(totalSeconds / 60)}`.padStart(2, "0")
     const seconds = `${totalSeconds % 60}`.padStart(2, "0")
-    const timeFormatted = `${minutes}:${seconds}`
-    return timeFormatted
+    return `${minutes}:${seconds}`
 }
 
 const getImageOfItem = (item: { name: string; type: string }): string => {

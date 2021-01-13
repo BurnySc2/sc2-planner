@@ -3,7 +3,7 @@ import CLASSES from "../constants/classes"
 
 import { getImageOfItem } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
 
 // A function to help us with reordering the result
@@ -58,7 +58,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         this.props.changeHoverIndex(-1)
     }
 
-    onDragEnd(result: any) {
+    onDragEnd(result: DropResult) {
         // Dropped outside the list
         if (!result.destination) {
             return
@@ -121,7 +121,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             <div
                 key={`seperator0`}
                 className={seperatorClass}
-                onClick={(e: any) => {
+                onClick={(e) => {
                     this.props.changeInsertIndex(0)
                 }}
             />
@@ -138,7 +138,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                             className={getItemClass(snapshot.isDragging, index)}
                             onMouseEnter={(e) => this.onMouseEnter(index)}
                             onMouseLeave={(e) => this.onMouseLeave()}
-                            onClick={(e: any) => {
+                            onClick={(e) => {
                                 this.props.removeClick(e, index)
                             }}
                         >
@@ -156,7 +156,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                 <div
                     key={`seperator${index + 1}`}
                     className={seperatorClass}
-                    onClick={(e: any) => {
+                    onClick={(e) => {
                         this.props.changeInsertIndex(index + 1)
                     }}
                 />

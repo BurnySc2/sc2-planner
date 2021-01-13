@@ -219,7 +219,7 @@ export default withRouter(
 
             // Decrement index because we removed a build order item
             if (this.state.insertIndex > this.state.hoverIndex) {
-                this.setState({ insertIndex: this.state.insertIndex - 1 })
+                this.setState({ insertIndex: Math.max(0, this.state.insertIndex - 1) })
             }
         }
 
@@ -292,7 +292,7 @@ export default withRouter(
             })
         }
 
-        handleKeyDown = (e: any) => {
+        handleKeyDown = (e: KeyboardEvent) => {
             // Handle keyboard presses: Arrow keys (left / right) to change insert-index
             let currentIndex = this.state.insertIndex
             let targetIndex = currentIndex
