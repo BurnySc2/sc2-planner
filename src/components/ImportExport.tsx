@@ -11,11 +11,7 @@ import CLASSES from "../constants/classes"
 import UNITS_BY_NAME from "../constants/units_by_name"
 import UPGRADE_BY_NAME from "../constants/upgrade_by_name"
 import { GameLogic } from "../game_logic/gamelogic"
-import {
-    IBuildOrderElement,
-    ISettingsElement,
-    IAllRaces,
-} from "../constants/interfaces"
+import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
 import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 interface MyProps {
@@ -50,10 +46,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         humanReadableIncludeActions: true,
     }
 
-    onMouseEnter = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        name: string
-    ) => {
+    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
         // On mouse enter: open drop down menu with various options
         this.setState({
             [name]: true,
@@ -61,20 +54,14 @@ export default class ImportExport extends Component<MyProps, MyState> {
         this.updateTemplateStringTooltip()
     }
 
-    onMouseLeave = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        name: string
-    ) => {
+    onMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
         // On mouse exit: close the above
         this.setState({
             [name]: false,
         })
     }
 
-    onClickExport = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        name: string
-    ) => {
+    onClickExport = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
         let clipBoardText = ""
         // TODO Create build order in the desired format
@@ -103,10 +90,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         }
     }
 
-    onClickImport = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        name: string
-    ) => {
+    onClickImport = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
         navigator.clipboard.readText().then((data) => {
             const decodedSALT = decodeSALT(data)
@@ -129,11 +113,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
     generateShareableLink() {
         // Returns the string of the shareable link
         const gamelogic = this.props.gamelogic
-        const newUrl = createUrlParams(
-            gamelogic.race,
-            gamelogic.exportSettings(),
-            gamelogic.bo
-        )
+        const newUrl = createUrlParams(gamelogic.race, gamelogic.exportSettings(), gamelogic.bo)
         const shareUrl = `https://burnysc2.github.io/sc2-planner/${newUrl}`
         return shareUrl
     }
@@ -160,10 +140,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
             }
             for (let replaceString in replaceValues) {
                 const value = replaceValues[replaceString]
-                instructionString = instructionString.replace(
-                    replaceString,
-                    value
-                )
+                instructionString = instructionString.replace(replaceString, value)
             }
             if (item.type === "action" && includeActions) {
                 instructions.push(instructionString)
@@ -216,9 +193,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         // Converts a list of elements to a list where each element gets wrapped into a <div>
         const htmlStuff: Array<JSX.Element> = []
         list.forEach((item, index) => {
-            htmlStuff.push(
-                <div key={`buildOrderItem${item}${index}`}>{item}</div>
-            )
+            htmlStuff.push(<div key={`buildOrderItem${item}${index}`}>{item}</div>)
         })
         return htmlStuff
     }
@@ -237,12 +212,8 @@ export default class ImportExport extends Component<MyProps, MyState> {
 
     render() {
         const classes = CLASSES.dropDown
-        const classesExportDropdown = this.state.export
-            ? `visible ${classes}`
-            : `hidden ${classes}`
-        const classesImportDropdown = this.state.import
-            ? `visible ${classes}`
-            : `hidden ${classes}`
+        const classesExportDropdown = this.state.export ? `visible ${classes}` : `hidden ${classes}`
+        const classesImportDropdown = this.state.import ? `visible ${classes}` : `hidden ${classes}`
 
         const exportElements = [
             "Copy shareable link",
@@ -261,9 +232,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
                                 this.setState({
                                     templateString: e.target.value,
                                     templateStringTooltip: this.formatListToHtmlLines(
-                                        this.generateHumanInstructions(
-                                            e.target.value
-                                        )
+                                        this.generateHumanInstructions(e.target.value)
                                     ),
                                 })
                             }}
@@ -272,18 +241,12 @@ export default class ImportExport extends Component<MyProps, MyState> {
                         />
 
                         <input
-                            defaultChecked={
-                                this.state.humanReadableIncludeWorkers
-                            }
+                            defaultChecked={this.state.humanReadableIncludeWorkers}
                             type="checkbox"
                             onChange={(e) => {
-                                this.updateTemplateStringTooltip(
-                                    undefined,
-                                    e.target.checked
-                                )
+                                this.updateTemplateStringTooltip(undefined, e.target.checked)
                                 this.setState({
-                                    humanReadableIncludeWorkers:
-                                        e.target.checked,
+                                    humanReadableIncludeWorkers: e.target.checked,
                                 })
                             }}
                         />
@@ -291,9 +254,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
                         <label>Workers</label>
 
                         <input
-                            defaultChecked={
-                                this.state.humanReadableIncludeActions
-                            }
+                            defaultChecked={this.state.humanReadableIncludeActions}
                             type="checkbox"
                             onChange={(e) => {
                                 this.updateTemplateStringTooltip(
@@ -302,8 +263,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
                                     e.target.checked
                                 )
                                 this.setState({
-                                    humanReadableIncludeActions:
-                                        e.target.checked,
+                                    humanReadableIncludeActions: e.target.checked,
                                 })
                             }}
                         />

@@ -7,10 +7,7 @@ const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
-const executeAction = (
-    gamelogic: GameLogic,
-    actionItem: IBuildOrderElement
-) => {
+const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => {
     // Issue action
     const action = CUSTOMACTIONS_BY_NAME[actionItem.name]
     console.assert(action !== undefined, JSON.stringify(actionItem, null, 4))
@@ -159,10 +156,7 @@ const executeAction = (
                 // Find target
                 gamelogic.errorMessage = "No busy Nexus could be found."
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "Nexus" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "Nexus" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -183,10 +177,7 @@ const executeAction = (
                 gamelogic.errorMessage = "No busy Gateway could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "Gateway" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "Gateway" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -207,10 +198,7 @@ const executeAction = (
                 gamelogic.errorMessage = "No busy Warpgate could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "WarpGate" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "WarpGate" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -228,14 +216,10 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
-                gamelogic.errorMessage =
-                    "No busy Cybernetics Core could be found."
+                gamelogic.errorMessage = "No busy Cybernetics Core could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "CyberneticsCore" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "CyberneticsCore" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -256,10 +240,7 @@ const executeAction = (
                 gamelogic.errorMessage = "No busy Forge could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "Forge" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "Forge" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -277,14 +258,10 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
-                gamelogic.errorMessage =
-                    "No busy Robotics Facility could be found."
+                gamelogic.errorMessage = "No busy Robotics Facility could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "RoboticsFacility" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "RoboticsFacility" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -305,10 +282,7 @@ const executeAction = (
                 gamelogic.errorMessage = "No busy Robotics Bay could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "RoboticsBay" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "RoboticsBay" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -329,10 +303,7 @@ const executeAction = (
                 gamelogic.errorMessage = "No busy Stargate could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "Stargate" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "Stargate" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -353,10 +324,7 @@ const executeAction = (
                 gamelogic.errorMessage = "No busy Fleet Beacon could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "FleetBeacon" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "FleetBeacon" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -374,14 +342,10 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
-                gamelogic.errorMessage =
-                    "No busy Twilight Council could be found."
+                gamelogic.errorMessage = "No busy Twilight Council could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "TwilightCouncil" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "TwilightCouncil" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -399,14 +363,10 @@ const executeAction = (
         // Find nexus with 50 energy
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
-                gamelogic.errorMessage =
-                    "No busy Templar Archive could be found."
+                gamelogic.errorMessage = "No busy Templar Archive could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "TemplarArchive" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "TemplarArchive" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -427,10 +387,7 @@ const executeAction = (
                 gamelogic.errorMessage = "No busy Dark Shrine could be found."
                 // Find target
                 for (const target of gamelogic.busyUnits) {
-                    if (
-                        target.name === "DarkShrine" &&
-                        target.hasChronoUntilFrame === -1
-                    ) {
+                    if (target.name === "DarkShrine" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
                         actionCompleted = true
@@ -450,12 +407,7 @@ const executeAction = (
             gamelogic.errorMessage = `Could not find a gateway.`
             for (const unit of gamelogic.idleUnits) {
                 if (unit.name === "Gateway" && !unit.isBusy()) {
-                    const task = new Task(
-                        7 * 22.4,
-                        gamelogic.frame,
-                        gamelogic.supplyUsed,
-                        -1
-                    )
+                    const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
                     task.morphToUnit = "WarpGate"
                     unit.addTask(gamelogic, task)
                     actionCompleted = true
@@ -469,12 +421,7 @@ const executeAction = (
         gamelogic.errorMessage = `Could not find a warpgate.`
         for (const unit of gamelogic.idleUnits) {
             if (unit.name === "WarpGate") {
-                const task = new Task(
-                    7 * 22.4,
-                    gamelogic.frame,
-                    gamelogic.supplyUsed,
-                    -1
-                )
+                const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
                 task.morphToUnit = "Gateway"
                 unit.addTask(gamelogic, task)
                 actionCompleted = true
@@ -489,12 +436,7 @@ const executeAction = (
             if (dt1.name === "DarkTemplar") {
                 for (const dt2 of gamelogic.idleUnits) {
                     if (dt2.name === "DarkTemplar" && dt1.id !== dt2.id) {
-                        const task = new Task(
-                            9 * 22.4,
-                            gamelogic.frame,
-                            gamelogic.supplyUsed,
-                            -1
-                        )
+                        const task = new Task(9 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
                         task.morphToUnit = "Archon"
                         dt1.addTask(gamelogic, task)
                         gamelogic.killUnit(dt2)
@@ -515,12 +457,7 @@ const executeAction = (
             if (ht1.name === "HighTemplar") {
                 for (const ht2 of gamelogic.idleUnits) {
                     if (ht2.name === "HighTemplar" && ht1.id !== ht2.id) {
-                        const task = new Task(
-                            9 * 22.4,
-                            gamelogic.frame,
-                            gamelogic.supplyUsed,
-                            -1
-                        )
+                        const task = new Task(9 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
                         task.morphToUnit = "Archon"
                         ht1.addTask(gamelogic, task)
                         gamelogic.killUnit(ht2)
@@ -541,12 +478,7 @@ const executeAction = (
             if (dt.name === "DarkTemplar") {
                 for (const ht of gamelogic.idleUnits) {
                     if (ht.name === "HighTemplar") {
-                        const task = new Task(
-                            9 * 22.4,
-                            gamelogic.frame,
-                            gamelogic.supplyUsed,
-                            -1
-                        )
+                        const task = new Task(9 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
                         task.morphToUnit = "Archon"
                         dt.addTask(gamelogic, task)
                         gamelogic.killUnit(ht)
@@ -632,11 +564,7 @@ const executeAction = (
         }
         gamelogic.errorMessage = `Could not find a '${structureName}' without addons to attach to addon.`
         for (const unit of gamelogic.idleUnits) {
-            if (
-                unit.name === structureName &&
-                !unit.hasAddon() &&
-                !unit.isBusy()
-            ) {
+            if (unit.name === structureName && !unit.hasAddon() && !unit.isBusy()) {
                 unit.isFlying = true
                 const task = new Task(
                     gamelogic.settings.addonSwapDelay * 22.4,
@@ -680,10 +608,7 @@ const executeAction = (
 
     // DETTACH TERRAN PRODUCTION FROM ADDONS
 
-    const dettach_from_addon = (
-        structureName: string,
-        dettachReactor = false
-    ) => {
+    const dettach_from_addon = (structureName: string, dettachReactor = false) => {
         if (!dettachReactor) {
             gamelogic.errorMessage = `Could not find a '${structureName}' with Techlab to dettach from.`
         } else {
@@ -692,8 +617,7 @@ const executeAction = (
         for (const unit of gamelogic.idleUnits) {
             if (
                 unit.name === structureName &&
-                ((!dettachReactor && unit.hasTechlab) ||
-                    (dettachReactor && unit.hasReactor)) &&
+                ((!dettachReactor && unit.hasTechlab) || (dettachReactor && unit.hasReactor)) &&
                 !unit.isBusy()
             ) {
                 unit.isFlying = true

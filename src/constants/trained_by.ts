@@ -55,13 +55,9 @@ data.Unit.forEach((trainingUnit) => {
                 }
 
                 let requiredStructure =
-                    requiredStructureId !== null
-                        ? UNITS_BY_ID[requiredStructureId].name
-                        : null
+                    requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
                 let requiredUpgrade =
-                    requiredUpgradeId !== null
-                        ? UPGRADE_BY_ID[requiredUpgradeId].name
-                        : null
+                    requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
 
                 // If it doesnt exist: create
                 if (TRAINED_BY[resultingUnit.name] === undefined) {
@@ -75,19 +71,15 @@ data.Unit.forEach((trainingUnit) => {
                     }
                 } else {
                     // Entry already exists, add training unit to object of 'trainedBy' and update requirement
-                    TRAINED_BY[resultingUnit.name].trainedBy.add(
-                        trainingUnit.name
-                    )
+                    TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
                 }
-                TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[
-                    resultingUnit.name
-                ].requiredStructure
+                TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name]
+                    .requiredStructure
                     ? requiredStructure
                     : TRAINED_BY[resultingUnit.name].requiredStructure
 
-                TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[
-                    resultingUnit.name
-                ].requiredUpgrade
+                TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[resultingUnit.name]
+                    .requiredUpgrade
                     ? requiredUpgrade
                     : TRAINED_BY[resultingUnit.name].requiredUpgrade
             }

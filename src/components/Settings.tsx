@@ -44,10 +44,7 @@ export default class Settings extends Component<MyProps, MyState> {
         this.props.updateSettings(itemShortName, newValue)
     }
 
-    onMouseEnter = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: JSX.Element
-    ) => {
+    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
         this.setState({
             tooltipText: item,
         })
@@ -55,14 +52,10 @@ export default class Settings extends Component<MyProps, MyState> {
 
     render() {
         const classes = CLASSES.dropDown
-        const classesDropdown = this.state.show
-            ? `visible ${classes}`
-            : `hidden ${classes}`
+        const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
 
         const settingsElements = this.props.settings.map((item, index) => {
-            const mouseEnterFunc = (
-                e: React.MouseEvent<HTMLDivElement, MouseEvent>
-            ) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(e, <div>{item.tooltip}</div>)
             }
             return (
@@ -105,11 +98,7 @@ export default class Settings extends Component<MyProps, MyState> {
         )
         return (
             <div>
-                <ReactTooltip
-                    place="bottom"
-                    id="settingsTooltip"
-                    className="max-w-xs"
-                >
+                <ReactTooltip place="bottom" id="settingsTooltip" className="max-w-xs">
                     {this.state.tooltipText}
                 </ReactTooltip>
                 {settingsButton}

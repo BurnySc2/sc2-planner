@@ -28,17 +28,11 @@ const getImageOfItem = (item: { name: string; type: string }): string => {
     let image = ""
     try {
         if (item.type === "upgrade") {
-            image = require(`../icons/png/${
-                UPGRADE_ICONS[item.name.toUpperCase()]
-            }`)
+            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
         } else if (item.type === "action") {
-            image = require(`../icons/png/${
-                CUSTOMACTIONS_BY_NAME[item.name].imageSource
-            }`)
+            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
         } else {
-            image = require(`../icons/png/${
-                UNIT_ICONS[item.name.toUpperCase()]
-            }`)
+            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
         }
     } catch {
         console.error(`Missing image for: ${item.name}`)
@@ -160,9 +154,7 @@ const decodeSettings = (settingsEncoded: string): Array<ISettingsElement> => {
     return jsonObj
 }
 
-const encodeBuildOrder = (
-    buildOrderObject: Array<IBuildOrderElement>
-): string => {
+const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string => {
     let compactArray: Array<{
         id: number
         type: string
@@ -220,9 +212,7 @@ const encodeBuildOrder = (
     return encoded
 }
 
-const decodeBuildOrder = (
-    buildOrderEncoded: string
-): Array<IBuildOrderElement> => {
+const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> => {
     let buildOrderDecoded: Array<IBuildOrderElement> = []
     let bo: Array<{
         id: number

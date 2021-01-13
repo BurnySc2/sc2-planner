@@ -5,10 +5,7 @@ import CLASSES from "../constants/classes"
 import { IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
-    onClick: (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        race: IAllRaces
-    ) => void
+    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces) => void
 }
 
 interface MyState {}
@@ -22,10 +19,7 @@ export default class RaceSelection extends Component<MyProps, MyState> {
     //     super(props)
     // }
 
-    onClick = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        race: IAllRaces
-    ) => {
+    onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces) => {
         this.props.onClick(e, race)
     }
 
@@ -36,15 +30,8 @@ export default class RaceSelection extends Component<MyProps, MyState> {
         const races = allRaces.map((race, index) => {
             const item: { name: string; path: string } = RACES[race]
             return (
-                <div
-                    key={item.name}
-                    className={classString}
-                    onClick={(e) => this.onClick(e, race)}
-                >
-                    <img
-                        src={require("../icons/png/" + item.path)}
-                        alt={item.name}
-                    />
+                <div key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
+                    <img src={require("../icons/png/" + item.path)} alt={item.name} />
                 </div>
             )
         })

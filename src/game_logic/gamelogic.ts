@@ -11,12 +11,7 @@ import Event from "./event"
 import Task from "./task"
 import executeAction from "./execute_action"
 import { defaultSettings } from "../constants/helper"
-import {
-    IBuildOrderElement,
-    ISettingsElement,
-    ICost,
-    IAllRaces,
-} from "../constants/interfaces"
+import { IBuildOrderElement, ISettingsElement, ICost, IAllRaces } from "../constants/interfaces"
 
 /** Logic of this file:
 Each frame
@@ -331,7 +326,6 @@ class GameLogic {
                 // Each time the boIndex gets incremented, take a snapshot of the current state - this way i can cache the gamelogic and reload it from the state
                 // e.g. bo = [scv, depot, scv]
                 // and i want to remove depot, i can resume from cached state of index 0
-
             }
         }
     }
@@ -518,18 +512,13 @@ class GameLogic {
                     // And CC requirement: ebay (but we have only orbitals)
                     // And Cybercore requirement: gateway (but we have only warpgates)
                     structure.name === requiredStructure ||
-                    (requiredStructure === "Spire" &&
-                        structure.name === "GreaterSpire") ||
+                    (requiredStructure === "Spire" && structure.name === "GreaterSpire") ||
                     (requiredStructure === "Hatchery" &&
                         ["Lair", "Hive"].includes(structure.name)) ||
-                    (requiredStructure === "Lair" &&
-                        structure.name === "Hive") ||
+                    (requiredStructure === "Lair" && structure.name === "Hive") ||
                     (requiredStructure === "CommandCenter" &&
-                        ["PlanetaryFortress", "OrbitalCommand"].includes(
-                            structure.name
-                        )) ||
-                    (requiredStructure === "Gateway" &&
-                        structure.name === "WarpGate")
+                        ["PlanetaryFortress", "OrbitalCommand"].includes(structure.name)) ||
+                    (requiredStructure === "Gateway" && structure.name === "WarpGate")
                 ) {
                     requiredStructureMet = true
                     break
@@ -553,8 +542,7 @@ class GameLogic {
 
             // If target is an addon but building structure already has addon: skip
             if (
-                (unit.name.includes("TechLab") ||
-                    unit.name.includes("Reactor")) &&
+                (unit.name.includes("TechLab") || unit.name.includes("Reactor")) &&
                 trainerUnit.hasAddon()
             ) {
                 this.errorMessage = `Could not find structure without addon to build '${unit.name}'.`
@@ -574,16 +562,12 @@ class GameLogic {
 
             // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
             const trainerCanTrainThroughLarva =
-                (trainedInfo.trainedBy.has("Larva") &&
-                    trainerUnit.larvaCount > 0) ||
+                (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) ||
                 (unit.type === "structure" && trainerUnit.name === "Probe")
             morphCondition = morphCondition && !trainerCanTrainThroughLarva
 
             // Unit has to be produced through main unit queue, but if unit is busy: dont train
-            if (
-                !trainerCanTrainThroughLarva &&
-                !trainerCanTrainThroughReactor
-            ) {
+            if (!trainerCanTrainThroughLarva && !trainerCanTrainThroughReactor) {
                 if (trainerUnit.tasks.length > 0) {
                     continue
                 }
@@ -648,8 +632,7 @@ class GameLogic {
                 this.supplyUsed,
                 taskId
             )
-            newTask.morphToUnit =
-                morphCondition || trainedInfo.consumesUnit ? unit.name : null
+            newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
                     newTask.newWorker = unit.name
@@ -663,12 +646,7 @@ class GameLogic {
             if (trainerUnit.name === "WarpGate") {
                 // Training through warpgate reduces train time to 4 seconds
                 newTask.totalFramesRequired = 3.6 * 22.4
-                trainerUnit.addTask(
-                    this,
-                    newTask,
-                    trainerCanTrainThroughReactor,
-                    true
-                )
+                trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, true)
                 // Add the warpgate recover time which can be sped up through chrono
                 trainerUnit.addTask(
                     this,
@@ -783,9 +761,7 @@ class GameLogic {
 
             const canBeResearchedByAddon =
                 researcherStructure.hasTechlab &&
-                researchInfo.researchedBy.has(
-                    `${researcherStructure.name}TechLab`
-                )
+                researchInfo.researchedBy.has(`${researcherStructure.name}TechLab`)
 
             if (!structureCanResearchUpgrade && !canBeResearchedByAddon) {
                 continue
@@ -794,14 +770,9 @@ class GameLogic {
             // All requirement checks complete, start the task
 
             const researchTime = this.getTime(upgrade.name, true)
-            const newTask = new Task(
-                researchTime,
-                this.frame,
-                this.supplyUsed,
-                this.getEventId()
-            )
+            const newTask = new Task(researchTime, this.frame, this.supplyUsed, this.getEventId())
             newTask.newUpgrade = upgrade.name
-            
+
             researcherStructure.addTask(this, newTask, canBeResearchedByAddon)
 
             const cost = this.getCost(upgrade.name, true)
@@ -930,11 +901,8 @@ class GameLogic {
             ]
         if (minerals === undefined) {
             minerals =
-                incomeMinerals(
-                    this.workersMinerals,
-                    this.baseCount,
-                    this.muleCount
-                ) / this.settings.incomeFactor
+                incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) /
+                this.settings.incomeFactor
             mineralIncomeCache[
                 // TODO Fix me: array[number] cannot be used as index type
                 // @ts-ignore
@@ -946,9 +914,7 @@ class GameLogic {
         // @ts-ignore
         let vespene = vespeneIncomeCache[[this.workersVespene, this.gasCount]]
         if (vespene === undefined) {
-            vespene =
-                incomeVespene(this.workersVespene, this.gasCount) /
-                this.settings.incomeFactor
+            vespene = incomeVespene(this.workersVespene, this.gasCount) / this.settings.incomeFactor
             // TODO Fix me: array[number] cannot be used as index type
             // @ts-ignore
             vespeneIncomeCache[[this.workersVespene, this.gasCount]] = vespene

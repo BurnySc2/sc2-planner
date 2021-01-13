@@ -21,10 +21,7 @@ data.Unit.forEach((researcherUnit) => {
             if (resultingUpgrade !== undefined) {
                 let requiredStructure = null
                 let requiredUpgrade = null
-                if (
-                    ability.requirements &&
-                    Array.isArray(ability.requirements)
-                ) {
+                if (ability.requirements && Array.isArray(ability.requirements)) {
                     for (let requirement of ability.requirements) {
                         if (requirement.upgrade) {
                             requiredUpgrade = requirement.upgrade
@@ -39,19 +36,13 @@ data.Unit.forEach((researcherUnit) => {
                     RESEARCHED_BY[resultingUpgrade.name] = {
                         researchedBy: new Set([researcherUnit.name]),
                         requiredStructure:
-                            requiredStructure !== null
-                                ? UNITS_BY_ID[requiredStructure].name
-                                : null,
+                            requiredStructure !== null ? UNITS_BY_ID[requiredStructure].name : null,
                         requiredUpgrade:
-                            requiredUpgrade !== null
-                                ? UPGRADE_BY_ID[requiredUpgrade].name
-                                : null,
+                            requiredUpgrade !== null ? UPGRADE_BY_ID[requiredUpgrade].name : null,
                     }
                 } else {
                     // Entry already exists, add training unit to object of 'researchedBy'
-                    RESEARCHED_BY[resultingUpgrade.name].researchedBy.add(
-                        researcherUnit.name
-                    )
+                    RESEARCHED_BY[resultingUpgrade.name].researchedBy.add(researcherUnit.name)
                 }
             }
         }

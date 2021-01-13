@@ -50,17 +50,14 @@ export default class Footer extends Component<MyProps, MyState> {
             tooltip: (
                 <div className="max-w-md">
                     <div>
-                        Most image assets are owned by Blizzard and are used
-                        according to
+                        Most image assets are owned by Blizzard and are used according to
                         http://blizzard.com/company/about/legal-faq.html.
                     </div>
                     <div>
-                        ©Blizzard Entertainment, Inc. All rights reserved. Wings
-                        of Liberty, Heart of the Swarm, Legacy of the Void,
-                        StarCraft, Brood War, Battle.net, and Blizzard
-                        Entertainment are trademarks or registered trademarks of
-                        Blizzard Entertainment, Inc. in the U.S. and/or other
-                        countries.
+                        ©Blizzard Entertainment, Inc. All rights reserved. Wings of Liberty, Heart
+                        of the Swarm, Legacy of the Void, StarCraft, Brood War, Battle.net, and
+                        Blizzard Entertainment are trademarks or registered trademarks of Blizzard
+                        Entertainment, Inc. in the U.S. and/or other countries.
                     </div>
                 </div>
             ),

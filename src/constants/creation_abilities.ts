@@ -53,10 +53,7 @@ data.Ability.forEach(
 
             // Build abilities, e.g. build nexus
             let buildStructure = ability.target.Build
-            if (
-                buildStructure !== undefined &&
-                ENABLED_ABILITIES.has(ability.id)
-            ) {
+            if (buildStructure !== undefined && ENABLED_ABILITIES.has(ability.id)) {
                 CREATION_ABILITIES[ability.id] = buildStructure.produces
                 return
             }

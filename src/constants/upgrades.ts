@@ -10,11 +10,7 @@ const ABILITY_TO_UPGRADES: { [name: number]: number } = {}
 data.Ability.forEach(
     // TODO Fix me
     // @ts-ignore
-    (ability: {
-        ability: number
-        id: number
-        target: { Research: { upgrade: number } }
-    }) => {
+    (ability: { ability: number; id: number; target: { Research: { upgrade: number } } }) => {
         const target = ability.target
         if (typeof target !== "string") {
             const research = target.Research
@@ -41,10 +37,7 @@ const alreadyUsedIds = new Set()
 data.Unit.forEach((unit) => {
     unit.abilities.forEach((ability, index) => {
         const upgrade_id = ABILITY_TO_UPGRADES[ability.ability]
-        if (
-            ENABLED_UPGRADES.has(upgrade_id) &&
-            !alreadyUsedIds.has(upgrade_id)
-        ) {
+        if (ENABLED_UPGRADES.has(upgrade_id) && !alreadyUsedIds.has(upgrade_id)) {
             alreadyUsedIds.add(upgrade_id)
             const upgrade = upgrade_data[upgrade_id]
             upgrade.race = unit.race.toLowerCase() as IAllRaces
@@ -90,10 +83,7 @@ UPGRADES.forEach((item) => {
 // UPGRADES.zerg.sort(sortFn)
 
 // Should be enabled 90 upgrades
-console.assert(
-    Object.keys(UPGRADES).length === 90,
-    `${Object.keys(UPGRADES).length} is not 90`
-)
+console.assert(Object.keys(UPGRADES).length === 90, `${Object.keys(UPGRADES).length} is not 90`)
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the upgrade is available from an ability
 export { UPGRADES, UPGRADE_NAMES_BY_RACE }

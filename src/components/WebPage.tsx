@@ -206,11 +206,7 @@ export default withRouter(
             if (bo.length > 0) {
                 this.rerunBuildOrder(this.state.race, bo, this.state.settings)
             } else {
-                const gamelogic = new GameLogic(
-                    this.state.race,
-                    bo,
-                    this.state.settings
-                )
+                const gamelogic = new GameLogic(this.state.race, bo, this.state.settings)
                 gamelogic.setStart()
                 this.setState({
                     bo: bo,
@@ -322,10 +318,7 @@ export default withRouter(
                 }
                 targetIndex = Math.max(
                     0,
-                    Math.min(
-                        this.state.gamelogic.boIndex,
-                        currentIndex + moveAmount
-                    )
+                    Math.min(this.state.gamelogic.boIndex, currentIndex + moveAmount)
                 )
             }
             // TODO Move the scroll bar
@@ -362,9 +355,7 @@ export default withRouter(
                     <div className="flex flex-row">
                         <div className="w-9/12">
                             <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
-                                <RaceSelection
-                                    onClick={this.raceSelectionClicked}
-                                />
+                                <RaceSelection onClick={this.raceSelectionClicked} />
                                 <Time gamelogic={this.state.gamelogic} />
                                 <BuildOrder
                                     gamelogic={this.state.gamelogic}
@@ -402,12 +393,8 @@ export default withRouter(
                                 insertIndex={this.state.insertIndex}
                                 actionClick={this.actionSelectionActionClicked}
                                 unitClick={this.actionSelectionUnitClicked}
-                                structureClick={
-                                    this.actionSelectionStructureClicked
-                                }
-                                upgradeClick={
-                                    this.actionSelectionUpgradeClicked
-                                }
+                                structureClick={this.actionSelectionStructureClicked}
+                                upgradeClick={this.actionSelectionUpgradeClicked}
                             />
                         </div>
                     </div>

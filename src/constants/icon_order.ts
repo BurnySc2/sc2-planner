@@ -249,8 +249,4 @@ const iconSortUpgradeFunction = (item1: IDataUpgrade, item2: IDataUpgrade) => {
     return 0
 }
 
-export {
-    iconSortUnitFunction,
-    iconSortStructureFunction,
-    iconSortUpgradeFunction,
-}
+export { iconSortUnitFunction, iconSortStructureFunction, iconSortUpgradeFunction }

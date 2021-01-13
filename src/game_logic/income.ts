@@ -1,11 +1,7 @@
 // Mule: 211 minerals per minute (real time), source: https://youtu.be/kmxeG8I5p1Y?t=14s
 // source: http://www.teamliquid.net/forum/sc2-strategy/140055-scientifically-measuring-mining-speed
 
-const incomeMinerals = (
-    workers: number,
-    bases: number,
-    mules: number = 0
-): number => {
+const incomeMinerals = (workers: number, bases: number, mules: number = 0): number => {
     // Returns mineral income per second.
     if ((workers === 0 && mules === 0) || bases === 0) {
         return 0
@@ -34,10 +30,7 @@ const incomeMinerals = (
     const income_third_worker_far_patch = 32
 
     const income_workers_close_patch = 46
-    const income_third_worker_close_patch = Math.max(
-        0,
-        102 - 2 * income_workers_close_patch
-    )
+    const income_third_worker_close_patch = Math.max(0, 102 - 2 * income_workers_close_patch)
 
     // Add workers as third workers to close patches
     if (workers > 19) {
@@ -81,8 +74,7 @@ const incomeVespene = (workers: number, geysers: number): number => {
         const w1 = Math.floor(workers / geysers)
         const w2 = workers % geysers
         return (
-            geysers * incomeVespene(w1, 1) +
-            w2 * (incomeVespene(w1 + 1, 1) - incomeVespene(w1, 1))
+            geysers * incomeVespene(w1, 1) + w2 * (incomeVespene(w1 + 1, 1) - incomeVespene(w1, 1))
         )
     }
     const gas_per_trip = 4

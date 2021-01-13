@@ -66,12 +66,7 @@ class Unit {
      * @param {Boolean} taskForReactor
      * @param {Boolean} taskForLarva
      */
-    addTask(
-        gamelogic: GameLogic,
-        task: Task,
-        taskForReactor = false,
-        taskForLarva = false
-    ) {
+    addTask(gamelogic: GameLogic, task: Task, taskForReactor = false, taskForLarva = false) {
         // console.assert([true, false].includes(taskForReactor), taskForReactor)
         // console.assert([true, false].includes(taskForLarva), taskForLarva)
         gamelogic.busyUnits.add(this)
@@ -96,8 +91,7 @@ class Unit {
                 this.larvaCount > 0 ||
                 (this.hasAddon() && this.addonTasks.length === 0)) &&
             !this.isFlying &&
-            (!workerTypes.has(this.name) ||
-                (!this.isMiningGas && !this.isScouting))
+            (!workerTypes.has(this.name) || (!this.isMiningGas && !this.isScouting))
         )
     }
 
@@ -105,11 +99,7 @@ class Unit {
      * Returns true it has a task (hatchery builds queen, or hatchery's larva builds drone, or barrack's reactor builds a marine)
      */
     isBusy() {
-        return (
-            this.tasks.length > 0 ||
-            this.backgroundTask.length > 0 ||
-            this.addonTasks.length > 0
-        )
+        return this.tasks.length > 0 || this.backgroundTask.length > 0 || this.addonTasks.length > 0
     }
 
     /**
@@ -123,12 +113,7 @@ class Unit {
      * Return true if worker is not scouting and not mining vespene
      */
     isMiningMinerals() {
-        return (
-            workerTypes.has(this.name) &&
-            this.isIdle() &&
-            !this.isMiningGas &&
-            !this.isScouting
-        )
+        return workerTypes.has(this.name) && this.isIdle() && !this.isMiningGas && !this.isScouting
     }
 
     /**
@@ -142,9 +127,7 @@ class Unit {
      * Checks if chronoboost ran out
      */
     hasChrono(frame: number) {
-        return (
-            this.hasChronoUntilFrame !== -1 && this.hasChronoUntilFrame > frame
-        )
+        return this.hasChronoUntilFrame !== -1 && this.hasChronoUntilFrame > frame
     }
 
     /**
@@ -174,10 +157,7 @@ class Unit {
             }
 
             // If has inject: spawn larva when frame has been reached
-            if (
-                this.hasInjectUntilFrame !== -1 &&
-                this.hasInjectUntilFrame <= gamelogic.frame
-            ) {
+            if (this.hasInjectUntilFrame !== -1 && this.hasInjectUntilFrame <= gamelogic.frame) {
                 this.hasInjectUntilFrame = -1
                 this.larvaCount += 3
             }
@@ -269,8 +249,7 @@ class Unit {
                     if (unitData.supply < 0) {
                         gamelogic.supplyCap += -unitData.supply
                         gamelogic.supplyCap = Math.min(200, gamelogic.supplyCap)
-                        gamelogic.supplyLeft =
-                            gamelogic.supplyCap - gamelogic.supplyUsed
+                        gamelogic.supplyLeft = gamelogic.supplyCap - gamelogic.supplyUsed
                     }
                 }
 
@@ -316,9 +295,7 @@ class Unit {
                     unitData = UNITS_BY_NAME[task.morphToUnit]
                     if (
                         unitData.is_townhall &&
-                        !["OrbitalCommand", "PlanetaryFortress"].includes(
-                            this.name
-                        )
+                        !["OrbitalCommand", "PlanetaryFortress"].includes(this.name)
                     ) {
                         gamelogic.baseCount += 1
                     }
@@ -377,11 +354,7 @@ class Unit {
 
         // Update normal unit task
         if (this.tasks.length > 0) {
-            const taskCompleted = this.updateTask(
-                gamelogic,
-                this.tasks[0],
-                true
-            )
+            const taskCompleted = this.updateTask(gamelogic, this.tasks[0], true)
             if (taskCompleted) {
                 this.tasks.shift()
             }
@@ -403,10 +376,7 @@ class Unit {
         })
 
         // Expire chrono
-        if (
-            this.hasChronoUntilFrame !== -1 &&
-            this.hasChronoUntilFrame <= gamelogic.frame
-        ) {
+        if (this.hasChronoUntilFrame !== -1 && this.hasChronoUntilFrame <= gamelogic.frame) {
             this.hasChronoUntilFrame = -1
         }
 

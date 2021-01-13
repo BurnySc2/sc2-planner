@@ -5,34 +5,26 @@ const CLASSES = {
 
     errorLabel: "text-red-600 text-2xl font-bold",
     // Race icon and the items on the right side icons
-    raceIcon:
-        "h-8 w-8 mx-1 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
+    raceIcon: "h-8 w-8 mx-1 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
     timeIcon: "h-24 w-24 mx-1 p-0 z-10",
     timeText: "absolute z-20 text-white",
 
     // Action selection container on the right
     actionContainer: "flex flex-wrap bg-gray-600 m-1 p-1",
     // Action icon
-    actionIconContainer:
-        "relative h-12 w-12 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
-    actionIconText:
-        "m-0 p-0 absolute z-40 text-white bg-black rounded select-none text-xs",
+    actionIconContainer: "relative h-12 w-12 m-0 p-0 z-10 hover:bg-gray-400 cursor-pointer",
+    actionIconText: "m-0 p-0 absolute z-40 text-white bg-black rounded select-none text-xs",
 
     // Icons in the build order at the top
     bo: "flex flex-row overflow-x-auto mx-1 p-0",
     // Seperators between build order items
     boItemSeperator: "w-3 h-16 bg-gray-600 hover:bg-yellow-200",
     boItemSeperatorSelected: "w-3 h-16 bg-yellow-500",
-    boItem:
-        "m-0 p-0 h-16 w-16 bg-green-700 hover:bg-green-500 cursor-move",
-    boItemDragging:
-        "m-0 p-0 h-16 w-16 bg-green-300 cursor-move",
-    boItemInvalid:
-        "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-500 cursor-move",
-    boItemInvalidDragging:
-        "m-0 p-0 h-16 w-16 bg-red-300 cursor-move",
-    boItemHighlighting:
-        "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border",
+    boItem: "m-0 p-0 h-16 w-16 bg-green-700 hover:bg-green-500 cursor-move",
+    boItemDragging: "m-0 p-0 h-16 w-16 bg-green-300 cursor-move",
+    boItemInvalid: "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-500 cursor-move",
+    boItemInvalidDragging: "m-0 p-0 h-16 w-16 bg-red-300 cursor-move",
+    boItemHighlighting: "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border",
     // Build order area in the bottom left
     boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
     // Time bar at the top of the area
@@ -66,20 +58,16 @@ const CLASSES = {
     // Would like to add margin to boCol but doesnt allow me
     boCol: "flex table-row m-0 p-0 border border-black",
     boRow: "flex m-0 p-0 border border-black",
-    boTimeElement:
-        "z-40 flex flex-shrink-0 items-center border-l border-r border-black",
-    boElementContainer:
-        "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black",
+    boTimeElement: "z-40 flex flex-shrink-0 items-center border-l border-r border-black",
+    boElementContainer: "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
 
     // Dropdown of export, import, settings
-    dropDown:
-        "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
+    dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
     // Only export import
-    dropDownButton:
-        "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-move",
+    dropDownButton: "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-move",
     // Only settings
     dropDownLabel: "hover:bg-gray-400 px-2 flex flex-row justify-between",
     dropDownInput: "rounded w-20 mx-2 z-50",

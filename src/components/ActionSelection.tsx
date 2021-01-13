@@ -15,22 +15,10 @@ interface MyProps {
     gamelogic: GameLogic
     race: IAllRaces
     insertIndex: number
-    actionClick: (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        action: ICustomAction
-    ) => void
-    unitClick: (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        unit: string
-    ) => void
-    structureClick: (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        unit: string
-    ) => void
-    upgradeClick: (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        unit: string
-    ) => void
+    actionClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, action: ICustomAction) => void
+    unitClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
+    structureClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
+    upgradeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
 }
 
 interface MyState {
@@ -48,10 +36,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
         }
     }
 
-    onMouseEnter = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        item: JSX.Element
-    ) => {
+    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
         this.setState({
             tooltipText: item,
         })
@@ -60,10 +45,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
     render() {
         let gameLogic: GameLogic = this.props.gamelogic
         // If the build order has more items than the gamelogic was able to parse (e.g. requirement not met of some item), then the insertIndex might be higher than max allowed, = bug
-        let infoIndex = Math.min(
-            this.props.insertIndex,
-            gameLogic.unitsCountArray.length - 1
-        )
+        let infoIndex = Math.min(this.props.insertIndex, gameLogic.unitsCountArray.length - 1)
         let unitsCount = gameLogic.unitsCountArray[infoIndex]
 
         const actionIconTextStyle = {
@@ -87,15 +69,11 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             ) {
                 return true
             }
-            if (
-                this.props.race === "protoss" &&
-                item.name === "SupplyProtoss"
-            ) {
+            if (this.props.race === "protoss" && item.name === "SupplyProtoss") {
                 return true
             }
             return false
         })
-
         const resources = resourcesAvailble.map((item, index) => {
             // Instead of getting the status when the last element finished, get the state after the last build order index was started
             let value: number | string = ""
@@ -110,14 +88,8 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
             return (
                 <div key={item.name} className={this.classString}>
-                    <img
-                        src={require("../icons/png/" + item.path)}
-                        alt={item.name}
-                    />
-                    <div
-                        className={CLASSES.actionIconText}
-                        style={actionIconTextStyle}
-                    >
+                    <img src={require("../icons/png/" + item.path)} alt={item.name} />
+                    <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
                 </div>
@@ -126,9 +98,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
         const customactions = CUSTOMACTIONS.map((item, index) => {
             // Update tooltip function
-            const mouseEnterFunc = (
-                e: React.MouseEvent<HTMLDivElement, MouseEvent>
-            ) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col">
@@ -143,10 +113,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 type: "action",
             })
 
-            const hidden =
-                item.race === undefined || item.race === this.props.race
-                    ? ""
-                    : "hidden"
+            const hidden = item.race === undefined || item.race === this.props.race ? "" : "hidden"
             return (
                 <div
                     data-tip
@@ -159,10 +126,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     }}
                 >
                     <img src={icon} alt={item.name} />
-                    <div
-                        className={CLASSES.actionIconText}
-                        style={actionIconTextStyle}
-                    >
+                    <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
                 </div>
@@ -171,9 +135,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
         const units = UNITS.map((item, index) => {
             // Update tooltip function
-            const mouseEnterFunc = (
-                e: React.MouseEvent<HTMLDivElement, MouseEvent>
-            ) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -189,9 +151,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const icon = getImageOfItem({ name: item.name, type: "unit" })
 
             const value = unitsCount[item.name]
-            const hidden = UNIT_NAMES_BY_RACE[this.props.race].has(item.name)
-                ? ""
-                : "hidden"
+            const hidden = UNIT_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
                 <div
                     data-tip
@@ -204,10 +164,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     }}
                 >
                     <img src={icon} alt={item.name} />
-                    <div
-                        className={CLASSES.actionIconText}
-                        style={actionIconTextStyle}
-                    >
+                    <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
                 </div>
@@ -216,9 +173,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
         const structures = STRUCTURES.map((item, index) => {
             // Update tooltip function
-            const mouseEnterFunc = (
-                e: React.MouseEvent<HTMLDivElement, MouseEvent>
-            ) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -232,11 +187,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             }
             const icon = getImageOfItem({ name: item.name, type: "structure" })
             const value = unitsCount[item.name]
-            const hidden = STRUCTURE_NAMES_BY_RACE[this.props.race].has(
-                item.name
-            )
-                ? ""
-                : "hidden"
+            const hidden = STRUCTURE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
                 <div
                     data-tip
@@ -249,10 +200,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     }}
                 >
                     <img src={icon} alt={item.name} />
-                    <div
-                        className={CLASSES.actionIconText}
-                        style={actionIconTextStyle}
-                    >
+                    <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
                 </div>
@@ -261,9 +209,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
         const upgrades = UPGRADES.map((item, index) => {
             // Update tooltip function
-            const mouseEnterFunc = (
-                e: React.MouseEvent<HTMLDivElement, MouseEvent>
-            ) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -271,17 +217,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                         <div>{item.name}</div>
                         <div>Minerals: {item.cost.minerals}</div>
                         <div>Vespene: {item.cost.gas}</div>
-                        <div>
-                            Research time: {Math.round(item.cost.time / 22.4)}s
-                        </div>
+                        <div>Research time: {Math.round(item.cost.time / 22.4)}s</div>
                     </div>
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "upgrade" })
             const value = unitsCount[item.name]
-            const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name)
-                ? ""
-                : "hidden"
+            const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
                 <div
                     data-tip
@@ -294,10 +236,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     }}
                 >
                     <img src={icon} alt={item.name} />
-                    <div
-                        className={CLASSES.actionIconText}
-                        style={actionIconTextStyle}
-                    >
+                    <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
                 </div>

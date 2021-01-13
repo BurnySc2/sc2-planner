@@ -10,10 +10,7 @@ import ReactTooltip from "react-tooltip"
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
-    removeClick: (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        index: number
-    ) => void
+    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
     changeHoverIndex: (index: number) => void
 }
 
@@ -43,9 +40,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.props.changeHoverIndex(item.id)
         const startTime = CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4)
         const endTime =
-            item.type === "action"
-                ? ""
-                : CONVERT_SECONDS_TO_TIME_STRING(item.end / 22.4)
+            item.type === "action" ? "" : CONVERT_SECONDS_TO_TIME_STRING(item.end / 22.4)
         // const itemName = item.type === "action" ? CUSTOMACTIONS_BY_NAME[item.name].name : item.name
 
         const finishText = endTime === "" ? "" : `Finish: ${endTime}`
@@ -75,9 +70,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             return ""
         }
         const myStyle = {
-            width: `${
-                width * this.props.gamelogic.settings.htmlElementWidthFactor
-            }px`,
+            width: `${width * this.props.gamelogic.settings.htmlElementWidthFactor}px`,
         }
         return <div key={key} style={myStyle}></div>
     }
@@ -148,10 +141,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                         rowContent.push(fillerElement)
                     } else if (item.start > 0) {
                         const key = `filler${index1}${index2}`
-                        const fillerElement = this.getFillerElement(
-                            item.start,
-                            key
-                        )
+                        const fillerElement = this.getFillerElement(item.start, key)
                         rowContent.push(fillerElement)
                     }
 
@@ -170,28 +160,19 @@ export default class BOArea extends Component<MyProps, MyState> {
                             onMouseLeave={(e) => this.onMouseLeave()}
                             onClick={(e) => this.props.removeClick(e, item.id)}
                         >
-                            <div
-                                style={myStyle}
-                                className={this.getClass(barType, item.id)}
-                            >
+                            <div style={myStyle} className={this.getClass(barType, item.id)}>
                                 <img
                                     className={CLASSES.boElementIcon}
-                                    src={require("../icons/png/" +
-                                        item.imageSource)}
+                                    src={require("../icons/png/" + item.imageSource)}
                                     alt={itemName}
                                 />
-                                <div className={CLASSES.boElementText}>
-                                    {itemName}
-                                </div>
+                                <div className={CLASSES.boElementText}>{itemName}</div>
                             </div>
                         </div>
                     )
                 })
                 return (
-                    <div
-                        key={`row${barType}${index1}`}
-                        className={CLASSES.boRow}
-                    >
+                    <div key={`row${barType}${index1}`} className={CLASSES.boRow}>
                         {rowContent}
                     </div>
                 )
@@ -205,10 +186,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             // Hide bar if it has no content to show
             if (bar.length > 0) {
                 return (
-                    <div
-                        key={`verticalBar ${barName}`}
-                        className={barBgClasses[barName]}
-                    >
+                    <div key={`verticalBar ${barName}`} className={barBgClasses[barName]}>
                         {bar}
                     </div>
                 )
@@ -232,9 +210,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         const timeIntervalContent = timeBarCalc.map((item, index) => {
             const myStyle = {
                 width: `${
-                    this.timeInterval *
-                    this.props.gamelogic.settings.htmlElementWidthFactor *
-                    22.4
+                    this.timeInterval * this.props.gamelogic.settings.htmlElementWidthFactor * 22.4
                 }px`,
             }
             const timeString = CONVERT_SECONDS_TO_TIME_STRING(item.start)

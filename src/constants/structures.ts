@@ -41,11 +41,7 @@ const ignoreStructure = new Set([
 ])
 
 const STRUCTURES: Array<IDataUnit> = data.Unit.filter((item) => {
-    return (
-        !ignoreStructure.has(item.name) &&
-        ENABLED_UNITS.has(item.id) &&
-        item.is_structure
-    )
+    return !ignoreStructure.has(item.name) && ENABLED_UNITS.has(item.id) && item.is_structure
 })
 
 const STRUCTURE_NAMES_BY_RACE: {
@@ -71,10 +67,7 @@ STRUCTURES.forEach((item) => {
 
 STRUCTURES.sort(iconSortStructureFunction)
 
-console.assert(
-    STRUCTURES.length === 53,
-    `${STRUCTURES.length} is not equal to 53`
-)
+console.assert(STRUCTURES.length === 53, `${STRUCTURES.length} is not equal to 53`)
 console.assert(
     STRUCTURE_NAMES_BY_RACE.terran.size === 21,
     `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 21`

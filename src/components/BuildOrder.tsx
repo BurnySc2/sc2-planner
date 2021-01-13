@@ -4,20 +4,12 @@ import CLASSES from "../constants/classes"
 import { getImageOfItem } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
-import {
-    IBuildOrderElement,
-    ISettingsElement,
-    IAllRaces,
-} from "../constants/interfaces"
+import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
 
 // A function to help us with reordering the result
 // https://www.npmjs.com/package/react-beautiful-dnd
 // Stolen from the horizontal list example https://github.com/atlassian/react-beautiful-dnd/blob/HEAD/docs/about/examples.md
-const reorder = (
-    list: Array<IBuildOrderElement>,
-    startIndex: number,
-    endIndex: number
-) => {
+const reorder = (list: Array<IBuildOrderElement>, startIndex: number, endIndex: number) => {
     const result = Array.from(list)
     const [removed] = result.splice(startIndex, 1)
     result.splice(endIndex, 0, removed)
@@ -29,10 +21,7 @@ interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
     insertIndex: number
-    removeClick: (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        index: number
-    ) => void
+    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
     rerunBuildOrder: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
@@ -127,9 +116,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
 
         let buildOrderItems: JSX.Element[] = []
         let seperatorClass =
-            this.props.insertIndex === 0
-                ? CLASSES.boItemSeperatorSelected
-                : CLASSES.boItemSeperator
+            this.props.insertIndex === 0 ? CLASSES.boItemSeperatorSelected : CLASSES.boItemSeperator
         buildOrderItems.push(
             <div
                 key={`seperator0`}
@@ -142,11 +129,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
 
         this.props.gamelogic.bo.forEach((item, index) => {
             buildOrderItems.push(
-                <Draggable
-                    key={`${index}`}
-                    draggableId={`${index}`}
-                    index={index}
-                >
+                <Draggable key={`${index}`} draggableId={`${index}`} index={index}>
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}

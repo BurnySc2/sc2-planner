@@ -52,11 +52,7 @@ const ignoreUnits = new Set([
 ])
 
 const UNITS: Array<IDataUnit> = data.Unit.filter((item) => {
-    return (
-        !ignoreUnits.has(item.name) &&
-        ENABLED_UNITS.has(item.id) &&
-        !item.is_structure
-    )
+    return !ignoreUnits.has(item.name) && ENABLED_UNITS.has(item.id) && !item.is_structure
 })
 
 UNITS.sort(iconSortUnitFunction)
