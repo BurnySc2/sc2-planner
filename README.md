@@ -64,7 +64,7 @@ Most image assets are owned by Blizzard and are used according to http://blizzar
 
 Prettify all .ts and .tsx files:
 
-`prettier --write "src/**/*.{ts,tsx}"`
+`npx prettier --write "**/*.{ts,tsx}"`
 
 # TODO
 
