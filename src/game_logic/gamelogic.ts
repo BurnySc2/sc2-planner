@@ -749,11 +749,6 @@ class GameLogic {
         // The unit/structure that is training the target unit or structure
 
         for (let researcherStructure of this.idleUnits) {
-            // Unit might no longer be idle while iterating over idleUnits
-            if (researcherStructure.tasks.length !== 0) {
-                continue
-            }
-
             const structureCanResearchUpgrade = researchInfo.researchedBy.has(
                 researcherStructure.name
             )
@@ -763,6 +758,16 @@ class GameLogic {
                 researchInfo.researchedBy.has(`${researcherStructure.name}TechLab`)
 
             if (!structureCanResearchUpgrade && !canBeResearchedByAddon) {
+                continue
+            }
+
+            // Unit is busy researching / building stuff
+            if (structureCanResearchUpgrade && researcherStructure.tasks.length !== 0) {
+                continue
+            }
+
+            if (canBeResearchedByAddon && researcherStructure.addonTasks.length !== 0) {
+                // Addon is busy researching
                 continue
             }
 
