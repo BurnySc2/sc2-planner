@@ -9512,14 +9512,6 @@
                     ]
                 },
                 {
-                    "ability": 797,
-                    "requirements": [
-                        {
-                            "addon_to": 28
-                        }
-                    ]
-                },
-                {
                     "ability": 790,
                     "requirements": [
                         {
