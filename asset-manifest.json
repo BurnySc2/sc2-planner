@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "./static/css/main.4ba75d41.chunk.css",
-    "main.js": "./static/js/main.ee657b4d.chunk.js",
-    "main.js.map": "./static/js/main.ee657b4d.chunk.js.map",
+    "main.css": "./static/css/main.22a4e555.chunk.css",
+    "main.js": "./static/js/main.0fb16795.chunk.js",
+    "main.js.map": "./static/js/main.0fb16795.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.8add3247.js",
     "runtime-main.js.map": "./static/js/runtime-main.8add3247.js.map",
     "static/js/2.57afd0ea.chunk.js": "./static/js/2.57afd0ea.chunk.js",
     "static/js/2.57afd0ea.chunk.js.map": "./static/js/2.57afd0ea.chunk.js.map",
     "index.html": "./index.html",
-    "precache-manifest.01fc072ce2647798e92829e633484bfc.js": "./precache-manifest.01fc072ce2647798e92829e633484bfc.js",
+    "precache-manifest.595e9d320c44ef95ff96dd88db42933a.js": "./precache-manifest.595e9d320c44ef95ff96dd88db42933a.js",
     "service-worker.js": "./service-worker.js",
-    "static/css/main.4ba75d41.chunk.css.map": "./static/css/main.4ba75d41.chunk.css.map",
+    "static/css/main.22a4e555.chunk.css.map": "./static/css/main.22a4e555.chunk.css.map",
     "static/js/2.57afd0ea.chunk.js.LICENSE.txt": "./static/js/2.57afd0ea.chunk.js.LICENSE.txt",
     "static/media/btn-ability-spearofadun-chronosurge.png": "./static/media/btn-ability-spearofadun-chronosurge.c37fcfbc.png",
     "static/media/btn-ability-zerg-neuralparasite-color.png": "./static/media/btn-ability-zerg-neuralparasite-color.8e5608d3.png",
@@ -55,7 +55,7 @@
   "entrypoints": [
     "static/js/runtime-main.8add3247.js",
     "static/js/2.57afd0ea.chunk.js",
-    "static/css/main.4ba75d41.chunk.css",
-    "static/js/main.ee657b4d.chunk.js"
+    "static/css/main.22a4e555.chunk.css",
+    "static/js/main.0fb16795.chunk.js"
   ]
 }
