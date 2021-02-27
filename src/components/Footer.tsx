@@ -123,7 +123,7 @@ export default class Footer extends Component<MyProps, MyState> {
         })
 
         return (
-            <div className="flex flex-row">
+            <div className={`sticky bottom-0 flex ${CLASSES.backgroundcolor}`}>
                 <ReactTooltip place="top" id="footerTooltip">
                     {this.state.tooltipText}
                 </ReactTooltip>

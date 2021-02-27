@@ -6,7 +6,7 @@ import MyRouter from "./components/MyRouter"
 class App extends Component {
     render() {
         return (
-            <div className="App">
+            <div>
                 <MyRouter />
             </div>
         )

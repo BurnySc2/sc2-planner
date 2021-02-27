@@ -46,6 +46,8 @@ To start dev server:
 
 `npm run start`
 
+Then go to [localhost:3000](http://localhost:3000)
+
 To deploy in `/build` directory:
 
 `npm run build`

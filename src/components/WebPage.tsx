@@ -25,6 +25,7 @@ import {
     ICustomAction,
     IAllRaces,
 } from "../constants/interfaces"
+import CLASSES from "../constants/classes"
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
@@ -335,67 +336,71 @@ export default withRouter(
 
         render() {
             return (
-                <div className="flex-col h-full w-full bg-gray-500">
-                    <Title />
-                    <div className="flex flex-row items-center">
-                        <ImportExport
-                            gamelogic={this.state.gamelogic}
-                            rerunBuildOrder={(race, bo, settings) =>
-                                this.rerunBuildOrder(race, bo, settings)
-                            }
-                            updateUrl={(race, bo, settings) =>
-                                this.updateUrl(race, bo, settings, true)
-                            }
-                        />
-                        <Settings
-                            settings={this.state.settings}
-                            updateSettings={this.updateSettings}
-                        />
-                    </div>
-                    <div className="flex flex-row">
-                        <div className="w-9/12">
-                            <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
-                                <RaceSelection onClick={this.raceSelectionClicked} />
-                                <Time gamelogic={this.state.gamelogic} />
-                                <BuildOrder
+                <div
+                    className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
+                >
+                    <div className="flex flex-col">
+                        <Title />
+                        <div className="flex flex-row items-center">
+                            <ImportExport
+                                gamelogic={this.state.gamelogic}
+                                rerunBuildOrder={(race, bo, settings) =>
+                                    this.rerunBuildOrder(race, bo, settings)
+                                }
+                                updateUrl={(race, bo, settings) =>
+                                    this.updateUrl(race, bo, settings, true)
+                                }
+                            />
+                            <Settings
+                                settings={this.state.settings}
+                                updateSettings={this.updateSettings}
+                            />
+                        </div>
+                        <div className={`flex flex-row  ${CLASSES.backgroundcolor}`}>
+                            <div className="w-9/12">
+                                <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
+                                    <RaceSelection onClick={this.raceSelectionClicked} />
+                                    <Time gamelogic={this.state.gamelogic} />
+                                    <BuildOrder
+                                        gamelogic={this.state.gamelogic}
+                                        hoverIndex={this.state.hoverIndex}
+                                        insertIndex={this.state.insertIndex}
+                                        removeClick={this.buildOrderRemoveClicked}
+                                        rerunBuildOrder={(race, bo, settings) =>
+                                            this.rerunBuildOrder(race, bo, settings)
+                                        }
+                                        updateUrl={(race, bo, settings) =>
+                                            this.updateUrl(race, bo, settings)
+                                        }
+                                        changeHoverIndex={(index) => {
+                                            this.changeHoverIndex(index)
+                                        }}
+                                        changeInsertIndex={(index) => {
+                                            this.changeInsertIndex(index)
+                                        }}
+                                    />
+                                </div>
+                                <BOArea
                                     gamelogic={this.state.gamelogic}
                                     hoverIndex={this.state.hoverIndex}
-                                    insertIndex={this.state.insertIndex}
                                     removeClick={this.buildOrderRemoveClicked}
-                                    rerunBuildOrder={(race, bo, settings) =>
-                                        this.rerunBuildOrder(race, bo, settings)
-                                    }
-                                    updateUrl={(race, bo, settings) =>
-                                        this.updateUrl(race, bo, settings)
-                                    }
                                     changeHoverIndex={(index) => {
                                         this.changeHoverIndex(index)
                                     }}
-                                    changeInsertIndex={(index) => {
-                                        this.changeInsertIndex(index)
-                                    }}
+                                />
+                                <ErrorMessage gamelogic={this.state.gamelogic} />
+                            </div>
+                            <div className="w-3/12 z-10">
+                                <ActionsSelection
+                                    gamelogic={this.state.gamelogic}
+                                    race={this.state.race}
+                                    insertIndex={this.state.insertIndex}
+                                    actionClick={this.actionSelectionActionClicked}
+                                    unitClick={this.actionSelectionUnitClicked}
+                                    structureClick={this.actionSelectionStructureClicked}
+                                    upgradeClick={this.actionSelectionUpgradeClicked}
                                 />
                             </div>
-                            <BOArea
-                                gamelogic={this.state.gamelogic}
-                                hoverIndex={this.state.hoverIndex}
-                                removeClick={this.buildOrderRemoveClicked}
-                                changeHoverIndex={(index) => {
-                                    this.changeHoverIndex(index)
-                                }}
-                            />
-                            <ErrorMessage gamelogic={this.state.gamelogic} />
-                        </div>
-                        <div className="w-3/12">
-                            <ActionsSelection
-                                gamelogic={this.state.gamelogic}
-                                race={this.state.race}
-                                insertIndex={this.state.insertIndex}
-                                actionClick={this.actionSelectionActionClicked}
-                                unitClick={this.actionSelectionUnitClicked}
-                                structureClick={this.actionSelectionStructureClicked}
-                                upgradeClick={this.actionSelectionUpgradeClicked}
-                            />
                         </div>
                     </div>
                     <Footer />

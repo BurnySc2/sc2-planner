@@ -1,5 +1,6 @@
 // File containing tailwind css classes for all my HTML elements
 const CLASSES = {
+    backgroundcolor: "bg-gray-500",
     title: "mx-2 text-3xl font-bold antialiased hover:text-blue-600",
     titleVersion: "mx-2 text-xs italic antialiased hover:text-blue-600",
 
