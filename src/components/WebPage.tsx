@@ -337,13 +337,10 @@ export default withRouter(
         }
 
         onMinimize = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          this.setState({
-            minimizedActionsSelection: !this.state.minimizedActionsSelection,
-          })
+            this.setState({
+                minimizedActionsSelection: !this.state.minimizedActionsSelection,
+            })
         }
-
-
-
 
         render() {
             return (
@@ -368,16 +365,17 @@ export default withRouter(
                             />
 
                             <div
-                            className={CLASSES.tinyButtons + " ml-auto"}
-                            onClick={(e) => this.onMinimize(e)}
+                                className={CLASSES.tinyButtons + " ml-auto"}
+                                onClick={(e) => this.onMinimize(e)}
                             >
-                            {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
+                                {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
                             </div>
                         </div>
                         <div className={`flex flex-row  ${CLASSES.backgroundcolor}`}>
-
                             <div
-                            className={this.state.minimizedActionsSelection ? "w-full" : "w-9/12"}
+                                className={
+                                    this.state.minimizedActionsSelection ? "w-full" : "w-9/12"
+                                }
                             >
                                 <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
                                     <RaceSelection onClick={this.raceSelectionClicked} />
@@ -413,7 +411,9 @@ export default withRouter(
                             </div>
 
                             <div
-                            className={this.state.minimizedActionsSelection ? "hidden" : "w-3/12"}
+                                className={
+                                    this.state.minimizedActionsSelection ? "hidden" : "w-3/12"
+                                }
                             >
                                 <ActionsSelection
                                     gamelogic={this.state.gamelogic}
@@ -425,8 +425,6 @@ export default withRouter(
                                     upgradeClick={this.actionSelectionUpgradeClicked}
                                 />
                             </div>
-
-
                         </div>
                     </div>
                     <Footer />
