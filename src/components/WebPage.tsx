@@ -36,6 +36,7 @@ interface MyState {
     settings: Array<ISettingsElement>
     hoverIndex: number
     insertIndex: number
+    minimizedActionsSelection: boolean
 }
 
 export default withRouter(
@@ -98,6 +99,7 @@ export default withRouter(
                 hoverIndex: -1,
                 // Index at which new build order items should be inserted (selected index)
                 insertIndex: 0,
+                minimizedActionsSelection: false,
             }
         }
 
@@ -334,6 +336,12 @@ export default withRouter(
             window.removeEventListener("keydown", this.handleKeyDown)
         }
 
+        onMinimize = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            this.setState({
+                minimizedActionsSelection: !this.state.minimizedActionsSelection,
+            })
+        }
+
         render() {
             return (
                 <div
@@ -355,9 +363,20 @@ export default withRouter(
                                 settings={this.state.settings}
                                 updateSettings={this.updateSettings}
                             />
+
+                            <div
+                                className={CLASSES.tinyButtons + " ml-auto"}
+                                onClick={(e) => this.onMinimize(e)}
+                            >
+                                {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
+                            </div>
                         </div>
                         <div className={`flex flex-row  ${CLASSES.backgroundcolor}`}>
-                            <div className="w-9/12">
+                            <div
+                                className={
+                                    this.state.minimizedActionsSelection ? "w-full" : "w-9/12"
+                                }
+                            >
                                 <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
                                     <RaceSelection onClick={this.raceSelectionClicked} />
                                     <Time gamelogic={this.state.gamelogic} />
@@ -390,7 +409,12 @@ export default withRouter(
                                 />
                                 <ErrorMessage gamelogic={this.state.gamelogic} />
                             </div>
-                            <div className="w-3/12 z-10">
+
+                            <div
+                                className={
+                                    this.state.minimizedActionsSelection ? "hidden" : "w-3/12"
+                                }
+                            >
                                 <ActionsSelection
                                     gamelogic={this.state.gamelogic}
                                     race={this.state.race}
