@@ -497,7 +497,7 @@ class GameLogic {
     }
 
     /**
-     * The simulation tries to train a unit, builds a structure or morphs a unit
+     * Checks if what an item requires is present or not
      */
     addRequirements(requires: string[][], errorMessage: string): boolean {
         this.requirements = this.requirements || []
@@ -526,10 +526,10 @@ class GameLogic {
             }
         }
 
-        const effortlessError = minBy(errorList, "neededEffort")
-        if (effortlessError.neededEffort) {
-            this.errorMessage = effortlessError.message
-            this.requirements.push(...effortlessError.requirements)
+        const leastEffortError = minBy(errorList, "neededEffort")
+        if (leastEffortError.neededEffort) {
+            this.errorMessage = leastEffortError.message
+            this.requirements.push(...leastEffortError.requirements)
             return false
         }
         return true
