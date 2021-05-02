@@ -201,7 +201,7 @@ export default withRouter(
         // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
         addItemToBO = (item: IBuildOrderElement) => {
             const bo = this.state.bo
-            let insertedItems = 1;
+            let insertedItems = 1
             bo.splice(this.state.insertIndex, 0, item)
             // Re-calculate build order
 
@@ -214,31 +214,35 @@ export default withRouter(
             // gamelogic.runUntilEnd()
 
             // Non cached:
-            let gamelogic: GameLogic;
-            if (this.state.insertIndex === bo.length - 1
-              && !this.state.gamelogic.errorMessage
-              && this.state.race === "zerg") {
+            let gamelogic: GameLogic
+            if (
+                this.state.insertIndex === bo.length - 1 &&
+                !this.state.gamelogic.errorMessage &&
+                this.state.race === "zerg"
+            ) {
                 do {
                     gamelogic = this.simulateBuildOrder(this.state.race, bo, this.state.settings)
                     if (gamelogic.errorMessage && gamelogic.requirements) {
                         // console.log("errorMessage: ", gamelogic.errorMessage)
                         // console.log("requirements names: ", gamelogic.requirements.map(req => req.name))
                         insertedItems += gamelogic.requirements.length
-                        const duplicatesToRemove: IBuildOrderElement[] = [];
+                        const duplicatesToRemove: IBuildOrderElement[] = []
                         for (let req of gamelogic.requirements) {
                             const duplicateItem = find(bo, req)
                             // Add item if absent, or present later in the bo
-                            if (!duplicateItem || bo.indexOf(duplicateItem) >= this.state.insertIndex) {
+                            if (
+                                !duplicateItem ||
+                                bo.indexOf(duplicateItem) >= this.state.insertIndex
+                            ) {
                                 bo.splice(this.state.insertIndex, 0, req)
                                 if (duplicateItem) {
-                                  duplicatesToRemove.push(duplicateItem);
+                                    duplicatesToRemove.push(duplicateItem)
                                 }
                             }
                         }
                         for (let duplicate of duplicatesToRemove) {
-                            remove(bo, item => item === duplicate)  // Specificaly remove the later one
+                            remove(bo, (item) => item === duplicate) // Specificaly remove the later one
                         }
-
                     }
                 } while (gamelogic.errorMessage && gamelogic.requirements)
             }
@@ -384,13 +388,10 @@ export default withRouter(
         }
 
         onMinimize = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-          this.setState({
-            minimizedActionsSelection: !this.state.minimizedActionsSelection,
-          })
+            this.setState({
+                minimizedActionsSelection: !this.state.minimizedActionsSelection,
+            })
         }
-
-
-
 
         render() {
             return (
@@ -415,16 +416,17 @@ export default withRouter(
                             />
 
                             <div
-                            className={CLASSES.tinyButtons + " ml-auto"}
-                            onClick={(e) => this.onMinimize(e)}
+                                className={CLASSES.tinyButtons + " ml-auto"}
+                                onClick={(e) => this.onMinimize(e)}
                             >
-                            {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
+                                {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
                             </div>
                         </div>
                         <div className={`flex flex-row  ${CLASSES.backgroundcolor}`}>
-
                             <div
-                            className={this.state.minimizedActionsSelection ? "w-full" : "w-9/12"}
+                                className={
+                                    this.state.minimizedActionsSelection ? "w-full" : "w-9/12"
+                                }
                             >
                                 <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
                                     <RaceSelection onClick={this.raceSelectionClicked} />
@@ -460,7 +462,9 @@ export default withRouter(
                             </div>
 
                             <div
-                            className={this.state.minimizedActionsSelection ? "hidden" : "w-3/12"}
+                                className={
+                                    this.state.minimizedActionsSelection ? "hidden" : "w-3/12"
+                                }
                             >
                                 <ActionsSelection
                                     gamelogic={this.state.gamelogic}
@@ -472,8 +476,6 @@ export default withRouter(
                                     upgradeClick={this.actionSelectionUpgradeClicked}
                                 />
                             </div>
-
-
                         </div>
                     </div>
                     <Footer />

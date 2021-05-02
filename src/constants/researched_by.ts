@@ -32,11 +32,13 @@ data.Unit.forEach((researcherUnit) => {
                         }
                     }
                 }
-                const requiredStructure = requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
+                const requiredStructure =
+                    requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
                 if (requiredStructure) {
                     requires.push(requiredStructure)
                 }
-                const requiredUpgrade = requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
+                const requiredUpgrade =
+                    requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
                 if (requiredUpgrade) {
                     requires.push(requiredUpgrade)
                 }

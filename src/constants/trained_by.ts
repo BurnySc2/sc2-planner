@@ -32,12 +32,12 @@ data.Unit.forEach((trainingUnit) => {
                 let requiresTechlab = false
                 let isMorph = MORPH_ABILITIES.has(ability.ability)
                 if (isMorph) {
-                    const morphes: {[resultingUnit: string]: string} = {
-                        "Baneling": "Zergling",
-                        "Ravager": "Roach",
-                        "Overseer": "Overlord",
-                        "LurkerMP": "Hydralisk",
-                        "BroodLord": "Corruptor",
+                    const morphes: { [resultingUnit: string]: string } = {
+                        Baneling: "Zergling",
+                        Ravager: "Roach",
+                        Overseer: "Overlord",
+                        LurkerMP: "Hydralisk",
+                        BroodLord: "Corruptor",
                     }
                     requiresUnit = morphes[resultingUnit.name]
                     if (morphes[resultingUnit.name]) {
@@ -96,7 +96,7 @@ data.Unit.forEach((trainingUnit) => {
                 } else {
                     // Entry already exists, add training unit to object of 'trainedBy' and update requirement
                     TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
-                    TRAINED_BY[resultingUnit.name].requires[0].push(trainingUnit.name, ...requires);
+                    TRAINED_BY[resultingUnit.name].requires[0].push(trainingUnit.name, ...requires)
                 }
                 TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name]
                     .requiredStructure
@@ -113,12 +113,21 @@ data.Unit.forEach((trainingUnit) => {
 })
 
 // Various fixes
-const requirementPriority = ["Lair", "Corruptor", "GreaterSpire", "Hive"];
+const requirementPriority = ["Lair", "Corruptor", "GreaterSpire", "Hive"]
 for (let itemName in TRAINED_BY) {
     const trainInfo = TRAINED_BY[itemName]
-    trainInfo.requires = trainInfo.requires.map(requires => sortBy(without(uniq(requires), "Larva", "OverlordTransport"), name => -requirementPriority.indexOf(name)));
+    trainInfo.requires = trainInfo.requires.map((requires) =>
+        sortBy(
+            without(uniq(requires), "Larva", "OverlordTransport"),
+            (name) => -requirementPriority.indexOf(name)
+        )
+    )
 }
-TRAINED_BY['Queen'].requires = [["SpawningPool", "Hatchery"], ["SpawningPool", "Lair"], ["SpawningPool", "Hive"]]
+TRAINED_BY["Queen"].requires = [
+    ["SpawningPool", "Hatchery"],
+    ["SpawningPool", "Lair"],
+    ["SpawningPool", "Hive"],
+]
 
 /**
 {Adept:

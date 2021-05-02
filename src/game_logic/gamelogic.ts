@@ -30,19 +30,19 @@ let eventId = 0
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
-const supplyUnitNameByRace: {[race: string]: any} = {
-  "terran": {
-    name: "SupplyDepot",
-    type: "structure",
-  },
-  "protoss": {
-    name: "Pylon",
-    type: "structure",
-  },
-  "zerg": {
-    name: "Overlord",
-    type: "unit",
-  },
+const supplyUnitNameByRace: { [race: string]: any } = {
+    terran: {
+        name: "SupplyDepot",
+        type: "structure",
+    },
+    protoss: {
+        name: "Pylon",
+        type: "structure",
+    },
+    zerg: {
+        name: "Overlord",
+        type: "unit",
+    },
 }
 
 class GameLogic {
@@ -496,13 +496,12 @@ class GameLogic {
         return unitsCount
     }
 
-
     /**
      * The simulation tries to train a unit, builds a structure or morphs a unit
      */
     addRequirements(requires: string[][], errorMessage: string): boolean {
-      this.requirements = this.requirements || []
-        const itemPresence: {[unitName: string]: boolean} = {}
+        this.requirements = this.requirements || []
+        const itemPresence: { [unitName: string]: boolean } = {}
         for (let item of this.units) {
             itemPresence[item.name] = true
         }
@@ -510,15 +509,14 @@ class GameLogic {
             itemPresence[upgradeName] = true
         }
 
-
-        let errorList: any[] = [];
-        let i = 0;
+        let errorList: any[] = []
+        let i = 0
         for (let requirementList of requires) {
-            const errors = errorList[i++] = {
+            const errors = (errorList[i++] = {
                 message: "",
                 requirements: [] as IBuildOrderElement[],
                 neededEffort: 0,
-            }
+            })
             for (let requiredItem of requirementList) {
                 if (!itemPresence[requiredItem]) {
                     errors.message = errorMessage
@@ -561,8 +559,12 @@ class GameLogic {
 
         // Check if requirement is met
         if (trainInfo.requires.length) {
-
-            if (!this.addRequirements(trainInfo.requires, `Required something for '${unit.name}' could not be found.`)) {
+            if (
+                !this.addRequirements(
+                    trainInfo.requires,
+                    `Required something for '${unit.name}' could not be found.`
+                )
+            ) {
                 return false
             }
 
@@ -631,16 +633,20 @@ class GameLogic {
                 !trainerCanTrainThroughReactor &&
                 !trainerCanTrainThroughLarva
             ) {
-                this.errorMessage = `Could not find unit to produce '${unit.name}'.` + JSON.stringify(trainInfo)
+                this.errorMessage =
+                    `Could not find unit to produce '${unit.name}'.` + JSON.stringify(trainInfo)
                 if (trainInfo.consumesUnit) {
                     if (unit.type === "structure") {
-                        this.requirements = [{
-                            name: "Drone",
-                            type: "worker",
-                        }]
-                    }
-                    else {
-                      this.errorMessage += ` Didn't know which requirement to insert here for ${JSON.stringify(trainInfo)}`
+                        this.requirements = [
+                            {
+                                name: "Drone",
+                                type: "worker",
+                            },
+                        ]
+                    } else {
+                        this.errorMessage += ` Didn't know which requirement to insert here for ${JSON.stringify(
+                            trainInfo
+                        )}`
                     }
                 }
                 // if (trainInfo.requiresUnit) {
@@ -795,7 +801,13 @@ class GameLogic {
                     break
                 }
             }
-            if (!requiredStructureMet && !this.addRequirements(researchInfo.requires, `Required structure '${requiredStructure}' to research upgrade '${upgrade.name}' could not be found.`)) {
+            if (
+                !requiredStructureMet &&
+                !this.addRequirements(
+                    researchInfo.requires,
+                    `Required structure '${requiredStructure}' to research upgrade '${upgrade.name}' could not be found.`
+                )
+            ) {
                 return false
             }
         }
@@ -815,10 +827,14 @@ class GameLogic {
             }
         }
 
-        if (!this.addRequirements(researchInfo.requires, `Could not find a structure to research upgrade '${upgrade.name}'.`)) {
+        if (
+            !this.addRequirements(
+                researchInfo.requires,
+                `Could not find a structure to research upgrade '${upgrade.name}'.`
+            )
+        ) {
             return false
         }
-
 
         // Get cost (mineral, vespene, supply)
         const cost = this.getCost(upgrade.name, true)
@@ -826,7 +842,6 @@ class GameLogic {
             this.setCostErrorMessage(cost, upgrade.name)
             return false
         }
-
 
         // The unit/structure that is training the target unit or structure
 
@@ -902,23 +917,23 @@ class GameLogic {
         this.busyUnits.delete(unit)
     }
 
-
     setCostErrorMessage(cost: ICost, unitName: string) {
         if (cost.supply > this.supplyLeft) {
             this.errorMessage = `Missing ${Math.ceil(
                 cost.supply - this.supplyLeft
             )} supply to produce '${unitName}'.`
             this.requirements = [supplyUnitNameByRace[this.race]]
-
         } else if (cost.vespene > this.vespene) {
             this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
                 cost.vespene - this.vespene
             )} vespene.`
             if (this.workersVespene === 0) {
-                this.requirements = [{
-                    name: "3worker_to_gas",
-                    type: "action",
-                }]
+                this.requirements = [
+                    {
+                        name: "3worker_to_gas",
+                        type: "action",
+                    },
+                ]
             }
         } else if (cost.minerals > this.minerals) {
             this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(

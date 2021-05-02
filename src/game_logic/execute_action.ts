@@ -6,15 +6,15 @@ import { IBuildOrderElement } from "../constants/interfaces"
 const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
-const workerNameByRace: {[race: string]: string} = {
-  "terran": "SCV",
-  "protoss": "Probe",
-  "zerg": "Drone",
+const workerNameByRace: { [race: string]: string } = {
+    terran: "SCV",
+    protoss: "Probe",
+    zerg: "Drone",
 }
-const gasBuildingByRace: {[race: string]: string} = {
-  "terran": "Rafinery",
-  "protoss": "Assimilator",
-  "zerg": "Extractor",
+const gasBuildingByRace: { [race: string]: string } = {
+    terran: "Rafinery",
+    protoss: "Assimilator",
+    zerg: "Extractor",
 }
 
 const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => {
@@ -61,10 +61,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "3worker_to_gas") {
         gamelogic.errorMessage = `Could not find three worker that are mining minerals or a gas structure. Max allowed workers per gas are 3.`
-        gamelogic.requirements = [{
-            name: gasBuildingByRace[gamelogic.race],
-            type: "structure",
-        }]
+        gamelogic.requirements = [
+            {
+                name: gasBuildingByRace[gamelogic.race],
+                type: "structure",
+            },
+        ]
         if (
             gamelogic.workersMinerals >= 3 &&
             gamelogic.gasCount > 0 &&
@@ -91,10 +93,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "worker_to_scout") {
         gamelogic.errorMessage = `Could not find a worker that is mining minerals.`
-        gamelogic.requirements = [{
-            name: workerNameByRace[gamelogic.race],
-            type: "worker",
-        }]
+        gamelogic.requirements = [
+            {
+                name: workerNameByRace[gamelogic.race],
+                type: "worker",
+            },
+        ]
         if (gamelogic.workersMinerals > 0) {
             for (const unit of gamelogic.idleUnits) {
                 if (workerTypes.has(unit.name) && unit.isMiningMinerals()) {
@@ -683,10 +687,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "inject") {
         gamelogic.errorMessage = `Could not find a Queen to inject with.`
-        gamelogic.requirements = [{
-            name: "Queen",
-            type: "unit",
-        }]
+        gamelogic.requirements = [
+            {
+                name: "Queen",
+                type: "unit",
+            },
+        ]
         for (const queen of gamelogic.idleUnits) {
             // Find queen with >=25 energy
             if (queen.name === "Queen" && queen.energy >= 25) {
@@ -711,10 +717,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
     if (action.internal_name === "creep_tumor") {
         gamelogic.errorMessage = `Could not find a Queen to create a Creep Tumor with.`
-        gamelogic.requirements = [{
-            name: "Queen",
-            type: "unit",
-        }]
+        gamelogic.requirements = [
+            {
+                name: "Queen",
+                type: "unit",
+            },
+        ]
         for (const queen of gamelogic.idleUnits) {
             // Find queen with >=25 energy
             if (queen.name === "Queen" && queen.energy >= 25) {
