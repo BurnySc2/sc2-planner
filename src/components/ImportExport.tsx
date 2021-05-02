@@ -95,7 +95,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         navigator.clipboard.readText().then((data) => {
             const decodedSALT = decodeSALT(data)
             const race = decodedSALT.race as IAllRaces | undefined
-            const bo = decodedSALT.bo
+            const bo = decodedSALT.bo as IBuildOrderElement[]
             this.setState({
                 tooltipText: "Pasted!",
             })
@@ -184,7 +184,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
     }
 
     generateSALTEncoding() {
-        const encodedSalt = encodeSALT(this.props.gamelogic.eventLog)
+        const encodedSalt = encodeSALT(this.props.gamelogic.eventLog as IBuildOrderElement[])
         console.log(encodedSalt)
         return encodedSalt
     }

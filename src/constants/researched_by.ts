@@ -18,27 +18,36 @@ data.Unit.forEach((researcherUnit) => {
         }) => {
             const resultingUpgradeId = RESEARCH_ABILITIES[ability.ability]
             const resultingUpgrade = UPGRADE_BY_ID[resultingUpgradeId]
+            const requires: string[] = []
             if (resultingUpgrade !== undefined) {
-                let requiredStructure = null
-                let requiredUpgrade = null
+                let requiredStructureId = null
+                let requiredUpgradeId = null
                 if (ability.requirements && Array.isArray(ability.requirements)) {
                     for (let requirement of ability.requirements) {
                         if (requirement.upgrade) {
-                            requiredUpgrade = requirement.upgrade
+                            requiredUpgradeId = requirement.upgrade
                         }
                         if (requirement.building) {
-                            requiredStructure = requirement.building
+                            requiredStructureId = requirement.building
                         }
                     }
                 }
+                const requiredStructure = requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
+                if (requiredStructure) {
+                    requires.push(requiredStructure)
+                }
+                const requiredUpgrade = requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
+                if (requiredUpgrade) {
+                    requires.push(requiredUpgrade)
+                }
+
                 // If it doesnt exist: create
                 if (!RESEARCHED_BY[resultingUpgrade.name]) {
                     RESEARCHED_BY[resultingUpgrade.name] = {
                         researchedBy: new Set([researcherUnit.name]),
-                        requiredStructure:
-                            requiredStructure !== null ? UNITS_BY_ID[requiredStructure].name : null,
-                        requiredUpgrade:
-                            requiredUpgrade !== null ? UPGRADE_BY_ID[requiredUpgrade].name : null,
+                        requiredStructure: requiredStructure,
+                        requiredUpgrade: requiredUpgrade,
+                        requires: [[...requires, researcherUnit.name]],
                     }
                 } else {
                     // Entry already exists, add training unit to object of 'researchedBy'
@@ -50,13 +59,13 @@ data.Unit.forEach((researcherUnit) => {
 })
 
 /**
-{OverlordSpeed: 
+{OverlordSpeed:
     requiredStructure: null,
     requiredUpgrade: null,
     researchedBy: { Hatchery: 1, Lair: 1, Hive: 1 }
 }
 
-{ProtossAir2: 
+{ProtossAir2:
     requiredStructure: FleetBeacon,
     requiredUpgrade: ProtossAir1,
     researchedBy: { CyberneticsCore: 1 }

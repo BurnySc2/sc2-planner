@@ -2,9 +2,10 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 import RESEARCHED_BY from "../constants/researched_by"
+import BO_ITEMS from "../constants/bo_items"
 import { incomeMinerals, incomeVespene } from "./income"
 
-import { cloneDeep } from "lodash"
+import { cloneDeep, minBy } from "lodash"
 
 import Unit from "./unit"
 import Event from "./event"
@@ -22,13 +23,27 @@ Each frame
     Check if the next build order item can be executed
 
 Each build order index increment
-    Add the current state to snapshots for cached view 
+    Add the current state to snapshots for cached view
 */
 
 let eventId = 0
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
+const supplyUnitNameByRace: {[race: string]: any} = {
+  "terran": {
+    name: "SupplyDepot",
+    type: "structure",
+  },
+  "protoss": {
+    name: "Pylon",
+    type: "structure",
+  },
+  "zerg": {
+    name: "Overlord",
+    type: "unit",
+  },
+}
 
 class GameLogic {
     race: IAllRaces
@@ -56,6 +71,7 @@ class GameLogic {
     eventLog: Array<Event>
     unitsCountArray: Array<{ [name: string]: number }>
     errorMessage: string
+    requirements?: IBuildOrderElement[]
     settings: { [name: string]: number }
 
     constructor(
@@ -97,6 +113,7 @@ class GameLogic {
         this.unitsCountArray = []
         // Error message appearing on GUI if build order is invalid
         this.errorMessage = ""
+        this.requirements = undefined
         eventId = -1
         mineralIncomeCache = {}
         vespeneIncomeCache = {}
@@ -321,6 +338,7 @@ class GameLogic {
             if (!endOfActions) {
                 this.boIndex += 1
                 this.errorMessage = ""
+                this.requirements = undefined
                 this.unitsCountArray.push(this.updateUnitsCount())
                 // Each time the boIndex gets incremented, take a snapshot of the current state - this way i can cache the gamelogic and reload it from the state
                 // e.g. bo = [scv, depot, scv]
@@ -478,6 +496,47 @@ class GameLogic {
         return unitsCount
     }
 
+
+    /**
+     * The simulation tries to train a unit, builds a structure or morphs a unit
+     */
+    addRequirements(requires: string[][], errorMessage: string): boolean {
+      this.requirements = this.requirements || []
+        const itemPresence: {[unitName: string]: boolean} = {}
+        for (let item of this.units) {
+            itemPresence[item.name] = true
+        }
+        for (let upgradeName of this.upgrades) {
+            itemPresence[upgradeName] = true
+        }
+
+
+        let errorList: any[] = [];
+        let i = 0;
+        for (let requirementList of requires) {
+            const errors = errorList[i++] = {
+                message: "",
+                requirements: [] as IBuildOrderElement[],
+                neededEffort: 0,
+            }
+            for (let requiredItem of requirementList) {
+                if (!itemPresence[requiredItem]) {
+                    errors.message = errorMessage
+                    errors.requirements.push(BO_ITEMS[requiredItem])
+                    errors.neededEffort += 1 / requirementList.length
+                }
+            }
+        }
+
+        const effortlessError = minBy(errorList, "neededEffort")
+        if (effortlessError.neededEffort) {
+            this.errorMessage = effortlessError.message
+            this.requirements.push(...effortlessError.requirements)
+            return false
+        }
+        return true
+    }
+
     /**
      * The simulation tries to train a unit, builds a structure or morphs a unit
      */
@@ -487,9 +546,10 @@ class GameLogic {
         console.assert(unit.type, JSON.stringify(unit, null, 4))
 
         // Get unit type / structure type that can train this unit
-        const trainedInfo = TRAINED_BY[unit.name]
-        let morphCondition = trainedInfo.isMorph || trainedInfo.consumesUnit
-        console.assert(trainedInfo, unit.name)
+        const trainInfo = TRAINED_BY[unit.name]
+        this.requirements = []
+        let morphCondition = trainInfo.isMorph || trainInfo.consumesUnit
+        console.assert(trainInfo, unit.name)
 
         // Get cost (mineral, vespene, supply)
         let cost = this.getCost(unit.name)
@@ -500,34 +560,28 @@ class GameLogic {
         }
 
         // Check if requirement is met
-        const requiredStructure = trainedInfo.requiredStructure
-        let requiredStructureMet = requiredStructure === null
-        if (!requiredStructureMet) {
-            for (let structure of this.units) {
-                if (
-                    // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
-                    // And hatch requirement: spawning pool (but we have a lair or hive)
-                    // And lair requirement: infestation pit (but we have hive)
-                    // And CC requirement: ebay (but we have only orbitals)
-                    // And Cybercore requirement: gateway (but we have only warpgates)
-                    structure.name === requiredStructure ||
-                    (requiredStructure === "Spire" && structure.name === "GreaterSpire") ||
-                    (requiredStructure === "Hatchery" &&
-                        ["Lair", "Hive"].includes(structure.name)) ||
-                    (requiredStructure === "Lair" && structure.name === "Hive") ||
-                    (requiredStructure === "CommandCenter" &&
-                        ["PlanetaryFortress", "OrbitalCommand"].includes(structure.name)) ||
-                    (requiredStructure === "Gateway" && structure.name === "WarpGate")
-                ) {
-                    requiredStructureMet = true
-                    break
-                }
-            }
-            if (!requiredStructureMet) {
-                // Zergling requires spawning pool
-                this.errorMessage = `Required structure '${requiredStructure}' for '${unit.name}' could not be found.`
+        if (trainInfo.requires.length) {
+
+            if (!this.addRequirements(trainInfo.requires, `Required something for '${unit.name}' could not be found.`)) {
                 return false
             }
+
+            //  TODO1 implement this as a fix in trained_by or researched_by rather than here
+            //     if (
+            //         // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
+            //         // And hatch requirement: spawning pool (but we have a lair or hive)
+            //         // And lair requirement: infestation pit (but we have hive)
+            //         // And CC requirement: ebay (but we have only orbitals)
+            //         // And Cybercore requirement: gateway (but we have only warpgates)
+            //         structure.name === requiredStructure ||
+            //         (requiredStructure === "Spire" && structure.name === "GreaterSpire") ||
+            //         (requiredStructure === "Hatchery" &&
+            //             ["Lair", "Hive"].includes(structure.name)) ||
+            //         (requiredStructure === "Lair" && structure.name === "Hive") ||
+            //         (requiredStructure === "CommandCenter" &&
+            //             ["PlanetaryFortress", "OrbitalCommand"].includes(structure.name)) ||
+            //         (requiredStructure === "Gateway" && structure.name === "WarpGate")
+            //     ) {
         }
 
         // The unit/structure that is training the target unit or structure
@@ -545,23 +599,23 @@ class GameLogic {
                 trainerUnit.hasAddon()
             ) {
                 this.errorMessage = `Could not find structure without addon to build '${unit.name}'.`
+                //TODO1 add requirements for terran
                 continue
             }
 
             // Loop over all idle units and check if they match unit type
 
             const trainerCanTrainThisUnit =
-                trainedInfo.trainedBy.has(trainerUnit.name) &&
-                (!trainedInfo.requiresTechlab || trainerUnit.hasTechlab)
+                trainInfo.trainedBy.has(trainerUnit.name) &&
+                (!trainInfo.requiresTechlab || trainerUnit.hasTechlab)
             const trainerCanTrainThroughReactor =
-                trainedInfo.trainedBy.has(trainerUnit.name) &&
-                !trainedInfo.requiresTechlab &&
+                trainInfo.trainedBy.has(trainerUnit.name) &&
+                !trainInfo.requiresTechlab &&
                 trainerUnit.hasReactor &&
                 trainerUnit.addonTasks.length === 0
-
             // TODO Rename this task as 'background task' as probes are building structures in the background aswell as hatcheries are building stuff with their larva
             const trainerCanTrainThroughLarva =
-                (trainedInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) ||
+                (trainInfo.trainedBy.has("Larva") && trainerUnit.larvaCount > 0) ||
                 (unit.type === "structure" && trainerUnit.name === "Probe")
             morphCondition = morphCondition && !trainerCanTrainThroughLarva
 
@@ -577,7 +631,26 @@ class GameLogic {
                 !trainerCanTrainThroughReactor &&
                 !trainerCanTrainThroughLarva
             ) {
-                this.errorMessage = `Could not find unit to produce '${unit.name}'.`
+                this.errorMessage = `Could not find unit to produce '${unit.name}'.` + JSON.stringify(trainInfo)
+                if (trainInfo.consumesUnit) {
+                    if (unit.type === "structure") {
+                        this.requirements = [{
+                            name: "Drone",
+                            type: "worker",
+                        }]
+                    }
+                    else {
+                      this.errorMessage += ` Didn't know which requirement to insert here for ${JSON.stringify(trainInfo)}`
+                    }
+                }
+                // if (trainInfo.requiresUnit) {
+                //   this.requirements = this.requirements || []
+                //   this.requirements.push({
+                //       name: trainInfo.requiresUnit,
+                //       type: "unit",
+                //   })
+                //   return
+                // }
                 continue
             }
 
@@ -631,7 +704,7 @@ class GameLogic {
                 this.supplyUsed,
                 taskId
             )
-            newTask.morphToUnit = morphCondition || trainedInfo.consumesUnit ? unit.name : null
+            newTask.morphToUnit = morphCondition || trainInfo.consumesUnit ? unit.name : null
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
                     newTask.newWorker = unit.name
@@ -704,16 +777,10 @@ class GameLogic {
      * Nearly the same as trainUnit(unit)
      */
     researchUpgrade(upgrade: IBuildOrderElement) {
+        this.requirements = []
         // Issue research command of upgrade type
         console.assert(upgrade.name, JSON.stringify(upgrade, null, 4))
         console.assert(upgrade.type, JSON.stringify(upgrade, null, 4))
-
-        // Get cost (mineral, vespene, supply)
-        const cost = this.getCost(upgrade.name, true)
-        if (!this._canAfford(cost)) {
-            this.setCostErrorMessage(cost, upgrade.name)
-            return false
-        }
 
         // Get unit type / structure type that can train this unit
         const researchInfo = RESEARCHED_BY[upgrade.name]
@@ -728,8 +795,7 @@ class GameLogic {
                     break
                 }
             }
-            if (!requiredStructureMet) {
-                this.errorMessage = `Required structure '${requiredStructure}' to research upgrade '${upgrade.name}' could not be found.`
+            if (!requiredStructureMet && !this.addRequirements(researchInfo.requires, `Required structure '${requiredStructure}' to research upgrade '${upgrade.name}' could not be found.`)) {
                 return false
             }
         }
@@ -741,11 +807,27 @@ class GameLogic {
             }
             if (!requiredUpgradeMet) {
                 this.errorMessage = `Required upgrade '${requiredUpgrade}' to research upgrade '${upgrade.name}' could not be found.`
+                this.requirements.push({
+                    name: requiredUpgrade,
+                    type: "upgrade",
+                })
                 return false
             }
         }
 
-        this.errorMessage = `Could not find a structure to research upgrade '${upgrade.name}'.`
+        if (!this.addRequirements(researchInfo.requires, `Could not find a structure to research upgrade '${upgrade.name}'.`)) {
+            return false
+        }
+
+
+        // Get cost (mineral, vespene, supply)
+        const cost = this.getCost(upgrade.name, true)
+        if (!this._canAfford(cost)) {
+            this.setCostErrorMessage(cost, upgrade.name)
+            return false
+        }
+
+
         // The unit/structure that is training the target unit or structure
 
         for (let researcherStructure of this.idleUnits) {
@@ -820,15 +902,24 @@ class GameLogic {
         this.busyUnits.delete(unit)
     }
 
+
     setCostErrorMessage(cost: ICost, unitName: string) {
         if (cost.supply > this.supplyLeft) {
             this.errorMessage = `Missing ${Math.ceil(
                 cost.supply - this.supplyLeft
             )} supply to produce '${unitName}'.`
+            this.requirements = [supplyUnitNameByRace[this.race]]
+
         } else if (cost.vespene > this.vespene) {
             this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
                 cost.vespene - this.vespene
             )} vespene.`
+            if (this.workersVespene === 0) {
+                this.requirements = [{
+                    name: "3worker_to_gas",
+                    type: "action",
+                }]
+            }
         } else if (cost.minerals > this.minerals) {
             this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
                 cost.minerals - this.minerals

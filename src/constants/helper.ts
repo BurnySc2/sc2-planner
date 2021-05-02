@@ -178,7 +178,7 @@ const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string =
 
     JS:
     import pako, Base64
-    https://www.npmjs.com/package/pako 
+    https://www.npmjs.com/package/pako
     https://www.npmjs.com/package/js-base64
     let my_string = JSON.stringify({"version": 1})
     let zlib_compressed = pako.deflate(my_string)
@@ -253,7 +253,7 @@ const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> 
                 type: item.type,
             })
         }
-        if (["worker", "unit", "structure"].includes(item.type)) {
+        if (item.type === "worker" || item.type === "unit" || item.type === "structure") {
             const unit = UNITS_BY_ID[item.id]
             buildOrderDecoded.push({ name: unit.name, type: item.type })
         }

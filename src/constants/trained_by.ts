@@ -2,6 +2,7 @@ import { CREATION_ABILITIES, MORPH_ABILITIES } from "./creation_abilities"
 import UNITS_BY_ID from "./units_by_id"
 import UPGRADE_BY_ID from "./upgrade_by_id"
 import { ITrainedBy } from "./interfaces"
+import { sortBy, uniq, without } from "lodash"
 
 import data from "./data.json"
 // const data = require("./data.json")
@@ -26,8 +27,23 @@ data.Unit.forEach((trainingUnit) => {
             if (resultingUnit !== undefined) {
                 let requiredStructureId = null
                 let requiredUpgradeId = null
+                let requiresUnit = null
+                let requires = []
                 let requiresTechlab = false
                 let isMorph = MORPH_ABILITIES.has(ability.ability)
+                if (isMorph) {
+                    const morphes: {[resultingUnit: string]: string} = {
+                        "Baneling": "Zergling",
+                        "Ravager": "Roach",
+                        "Overseer": "Overlord",
+                        "LurkerMP": "Hydralisk",
+                        "BroodLord": "Corruptor",
+                    }
+                    requiresUnit = morphes[resultingUnit.name]
+                    if (morphes[resultingUnit.name]) {
+                        requires.push(morphes[resultingUnit.name])
+                    }
+                }
                 const isFreeMorph =
                     resultingUnit.minerals === trainingUnit.minerals &&
                     resultingUnit.gas === trainingUnit.gas &&
@@ -56,14 +72,22 @@ data.Unit.forEach((trainingUnit) => {
 
                 let requiredStructure =
                     requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
+                if (requiredStructure) {
+                    requires.push(requiredStructure)
+                }
                 let requiredUpgrade =
                     requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
+                if (requiredUpgrade) {
+                    requires.push(requiredUpgrade)
+                }
 
                 // If it doesnt exist: create
                 if (TRAINED_BY[resultingUnit.name] === undefined) {
                     TRAINED_BY[resultingUnit.name] = {
                         trainedBy: new Set([trainingUnit.name]),
                         requiresTechlab: requiresTechlab,
+                        requiresUnit: requiresUnit,
+                        requires: [[...requires, trainingUnit.name]],
                         isMorph: isMorph,
                         consumesUnit: consumesUnit,
                         requiredStructure: null,
@@ -72,6 +96,7 @@ data.Unit.forEach((trainingUnit) => {
                 } else {
                     // Entry already exists, add training unit to object of 'trainedBy' and update requirement
                     TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
+                    TRAINED_BY[resultingUnit.name].requires[0].push(trainingUnit.name, ...requires);
                 }
                 TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name]
                     .requiredStructure
@@ -87,8 +112,16 @@ data.Unit.forEach((trainingUnit) => {
     )
 })
 
+// Various fixes
+const requirementPriority = ["Lair", "Corruptor", "GreaterSpire", "Hive"];
+for (let itemName in TRAINED_BY) {
+    const trainInfo = TRAINED_BY[itemName]
+    trainInfo.requires = trainInfo.requires.map(requires => sortBy(without(uniq(requires), "Larva", "OverlordTransport"), name => -requirementPriority.indexOf(name)));
+}
+TRAINED_BY['Queen'].requires = [["SpawningPool", "Hatchery"], ["SpawningPool", "Lair"], ["SpawningPool", "Hive"]]
+
 /**
-{Adept: 
+{Adept:
     requiredStructure: "CyberneticsCore",
     requiredUpgrade: null,
     requiresTechlab: false,

@@ -18,7 +18,7 @@ import {
     decodeBuildOrder,
     createUrlParams,
 } from "../constants/helper"
-import { cloneDeep } from "lodash"
+import { cloneDeep, find, remove } from "lodash"
 import {
     IBuildOrderElement,
     ISettingsElement,
@@ -144,6 +144,24 @@ export default withRouter(
             })
         }
 
+        simulateBuildOrder(
+            race: IAllRaces | undefined,
+            buildOrder: Array<IBuildOrderElement>,
+            settings: Array<ISettingsElement> | undefined
+        ): GameLogic {
+            if (!race) {
+                race = "terran" as IAllRaces
+            }
+            if (!settings) {
+                settings = cloneDeep(defaultSettings)
+            }
+
+            const gamelogic = new GameLogic(race, buildOrder, settings)
+            gamelogic.setStart()
+            gamelogic.runUntilEnd()
+            return gamelogic
+        }
+
         // TODO Pass the settings to Settings.js and let the user input handle it
         updateSettings = (fieldKey: string, fieldValue: number) => {
             const settings = this.state.settings
@@ -183,6 +201,7 @@ export default withRouter(
         // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
         addItemToBO = (item: IBuildOrderElement) => {
             const bo = this.state.bo
+            let insertedItems = 1;
             bo.splice(this.state.insertIndex, 0, item)
             // Re-calculate build order
 
@@ -195,10 +214,38 @@ export default withRouter(
             // gamelogic.runUntilEnd()
 
             // Non cached:
+            let gamelogic: GameLogic;
+            if (this.state.insertIndex === bo.length - 1
+              && !this.state.gamelogic.errorMessage
+              && this.state.race === "zerg") {
+                do {
+                    gamelogic = this.simulateBuildOrder(this.state.race, bo, this.state.settings)
+                    if (gamelogic.errorMessage && gamelogic.requirements) {
+                        // console.log("errorMessage: ", gamelogic.errorMessage)
+                        // console.log("requirements names: ", gamelogic.requirements.map(req => req.name))
+                        insertedItems += gamelogic.requirements.length
+                        const duplicatesToRemove: IBuildOrderElement[] = [];
+                        for (let req of gamelogic.requirements) {
+                            const duplicateItem = find(bo, req)
+                            // Add item if absent, or present later in the bo
+                            if (!duplicateItem || bo.indexOf(duplicateItem) >= this.state.insertIndex) {
+                                bo.splice(this.state.insertIndex, 0, req)
+                                if (duplicateItem) {
+                                  duplicatesToRemove.push(duplicateItem);
+                                }
+                            }
+                        }
+                        for (let duplicate of duplicatesToRemove) {
+                            remove(bo, item => item === duplicate)  // Specificaly remove the later one
+                        }
+
+                    }
+                } while (gamelogic.errorMessage && gamelogic.requirements)
+            }
             this.rerunBuildOrder(this.state.race, bo, this.state.settings)
             this.updateUrl(this.state.race, bo, this.state.settings)
             // Increment index because we appended a new build order item
-            this.setState({ insertIndex: this.state.insertIndex + 1 })
+            this.setState({ insertIndex: this.state.insertIndex + insertedItems })
         }
 
         removeItemFromBO = (index: number) => {
