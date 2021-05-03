@@ -2,7 +2,7 @@ import { CREATION_ABILITIES, MORPH_ABILITIES } from "./creation_abilities"
 import UNITS_BY_ID from "./units_by_id"
 import UPGRADE_BY_ID from "./upgrade_by_id"
 import { ITrainedBy } from "./interfaces"
-import { sortBy, uniq, without } from "lodash"
+import { sortBy, uniq, without, pull } from "lodash"
 
 import data from "./data.json"
 // const data = require("./data.json")
@@ -116,19 +116,41 @@ data.Unit.forEach((trainingUnit) => {
 const requirementPriority = ["Lair", "Corruptor", "GreaterSpire", "Hive"]
 for (let itemName in TRAINED_BY) {
     const trainInfo = TRAINED_BY[itemName]
+
     trainInfo.requires = trainInfo.requires.map((requires) =>
         sortBy(
             without(uniq(requires), "Larva", "OverlordTransport"),
             (name) => -requirementPriority.indexOf(name)
         )
     )
+
+    // Split Gateway and WarpGate requirements
+    pull(trainInfo.requires[0], "BarracksFlying", "FactoryFlying", "StarportFlying")
+    if (trainInfo.requires[0].indexOf("Gateway") >= 0) {
+        const nonGatewayRequires: string[] = without(trainInfo.requires[0], "Gateway", "WarpGate")
+        trainInfo.requires = [
+            [...nonGatewayRequires, "Gateway"],
+            ["WarpGate", ...nonGatewayRequires],
+        ]
+    }
 }
 TRAINED_BY["Queen"].requires = [
     ["SpawningPool", "Hatchery"],
     ["SpawningPool", "Lair"],
     ["SpawningPool", "Hive"],
 ]
-
+TRAINED_BY["Mothership"].requires = [["FleetBeacon", "Nexus"]]
+TRAINED_BY["WarpGate"] = {
+    consumesUnit: false,
+    isMorph: false,
+    requiredStructure: "Pylon",
+    requiredUpgrade: null,
+    requires: [["WarpGateResearch", "Gateway"]],
+    requiresTechlab: false,
+    requiresUnit: null,
+    trainedBy: new Set("Probe"),
+}
+console.log("TRAINED_BY", TRAINED_BY)
 /**
 {Adept:
     requiredStructure: "CyberneticsCore",

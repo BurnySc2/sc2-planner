@@ -110,7 +110,7 @@ const defaultSettings = [
             "How many seconds until the simulation detected that it got stuck. For example when going '12 pool', workers need to gather a lot of minerals first (simulation is then 'idle' for about 15 seconds). This setting has a huge performance impact on detecting invalid build orders.",
         variableName: "idleLimit",
         n: "il",
-        v: 60,
+        v: 90,
         min: 0,
         max: 600,
         step: 5,

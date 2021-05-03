@@ -215,20 +215,24 @@ export default withRouter(
 
             // Non cached:
             let gamelogic: GameLogic
-            if (
-                this.state.insertIndex === bo.length - 1 &&
-                !this.state.gamelogic.errorMessage &&
-                this.state.race === "zerg"
-            ) {
+            if (this.state.insertIndex === bo.length - 1 && !this.state.gamelogic.errorMessage) {
+                let fillingLoop = 0
                 do {
                     gamelogic = this.simulateBuildOrder(this.state.race, bo, this.state.settings)
                     if (gamelogic.errorMessage && gamelogic.requirements) {
-                        // console.log("errorMessage: ", gamelogic.errorMessage)
-                        // console.log("requirements names: ", gamelogic.requirements.map(req => req.name))
+                        console.log("errorMessage: ", gamelogic.errorMessage)
+                        console.log(
+                            "requirements names: ",
+                            gamelogic.requirements.map((req) => req.name)
+                        )
+                        fillingLoop++
                         insertedItems += gamelogic.requirements.length
                         const duplicatesToRemove: IBuildOrderElement[] = []
                         for (let req of gamelogic.requirements) {
-                            const duplicateItem = find(bo, req)
+                            let duplicateItem: IBuildOrderElement | undefined
+                            if (req.name !== "HighTemplar" && req.name !== "DarkTemplar") {
+                                duplicateItem = find(bo, req)
+                            }
                             // Add item if absent, or present later in the bo
                             if (
                                 !duplicateItem ||
@@ -244,7 +248,7 @@ export default withRouter(
                             remove(bo, (item) => item === duplicate) // Specificaly remove the later one
                         }
                     }
-                } while (gamelogic.errorMessage && gamelogic.requirements)
+                } while (gamelogic.errorMessage && gamelogic.requirements && fillingLoop < 25)
             }
             this.rerunBuildOrder(this.state.race, bo, this.state.settings)
             this.updateUrl(this.state.race, bo, this.state.settings)

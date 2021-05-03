@@ -520,6 +520,10 @@ class GameLogic {
             for (let requiredItem of requirementList) {
                 if (!itemPresence[requiredItem]) {
                     errors.message = errorMessage
+                    if (!BO_ITEMS[requiredItem]) {
+                        //TODO1 remove
+                        console.log("BO_ITEMS[requiredItem]", BO_ITEMS[requiredItem], requiredItem)
+                    }
                     errors.requirements.push(BO_ITEMS[requiredItem])
                     errors.neededEffort += 1 / requirementList.length
                 }
@@ -548,15 +552,6 @@ class GameLogic {
         this.requirements = []
         let morphCondition = trainInfo.isMorph || trainInfo.consumesUnit
         console.assert(trainInfo, unit.name)
-
-        // Get cost (mineral, vespene, supply)
-        let cost = this.getCost(unit.name)
-        if (!this._canAfford(cost) && !morphCondition) {
-            // Generate error message if not able to afford (missing minerals, vespene or free supply)
-            this.setCostErrorMessage(cost, unit.name)
-            return false
-        }
-
         // Check if requirement is met
         if (trainInfo.requires.length) {
             if (
@@ -568,7 +563,7 @@ class GameLogic {
                 return false
             }
 
-            //  TODO1 implement this as a fix in trained_by or researched_by rather than here
+            //  TODO1 implement this as a fix in trained_by or researched_by rather than here; so far, doesn't seem neede, though
             //     if (
             //         // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
             //         // And hatch requirement: spawning pool (but we have a lair or hive)
@@ -584,6 +579,14 @@ class GameLogic {
             //             ["PlanetaryFortress", "OrbitalCommand"].includes(structure.name)) ||
             //         (requiredStructure === "Gateway" && structure.name === "WarpGate")
             //     ) {
+        }
+
+        // Get cost (mineral, vespene, supply)
+        let cost = this.getCost(unit.name)
+        if (!this._canAfford(cost) && !morphCondition) {
+            // Generate error message if not able to afford (missing minerals, vespene or free supply)
+            this.setCostErrorMessage(cost, unit.name)
+            return false
         }
 
         // The unit/structure that is training the target unit or structure

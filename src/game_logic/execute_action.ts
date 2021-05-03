@@ -12,7 +12,7 @@ const workerNameByRace: { [race: string]: string } = {
     zerg: "Drone",
 }
 const gasBuildingByRace: { [race: string]: string } = {
-    terran: "Rafinery",
+    terran: "Refinery",
     protoss: "Assimilator",
     zerg: "Extractor",
 }
@@ -425,6 +425,13 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "convert_gateway_to_warpgate") {
         gamelogic.errorMessage = `Required upgrade 'WarpGateResearch' not researched.`
+
+        gamelogic.requirements = [
+            {
+                name: "WarpGateResearch",
+                type: "upgrade",
+            },
+        ]
         if (gamelogic.upgrades.has("WarpGateResearch")) {
             gamelogic.errorMessage = `Could not find a gateway.`
             for (const unit of gamelogic.idleUnits) {
@@ -454,6 +461,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "morph_archon_from_dt_dt") {
         gamelogic.errorMessage = `Could not find two dark templars.`
+        gamelogic.requirements = [
+            {
+                name: "DarkTemplar",
+                type: "unit",
+            },
+            {
+                name: "DarkTemplar",
+                type: "unit",
+            },
+        ]
         for (const dt1 of gamelogic.idleUnits) {
             if (dt1.name === "DarkTemplar") {
                 for (const dt2 of gamelogic.idleUnits) {
@@ -475,6 +492,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "morph_archon_from_ht_ht") {
         gamelogic.errorMessage = `Could not find two high templars.`
+        gamelogic.requirements = [
+            {
+                name: "HighTemplar",
+                type: "unit",
+            },
+            {
+                name: "HighTemplar",
+                type: "unit",
+            },
+        ]
         for (const ht1 of gamelogic.idleUnits) {
             if (ht1.name === "HighTemplar") {
                 for (const ht2 of gamelogic.idleUnits) {
@@ -496,6 +523,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "morph_archon_from_ht_dt") {
         gamelogic.errorMessage = `Could not find one high templar and one dark templar.`
+        gamelogic.requirements = [
+            {
+                name: "HighTemplar",
+                type: "unit",
+            },
+            {
+                name: "DarkTemplar",
+                type: "unit",
+            },
+        ]
         for (const dt of gamelogic.idleUnits) {
             if (dt.name === "DarkTemplar") {
                 for (const ht of gamelogic.idleUnits) {
