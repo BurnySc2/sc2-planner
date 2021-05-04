@@ -1,27 +1,75 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "c37cc0619b449c571eb6301ec38b361a",
+    "revision": "e13876846d5a902083e00cfaf442c6fe",
     "url": "./index.html"
   },
   {
-    "revision": "69b5f959749ede6d13cc",
+    "revision": "dbb063252c679acd4483",
     "url": "./static/css/main.59b75317.chunk.css"
   },
   {
-    "revision": "b2fb1d1fc62e00eb3362",
-    "url": "./static/js/2.57afd0ea.chunk.js"
+    "revision": "7a7650ba509982009861",
+    "url": "./static/js/2.5d6196bf.chunk.js"
   },
   {
     "revision": "33490309eac47256b827830c802fd4a5",
-    "url": "./static/js/2.57afd0ea.chunk.js.LICENSE.txt"
+    "url": "./static/js/2.5d6196bf.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "69b5f959749ede6d13cc",
-    "url": "./static/js/main.8c23a874.chunk.js"
+    "revision": "dbb063252c679acd4483",
+    "url": "./static/js/main.54b55a97.chunk.js"
   },
   {
     "revision": "42effd31e3ad0d35d698",
     "url": "./static/js/runtime-main.8add3247.js"
+  },
+  {
+    "revision": "fcf2b694dcbf6866a81daeac670b85c8",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-cyberneticscore.fcf2b694.png"
+  },
+  {
+    "revision": "33a9e7c7f4cbe1850d1e34d50919d573",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-darkshrine.33a9e7c7.png"
+  },
+  {
+    "revision": "b52015bad482c624cf44d1b69f3cab3c",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-fleetbeacon.b52015ba.png"
+  },
+  {
+    "revision": "f6f10fe800366f972e8278af50d2939d",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-forge.f6f10fe8.png"
+  },
+  {
+    "revision": "59fcdc7a4b86c5d674c6e4f800f174b6",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-gateway.59fcdc7a.png"
+  },
+  {
+    "revision": "ecb12b39ca8664574639831025eae385",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-nexus.ecb12b39.png"
+  },
+  {
+    "revision": "dac8f6a7dda6cb0b607c632bae0bf912",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-roboticsfacility.dac8f6a7.png"
+  },
+  {
+    "revision": "ee408dfdd17b55a28ca829a0fb3a9dcf",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-roboticssupportbay.ee408dfd.png"
+  },
+  {
+    "revision": "b43f2b6f5acfa6f6bcec5bf2192b053a",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-stargate.b43f2b6f.png"
+  },
+  {
+    "revision": "eaba8db921c52029a8c9b33defe27afb",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-templararchives.eaba8db9.png"
+  },
+  {
+    "revision": "eb583333bfade366b4adcbe76909450d",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-twilightcouncil.eb583333.png"
+  },
+  {
+    "revision": "6b5a58b200b40821834bec54e099a534",
+    "url": "./static/media/btn-ability-spearofadun-chronosurge-warpgate.6b5a58b2.png"
   },
   {
     "revision": "c37fcfbc0893e570daea102d373d53ef",
