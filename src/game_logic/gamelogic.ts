@@ -2,7 +2,7 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 import RESEARCHED_BY from "../constants/researched_by"
-import BO_ITEMS from "../constants/bo_items"
+import { BO_ITEMS } from "../constants/bo_items"
 import { incomeMinerals, incomeVespene } from "./income"
 
 import { cloneDeep, minBy } from "lodash"
@@ -11,8 +11,13 @@ import Unit from "./unit"
 import Event from "./event"
 import Task from "./task"
 import executeAction from "./execute_action"
-import { defaultSettings } from "../constants/helper"
+import { defaultSettings, defaultOptimizeSettings } from "../constants/helper"
 import { IBuildOrderElement, ISettingsElement, ICost, IAllRaces } from "../constants/interfaces"
+
+//TODO1 remove
+//console.log("BO_ITEMS", BO_ITEMS)
+//console.log("TRAINED_BY", TRAINED_BY)
+//console.log("RESEARCHED_BY", RESEARCHED_BY)
 
 /** Logic of this file:
 Each frame
@@ -73,11 +78,13 @@ class GameLogic {
     errorMessage: string
     requirements?: IBuildOrderElement[]
     settings: { [name: string]: number }
+    optimizeSettings: { [name: string]: number }
 
     constructor(
         race: IAllRaces = "terran",
         bo: Array<IBuildOrderElement> = [],
-        customSettings: Array<ISettingsElement> = []
+        customSettings: Array<ISettingsElement> = [],
+        customOptimizeSettings: Array<ISettingsElement> = []
     ) {
         this.race = race
         this.bo = bo
@@ -138,6 +145,10 @@ class GameLogic {
 
         // Update settings from customSettings object, see WebPage.js defaultSettings
         this.loadSettings(customSettings)
+
+        this.optimizeSettings = {}
+        this.loadOptimizeSettings(defaultOptimizeSettings)
+        this.loadOptimizeSettings(customOptimizeSettings)
     }
 
     /**
@@ -181,6 +192,12 @@ class GameLogic {
         }
     }
 
+    loadOptimizeSettings(customSettings: Array<ISettingsElement>) {
+        for (let item of customSettings) {
+            this.optimizeSettings[item.variableName] = item.v
+        }
+    }
+
     exportSettings() {
         // Update default settings from gamelogic.settings object, then return it
         let settingsObject = cloneDeep(defaultSettings)
@@ -188,6 +205,15 @@ class GameLogic {
             item.v = this.settings[item.variableName]
         })
         return settingsObject
+    }
+
+    exportOptimizeSettings() {
+        // Update default settings from gamelogic.settings object, then return it
+        let optimizeSettingsObject = cloneDeep(defaultOptimizeSettings)
+        optimizeSettingsObject.forEach((item) => {
+            item.v = this.optimizeSettings[item.variableName]
+        })
+        return optimizeSettingsObject
     }
 
     /**
@@ -563,7 +589,7 @@ class GameLogic {
                 return false
             }
 
-            //  TODO1 implement this as a fix in trained_by or researched_by rather than here; so far, doesn't seem neede, though
+            //  TODO1 implement this as a fix in trained_by or researched_by rather than here; so far, doesn't seem needed, though
             //     if (
             //         // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
             //         // And hatch requirement: spawning pool (but we have a lair or hive)

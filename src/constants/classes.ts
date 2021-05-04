@@ -67,6 +67,7 @@ const CLASSES = {
     // Dropdown of export, import, settings
     dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
+    dropDownSubContainer: "w-full m-0 p-0 flex flex-row justify-between",
     // Only export import
     dropDownButton: "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-pointer",
     // Only settings

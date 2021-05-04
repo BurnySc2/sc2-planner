@@ -139,6 +139,7 @@ TRAINED_BY["Queen"].requires = [
     ["SpawningPool", "Lair"],
     ["SpawningPool", "Hive"],
 ]
+TRAINED_BY["SCV"].requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
 TRAINED_BY["Mothership"].requires = [["FleetBeacon", "Nexus"]]
 TRAINED_BY["WarpGate"] = {
     consumesUnit: false,
@@ -150,7 +151,6 @@ TRAINED_BY["WarpGate"] = {
     requiresUnit: null,
     trainedBy: new Set("Probe"),
 }
-console.log("TRAINED_BY", TRAINED_BY)
 /**
 {Adept:
     requiredStructure: "CyberneticsCore",
@@ -164,8 +164,8 @@ console.log("TRAINED_BY", TRAINED_BY)
 }
  */
 console.assert(
-    Object.keys(TRAINED_BY).length === 115,
-    `${Object.keys(TRAINED_BY).length} is not 115`
+    Object.keys(TRAINED_BY).length === 116,
+    `${Object.keys(TRAINED_BY).length} is not 116`
 )
 
 console.assert(

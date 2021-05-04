@@ -9,12 +9,16 @@ import BuildOrder from "./BuildOrder"
 import BOArea from "./BOArea"
 import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
+import Optimize from "./Optimize"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
+import { OptimizeLogic } from "../game_logic/optimize"
 import {
     defaultSettings,
+    defaultOptimizeSettings,
     decodeSettings,
+    decodeOptimizeSettings,
     decodeBuildOrder,
     createUrlParams,
 } from "../constants/helper"
@@ -34,6 +38,7 @@ interface MyState {
     bo: Array<IBuildOrderElement>
     gamelogic: GameLogic
     settings: Array<ISettingsElement>
+    optimizeSettings: Array<ISettingsElement>
     hoverIndex: number
     insertIndex: number
     minimizedActionsSelection: boolean
@@ -50,6 +55,7 @@ export default withRouter(
             const urlParams = new URLSearchParams(this.props.location.search)
             const raceUrl: string | null = urlParams.get("race")
             const settingsEncoded: string | null = urlParams.get("settings")
+            const optimizeSettingsEncoded: string | null = urlParams.get("optimizeSettings")
             const boEncoded: string | null = urlParams.get("bo")
 
             let race: IAllRaces = "terran"
@@ -71,6 +77,20 @@ export default withRouter(
                 })
             }
 
+            // Decode optimize settings from url
+            let optimizeSettings = cloneDeep(defaultOptimizeSettings)
+            if (optimizeSettingsEncoded) {
+                const decodedSettings = decodeOptimizeSettings(optimizeSettingsEncoded)
+                // Override default optimizeSettings from optimizeSettings in url
+                optimizeSettings.forEach((item1) => {
+                    decodedSettings.forEach((item2) => {
+                        if (item1.n === item2.n) {
+                            item1.v = item2.v
+                        }
+                    })
+                })
+            }
+
             // Decode build order from url
             let bo: Array<IBuildOrderElement> = []
             if (boEncoded) {
@@ -81,7 +101,7 @@ export default withRouter(
             }
 
             // Start the game logic with given settings and build order
-            const gamelogic = new GameLogic(race, bo, settings)
+            const gamelogic = new GameLogic(race, bo, settings, optimizeSettings)
             gamelogic.setStart()
             if (bo.length > 0) {
                 // If a build order was given, simulate it
@@ -95,6 +115,7 @@ export default withRouter(
                 bo: bo,
                 gamelogic: gamelogic,
                 settings: settings,
+                optimizeSettings: optimizeSettings,
                 // Index the mouse is hovering over
                 hoverIndex: -1,
                 // Index at which new build order items should be inserted (selected index)
@@ -107,10 +128,11 @@ export default withRouter(
             race: string | undefined,
             buildOrder: Array<IBuildOrderElement>,
             settings: Array<ISettingsElement> | undefined,
+            optimizeSettings: Array<ISettingsElement> | undefined,
             pushHistory = false
         ) => {
             // See router props
-            const newUrl = createUrlParams(race, settings, buildOrder)
+            const newUrl = createUrlParams(race, settings, optimizeSettings, buildOrder)
 
             // Change current url
             if (pushHistory) {
@@ -123,7 +145,8 @@ export default withRouter(
         rerunBuildOrder(
             race: IAllRaces | undefined,
             buildOrder: Array<IBuildOrderElement>,
-            settings: Array<ISettingsElement> | undefined
+            settings: Array<ISettingsElement> | undefined,
+            optimizeSettings: Array<ISettingsElement> | undefined
         ) {
             if (!race) {
                 race = "terran" as IAllRaces
@@ -131,8 +154,11 @@ export default withRouter(
             if (!settings) {
                 settings = cloneDeep(defaultSettings)
             }
+            if (!optimizeSettings) {
+                optimizeSettings = cloneDeep(defaultOptimizeSettings)
+            }
 
-            const gamelogic = new GameLogic(race, buildOrder, settings)
+            const gamelogic = new GameLogic(race, buildOrder, settings, optimizeSettings)
             gamelogic.setStart()
             gamelogic.runUntilEnd()
             this.setState({
@@ -147,7 +173,8 @@ export default withRouter(
         simulateBuildOrder(
             race: IAllRaces | undefined,
             buildOrder: Array<IBuildOrderElement>,
-            settings: Array<ISettingsElement> | undefined
+            settings: Array<ISettingsElement> | undefined,
+            optimizeSettings: Array<ISettingsElement> | undefined
         ): GameLogic {
             if (!race) {
                 race = "terran" as IAllRaces
@@ -155,8 +182,11 @@ export default withRouter(
             if (!settings) {
                 settings = cloneDeep(defaultSettings)
             }
+            if (!optimizeSettings) {
+                optimizeSettings = cloneDeep(defaultOptimizeSettings)
+            }
 
-            const gamelogic = new GameLogic(race, buildOrder, settings)
+            const gamelogic = new GameLogic(race, buildOrder, settings, optimizeSettings)
             gamelogic.setStart()
             gamelogic.runUntilEnd()
             return gamelogic
@@ -173,8 +203,38 @@ export default withRouter(
 
             // Re-calculate the whole simulation
             // TODO optimize: only recalculate if settings were changed that affected it
-            this.rerunBuildOrder(this.state.race, this.state.bo, settings)
-            this.updateUrl(this.state.race, this.state.bo, settings)
+            this.rerunBuildOrder(
+                this.state.race,
+                this.state.bo,
+                settings,
+                this.state.optimizeSettings
+            )
+            this.updateUrl(this.state.race, this.state.bo, settings, this.state.optimizeSettings)
+        }
+
+        updateOptimize = (fieldKey: string, fieldValue: number) => {
+            const optimizeSettings = this.state.optimizeSettings
+            optimizeSettings.forEach((item) => {
+                if (item.n === fieldKey) {
+                    item.v = fieldValue
+                }
+            })
+
+            this.updateUrl(this.state.race, this.state.bo, this.state.settings, optimizeSettings)
+        }
+
+        applyOpitimization = (optimizationList: string[]) => {
+            const optimize = new OptimizeLogic(
+                this.state.race,
+                this.state.bo,
+                this.state.settings,
+                this.state.optimizeSettings
+            )
+            const state = optimize.optimizeBuildOrder(this.state.gamelogic, optimizationList)
+            if (state) {
+                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
+                this.setState(state)
+            }
         }
 
         raceSelectionClicked = (
@@ -182,7 +242,12 @@ export default withRouter(
             race: IAllRaces
         ) => {
             // Set race in state after a race selection icon has been pressed
-            const gamelogic = new GameLogic(race, [], this.state.settings)
+            const gamelogic = new GameLogic(
+                race,
+                [],
+                this.state.settings,
+                this.state.optimizeSettings
+            )
             gamelogic.setStart()
 
             this.setState({
@@ -193,7 +258,7 @@ export default withRouter(
             })
 
             // If settings are unchanged, change url to just '/race' instead of encoded settings
-            this.updateUrl(race, [], this.state.settings, true)
+            this.updateUrl(race, [], this.state.settings, this.state.optimizeSettings, true)
             // this.props.history.replace(`/${race}`)
             // this.props.history.push(`/race=${race}`)
         }
@@ -214,17 +279,25 @@ export default withRouter(
             // gamelogic.runUntilEnd()
 
             // Non cached:
+            // Fill up with missing items
             let gamelogic: GameLogic
-            if (this.state.insertIndex === bo.length - 1 && !this.state.gamelogic.errorMessage) {
+            if (
+                this.state.insertIndex === bo.length - 1 &&
+                !this.state.gamelogic.errorMessage &&
+                this.state.race !== "terran"
+            ) {
                 let fillingLoop = 0
                 do {
-                    gamelogic = this.simulateBuildOrder(this.state.race, bo, this.state.settings)
+                    gamelogic = this.simulateBuildOrder(
+                        this.state.race,
+                        bo,
+                        this.state.settings,
+                        this.state.optimizeSettings
+                    )
                     if (gamelogic.errorMessage && gamelogic.requirements) {
-                        console.log("errorMessage: ", gamelogic.errorMessage)
-                        console.log(
-                            "requirements names: ",
-                            gamelogic.requirements.map((req) => req.name)
-                        )
+                        //TODO1 remove
+                        // console.log("errorMessage: ", gamelogic.errorMessage)
+                        // console.log("requirements names: ", gamelogic.requirements.map(req => req.name))
                         fillingLoop++
                         insertedItems += gamelogic.requirements.length
                         const duplicatesToRemove: IBuildOrderElement[] = []
@@ -250,8 +323,13 @@ export default withRouter(
                     }
                 } while (gamelogic.errorMessage && gamelogic.requirements && fillingLoop < 25)
             }
-            this.rerunBuildOrder(this.state.race, bo, this.state.settings)
-            this.updateUrl(this.state.race, bo, this.state.settings)
+            this.rerunBuildOrder(
+                this.state.race,
+                bo,
+                this.state.settings,
+                this.state.optimizeSettings
+            )
+            this.updateUrl(this.state.race, bo, this.state.settings, this.state.optimizeSettings)
             // Increment index because we appended a new build order item
             this.setState({ insertIndex: this.state.insertIndex + insertedItems })
         }
@@ -262,9 +340,19 @@ export default withRouter(
 
             // TODO load snapshot from shortly before the removed bo index
             if (bo.length > 0) {
-                this.rerunBuildOrder(this.state.race, bo, this.state.settings)
+                this.rerunBuildOrder(
+                    this.state.race,
+                    bo,
+                    this.state.settings,
+                    this.state.optimizeSettings
+                )
             } else {
-                const gamelogic = new GameLogic(this.state.race, bo, this.state.settings)
+                const gamelogic = new GameLogic(
+                    this.state.race,
+                    bo,
+                    this.state.settings,
+                    this.state.optimizeSettings
+                )
                 gamelogic.setStart()
                 this.setState({
                     bo: bo,
@@ -273,7 +361,7 @@ export default withRouter(
                 })
             }
 
-            this.updateUrl(this.state.race, bo, this.state.settings)
+            this.updateUrl(this.state.race, bo, this.state.settings, this.state.optimizeSettings)
 
             // Decrement index because we removed a build order item
             if (this.state.insertIndex > this.state.hoverIndex) {
@@ -407,16 +495,21 @@ export default withRouter(
                         <div className="flex flex-row items-center">
                             <ImportExport
                                 gamelogic={this.state.gamelogic}
-                                rerunBuildOrder={(race, bo, settings) =>
-                                    this.rerunBuildOrder(race, bo, settings)
+                                rerunBuildOrder={(race, bo, settings, optimizeSettings) =>
+                                    this.rerunBuildOrder(race, bo, settings, optimizeSettings)
                                 }
-                                updateUrl={(race, bo, settings) =>
-                                    this.updateUrl(race, bo, settings, true)
+                                updateUrl={(race, bo, settings, optimizeSettings) =>
+                                    this.updateUrl(race, bo, settings, optimizeSettings, true)
                                 }
                             />
                             <Settings
                                 settings={this.state.settings}
                                 updateSettings={this.updateSettings}
+                            />
+                            <Optimize
+                                optimizeSettings={this.state.optimizeSettings}
+                                updateOptimize={this.updateOptimize}
+                                applyOpitimization={this.applyOpitimization}
                             />
 
                             <div
@@ -440,11 +533,16 @@ export default withRouter(
                                         hoverIndex={this.state.hoverIndex}
                                         insertIndex={this.state.insertIndex}
                                         removeClick={this.buildOrderRemoveClicked}
-                                        rerunBuildOrder={(race, bo, settings) =>
-                                            this.rerunBuildOrder(race, bo, settings)
+                                        rerunBuildOrder={(race, bo, settings, optimizeSettings) =>
+                                            this.rerunBuildOrder(
+                                                race,
+                                                bo,
+                                                settings,
+                                                optimizeSettings
+                                            )
                                         }
-                                        updateUrl={(race, bo, settings) =>
-                                            this.updateUrl(race, bo, settings)
+                                        updateUrl={(race, bo, settings, optimizeSettings) =>
+                                            this.updateUrl(race, bo, settings, optimizeSettings)
                                         }
                                         changeHoverIndex={(index) => {
                                             this.changeHoverIndex(index)

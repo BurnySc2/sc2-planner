@@ -25,12 +25,14 @@ interface MyProps {
     rerunBuildOrder: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
-        settings: ISettingsElement[] | undefined
+        settings: ISettingsElement[] | undefined,
+        optimizeSettings: ISettingsElement[] | undefined
     ) => void
     updateUrl: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
-        settings: ISettingsElement[] | undefined
+        settings: ISettingsElement[] | undefined,
+        optimizeSettings: ISettingsElement[] | undefined
     ) => void
     changeHoverIndex: (index: number) => void
     changeInsertIndex: (index: number) => void
@@ -73,13 +75,15 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         this.props.rerunBuildOrder(
             this.props.gamelogic.race,
             items,
-            this.props.gamelogic.exportSettings()
+            this.props.gamelogic.exportSettings(),
+            this.props.gamelogic.exportOptimizeSettings()
         )
 
         this.props.updateUrl(
             this.props.gamelogic.race,
             items,
-            this.props.gamelogic.exportSettings()
+            this.props.gamelogic.exportSettings(),
+            this.props.gamelogic.exportOptimizeSettings()
         )
     }
 

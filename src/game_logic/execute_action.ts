@@ -3,19 +3,10 @@ import Unit from "./unit"
 import Task from "./task"
 import { GameLogic } from "./gamelogic"
 import { IBuildOrderElement } from "../constants/interfaces"
+import { workerNameByRace, gasBuildingByRace } from "../constants/bo_items"
 const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
-const workerNameByRace: { [race: string]: string } = {
-    terran: "SCV",
-    protoss: "Probe",
-    zerg: "Drone",
-}
-const gasBuildingByRace: { [race: string]: string } = {
-    terran: "Refinery",
-    protoss: "Assimilator",
-    zerg: "Extractor",
-}
 
 const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => {
     // Issue action

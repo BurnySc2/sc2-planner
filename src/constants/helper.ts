@@ -133,7 +133,38 @@ defaultSettings.forEach((item) => {
     settingsDefaultValues[item.n] = item.v
 })
 
-const encodeSettings = (settingsObject: Array<ISettingsElement>): string => {
+const defaultOptimizeSettings = [
+    {
+        // Pretty name displayed in gui
+        name: "Maximize workers up to",
+        // Tooltip popup that shows some information text
+        tooltip: "Add as many workers as possible while keeping the same bo end time.",
+        // Internal long variable name used by gamelogic.js
+        variableName: "maximizeWorkers",
+        // Short name for base64 string
+        n: "mw",
+        // The given value
+        v: 80,
+        // Min value in GUI
+        min: 0,
+        // Max value in GUI
+        max: 200,
+        // Step size of values in GUI if you press the arrow things
+        step: 1,
+    },
+]
+
+const optimizeSettingsDefaultValues: { [name: string]: number } = {}
+defaultOptimizeSettings.forEach((item) => {
+    // TODO Fix type annotation
+    // @ts-ignor
+    optimizeSettingsDefaultValues[item.n] = item.v
+})
+
+const encodeSettings = (
+    settingsObject: Array<ISettingsElement>,
+    settingsDefaultValues: { [name: string]: number }
+): string => {
     // Strip away unwanted values
     let strippedObject = settingsObject.map((item) => {
         return pick(item, ["n", "v"])
@@ -151,6 +182,10 @@ const decodeSettings = (settingsEncoded: string): Array<ISettingsElement> => {
     const decodedString = lzbase62.decompress(settingsEncoded)
     const jsonObj = JSON.parse(decodedString)
     return jsonObj
+}
+
+const decodeOptimizeSettings = (settingsEncoded: string): Array<ISettingsElement> => {
+    return decodeSettings(settingsEncoded)
 }
 
 const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string => {
@@ -268,6 +303,7 @@ const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> 
 const createUrlParams = (
     race: string | undefined,
     settings: Array<ISettingsElement> | undefined,
+    optimizeSettings: Array<ISettingsElement> | undefined,
     buildOrder: Array<IBuildOrderElement> = []
 ): string => {
     let newUrl = `?`
@@ -280,9 +316,17 @@ const createUrlParams = (
         settings = defaultSettings
     } else if (!isEqual(settings, defaultSettings)) {
         // Encode the settings
-        const settingsEncoded = encodeSettings(settings)
+        const settingsEncoded = encodeSettings(settings, settingsDefaultValues)
         // const decoded = decodeSettings(settingsEncoded)
         newUrl += `&settings=${settingsEncoded}`
+    }
+
+    if (!optimizeSettings) {
+        optimizeSettings = defaultOptimizeSettings
+    } else if (!isEqual(optimizeSettings, defaultOptimizeSettings)) {
+        // Encode the settings
+        const settingsEncoded = encodeSettings(optimizeSettings, optimizeSettingsDefaultValues)
+        newUrl += `&optimizeSettings=${settingsEncoded}`
     }
 
     if (buildOrder.length > 0) {
@@ -333,10 +377,12 @@ const decodeSALT = (saltEncoding: string) => {
 
 export {
     defaultSettings,
+    defaultOptimizeSettings,
     CONVERT_SECONDS_TO_TIME_STRING,
     getImageOfItem,
     encodeSettings,
     decodeSettings,
+    decodeOptimizeSettings,
     encodeBuildOrder,
     decodeBuildOrder,
     createUrlParams,
