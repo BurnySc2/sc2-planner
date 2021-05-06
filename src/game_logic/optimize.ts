@@ -7,14 +7,12 @@ import { BO_ITEMS, workerNameByRace } from "../constants/bo_items"
 
 class OptimizeLogic {
     race: IAllRaces
-    bo: Array<IBuildOrderElement>
     customSettings: Array<ISettingsElement>
     customOptimizeSettings: Array<ISettingsElement>
     optimizeSettings: { [name: string]: number }
 
     constructor(
         race: IAllRaces = "terran",
-        bo: Array<IBuildOrderElement> = [],
         customSettings: Array<ISettingsElement> = [],
         customOptimizeSettings: Array<ISettingsElement> = []
     ) {
@@ -23,17 +21,17 @@ class OptimizeLogic {
         this.loadOptimizeSettings(customOptimizeSettings)
 
         this.race = race || ("terran" as IAllRaces)
-        this.bo = bo
         this.customSettings = customSettings
         this.customOptimizeSettings = customOptimizeSettings
     }
 
     optimizeBuildOrder(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
+        buildOrder: Array<IBuildOrderElement>,
         optimizationList: string[]
     ): any {
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
-            return this.maximizeWorkers(currentGamelogic)
+            return this.maximizeWorkers(currentGamelogic, buildOrder)
         }
     }
 
@@ -43,7 +41,8 @@ class OptimizeLogic {
      * TODO2 remove existing workers/supply if it allows to build more workers
      */
     maximizeWorkers(
-        currentGamelogic: GameLogic // Used for comparison with future optimizations
+        currentGamelogic: GameLogic, // Used for comparison with future optimizations
+        buildOrder: Array<IBuildOrderElement>
     ): any {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
@@ -54,7 +53,7 @@ class OptimizeLogic {
             }
         }
 
-        const bo = cloneDeep(this.bo)
+        const bo = cloneDeep(buildOrder)
 
         let bestGameLogic: GameLogic = currentGamelogic
         let gamelogic: GameLogic = currentGamelogic

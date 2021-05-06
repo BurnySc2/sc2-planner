@@ -139,6 +139,21 @@ TRAINED_BY["Queen"].requires = [
     ["SpawningPool", "Lair"],
     ["SpawningPool", "Hive"],
 ]
+//TODO1 add in requires that if Lair is needed, Hive works as well
+//TODO1 add the following
+//         // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
+//         // And hatch requirement: spawning pool (but we have a lair or hive)
+//         // And lair requirement: infestation pit (but we have hive)
+//         // And CC requirement: ebay (but we have only orbitals)
+//         // And Cybercore requirement: gateway (but we have only warpgates)
+//         structure.name === requiredStructure ||
+//         (requiredStructure === "Spire" && structure.name === "GreaterSpire") ||
+//         (requiredStructure === "Hatchery" &&
+//             ["Lair", "Hive"].includes(structure.name)) ||
+//         (requiredStructure === "Lair" && structure.name === "Hive") ||
+//         (requiredStructure === "CommandCenter" &&
+//             ["PlanetaryFortress", "OrbitalCommand"].includes(structure.name)) ||
+//         (requiredStructure === "Gateway" && structure.name === "WarpGate")
 TRAINED_BY["SCV"].requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
 TRAINED_BY["Mothership"].requires = [["FleetBeacon", "Nexus"]]
 TRAINED_BY["WarpGate"] = {

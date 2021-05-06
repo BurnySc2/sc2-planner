@@ -36,6 +36,7 @@ interface MyProps {
     ) => void
     changeHoverIndex: (index: number) => void
     changeInsertIndex: (index: number) => void
+    multilineBuildOrder: boolean
 }
 
 interface MyState {
@@ -173,7 +174,10 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                     <Droppable droppableId="droppable" direction="horizontal">
                         {(provided, snapshot) => (
                             <div
-                                className="flex flex-shrink-0"
+                                className={
+                                    (this.props.multilineBuildOrder ? "flex-wrap flex-row" : "") +
+                                    " flex"
+                                }
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >

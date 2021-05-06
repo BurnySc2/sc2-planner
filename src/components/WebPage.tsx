@@ -41,6 +41,7 @@ interface MyState {
     optimizeSettings: Array<ISettingsElement>
     hoverIndex: number
     insertIndex: number
+    multilineBuildOrder: boolean
     minimizedActionsSelection: boolean
 }
 
@@ -120,6 +121,7 @@ export default withRouter(
                 hoverIndex: -1,
                 // Index at which new build order items should be inserted (selected index)
                 insertIndex: 0,
+                multilineBuildOrder: true,
                 minimizedActionsSelection: false,
             }
         }
@@ -226,11 +228,14 @@ export default withRouter(
         applyOpitimization = (optimizationList: string[]) => {
             const optimize = new OptimizeLogic(
                 this.state.race,
-                this.state.bo,
                 this.state.settings,
                 this.state.optimizeSettings
             )
-            const state = optimize.optimizeBuildOrder(this.state.gamelogic, optimizationList)
+            const state = optimize.optimizeBuildOrder(
+                this.state.gamelogic,
+                this.state.bo,
+                optimizationList
+            )
             if (state) {
                 this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
                 this.setState(state)
@@ -479,6 +484,12 @@ export default withRouter(
             window.removeEventListener("keydown", this.handleKeyDown)
         }
 
+        onMultiline = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            this.setState({
+                multilineBuildOrder: !this.state.multilineBuildOrder,
+            })
+        }
+
         onMinimize = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             this.setState({
                 minimizedActionsSelection: !this.state.minimizedActionsSelection,
@@ -488,7 +499,7 @@ export default withRouter(
         render() {
             return (
                 <div
-                    className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
+                    className={`select-none flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
                 >
                     <div className="flex flex-col">
                         <Title />
@@ -512,11 +523,33 @@ export default withRouter(
                                 applyOpitimization={this.applyOpitimization}
                             />
 
-                            <div
-                                className={CLASSES.tinyButtons + " ml-auto"}
-                                onClick={(e) => this.onMinimize(e)}
-                            >
-                                {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
+                            <div className="absolute w-full h-0 text-right">
+                                <div className="w-6 inline-block">
+                                    <div
+                                        className={
+                                            CLASSES.tinyButtons +
+                                            (this.state.multilineBuildOrder ? "" : " text-lg") +
+                                            " ml-auto"
+                                        }
+                                        onClick={(e) => this.onMultiline(e)}
+                                    >
+                                        {this.state.multilineBuildOrder ? "―" : "≡"}
+                                    </div>
+                                </div>
+
+                                <div
+                                    className={
+                                        (this.state.minimizedActionsSelection ? "w-8" : "w-3/12") +
+                                        " inline-block"
+                                    }
+                                >
+                                    <div
+                                        className={CLASSES.tinyButtons + " ml-auto"}
+                                        onClick={(e) => this.onMinimize(e)}
+                                    >
+                                        {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className={`flex flex-row  ${CLASSES.backgroundcolor}`}>
@@ -550,6 +583,7 @@ export default withRouter(
                                         changeInsertIndex={(index) => {
                                             this.changeInsertIndex(index)
                                         }}
+                                        multilineBuildOrder={this.state.multilineBuildOrder}
                                     />
                                 </div>
                                 <BOArea
