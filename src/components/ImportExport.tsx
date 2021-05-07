@@ -16,12 +16,7 @@ import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 interface MyProps {
     gamelogic: GameLogic
-    rerunBuildOrder: (
-        race: IAllRaces | undefined,
-        buildOrder: IBuildOrderElement[],
-        settings: ISettingsElement[] | undefined,
-        optimizeSettings: ISettingsElement[] | undefined
-    ) => void
+    rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
@@ -101,7 +96,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
             this.setState({
                 tooltipText: "Pasted!",
             })
-            this.props.rerunBuildOrder(race, bo, undefined, undefined)
+            this.props.rerunBuildOrder(bo)
             this.props.updateUrl(race, bo, undefined, undefined)
         })
     }

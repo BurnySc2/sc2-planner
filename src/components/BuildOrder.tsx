@@ -22,12 +22,7 @@ interface MyProps {
     hoverIndex: number
     insertIndex: number
     removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
-    rerunBuildOrder: (
-        race: IAllRaces | undefined,
-        buildOrder: IBuildOrderElement[],
-        settings: ISettingsElement[] | undefined,
-        optimizeSettings: ISettingsElement[] | undefined
-    ) => void
+    rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
@@ -73,12 +68,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             result.destination.index
         )
 
-        this.props.rerunBuildOrder(
-            this.props.gamelogic.race,
-            items,
-            this.props.gamelogic.exportSettings(),
-            this.props.gamelogic.exportOptimizeSettings()
-        )
+        this.props.rerunBuildOrder(items)
 
         this.props.updateUrl(
             this.props.gamelogic.race,

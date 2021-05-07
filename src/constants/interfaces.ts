@@ -84,7 +84,7 @@ interface ITrainedBy {
     [name: string]: {
         requiredStructure: string | null
         requiredUpgrade: string | null
-        requiresUnit: string | null
+        requiresUnits: string[] | null
         requires: string[][]
         trainedBy: Set<string>
         requiresTechlab: boolean

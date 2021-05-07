@@ -27,21 +27,22 @@ data.Unit.forEach((trainingUnit) => {
             if (resultingUnit !== undefined) {
                 let requiredStructureId = null
                 let requiredUpgradeId = null
-                let requiresUnit = null
+                let requiresUnits = null
                 let requires = []
                 let requiresTechlab = false
                 let isMorph = MORPH_ABILITIES.has(ability.ability)
                 if (isMorph) {
-                    const morphes: { [resultingUnit: string]: string } = {
-                        Baneling: "Zergling",
-                        Ravager: "Roach",
-                        Overseer: "Overlord",
-                        LurkerMP: "Hydralisk",
-                        BroodLord: "Corruptor",
+                    const morphes: { [resultingUnit: string]: string[] } = {
+                        Baneling: ["Zergling"],
+                        Ravager: ["Roach"],
+                        Overseer: ["Overlord"],
+                        LurkerMP: ["Hydralisk"],
+                        BroodLord: ["Corruptor"],
+                        Archon: ["HighTemplar", "DarkTemplar"],
                     }
-                    requiresUnit = morphes[resultingUnit.name]
+                    requiresUnits = morphes[resultingUnit.name]
                     if (morphes[resultingUnit.name]) {
-                        requires.push(morphes[resultingUnit.name])
+                        requires.push(...morphes[resultingUnit.name])
                     }
                 }
                 const isFreeMorph =
@@ -92,7 +93,7 @@ data.Unit.forEach((trainingUnit) => {
                     TRAINED_BY[resultingUnit.name] = {
                         trainedBy: new Set([trainingUnit.name]),
                         requiresTechlab: requiresTechlab,
-                        requiresUnit: requiresUnit,
+                        requiresUnits: requiresUnits,
                         requires: [requires],
                         isMorph: isMorph,
                         consumesUnit: consumesUnit,
@@ -118,19 +119,11 @@ data.Unit.forEach((trainingUnit) => {
     )
 })
 
-// Various fixes
-const requirementPriority = ["Lair", "Corruptor", "GreaterSpire", "Hive"]
+// Hardcoded fixes
 for (let itemName in TRAINED_BY) {
     const trainInfo = TRAINED_BY[itemName]
 
-    trainInfo.requires = trainInfo.requires.map((requires) =>
-        sortBy(
-            without(uniq(requires), "Larva", "OverlordTransport"),
-            (name) => -requirementPriority.indexOf(name)
-        )
-    )
-
-    // Split Gateway and WarpGate requirements
+    // Hardcoded fix for when Gateway is required and WarpGate would work
     if (trainInfo.requires[0].indexOf("Gateway") >= 0) {
         const nonGatewayRequires: string[] = without(trainInfo.requires[0], "Gateway", "WarpGate")
         trainInfo.requires = [
@@ -139,7 +132,7 @@ for (let itemName in TRAINED_BY) {
         ]
     }
 
-    // Allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
+    // Hardcoded fix so allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
     for (let structureType of ["Barracks", "Factory", "Starport"]) {
         pull(trainInfo.requires[0], structureType + "Flying")
         if (trainInfo.requires[0].indexOf(structureType) >= 0 && !trainInfo.requiredStructure) {
@@ -152,28 +145,10 @@ for (let itemName in TRAINED_BY) {
         }
     }
 }
-TRAINED_BY["Queen"].requires = [
-    ["SpawningPool", "Hatchery"],
-    ["SpawningPool", "Lair"],
-    ["SpawningPool", "Hive"],
-]
-//TODO1 add in requires that if Lair is needed, Hive works as well
-//TODO1 add the following
-//         // Hardcoded fix for requirement of corruptor: spire (in case there is only a greater spire)
-//         // And hatch requirement: spawning pool (but we have a lair or hive)
-//         // And lair requirement: infestation pit (but we have hive)
-//         // And CC requirement: ebay (but we have only orbitals)
-//         // And Cybercore requirement: gateway (but we have only warpgates)
-//         structure.name === requiredStructure ||
-//         (requiredStructure === "Spire" && structure.name === "GreaterSpire") ||
-//         (requiredStructure === "Hatchery" &&
-//             ["Lair", "Hive"].includes(structure.name)) ||
-//         (requiredStructure === "Lair" && structure.name === "Hive") ||
-//         (requiredStructure === "CommandCenter" &&
-//             ["PlanetaryFortress", "OrbitalCommand"].includes(structure.name)) ||
-//         (requiredStructure === "Gateway" && structure.name === "WarpGate")
-TRAINED_BY["SCV"].requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
+
+// Hardcoded fix for Mothership requiring MothershipCore when it should be Nexus
 TRAINED_BY["Mothership"].requires = [["FleetBeacon", "Nexus"]]
+// Hardcoded fix for WarpGate being Absent
 TRAINED_BY["WarpGate"] = {
     consumesUnit: false,
     isMorph: false,
@@ -181,9 +156,55 @@ TRAINED_BY["WarpGate"] = {
     requiredUpgrade: null,
     requires: [["WarpGateResearch", "Gateway"]],
     requiresTechlab: false,
-    requiresUnit: null,
+    requiresUnits: null,
     trainedBy: new Set("Probe"),
 }
+
+// Hardcoded fix for SCV requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
+TRAINED_BY["SCV"].requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
+// Hardcoded fix for EngineeringBay requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
+TRAINED_BY["EngineeringBay"].requires = [
+    ["CommandCenter", "SCV"],
+    ["OrbitalCommand", "SCV"],
+    ["PlanetaryFortress", "SCV"],
+]
+
+// Hardcoded fix for Queen requiring Hatchery when Lair and Hive could work as well
+TRAINED_BY["Queen"].requires = [
+    ["Hatchery", "SpawningPool"],
+    ["Lair", "SpawningPool"],
+    ["Hive", "SpawningPool"],
+]
+// Hardcoded fix for SpawningPool requiring Hatchery when Lair and Hive could work as well
+TRAINED_BY["SpawningPool"].requires = [
+    ["Hatchery", "Drone"],
+    ["Lair", "Drone"],
+    ["Hive", "Drone"],
+]
+// Hardcoded fix for EvolutionChamber requiring Hatchery when Lair and Hive could work as well
+TRAINED_BY["EvolutionChamber"].requires = [
+    ["Hatchery", "Drone"],
+    ["Lair", "Drone"],
+    ["Hive", "Drone"],
+]
+// Hardcoded fix for Ravager requiring Hatchery instead of RoachWarren
+TRAINED_BY["Ravager"].requires = [["Roach", "RoachWarren"]]
+// Hardcoded fix for when only GreaterSpire available
+TRAINED_BY["Corruptor"].requires = [["Spire"], ["GreaterSpire"]]
+
+// Reorder requirements to optimize build duration
+const requirementPriority = ["Hive", "GreaterSpire", "Corruptor", "Lair"]
+for (let itemName in TRAINED_BY) {
+    const trainInfo = TRAINED_BY[itemName]
+
+    trainInfo.requires = trainInfo.requires.map((requires) =>
+        sortBy(
+            without(uniq(requires), "Larva", "OverlordTransport"), // Hardcoded fix to remove requirements impossible to match from the bo
+            (name) => -requirementPriority.indexOf(name)
+        )
+    )
+}
+
 /**
 {Adept:
     requiredStructure: "CyberneticsCore",

@@ -22,7 +22,7 @@ import {
     decodeBuildOrder,
     createUrlParams,
 } from "../constants/helper"
-import { cloneDeep, find, remove } from "lodash"
+import { cloneDeep } from "lodash"
 import {
     IBuildOrderElement,
     ISettingsElement,
@@ -144,54 +144,15 @@ export default withRouter(
             }
         }
 
-        rerunBuildOrder(
-            race: IAllRaces | undefined,
-            buildOrder: Array<IBuildOrderElement>,
-            settings: Array<ISettingsElement> | undefined,
-            optimizeSettings: Array<ISettingsElement> | undefined
-        ) {
-            if (!race) {
-                race = "terran" as IAllRaces
-            }
-            if (!settings) {
-                settings = cloneDeep(defaultSettings)
-            }
-            if (!optimizeSettings) {
-                optimizeSettings = cloneDeep(defaultOptimizeSettings)
-            }
-
-            const gamelogic = new GameLogic(race, buildOrder, settings, optimizeSettings)
-            gamelogic.setStart()
-            gamelogic.runUntilEnd()
+        rerunBuildOrder(gamelogic: GameLogic, buildOrder: Array<IBuildOrderElement>) {
+            const newGamelogic = GameLogic.simulatedBuildOrder(gamelogic, buildOrder)
             this.setState({
-                race: race,
+                race: newGamelogic.race,
                 bo: buildOrder,
-                gamelogic: gamelogic,
-                settings: settings,
+                gamelogic: newGamelogic,
+                settings: newGamelogic.customSettings,
                 hoverIndex: -1,
             })
-        }
-
-        simulateBuildOrder(
-            race: IAllRaces | undefined,
-            buildOrder: Array<IBuildOrderElement>,
-            settings: Array<ISettingsElement> | undefined,
-            optimizeSettings: Array<ISettingsElement> | undefined
-        ): GameLogic {
-            if (!race) {
-                race = "terran" as IAllRaces
-            }
-            if (!settings) {
-                settings = cloneDeep(defaultSettings)
-            }
-            if (!optimizeSettings) {
-                optimizeSettings = cloneDeep(defaultOptimizeSettings)
-            }
-
-            const gamelogic = new GameLogic(race, buildOrder, settings, optimizeSettings)
-            gamelogic.setStart()
-            gamelogic.runUntilEnd()
-            return gamelogic
         }
 
         // TODO Pass the settings to Settings.js and let the user input handle it
@@ -205,12 +166,13 @@ export default withRouter(
 
             // Re-calculate the whole simulation
             // TODO optimize: only recalculate if settings were changed that affected it
-            this.rerunBuildOrder(
+            const gamelogic = new GameLogic(
                 this.state.race,
                 this.state.bo,
-                settings,
+                cloneDeep(settings),
                 this.state.optimizeSettings
             )
+            this.rerunBuildOrder(gamelogic, this.state.bo)
             this.updateUrl(this.state.race, this.state.bo, settings, this.state.optimizeSettings)
         }
 
@@ -270,74 +232,24 @@ export default withRouter(
 
         // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
         addItemToBO = (item: IBuildOrderElement) => {
-            const bo = this.state.bo
-            let insertedItems = 1
-            bo.splice(this.state.insertIndex, 0, item)
-            // Re-calculate build order
+            const [gamelogic, insertedItems] = GameLogic.addItemToBO(
+                this.state.gamelogic,
+                item,
+                this.state.insertIndex
+            )
 
-            // // Caching using snapshots - idk why this isnt working properly
-            // const latestSnapshot = gamelogic.getLastSnapshot()
-            // if (latestSnapshot) {
-            //     gamelogic.loadFromSnapshotObject(latestSnapshot)
-            // }
-            // gamelogic.bo = cloneDeep(bo)
-            // gamelogic.runUntilEnd()
-
-            // Non cached:
-            // Fill up with missing items
-            let gamelogic: GameLogic
-            if (this.state.insertIndex === bo.length - 1 && !this.state.gamelogic.errorMessage) {
-                let fillingLoop = 0
-                do {
-                    gamelogic = this.simulateBuildOrder(
-                        this.state.race,
-                        bo,
-                        this.state.settings,
-                        this.state.optimizeSettings
-                    )
-                    if (gamelogic.errorMessage && gamelogic.requirements) {
-                        //TODO1 remove
-                        console.log("errorMessage: ", gamelogic.errorMessage)
-                        console.log(
-                            "requirements names: ",
-                            gamelogic.requirements.map((req) => req.name)
-                        )
-                        fillingLoop++
-                        insertedItems += gamelogic.requirements.length
-                        const duplicatesToRemove: IBuildOrderElement[] = []
-                        for (let req of gamelogic.requirements) {
-                            let duplicateItem: IBuildOrderElement | undefined
-                            if (req.name !== "HighTemplar" && req.name !== "DarkTemplar") {
-                                duplicateItem = find(bo, req)
-                            }
-                            // Add item if absent, or present later in the bo
-                            if (
-                                !duplicateItem ||
-                                bo.indexOf(duplicateItem) >= this.state.insertIndex
-                            ) {
-                                bo.splice(this.state.insertIndex, 0, req)
-                                if (duplicateItem) {
-                                    duplicatesToRemove.push(duplicateItem)
-                                }
-                            }
-                        }
-                        for (let duplicate of duplicatesToRemove) {
-                            //TODO1 don't remove it if morphed from it?
-                            remove(bo, (item) => item === duplicate) // Specificaly remove the later one
-                        }
-                    }
-                } while (gamelogic.errorMessage && gamelogic.requirements && fillingLoop < 25)
-            }
-            this.rerunBuildOrder(
+            this.updateUrl(
                 this.state.race,
-                bo,
+                gamelogic.bo,
                 this.state.settings,
                 this.state.optimizeSettings
             )
-            this.updateUrl(this.state.race, bo, this.state.settings, this.state.optimizeSettings)
-            console.log("bo", bo)
             // Increment index because we appended a new build order item
-            this.setState({ insertIndex: this.state.insertIndex + insertedItems })
+            this.setState({
+                bo: gamelogic.bo,
+                gamelogic: gamelogic,
+                insertIndex: this.state.insertIndex + insertedItems,
+            })
         }
 
         removeItemFromBO = (index: number) => {
@@ -346,12 +258,7 @@ export default withRouter(
 
             // TODO load snapshot from shortly before the removed bo index
             if (bo.length > 0) {
-                this.rerunBuildOrder(
-                    this.state.race,
-                    bo,
-                    this.state.settings,
-                    this.state.optimizeSettings
-                )
+                this.rerunBuildOrder(this.state.gamelogic, bo)
             } else {
                 const gamelogic = new GameLogic(
                     this.state.race,
@@ -500,15 +407,15 @@ export default withRouter(
         render() {
             return (
                 <div
-                    className={`select-none flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
+                    className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
                 >
                     <div className="flex flex-col">
                         <Title />
-                        <div className="flex flex-row items-center">
+                        <div className="select-none flex flex-row items-center">
                             <ImportExport
                                 gamelogic={this.state.gamelogic}
-                                rerunBuildOrder={(race, bo, settings, optimizeSettings) =>
-                                    this.rerunBuildOrder(race, bo, settings, optimizeSettings)
+                                rerunBuildOrder={(bo) =>
+                                    this.rerunBuildOrder(this.state.gamelogic, bo)
                                 }
                                 updateUrl={(race, bo, settings, optimizeSettings) =>
                                     this.updateUrl(race, bo, settings, optimizeSettings, true)
@@ -559,7 +466,7 @@ export default withRouter(
                                     this.state.minimizedActionsSelection ? "w-full" : "w-9/12"
                                 }
                             >
-                                <div className="flex flex-row bg-indigo-400 m-1 p-1 items-center">
+                                <div className="select-none flex flex-row bg-indigo-400 m-1 p-1 items-center">
                                     <RaceSelection onClick={this.raceSelectionClicked} />
                                     <Time gamelogic={this.state.gamelogic} />
                                     <BuildOrder
@@ -567,13 +474,8 @@ export default withRouter(
                                         hoverIndex={this.state.hoverIndex}
                                         insertIndex={this.state.insertIndex}
                                         removeClick={this.buildOrderRemoveClicked}
-                                        rerunBuildOrder={(race, bo, settings, optimizeSettings) =>
-                                            this.rerunBuildOrder(
-                                                race,
-                                                bo,
-                                                settings,
-                                                optimizeSettings
-                                            )
+                                        rerunBuildOrder={(bo) =>
+                                            this.rerunBuildOrder(this.state.gamelogic, bo)
                                         }
                                         updateUrl={(race, bo, settings, optimizeSettings) =>
                                             this.updateUrl(race, bo, settings, optimizeSettings)

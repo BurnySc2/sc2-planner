@@ -41,8 +41,23 @@ const gasBuildingByRace: { [race: string]: string } = {
     zerg: "Extractor",
 }
 
+const supplyUnitNameByRace: { [race: string]: any } = {
+    terran: {
+        name: "SupplyDepot",
+        type: "structure",
+    },
+    protoss: {
+        name: "Pylon",
+        type: "structure",
+    },
+    zerg: {
+        name: "Overlord",
+        type: "unit",
+    },
+}
+
 console.assert(Object.keys(BO_ITEMS).length === 235, `${Object.keys(BO_ITEMS).length} is not 235`)
 
 console.assert(BO_ITEMS["Zergling"].name === "Zergling", `${BO_ITEMS["Zergling"].name}`)
 console.assert(BO_ITEMS["Zergling"].type === "unit", `${BO_ITEMS["Zergling"].type}`)
-export { BO_ITEMS, workerNameByRace, gasBuildingByRace }
+export { BO_ITEMS, workerNameByRace, gasBuildingByRace, supplyUnitNameByRace }

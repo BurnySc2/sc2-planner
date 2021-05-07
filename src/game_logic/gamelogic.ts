@@ -2,10 +2,10 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import TRAINED_BY from "../constants/trained_by"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 import RESEARCHED_BY from "../constants/researched_by"
-import { BO_ITEMS } from "../constants/bo_items"
+import { BO_ITEMS, supplyUnitNameByRace } from "../constants/bo_items"
 import { incomeMinerals, incomeVespene } from "./income"
 
-import { cloneDeep, minBy } from "lodash"
+import { cloneDeep, minBy, find, remove } from "lodash"
 
 import Unit from "./unit"
 import Event from "./event"
@@ -35,20 +35,6 @@ let eventId = 0
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
-const supplyUnitNameByRace: { [race: string]: any } = {
-    terran: {
-        name: "SupplyDepot",
-        type: "structure",
-    },
-    protoss: {
-        name: "Pylon",
-        type: "structure",
-    },
-    zerg: {
-        name: "Overlord",
-        type: "unit",
-    },
-}
 
 class GameLogic {
     race: IAllRaces
@@ -78,7 +64,9 @@ class GameLogic {
     errorMessage: string
     requirements?: IBuildOrderElement[]
     settings: { [name: string]: number }
+    customSettings: Array<ISettingsElement>
     optimizeSettings: { [name: string]: number }
+    customOptimizeSettings: Array<ISettingsElement>
 
     constructor(
         race: IAllRaces = "terran",
@@ -126,6 +114,7 @@ class GameLogic {
         vespeneIncomeCache = {}
 
         // Custom settings from the settings page
+        this.customSettings = customSettings
         this.settings = {}
         this.loadSettings(defaultSettings)
         // How many seconds the worker mining should be delayed at game start
@@ -146,6 +135,7 @@ class GameLogic {
         // Update settings from customSettings object, see WebPage.js defaultSettings
         this.loadSettings(customSettings)
 
+        this.customOptimizeSettings = customOptimizeSettings
         this.optimizeSettings = {}
         this.loadOptimizeSettings(defaultOptimizeSettings)
         this.loadOptimizeSettings(customOptimizeSettings)
@@ -553,10 +543,6 @@ class GameLogic {
             for (let requiredItem of requirementList) {
                 if (!itemPresence[requiredItem]) {
                     errors.message = `Required ${requiredItem} for ${itemName} could not be found.`
-                    if (!BO_ITEMS[requiredItem]) {
-                        //TODO1 remove
-                        console.log("BO_ITEMS[requiredItem]", BO_ITEMS[requiredItem], requiredItem)
-                    }
                     errors.requirements.push(BO_ITEMS[requiredItem])
                     errors.neededEffort += 1 / requirementList.length
                 }
@@ -1063,6 +1049,95 @@ class GameLogic {
             return true
         }
         return false
+    }
+
+    canRequirementBeDuplicated(requirementName: string, itemName: string): boolean {
+        let itemInfo = TRAINED_BY[itemName]
+        const isMorphedFromAnotherUnit =
+            itemInfo && itemInfo.requiresUnits && itemInfo.requiresUnits.includes(requirementName)
+        const isArchonMaterial =
+            !itemInfo &&
+            ((itemName === "morph_archon_from_ht_ht" && requirementName === "HighTemplar") ||
+                (itemName === "morph_archon_from_dt_dt" && requirementName === "DarkTemplar") ||
+                (itemName === "morph_archon_from_ht_dt" &&
+                    (requirementName === "HighTemplar" || requirementName === "DarkTemplar")))
+        const isSupplyProvider = requirementName === supplyUnitNameByRace[this.race].name
+        return isMorphedFromAnotherUnit || isArchonMaterial || isSupplyProvider
+    }
+
+    static simulatedBuildOrder(
+        prevGamelogic: GameLogic,
+        buildOrder: Array<IBuildOrderElement>
+    ): GameLogic {
+        const gamelogic = new GameLogic(
+            prevGamelogic.race,
+            buildOrder,
+            prevGamelogic.customSettings,
+            prevGamelogic.customOptimizeSettings
+        )
+        gamelogic.setStart()
+        gamelogic.runUntilEnd()
+        return gamelogic
+    }
+
+    static addItemToBO(
+        prevGamelogic: GameLogic,
+        item: IBuildOrderElement,
+        insertIndex: number
+    ): [GameLogic, number] {
+        const bo = prevGamelogic.bo
+        let initialBOLength = bo.length
+        bo.splice(insertIndex, 0, item)
+        // Re-calculate build order
+
+        // // Caching using snapshots - idk why this isnt working properly
+        // const latestSnapshot = gamelogic.getLastSnapshot()
+        // if (latestSnapshot) {
+        //     gamelogic.loadFromSnapshotObject(latestSnapshot)
+        // }
+        // gamelogic.bo = cloneDeep(bo)
+        // gamelogic.runUntilEnd()
+
+        // Non cached:
+        // Fill up with missing items
+        let gamelogic: GameLogic
+        console.log("this.state.insertIndex === bo.length - 1", insertIndex, bo.length)
+        if (insertIndex === bo.length - 1 && !prevGamelogic.errorMessage) {
+            let fillingLoop = 0
+            do {
+                gamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
+                if (gamelogic.errorMessage && gamelogic.requirements) {
+                    //TODO1 remove
+                    console.log("errorMessage: ", gamelogic.errorMessage)
+                    console.log(
+                        "requirements names: ",
+                        gamelogic.requirements.map((req) => req.name)
+                    )
+                    fillingLoop++
+                    const duplicatesToRemove: IBuildOrderElement[] = []
+                    for (let req of gamelogic.requirements) {
+                        let duplicateItem: IBuildOrderElement | undefined
+                        if (!gamelogic.canRequirementBeDuplicated(req.name, item.name)) {
+                            duplicateItem = find(bo, req)
+                        }
+                        // Add item if absent, or present later in the bo
+                        if (!duplicateItem || bo.indexOf(duplicateItem) >= insertIndex) {
+                            bo.splice(insertIndex, 0, req)
+                            if (duplicateItem) {
+                                duplicatesToRemove.push(duplicateItem)
+                            }
+                        }
+                    }
+                    for (let duplicate of duplicatesToRemove) {
+                        //TODO1 don't remove it if morphed from it?
+                        remove(bo, (item) => item === duplicate) // Specificaly remove the later one
+                    }
+                }
+            } while (gamelogic.errorMessage && gamelogic.requirements && fillingLoop < 25)
+        }
+        const insertedItems = bo.length - initialBOLength
+        const finalGamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
+        return [finalGamelogic, insertedItems]
     }
 }
 
