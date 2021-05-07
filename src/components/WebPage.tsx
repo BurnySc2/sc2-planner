@@ -286,11 +286,7 @@ export default withRouter(
             // Non cached:
             // Fill up with missing items
             let gamelogic: GameLogic
-            if (
-                this.state.insertIndex === bo.length - 1 &&
-                !this.state.gamelogic.errorMessage &&
-                this.state.race !== "terran"
-            ) {
+            if (this.state.insertIndex === bo.length - 1 && !this.state.gamelogic.errorMessage) {
                 let fillingLoop = 0
                 do {
                     gamelogic = this.simulateBuildOrder(
@@ -301,8 +297,11 @@ export default withRouter(
                     )
                     if (gamelogic.errorMessage && gamelogic.requirements) {
                         //TODO1 remove
-                        // console.log("errorMessage: ", gamelogic.errorMessage)
-                        // console.log("requirements names: ", gamelogic.requirements.map(req => req.name))
+                        console.log("errorMessage: ", gamelogic.errorMessage)
+                        console.log(
+                            "requirements names: ",
+                            gamelogic.requirements.map((req) => req.name)
+                        )
                         fillingLoop++
                         insertedItems += gamelogic.requirements.length
                         const duplicatesToRemove: IBuildOrderElement[] = []
@@ -323,6 +322,7 @@ export default withRouter(
                             }
                         }
                         for (let duplicate of duplicatesToRemove) {
+                            //TODO1 don't remove it if morphed from it?
                             remove(bo, (item) => item === duplicate) // Specificaly remove the later one
                         }
                     }
@@ -335,6 +335,7 @@ export default withRouter(
                 this.state.optimizeSettings
             )
             this.updateUrl(this.state.race, bo, this.state.settings, this.state.optimizeSettings)
+            console.log("bo", bo)
             // Increment index because we appended a new build order item
             this.setState({ insertIndex: this.state.insertIndex + insertedItems })
         }

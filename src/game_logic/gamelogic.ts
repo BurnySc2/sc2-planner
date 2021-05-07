@@ -15,9 +15,9 @@ import { defaultSettings, defaultOptimizeSettings } from "../constants/helper"
 import { IBuildOrderElement, ISettingsElement, ICost, IAllRaces } from "../constants/interfaces"
 
 //TODO1 remove
-//console.log("BO_ITEMS", BO_ITEMS)
-//console.log("TRAINED_BY", TRAINED_BY)
-//console.log("RESEARCHED_BY", RESEARCHED_BY)
+console.log("BO_ITEMS", BO_ITEMS)
+console.log("TRAINED_BY", TRAINED_BY)
+console.log("RESEARCHED_BY", RESEARCHED_BY)
 
 /** Logic of this file:
 Each frame
@@ -525,11 +525,18 @@ class GameLogic {
     /**
      * Checks if what an item requires is present or not
      */
-    addRequirements(requires: string[][], errorMessage: string): boolean {
+    addRequirements(itemName: string, requires: string[][]): boolean {
         this.requirements = this.requirements || []
         const itemPresence: { [unitName: string]: boolean } = {}
         for (let item of this.units) {
-            itemPresence[item.name] = true
+            let itemName = item.name
+            if (item.hasTechlab) {
+                itemName += "TechLab"
+            }
+            if (item.hasReactor) {
+                itemName += "Reactor"
+            }
+            itemPresence[itemName] = true
         }
         for (let upgradeName of this.upgrades) {
             itemPresence[upgradeName] = true
@@ -545,7 +552,7 @@ class GameLogic {
             })
             for (let requiredItem of requirementList) {
                 if (!itemPresence[requiredItem]) {
-                    errors.message = errorMessage
+                    errors.message = `Required ${requiredItem} for ${itemName} could not be found.`
                     if (!BO_ITEMS[requiredItem]) {
                         //TODO1 remove
                         console.log("BO_ITEMS[requiredItem]", BO_ITEMS[requiredItem], requiredItem)
@@ -580,12 +587,7 @@ class GameLogic {
         console.assert(trainInfo, unit.name)
         // Check if requirement is met
         if (trainInfo.requires.length) {
-            if (
-                !this.addRequirements(
-                    trainInfo.requires,
-                    `Required something for '${unit.name}' could not be found.`
-                )
-            ) {
+            if (!this.addRequirements(unit.name, trainInfo.requires)) {
                 return false
             }
         }
@@ -815,10 +817,7 @@ class GameLogic {
             }
             if (
                 !requiredStructureMet &&
-                !this.addRequirements(
-                    researchInfo.requires,
-                    `Required structure '${requiredStructure}' to research upgrade '${upgrade.name}' could not be found.`
-                )
+                !this.addRequirements(upgrade.name, researchInfo.requires)
             ) {
                 return false
             }
@@ -839,12 +838,7 @@ class GameLogic {
             }
         }
 
-        if (
-            !this.addRequirements(
-                researchInfo.requires,
-                `Could not find a structure to research upgrade '${upgrade.name}'.`
-            )
-        ) {
+        if (!this.addRequirements(upgrade.name, researchInfo.requires)) {
             return false
         }
 

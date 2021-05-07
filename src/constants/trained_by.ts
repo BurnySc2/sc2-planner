@@ -81,13 +81,19 @@ data.Unit.forEach((trainingUnit) => {
                     requires.push(requiredUpgrade)
                 }
 
+                if (requiresTechlab) {
+                    requires.push(trainingUnit.name + "TechLab")
+                } else {
+                    requires.push(trainingUnit.name)
+                }
+
                 // If it doesnt exist: create
                 if (TRAINED_BY[resultingUnit.name] === undefined) {
                     TRAINED_BY[resultingUnit.name] = {
                         trainedBy: new Set([trainingUnit.name]),
                         requiresTechlab: requiresTechlab,
                         requiresUnit: requiresUnit,
-                        requires: [[...requires, trainingUnit.name]],
+                        requires: [requires],
                         isMorph: isMorph,
                         consumesUnit: consumesUnit,
                         requiredStructure: null,
@@ -96,7 +102,7 @@ data.Unit.forEach((trainingUnit) => {
                 } else {
                     // Entry already exists, add training unit to object of 'trainedBy' and update requirement
                     TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
-                    TRAINED_BY[resultingUnit.name].requires[0].push(trainingUnit.name, ...requires)
+                    TRAINED_BY[resultingUnit.name].requires[0].push(...requires)
                 }
                 TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name]
                     .requiredStructure
@@ -125,13 +131,25 @@ for (let itemName in TRAINED_BY) {
     )
 
     // Split Gateway and WarpGate requirements
-    pull(trainInfo.requires[0], "BarracksFlying", "FactoryFlying", "StarportFlying")
     if (trainInfo.requires[0].indexOf("Gateway") >= 0) {
         const nonGatewayRequires: string[] = without(trainInfo.requires[0], "Gateway", "WarpGate")
         trainInfo.requires = [
             [...nonGatewayRequires, "Gateway"],
             ["WarpGate", ...nonGatewayRequires],
         ]
+    }
+
+    // Allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
+    for (let structureType of ["Barracks", "Factory", "Starport"]) {
+        pull(trainInfo.requires[0], structureType + "Flying")
+        if (trainInfo.requires[0].indexOf(structureType) >= 0 && !trainInfo.requiredStructure) {
+            const nonBarracksRequires: string[] = without(trainInfo.requires[0], structureType)
+            trainInfo.requires = [
+                [...nonBarracksRequires, structureType],
+                [structureType + "Reactor", ...nonBarracksRequires],
+                [structureType + "TechLab", ...nonBarracksRequires],
+            ]
+        }
     }
 }
 TRAINED_BY["Queen"].requires = [
