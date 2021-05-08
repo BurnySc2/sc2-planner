@@ -170,7 +170,7 @@
     {
         "internal_name": "chronoboost_busy_nexus",
         "name": "Chrono Nexus",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-nexus.png",
         "duration": 20,
         "race": "protoss",
         "id": 21
@@ -178,7 +178,7 @@
     {
         "internal_name": "chronoboost_busy_gateway",
         "name": "Chrono Gateway",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-gateway.png",
         "duration": 20,
         "race": "protoss",
         "id": 22
@@ -186,7 +186,7 @@
     {
         "internal_name": "chronoboost_busy_warpgate",
         "name": "Chrono Warpgate",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-warpgate.png",
         "duration": 20,
         "race": "protoss",
         "id": 23
@@ -194,7 +194,7 @@
     {
         "internal_name": "chronoboost_busy_cybercore",
         "name": "Chrono Cybernetics Core",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-cyberneticscore.png",
         "duration": 20,
         "race": "protoss",
         "id": 24
@@ -202,7 +202,7 @@
     {
         "internal_name": "chronoboost_busy_forge",
         "name": "Chrono Forge",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-forge.png",
         "duration": 20,
         "race": "protoss",
         "id": 25
@@ -210,7 +210,7 @@
     {
         "internal_name": "chronoboost_busy_twilight",
         "name": "Chrono Twilight Council",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-twilightcouncil.png",
         "duration": 20,
         "race": "protoss",
         "id": 35
@@ -218,7 +218,7 @@
     {
         "internal_name": "chronoboost_busy_templar_archive",
         "name": "Chrono Templar Archive",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-templararchives.png",
         "duration": 20,
         "race": "protoss",
         "id": 36
@@ -226,7 +226,7 @@
     {
         "internal_name": "chronoboost_busy_dark_shrine",
         "name": "Chrono Dark Shrine",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-darkshrine.png",
         "duration": 20,
         "race": "protoss",
         "id": 37
@@ -234,7 +234,7 @@
     {
         "internal_name": "chronoboost_busy_robo",
         "name": "Chrono Robotics Facility",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-roboticsfacility.png",
         "duration": 20,
         "race": "protoss",
         "id": 34
@@ -242,7 +242,7 @@
     {
         "internal_name": "chronoboost_busy_robotics_bay",
         "name": "Chrono Robotics Bay",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-roboticssupportbay.png",
         "duration": 20,
         "race": "protoss",
         "id": 38
@@ -250,7 +250,7 @@
     {
         "internal_name": "chronoboost_busy_stargate",
         "name": "Chrono Stargate",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-stargate.png",
         "duration": 20,
         "race": "protoss",
         "id": 33
@@ -258,7 +258,7 @@
     {
         "internal_name": "chronoboost_busy_fleet_beacon",
         "name": "Chrono Fleet Beacon",
-        "imageSource": "btn-ability-spearofadun-chronosurge.png",
+        "imageSource": "btn-ability-spearofadun-chronosurge-fleetbeacon.png",
         "duration": 20,
         "race": "protoss",
         "id": 39
