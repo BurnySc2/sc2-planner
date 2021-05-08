@@ -345,7 +345,6 @@ test("Add two Archons with required tech", () => {
     expect(logic.units.size).toBe(21)
     expect(logic.eventLog.length).toBe(11)
     expect(logic.supplyCap).toBe(31)
-
     ;[logic, insertedItems] = GameLogic.addItemToBO(
         logic,
         { name: "morph_archon_from_ht_ht", type: "action" },

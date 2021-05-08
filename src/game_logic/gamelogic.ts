@@ -15,9 +15,9 @@ import { defaultSettings, defaultOptimizeSettings } from "../constants/helper"
 import { IBuildOrderElement, ISettingsElement, ICost, IAllRaces } from "../constants/interfaces"
 
 //TODO1 remove
-console.log("BO_ITEMS", BO_ITEMS)
-console.log("TRAINED_BY", TRAINED_BY)
-console.log("RESEARCHED_BY", RESEARCHED_BY)
+// console.log("BO_ITEMS", BO_ITEMS)
+// console.log("TRAINED_BY", TRAINED_BY)
+// console.log("RESEARCHED_BY", RESEARCHED_BY)
 
 /** Logic of this file:
 Each frame
@@ -1101,18 +1101,17 @@ class GameLogic {
         // Non cached:
         // Fill up with missing items
         let gamelogic: GameLogic
-        console.log("this.state.insertIndex === bo.length - 1", insertIndex, bo.length)
         if (insertIndex === bo.length - 1 && !prevGamelogic.errorMessage) {
             let fillingLoop = 0
             do {
                 gamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
                 if (gamelogic.errorMessage && gamelogic.requirements) {
                     //TODO1 remove
-                    console.log("errorMessage: ", gamelogic.errorMessage)
-                    console.log(
-                        "requirements names: ",
-                        gamelogic.requirements.map((req) => req.name)
-                    )
+                    // console.log("errorMessage: ", gamelogic.errorMessage)
+                    // console.log(
+                    //     "requirements names: ",
+                    //     gamelogic.requirements.map((req) => req.name)
+                    // )
                     fillingLoop++
                     const duplicatesToRemove: IBuildOrderElement[] = []
                     for (let req of gamelogic.requirements) {
@@ -1129,7 +1128,6 @@ class GameLogic {
                         }
                     }
                     for (let duplicate of duplicatesToRemove) {
-                        //TODO1 don't remove it if morphed from it?
                         remove(bo, (item) => item === duplicate) // Specificaly remove the later one
                     }
                 }
