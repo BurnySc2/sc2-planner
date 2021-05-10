@@ -93,6 +93,13 @@ interface ITrainedBy {
     }
 }
 
+interface IResourceHistory {
+    minerals: number[]
+    vespene: number[]
+    supplyLeft: number[]
+    raceSpecific: number[]
+}
+
 export type {
     IReplaceString,
     IAllRaces,
@@ -107,4 +114,5 @@ export type {
     IDataAbility,
     IResearchedBy,
     ITrainedBy,
+    IResourceHistory,
 }

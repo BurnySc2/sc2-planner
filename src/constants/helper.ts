@@ -125,6 +125,16 @@ const defaultSettings = [
         max: 10,
         step: 0.01,
     },
+    {
+        name: "Resource height",
+        tooltip: "The height of the resource rows displayed in the browser.",
+        variableName: "htmlResourceHeight",
+        n: "rh",
+        v: 2,
+        min: 0,
+        max: 10,
+        step: 0.1,
+    },
 ]
 const settingsDefaultValues: { [name: string]: number } = {}
 defaultSettings.forEach((item) => {

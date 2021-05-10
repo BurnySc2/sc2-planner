@@ -12,7 +12,13 @@ import Event from "./event"
 import Task from "./task"
 import executeAction from "./execute_action"
 import { defaultSettings, defaultOptimizeSettings } from "../constants/helper"
-import { IBuildOrderElement, ISettingsElement, ICost, IAllRaces } from "../constants/interfaces"
+import {
+    IBuildOrderElement,
+    ISettingsElement,
+    ICost,
+    IAllRaces,
+    IResourceHistory,
+} from "../constants/interfaces"
 
 //TODO1 remove
 // console.log("BO_ITEMS", BO_ITEMS)
@@ -45,6 +51,10 @@ class GameLogic {
     supplyUsed: number
     supplyLeft: number
     supplyCap: number
+    larvaCount: number
+    availableChronoboosts: number
+    availableMULEs: number
+    resourceHistory: IResourceHistory
     units: Set<Unit>
     idleUnits: Set<Unit>
     busyUnits: Set<Unit>
@@ -82,6 +92,21 @@ class GameLogic {
         this.supplyUsed = 12
         this.supplyLeft = this.race === "zerg" ? 2 : 3
         this.supplyCap = this.race === "zerg" ? 14 : 15
+        this.availableChronoboosts = 1
+        this.availableMULEs = 0
+        this.larvaCount = 3
+        this.resourceHistory = {
+            minerals: [this.minerals],
+            vespene: [this.vespene],
+            supplyLeft: [this.supplyLeft],
+            raceSpecific: [
+                {
+                    protoss: this.availableChronoboosts,
+                    terran: this.availableMULEs,
+                    zerg: this.larvaCount,
+                }[this.race],
+            ],
+        }
         // All units that are alive
         this.units = new Set()
         // Units that have a slot open to do something, e.g. a barracks with reactor will be idle if it only trains one marine
@@ -151,6 +176,21 @@ class GameLogic {
         this.supplyUsed = 12
         this.supplyLeft = this.race === "zerg" ? 2 : 3
         this.supplyCap = this.race === "zerg" ? 14 : 15
+        this.larvaCount = 3
+        this.availableChronoboosts = 1
+        this.availableMULEs = 0
+        this.resourceHistory = {
+            minerals: [this.minerals],
+            vespene: [this.vespene],
+            supplyLeft: [this.supplyLeft],
+            raceSpecific: [
+                {
+                    protoss: this.availableChronoboosts,
+                    terran: this.availableMULEs,
+                    zerg: this.larvaCount,
+                }[this.race],
+            ],
+        }
         this.units = new Set()
         this.idleUnits = new Set()
         this.busyUnits = new Set()
@@ -361,6 +401,17 @@ class GameLogic {
                 // and i want to remove depot, i can resume from cached state of index 0
             }
         }
+
+        this.resourceHistory.minerals.push(this.minerals)
+        this.resourceHistory.vespene.push(this.vespene)
+        this.resourceHistory.supplyLeft.push(this.supplyLeft)
+        this.resourceHistory.raceSpecific.push(
+            {
+                protoss: this.availableChronoboosts,
+                terran: this.availableMULEs,
+                zerg: this.larvaCount,
+            }[this.race]
+        )
     }
 
     /**
@@ -379,6 +430,7 @@ class GameLogic {
         // Count of HT and DT for archon
         let htCount = 0
         let dtCount = 0
+        this.availableMULEs = 0
         this.units.forEach((unit, index) => {
             // Reduce drone count by 1 if it received a task to build a structure
             // Reduce HT or DT count by 1 if it is busy morphing to archon
@@ -444,6 +496,7 @@ class GameLogic {
                 const amount = Math.floor(unit.energy / 50)
                 incrementUnitName("call_down_mule", amount)
                 incrementUnitName("call_down_supply", amount)
+                this.availableMULEs += amount
             }
             if (this.freeTechlabs > 0) {
                 if (unit.name === "Barracks" && !unit.hasAddon()) {
@@ -760,6 +813,7 @@ class GameLogic {
             }
             if (trainerCanTrainThroughLarva) {
                 trainerUnit.larvaCount -= 1
+                this.larvaCount--
             }
 
             this.minerals -= cost.minerals

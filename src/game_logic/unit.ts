@@ -142,6 +142,7 @@ class Unit {
      */
     updateUnitState(gamelogic: GameLogic) {
         // Energy per frame
+        const prevEnergy = this.energy
         this.energy = Math.min(200, this.energy + 0.03515625)
 
         // If is zerg townhall: generate new larva
@@ -153,6 +154,7 @@ class Unit {
 
             if (this.nextLarvaSpawn < gamelogic.frame) {
                 this.larvaCount += 1
+                gamelogic.larvaCount += 1
                 this.nextLarvaSpawn = gamelogic.frame + 11 * 22.4
             }
 
@@ -160,7 +162,22 @@ class Unit {
             if (this.hasInjectUntilFrame !== -1 && this.hasInjectUntilFrame <= gamelogic.frame) {
                 this.hasInjectUntilFrame = -1
                 this.larvaCount += 3
+                gamelogic.larvaCount += 3
             }
+        }
+
+        if (
+            ["Nexus"].includes(this.name) &&
+            Math.floor(this.energy / 50) > Math.floor(prevEnergy / 50)
+        ) {
+            gamelogic.availableChronoboosts++
+        }
+
+        if (
+            ["OrbitalCommand"].includes(this.name) &&
+            Math.floor(this.energy / 50) > Math.floor(prevEnergy / 50)
+        ) {
+            gamelogic.availableMULEs++
         }
     }
 
