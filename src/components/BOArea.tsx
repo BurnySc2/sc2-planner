@@ -16,6 +16,8 @@ interface MyProps {
 
 interface MyState {
     tooltipText: string | JSX.Element
+    highlightStart: number
+    highlightEnd: number
 }
 
 export default class BOArea extends Component<MyProps, MyState> {
@@ -43,6 +45,8 @@ export default class BOArea extends Component<MyProps, MyState> {
 
         this.state = {
             tooltipText: "",
+            highlightStart: 0,
+            highlightEnd: 0,
         }
     }
 
@@ -63,6 +67,8 @@ export default class BOArea extends Component<MyProps, MyState> {
                     <div>Supply: {item.supply}</div>
                 </div>
             ),
+            highlightStart: item.start,
+            highlightEnd: item.end,
         })
         // TODO This should probably be done somewhere else, so that it is called less often
         ReactTooltip.rebuild()
@@ -72,6 +78,8 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.props.changeHoverIndex(-1)
         this.setState({
             tooltipText: "",
+            highlightStart: 0,
+            highlightEnd: 0,
         })
     }
 
@@ -276,7 +284,7 @@ export default class BOArea extends Component<MyProps, MyState> {
 
         this.setResourceConstants()
         const resourceHeight = this.props.gamelogic.settings.htmlResourceHeight
-        const resourceContent = !resourceHeight
+        const resourceBars = !resourceHeight
             ? []
             : this.resourceTypes.map((resourceDetails) => {
                   const { resourceType, resourceName, icon } = resourceDetails
@@ -336,27 +344,24 @@ export default class BOArea extends Component<MyProps, MyState> {
                       }
                   )
 
-                  const wideContainerStyle = {
+                  const wideBarStyle = {
                       backgroundImage: `url(${require(`../icons/${resourceType}.jpg`)})`,
                       backgroundSize: "100% 100%",
                   }
-                  const borderContainerHeightStyle = {
+                  const borderBarHeightStyle = {
                       height: resourceHeight + "rem",
                   }
                   return (
-                      <div key={`row${resourceType}`} className={CLASSES.boResourceContainer}>
+                      <div key={`row${resourceType}`} className={CLASSES.boResourceBar}>
                           <img
                               className={CLASSES.boResourceIcon}
                               src={require("../icons/" + icon)}
                               alt={resourceName}
                           />
-                          <div
-                              className={CLASSES.boResourceWideContainer}
-                              style={wideContainerStyle}
-                          >
+                          <div className={CLASSES.boResourceWideBar} style={wideBarStyle}>
                               <div
-                                  className={CLASSES.boResourceBorderContainer}
-                                  style={borderContainerHeightStyle}
+                                  className={CLASSES.boResourceBorderBar}
+                                  style={borderBarHeightStyle}
                               >
                                   {rowContent}
                               </div>
@@ -364,6 +369,23 @@ export default class BOArea extends Component<MyProps, MyState> {
                       </div>
                   )
               })
+
+        const highlightStyle = {
+            left: widthFactor * this.state.highlightStart,
+            width: widthFactor * (this.state.highlightEnd - this.state.highlightStart),
+        }
+        const resourceHighlight = !highlightStyle.width ? (
+            ""
+        ) : (
+            <div className={CLASSES.boResourceHighlight} style={highlightStyle}></div>
+        )
+
+        const resourceContent = (
+            <div className={CLASSES.boResourceContainer}>
+                {resourceBars}
+                {resourceHighlight}
+            </div>
+        )
 
         // Generate time bar
         let maxTime = 0
