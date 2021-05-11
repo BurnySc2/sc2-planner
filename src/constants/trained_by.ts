@@ -135,7 +135,11 @@ for (let itemName in TRAINED_BY) {
     // Hardcoded fix so allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
     for (let structureType of ["Barracks", "Factory", "Starport"]) {
         pull(trainInfo.requires[0], structureType + "Flying")
-        if (trainInfo.requires[0].indexOf(structureType) >= 0 && !trainInfo.requiredStructure) {
+        if (
+            trainInfo.requires[0].indexOf(structureType) >= 0 &&
+            itemName.indexOf("Reactor") < 0 &&
+            itemName.indexOf("TechLab") < 0
+        ) {
             const nonBarracksRequires: string[] = without(trainInfo.requires[0], structureType)
             trainInfo.requires = [
                 [...nonBarracksRequires, structureType],
