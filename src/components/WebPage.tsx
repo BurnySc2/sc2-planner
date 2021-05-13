@@ -10,6 +10,7 @@ import BOArea from "./BOArea"
 import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
 import Optimize from "./Optimize"
+import Play from "./Play"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
@@ -430,6 +431,7 @@ export default withRouter(
                                 updateOptimize={this.updateOptimize}
                                 applyOpitimization={this.applyOpitimization}
                             />
+                            <Play gamelogic={this.state.gamelogic} />
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">
