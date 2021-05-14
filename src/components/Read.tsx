@@ -1,9 +1,11 @@
 import React, { Component } from "react"
 import ReactTooltip from "react-tooltip"
-import { find } from "lodash"
+import { find, countBy, uniq, last } from "lodash"
 
 import CLASSES from "../constants/classes"
 import { GameLogic } from "../game_logic/gamelogic"
+
+type Instruction = [string[], number, boolean]
 
 interface MyProps {
     gamelogic: GameLogic
@@ -15,7 +17,7 @@ interface MyState {
     tooltipText: string | JSX.Element
 }
 
-export default class Play extends Component<MyProps, MyState> {
+export default class Read extends Component<MyProps, MyState> {
     synth: SpeechSynthesis
     voices: SpeechSynthesisVoice[]
     lineHandlers: NodeJS.Timeout[]
@@ -55,21 +57,62 @@ export default class Play extends Component<MyProps, MyState> {
         })
     }
 
-    playBuildOrder(startAt = 0) {
-        //TODO1 remove joke
-        //this.speak("Renaud, tu micro comme un ver de terre...", 0, false, "Google français")
-
-        const lastEvent = this.props.gamelogic.eventLog[this.props.gamelogic.eventLog.length - 1]
+    readBuildOrder(startAt = 0) {
         this.setState({
             canStop: true,
         })
+        //TODO1 remove joke
+        //this.speak("Renaud, tu micro comme un ver de terre...", 0, false, "Google français")
+        this.speak("3", 0)
+        this.speak("2", 1)
+        this.speak("1", 2)
+        const instructionList: Instruction[] = []
+        const lastEvent = this.props.gamelogic.eventLog[this.props.gamelogic.eventLog.length - 1]
+        let prevInstruction: Instruction | undefined
+        let boEndTime = 0
         for (let event of this.props.gamelogic.eventLog) {
-            const time = (event.start * 1000) / 24 - startAt
+            const time = (event.start * 1000) / 22.4 - startAt * 1000
             if (time >= 0) {
                 const isLastMessage = event === lastEvent
-                this.speak(event.name.replace(/_/g, " "), time, isLastMessage)
+                const text = event.name.replace(/_/g, " ")
+                boEndTime = Math.max(boEndTime, event?.end || event.start)
+                if (prevInstruction && prevInstruction[1] === time) {
+                    prevInstruction[0].push(text)
+                    prevInstruction[2] = isLastMessage
+                } else {
+                    prevInstruction = [[text], time, isLastMessage]
+                    instructionList.push(prevInstruction)
+                }
+                if (isLastMessage) {
+                    const minutes = Math.floor(boEndTime / 22.4 / 60)
+                    const seconds = Math.floor(boEndTime / 22.4) % 60
+                    prevInstruction[0].push(
+                        `Then the build order ends at ${
+                            minutes >= 1 ? `${minutes}:${seconds}` : `${seconds} seconds`
+                        }`
+                    )
+                }
             }
         }
+        this.lineHandlers.push(
+            setTimeout(() => {
+                instructionList.forEach((instruction) => {
+                    const items = instruction[0]
+                    const count = countBy(items)
+                    const uniqItems = uniq(items)
+                    const itemsWithPlurals = uniqItems.map((item) =>
+                        count[item] === 1 ? item : `${count[item]} ${item}s`
+                    )
+                    const text =
+                        itemsWithPlurals.length === 1
+                            ? itemsWithPlurals[0]
+                            : `${itemsWithPlurals.slice(0, -1).join(", ")}, and ${last(
+                                  itemsWithPlurals
+                              )}`
+                    this.speak(text, instruction[1], instruction[2])
+                })
+            }, 3 * 1000)
+        )
     }
 
     speak(
@@ -129,20 +172,20 @@ export default class Play extends Component<MyProps, MyState> {
             this.onMouseEnter(e, <div>{tooltip}</div>)
         }
 
-        const playButton = (
+        const readButton = (
             <div
                 className={CLASSES.buttons}
                 onMouseEnter={this.showSettings}
                 onMouseLeave={this.hideSettings}
             >
-                Play ▷
+                Read BO&nbsp;&nbsp;▷
                 <div className={classesDropdown}>
-                    <div key="playStartTime" className={CLASSES.dropDownContainer}>
+                    <div key="readStartTime" className={CLASSES.dropDownContainer}>
                         <div className={CLASSES.dropDownSubContainer}>
                             <div
                                 className={CLASSES.dropDownLabel}
                                 data-tip
-                                data-for="playTooltip"
+                                data-for="readTooltip"
                                 onMouseEnter={mouseEnterFunc(
                                     "Time at which the speaker should start describing the bo"
                                 )}
@@ -164,9 +207,9 @@ export default class Play extends Component<MyProps, MyState> {
                     <div className={CLASSES.dropDownContainer}>
                         <div
                             className={CLASSES.dropDownWideButton}
-                            onClick={(e) => this.playBuildOrder(this.startTime)}
+                            onClick={(e) => this.readBuildOrder(this.startTime)}
                         >
-                            <span className={CLASSES.centeredButton}>Play</span>
+                            <span className={CLASSES.centeredButton}>Read</span>
                         </div>
                     </div>
                 </div>
@@ -180,10 +223,10 @@ export default class Play extends Component<MyProps, MyState> {
         return (
             <div className="flex">
                 <div>
-                    <ReactTooltip place="bottom" id="playTooltip" className="max-w-xs">
+                    <ReactTooltip place="bottom" id="readTooltip" className="max-w-xs">
                         {this.state.tooltipText}
                     </ReactTooltip>
-                    {playButton}
+                    {readButton}
                 </div>
 
                 {stopButton}
