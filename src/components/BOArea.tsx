@@ -92,6 +92,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.tooltipPrevQuantity = undefined
         this.prevTooltipResourceType = undefined
         this.updateResourceTooltip(event, resourceType, resourceName, startFrame)
+        ReactTooltip.rebuild()
     }
 
     updateResourceTooltip(
@@ -104,7 +105,6 @@ export default class BOArea extends Component<MyProps, MyState> {
         let currentTargetRect = event.currentTarget.getBoundingClientRect()
         const eventOffsetX = event.pageX - currentTargetRect.left
         const frame = Math.floor(startFrame + eventOffsetX / widthFactor)
-
         const history = this.props.gamelogic.resourceHistory[resourceType]
         const quantity = Math.round(history[frame])
 
@@ -167,7 +167,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                 }[this.props.gamelogic.race],
             },
             {
-                resourceType: "raceSpecific",
+                resourceType: "raceSpecificResource",
                 resourceName: {
                     protoss: "Available chronoboosts",
                     terran: "Available MULEs",
@@ -184,13 +184,13 @@ export default class BOArea extends Component<MyProps, MyState> {
             minerals: 25,
             vespene: 25,
             supplyLeft: 1,
-            raceSpecific: 1,
+            raceSpecificResource: 1,
         }
         this.quantityMaxes = {
             minerals: 400,
             vespene: 400,
             supplyLeft: 8,
-            raceSpecific: {
+            raceSpecificResource: {
                 protoss: 4,
                 terran: 3,
                 zerg: 6,

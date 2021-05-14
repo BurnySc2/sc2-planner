@@ -46,9 +46,7 @@ class GameLogic {
     supplyUsed: number
     supplyLeft: number
     supplyCap: number
-    larvaCount: number
-    availableChronoboosts: number
-    availableMULEs: number
+    raceSpecificResource: number
     resourceHistory: IResourceHistory
     units: Set<Unit>
     idleUnits: Set<Unit>
@@ -87,20 +85,12 @@ class GameLogic {
         this.supplyUsed = 12
         this.supplyLeft = this.race === "zerg" ? 2 : 3
         this.supplyCap = this.race === "zerg" ? 14 : 15
-        this.availableChronoboosts = 1
-        this.availableMULEs = 0
-        this.larvaCount = 3
+        this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
         this.resourceHistory = {
             minerals: [this.minerals],
             vespene: [this.vespene],
             supplyLeft: [this.supplyLeft],
-            raceSpecific: [
-                {
-                    protoss: this.availableChronoboosts,
-                    terran: this.availableMULEs,
-                    zerg: this.larvaCount,
-                }[this.race],
-            ],
+            raceSpecificResource: [this.raceSpecificResource],
         }
         // All units that are alive
         this.units = new Set()
@@ -171,20 +161,12 @@ class GameLogic {
         this.supplyUsed = 12
         this.supplyLeft = this.race === "zerg" ? 2 : 3
         this.supplyCap = this.race === "zerg" ? 14 : 15
-        this.larvaCount = 3
-        this.availableChronoboosts = 1
-        this.availableMULEs = 0
+        this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
         this.resourceHistory = {
             minerals: [this.minerals],
             vespene: [this.vespene],
             supplyLeft: [this.supplyLeft],
-            raceSpecific: [
-                {
-                    protoss: this.availableChronoboosts,
-                    terran: this.availableMULEs,
-                    zerg: this.larvaCount,
-                }[this.race],
-            ],
+            raceSpecificResource: [this.raceSpecificResource],
         }
         this.units = new Set()
         this.idleUnits = new Set()
@@ -333,6 +315,10 @@ class GameLogic {
             }
             return 0
         })
+        console.log(
+            "this.resourceHistory.raceSpecificResource",
+            this.resourceHistory.raceSpecificResource
+        )
     }
 
     /**
@@ -343,6 +329,7 @@ class GameLogic {
      */
     runFrame() {
         // Run one frame in game logic
+        this.raceSpecificResource = 0
         this.addIncome()
         this.updateUnitsProgress()
 
@@ -401,13 +388,7 @@ class GameLogic {
         this.resourceHistory.minerals.push(this.minerals)
         this.resourceHistory.vespene.push(this.vespene)
         this.resourceHistory.supplyLeft.push(this.supplyLeft)
-        this.resourceHistory.raceSpecific.push(
-            {
-                protoss: this.availableChronoboosts,
-                terran: this.availableMULEs,
-                zerg: this.larvaCount,
-            }[this.race]
-        )
+        this.resourceHistory.raceSpecificResource.push(this.raceSpecificResource)
     }
 
     /**
@@ -426,7 +407,6 @@ class GameLogic {
         // Count of HT and DT for archon
         let htCount = 0
         let dtCount = 0
-        this.availableMULEs = 0
         this.units.forEach((unit, index) => {
             // Reduce drone count by 1 if it received a task to build a structure
             // Reduce HT or DT count by 1 if it is busy morphing to archon
@@ -492,7 +472,6 @@ class GameLogic {
                 const amount = Math.floor(unit.energy / 50)
                 incrementUnitName("call_down_mule", amount)
                 incrementUnitName("call_down_supply", amount)
-                this.availableMULEs += amount
             }
             if (this.freeTechlabs > 0) {
                 if (unit.name === "Barracks" && !unit.hasAddon()) {
@@ -798,7 +777,6 @@ class GameLogic {
             }
             if (trainerCanTrainThroughLarva) {
                 trainerUnit.larvaCount -= 1
-                this.larvaCount--
             }
 
             this.minerals -= cost.minerals
@@ -920,6 +898,7 @@ class GameLogic {
      */
     updateUnitsProgress() {
         // Updates the energy on each unit and their task progress
+
         this.units.forEach((unit) => {
             unit.updateUnitState(this)
         })

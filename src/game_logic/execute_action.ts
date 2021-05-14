@@ -190,7 +190,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "Nexus" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -218,7 +217,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "Gateway" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -250,7 +248,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "WarpGate" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -278,7 +275,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "CyberneticsCore" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -306,7 +302,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "Forge" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -334,7 +329,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "RoboticsFacility" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -362,7 +356,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "RoboticsBay" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -390,7 +383,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "Stargate" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -418,7 +410,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "FleetBeacon" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -446,7 +437,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "TwilightCouncil" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -474,7 +464,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "TemplarArchive" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -502,7 +491,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                     if (target.name === "DarkShrine" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
                         unit.energy -= 50
-                        gamelogic.availableChronoboosts--
                         actionCompleted = true
                         break
                     }
@@ -662,7 +650,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
             // Find orbital with >=50 energy
             if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
                 unit.energy -= 50
-                gamelogic.availableMULEs--
                 // Spawn temporary unit mule
                 // TODO Might want to add mule spawn delay later? (2-3 seconds)
                 const newUnit = new Unit("MULE")
@@ -696,7 +683,6 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
                 for (const depot of gamelogic.units) {
                     if (depot.name === "SupplyDepot" && !depot.hasSupplyDrop) {
                         unit.energy -= 50
-                        gamelogic.availableMULEs--
                         depot.hasSupplyDrop = true
                         gamelogic.increaseMaxSupply(8)
                         break

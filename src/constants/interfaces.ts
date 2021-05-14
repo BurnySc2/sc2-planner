@@ -97,7 +97,7 @@ interface IResourceHistory {
     minerals: number[]
     vespene: number[]
     supplyLeft: number[]
-    raceSpecific: number[]
+    raceSpecificResource: number[]
 }
 
 export type {
