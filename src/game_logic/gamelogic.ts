@@ -14,11 +14,6 @@ import executeAction from "./execute_action"
 import { defaultSettings, defaultOptimizeSettings } from "../constants/helper"
 import { IBuildOrderElement, ISettingsElement, ICost, IAllRaces } from "../constants/interfaces"
 
-//TODO1 remove
-// console.log("BO_ITEMS", BO_ITEMS)
-// console.log("TRAINED_BY", TRAINED_BY)
-// console.log("RESEARCHED_BY", RESEARCHED_BY)
-
 /** Logic of this file:
 Each frame
     Calculate and add income
@@ -322,6 +317,7 @@ class GameLogic {
             // Train unit
             if (["worker", "unit"].includes(boElement.type)) {
                 const trained = this.trainUnit(boElement)
+
                 if (trained) {
                     endOfActions = false
                 }
@@ -573,7 +569,8 @@ class GameLogic {
         console.assert(trainInfo, unit.name)
         // Check if requirement is met
         if (trainInfo.requires.length) {
-            if (!this.addRequirements(unit.name, trainInfo.requires)) {
+            const requirements = this.addRequirements(unit.name, trainInfo.requires)
+            if (!requirements) {
                 return false
             }
         }
@@ -601,7 +598,6 @@ class GameLogic {
                 trainerUnit.hasAddon()
             ) {
                 this.errorMessage = `Could not find structure without addon to build '${unit.name}'.`
-                //TODO1 add requirements for terran
                 continue
             }
 
@@ -633,8 +629,7 @@ class GameLogic {
                 !trainerCanTrainThroughReactor &&
                 !trainerCanTrainThroughLarva
             ) {
-                this.errorMessage =
-                    `Could not find unit to produce '${unit.name}'.` + JSON.stringify(trainInfo)
+                this.errorMessage = `Could not find unit to produce '${unit.name}'.`
                 if (trainInfo.consumesUnit) {
                     if (unit.type === "structure") {
                         this.requirements = [
@@ -644,19 +639,9 @@ class GameLogic {
                             },
                         ]
                     } else {
-                        this.errorMessage += ` Didn't know which requirement to insert here for ${JSON.stringify(
-                            trainInfo
-                        )}`
+                        this.errorMessage += ` Didn't know which requirement to insert here for ${unit.name}`
                     }
                 }
-                // if (trainInfo.requiresUnit) {
-                //   this.requirements = this.requirements || []
-                //   this.requirements.push({
-                //       name: trainInfo.requiresUnit,
-                //       type: "unit",
-                //   })
-                //   return
-                // }
                 continue
             }
 
@@ -1077,6 +1062,7 @@ class GameLogic {
         )
         gamelogic.setStart()
         gamelogic.runUntilEnd()
+
         return gamelogic
     }
 
@@ -1100,18 +1086,16 @@ class GameLogic {
 
         // Non cached:
         // Fill up with missing items
-        let gamelogic: GameLogic
+        let gamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
+        let fillingLoop = 0
+        // Add required items if need be
         if (insertIndex === bo.length - 1 && !prevGamelogic.errorMessage) {
-            let fillingLoop = 0
             do {
-                gamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
+                if (fillingLoop > 0) {
+                    // Simulation is done already, the first time
+                    gamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
+                }
                 if (gamelogic.errorMessage && gamelogic.requirements) {
-                    //TODO1 remove
-                    // console.log("errorMessage: ", gamelogic.errorMessage)
-                    // console.log(
-                    //     "requirements names: ",
-                    //     gamelogic.requirements.map((req) => req.name)
-                    // )
                     fillingLoop++
                     const duplicatesToRemove: IBuildOrderElement[] = []
                     for (let req of gamelogic.requirements) {
@@ -1134,8 +1118,7 @@ class GameLogic {
             } while (gamelogic.errorMessage && gamelogic.requirements && fillingLoop < 25)
         }
         const insertedItems = bo.length - initialBOLength
-        const finalGamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
-        return [finalGamelogic, insertedItems]
+        return [gamelogic, insertedItems]
     }
 }
 

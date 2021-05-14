@@ -55,7 +55,7 @@ export default class Optimize extends Component<MyProps, MyState> {
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         optimizationName: string | number
     ) => {
-        this.props.applyOpitimization(["" + optimizationName])
+        this.props.applyOpitimization([`${optimizationName}`])
     }
 
     render() {
