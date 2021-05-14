@@ -15,7 +15,6 @@ interface MyProps {
 }
 
 interface MyState {
-    tooltipText: string | JSX.Element
     highlightStart: number
     highlightEnd: number
 }
@@ -31,6 +30,9 @@ export default class BOArea extends Component<MyProps, MyState> {
     }[] = []
     quantityRoundings: { [resourceType: string]: number } = {}
     quantityMaxes: { [resourceType: string]: number } = {}
+    tooltipPrevQuantity: number | undefined
+    prevTooltipResourceType: keyof IResourceHistory | undefined
+    tooltipContent: JSX.Element | undefined
 
     /**
      * Receives even items from WebPage.js, then recalcuates the items below
@@ -44,7 +46,6 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.timeInterval = 20
 
         this.state = {
-            tooltipText: "",
             highlightStart: 0,
             highlightEnd: 0,
         }
@@ -59,51 +60,72 @@ export default class BOArea extends Component<MyProps, MyState> {
 
         const finishText = endTime === "" ? "" : `Finish: ${endTime}`
 
+        this.tooltipContent = (
+            <div className="flex flex-col text-center">
+                <div>Start: {startTime}</div>
+                <div>{finishText}</div>
+                <div>Supply: {item.supply}</div>
+            </div>
+        )
         this.setState({
-            tooltipText: (
-                <div className="flex flex-col text-center">
-                    <div>Start: {startTime}</div>
-                    <div>{finishText}</div>
-                    <div>Supply: {item.supply}</div>
-                </div>
-            ),
             highlightStart: item.start,
             highlightEnd: item.end,
         })
-        // TODO This should probably be done somewhere else, so that it is called less often
-        ReactTooltip.rebuild()
     }
 
     onMouseLeave() {
         this.props.changeHoverIndex(-1)
+        this.tooltipContent = undefined
         this.setState({
-            tooltipText: "",
             highlightStart: 0,
             highlightEnd: 0,
         })
     }
 
-    onResourceEnter(resourceType: keyof IResourceHistory, resourceName: string, quantity: number) {
+    showResourceTooltip(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        resourceType: keyof IResourceHistory,
+        resourceName: string,
+        startFrame: number
+    ) {
         this.setResourceConstants()
-        const extraQuantity = quantity > this.quantityMaxes[resourceType] ? " or more" : ""
-        this.setState({
-            tooltipText: (
+        this.tooltipPrevQuantity = undefined
+        this.prevTooltipResourceType = undefined
+        this.updateResourceTooltip(event, resourceType, resourceName, startFrame)
+    }
+
+    updateResourceTooltip(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        resourceType: keyof IResourceHistory,
+        resourceName: string,
+        startFrame: number
+    ) {
+        const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
+        let currentTargetRect = event.currentTarget.getBoundingClientRect()
+        const eventOffsetX = event.pageX - currentTargetRect.left
+        const frame = Math.floor(startFrame + eventOffsetX / widthFactor)
+
+        const history = this.props.gamelogic.resourceHistory[resourceType]
+        const quantity = Math.round(history[frame])
+
+        if (
+            quantity !== this.tooltipPrevQuantity ||
+            resourceType !== this.prevTooltipResourceType
+        ) {
+            this.tooltipPrevQuantity = quantity
+            this.prevTooltipResourceType = resourceType
+            this.tooltipContent = (
                 <div className="flex flex-col text-center">
                     <div>
                         {resourceName}: {quantity}
-                        {extraQuantity}
                     </div>
                 </div>
-            ),
-        })
-        // TODO This should probably be done somewhere else, so that it is called less often
-        ReactTooltip.rebuild()
+            )
+        }
     }
 
-    onResourceLeave() {
-        this.setState({
-            tooltipText: "",
-        })
+    hideResourceTooltip() {
+        this.tooltipContent = undefined
     }
 
     getFillerElement(width: number, key: string) {
@@ -298,25 +320,22 @@ export default class BOArea extends Component<MyProps, MyState> {
                   const quantityMax: number = this.quantityMaxes[resourceType]
 
                   // Concatenate same height quantities to add less DOM elements
-                  const dimensions: [number, number][] = history.reduce<[number, number][]>(
-                      (res, quantity: number) => {
-                          const previousDimension = res[res.length - 1]
-                          const roundedQuantity = Math.min(
-                              quantityMax + 1,
-                              Math.floor(quantity / quantityRounding) * quantityRounding
-                          )
-                          if (!previousDimension || previousDimension[1] !== roundedQuantity) {
-                              res.push([widthFactor, roundedQuantity])
-                          } else {
-                              previousDimension[0] += widthFactor
-                          }
-                          return res
-                      },
-                      []
-                  )
+                  const dimensions: [number, number, number][] = history.reduce<
+                      [number, number, number][]
+                  >((res, quantity: number, frame: number) => {
+                      const previousDimension = res[res.length - 1]
+                      const roundedQuantity =
+                          Math.floor(quantity / quantityRounding) * quantityRounding
+                      if (!previousDimension || previousDimension[1] !== roundedQuantity) {
+                          res.push([widthFactor, roundedQuantity, frame])
+                      } else {
+                          previousDimension[0] += widthFactor
+                      }
+                      return res
+                  }, [])
 
                   const rowContent: Array<JSX.Element | string> = dimensions.map(
-                      ([width, roundedQuantity], index1) => {
+                      ([width, roundedQuantity, startFrame], index1) => {
                           const height = Math.min(quantityMax, roundedQuantity)
                           const style = {
                               width,
@@ -325,7 +344,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                               borderTopColor: "#7f9cf5",
                               backgroundColor:
                                   roundedQuantity > quantityMax
-                                      ? `rgba(85%, 55%, -91%, 0.5)`
+                                      ? `rgba(30%, 30%, 30%, 0.5)`
                                       : "rgba(0, 0, 0, 0)",
                           }
                           return (
@@ -334,11 +353,24 @@ export default class BOArea extends Component<MyProps, MyState> {
                                   style={style}
                                   className={CLASSES.boResource}
                                   data-tip
-                                  data-for="boResourceTooltip"
+                                  data-for="boAreaTooltip"
                                   onMouseEnter={(e) =>
-                                      this.onResourceEnter(resourceType, resourceName, height)
+                                      this.showResourceTooltip(
+                                          e,
+                                          resourceType,
+                                          resourceName,
+                                          startFrame
+                                      )
                                   }
-                                  onMouseLeave={(e) => this.onResourceLeave()}
+                                  onMouseMove={(e) =>
+                                      this.showResourceTooltip(
+                                          e,
+                                          resourceType,
+                                          resourceName,
+                                          startFrame
+                                      )
+                                  }
+                                  onMouseLeave={(e) => this.hideResourceTooltip()}
                               ></div>
                           )
                       }
@@ -346,7 +378,7 @@ export default class BOArea extends Component<MyProps, MyState> {
 
                   const wideBarStyle = {
                       backgroundImage: `url(${require(`../icons/${resourceType}.jpg`)})`,
-                      backgroundSize: "100% 100%",
+                      backgroundSize: "contain",
                   }
                   const borderBarHeightStyle = {
                       height: resourceHeight + "rem",
@@ -429,12 +461,11 @@ export default class BOArea extends Component<MyProps, MyState> {
         }
         return (
             <div className={CLASSES.boArea}>
-                <ReactTooltip place="bottom" id="boAreaTooltip">
-                    {this.state.tooltipText}
-                </ReactTooltip>
-                <ReactTooltip place="bottom" id="boResourceTooltip">
-                    {this.state.tooltipText}
-                </ReactTooltip>
+                <ReactTooltip
+                    place="bottom"
+                    id="boAreaTooltip"
+                    getContent={() => this.tooltipContent}
+                ></ReactTooltip>
                 {resourceContent}
                 {timeBarContent}
                 {verticalBarsContent}
