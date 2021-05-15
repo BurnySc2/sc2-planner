@@ -1,6 +1,6 @@
 import React, { Component, ChangeEvent } from "react"
 import ReactTooltip from "react-tooltip"
-import { find, filter } from "lodash"
+import { filter } from "lodash"
 
 import CLASSES from "../constants/classes"
 import { ISettingsElement } from "../constants/interfaces"
@@ -51,7 +51,7 @@ export default class Optimize extends Component<MyProps, MyState> {
         this.props.updateOptimize(itemShortName, newValue)
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
+    onMouseEnter = (e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element) => {
         this.setState({
             tooltipText: item,
         })
@@ -67,41 +67,56 @@ export default class Optimize extends Component<MyProps, MyState> {
     render() {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
+        const mouseEnterFunc = (
+            e: React.MouseEvent<HTMLElement, MouseEvent>,
+            tooltip: string | number
+        ) => {
+            this.onMouseEnter(e, <div>{tooltip}</div>)
+        }
         const optionlessSettings = filter(
             this.props.optimizeSettings,
-            (item: ISettingsElement) => !/Option1/.test(`${item.variableName}`)
+            (setting: ISettingsElement) => !/Option[0-9]+/.test(`${setting.variableName}`)
         )
 
         const settingsElements = optionlessSettings.map((item, index) => {
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                this.onMouseEnter(e, <div>{item.tooltip}</div>)
-            }
-            const addiItem = find(this.props.optimizeSettings, {
-                variableName: `${item.variableName}Option1`,
-            })
-            const additionalField = !addiItem ? (
-                ""
-            ) : (
-                <label>
-                    <input
-                        name={addiItem.n}
-                        type="checkbox"
-                        checked={!!addiItem.v}
-                        onChange={(e) => {
-                            this.onChange(e, addiItem.n)
-                        }}
-                    />
-                    {addiItem.name}&nbsp;
-                </label>
+            const addiItems = filter(this.props.optimizeSettings, (setting) =>
+                new RegExp(`^${item.variableName}Option[0-9]+$`).test(`${setting.variableName}`)
             )
+            const additionalField = addiItems.map((addiItem) => {
+                return (
+                    <div key={addiItem.n} className={CLASSES.dropDownSubContainer}>
+                        <div className={CLASSES.dropDownSubContainer}>
+                            <label
+                                htmlFor={addiItem.n}
+                                className={CLASSES.dropDownLabel}
+                                data-tip
+                                data-for="optimizeSettingsTooltip"
+                                onMouseEnter={(e) => mouseEnterFunc(e, addiItem.tooltip)}
+                            >
+                                {addiItem.name}
+                            </label>
+                            <input
+                                className={CLASSES.dropDownInput}
+                                name={addiItem.n}
+                                id={addiItem.n}
+                                type="checkbox"
+                                checked={!!addiItem.v}
+                                onChange={(e) => {
+                                    this.onChange(e, addiItem.n)
+                                }}
+                            />
+                        </div>
+                    </div>
+                )
+            })
             return (
-                <div key={index} className={CLASSES.dropDownContainer}>
+                <div key={index} className={CLASSES.dropDownContainer + "flex flex-col"}>
                     <div className={CLASSES.dropDownSubContainer}>
                         <div
                             className={CLASSES.dropDownLabel}
                             data-tip
                             data-for="optimizeSettingsTooltip"
-                            onMouseEnter={mouseEnterFunc}
+                            onMouseEnter={(e) => mouseEnterFunc(e, item.tooltip)}
                         >
                             {item.name}
                         </div>
@@ -117,10 +132,10 @@ export default class Optimize extends Component<MyProps, MyState> {
                                 this.onChange(e, item.n)
                             }}
                         />
-                        {additionalField}
                     </div>
+                    {additionalField}
                     <div
-                        className={CLASSES.dropDownButton}
+                        className={`${CLASSES.dropDownButton} pb-1`}
                         onClick={(e) => this.onApply(e, item.variableName)}
                     >
                         Apply

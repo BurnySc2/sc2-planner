@@ -202,14 +202,22 @@ export default withRouter(
                 this.state.settings,
                 this.state.optimizeSettings
             )
-            const state = optimize.optimizeBuildOrder(
+            const newGamelogic = optimize.optimizeBuildOrder(
                 this.state.gamelogic,
                 this.state.bo,
                 optimizationList
             )
-            if (state) {
-                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
-                this.setState(state)
+            if (newGamelogic) {
+                this.updateUrl(
+                    newGamelogic.race,
+                    newGamelogic.bo,
+                    this.state.settings,
+                    this.state.optimizeSettings
+                )
+                this.setState({
+                    bo: newGamelogic.bo,
+                    gamelogic: newGamelogic,
+                })
             }
         }
 

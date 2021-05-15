@@ -1,9 +1,9 @@
-import { cloneDeep } from "lodash"
+import { cloneDeep, isEqual } from "lodash"
 
 import { defaultOptimizeSettings } from "../constants/helper"
 import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
 import { GameLogic } from "../game_logic/gamelogic"
-import { BO_ITEMS, workerNameByRace } from "../constants/bo_items"
+import { BO_ITEMS, workerNameByRace, supplyUnitNameByRace } from "../constants/bo_items"
 
 class OptimizeLogic {
     race: IAllRaces
@@ -29,13 +29,52 @@ class OptimizeLogic {
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         optimizationList: string[]
-    ): any {
+    ): GameLogic | undefined {
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
-            const doRemoveWorkersFirst = !!currentGamelogic.optimizeSettings[
+            const maximizeWorkersOption1 = !!currentGamelogic.optimizeSettings[
                 "maximizeWorkersOption1"
             ]
-            return this.maximizeItem(currentGamelogic, buildOrder, doRemoveWorkersFirst)
+            const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings[
+                "maximizeWorkersOption2"
+            ]
+            return this.maximizeItem(
+                currentGamelogic,
+                buildOrder,
+                maximizeWorkersOption1,
+                maximizeWorkersOption2
+            )
         }
+    }
+
+    removeFromBO(bo: IBuildOrderElement[], itemName: string): void {
+        for (let i = 0; i < bo.length; i++) {
+            const item = bo[i]
+            if (item.name === itemName) {
+                bo.splice(i, 1)
+                i--
+            }
+        }
+    }
+
+    /**
+     * Adds supply to a bo wherever it's needed
+     * gamelogic is assumed to have been run until the end
+     */
+    addSupply(gamelogic: GameLogic): GameLogic {
+        const supplyItem = supplyUnitNameByRace[this.race]
+        let addedSupply = 0
+        while (
+            addedSupply < 15 &&
+            gamelogic.errorMessage &&
+            isEqual(gamelogic.requirements, [supplyItem])
+        ) {
+            // Start getting additional supply 1 bo item before the one needing it
+            const bo = cloneDeep(gamelogic.bo)
+            bo.splice(gamelogic.boIndex - 1, 0, supplyItem) //TODO2 minus [0, 1, 2, 3] should be tested here for perfect results, not just minus [1]
+            addedSupply++
+            gamelogic = this.simulateBo(bo)
+        }
+        return gamelogic
     }
 
     /**
@@ -46,10 +85,12 @@ class OptimizeLogic {
     maximizeItem(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
-        removeItemBefore: boolean
-    ): any {
-        const currentFrameCount = currentGamelogic.frame
+        removeItemBefore: boolean,
+        addNecessarySupply: boolean
+    ): GameLogic | undefined {
+        const frameCountAllowed = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
+        const supplyItem = supplyUnitNameByRace[this.race]
         let initialWorkerCount = 0
         for (let unit of currentGamelogic.units) {
             if (unit.name === worker.name) {
@@ -61,13 +102,12 @@ class OptimizeLogic {
 
         // Remove items before
         if (removeItemBefore) {
-            for (let i = 0; i < bo.length; i++) {
-                const item = bo[i]
-                if (item.name === worker.name) {
-                    bo.splice(i, 1)
-                    i--
-                }
-            }
+            this.removeFromBO(bo, worker.name)
+        }
+
+        // Remove supply before
+        if (addNecessarySupply) {
+            this.removeFromBO(bo, supplyItem.name)
         }
 
         let bestGameLogic: GameLogic = currentGamelogic
@@ -82,14 +122,16 @@ class OptimizeLogic {
                 let boToTest = cloneDeep(bo)
                 boToTest.splice(whereToAddWorker, 0, worker)
                 gamelogic = this.simulateBo(boToTest)
-                isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
+                if (addNecessarySupply) {
+                    gamelogic = this.addSupply(gamelogic)
+                }
+                isBetter = gamelogic.frame <= frameCountAllowed && !gamelogic.errorMessage
                 if (isBetter) {
                     bo.splice(whereToAddWorker, 0, worker)
                     whereToAddWorker++
                     addedWorkerCount++
                     bestGameLogic = gamelogic
                 }
-                //TODO1 use gamelogic.boIndex to identify error position and add supply before new worker if needed
             } while (
                 isBetter ||
                 initialWorkerCount + addedWorkerCount >= this.optimizeSettings.maximizeWorkers
@@ -97,16 +139,10 @@ class OptimizeLogic {
         }
 
         if (bestGameLogic === currentGamelogic) {
-            return false
+            return
         }
         //else
-        return {
-            race: this.race,
-            bo: bo,
-            gamelogic: bestGameLogic,
-            settings: this.customSettings,
-            hoverIndex: -1,
-        }
+        return bestGameLogic
     }
 
     simulateBo(boToTest: IBuildOrderElement[]): GameLogic {

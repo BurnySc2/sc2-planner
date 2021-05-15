@@ -153,21 +153,23 @@ const defaultOptimizeSettings = [
         step: 1,
     },
     {
-        // Pretty name displayed in gui
-        name: "remove workers before",
-        // Tooltip popup that shows some information text
+        name: "Remove workers before maxing",
         tooltip: "Remove all workers before adding as many.",
-        // Internal long variable name used by gamelogic.js
         variableName: "maximizeWorkersOption1",
-        // Short name for base64 string
         n: "mw1",
-        // The given value
         v: 1,
-        // Min value in GUI
         min: 0,
-        // Max value in GUI
         max: 1,
-        // Step size of values in GUI if you press the arrow things
+        step: 1,
+    },
+    {
+        name: "Add necessary supply",
+        tooltip: "Add supply when needed.",
+        variableName: "maximizeWorkersOption2",
+        n: "mw2",
+        v: 1,
+        min: 0,
+        max: 1,
         step: 1,
     },
 ]
