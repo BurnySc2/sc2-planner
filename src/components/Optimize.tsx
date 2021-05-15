@@ -1,5 +1,6 @@
 import React, { Component, ChangeEvent } from "react"
 import ReactTooltip from "react-tooltip"
+import { find, filter } from "lodash"
 
 import CLASSES from "../constants/classes"
 import { ISettingsElement } from "../constants/interfaces"
@@ -41,7 +42,12 @@ export default class Optimize extends Component<MyProps, MyState> {
     }
 
     onChange = (e: ChangeEvent<HTMLInputElement>, itemShortName: string) => {
-        const newValue = parseFloat(e.target.value)
+        const newValue =
+            e.target.type === "checkbox"
+                ? (e.target as any).checked
+                    ? 1
+                    : 0
+                : parseFloat(e.target.value)
         this.props.updateOptimize(itemShortName, newValue)
     }
 
@@ -61,11 +67,33 @@ export default class Optimize extends Component<MyProps, MyState> {
     render() {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
+        const optionlessSettings = filter(
+            this.props.optimizeSettings,
+            (item: ISettingsElement) => !/Option1/.test(`${item.variableName}`)
+        )
 
-        const settingsElements = this.props.optimizeSettings.map((item, index) => {
+        const settingsElements = optionlessSettings.map((item, index) => {
             const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(e, <div>{item.tooltip}</div>)
             }
+            const addiItem = find(this.props.optimizeSettings, {
+                variableName: `${item.variableName}Option1`,
+            })
+            const additionalField = !addiItem ? (
+                ""
+            ) : (
+                <label>
+                    <input
+                        name={addiItem.n}
+                        type="checkbox"
+                        checked={!!addiItem.v}
+                        onChange={(e) => {
+                            this.onChange(e, addiItem.n)
+                        }}
+                    />
+                    {addiItem.name}&nbsp;
+                </label>
+            )
             return (
                 <div key={index} className={CLASSES.dropDownContainer}>
                     <div className={CLASSES.dropDownSubContainer}>
@@ -89,6 +117,7 @@ export default class Optimize extends Component<MyProps, MyState> {
                                 this.onChange(e, item.n)
                             }}
                         />
+                        {additionalField}
                     </div>
                     <div
                         className={CLASSES.dropDownButton}

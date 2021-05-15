@@ -31,37 +31,55 @@ class OptimizeLogic {
         optimizationList: string[]
     ): any {
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
-            return this.maximizeWorkers(currentGamelogic, buildOrder)
+            const doRemoveWorkersFirst = !!currentGamelogic.optimizeSettings[
+                "maximizeWorkersOption1"
+            ]
+            return this.maximizeItem(currentGamelogic, buildOrder, doRemoveWorkersFirst)
         }
     }
 
     /**
      * Adds workers at each bo step while the bo doesn't end later
-     * TODO2 also add additional supply
      * TODO2 remove existing workers/supply if it allows to build more workers
+     * TODO2 also add additional supply
      */
-    maximizeWorkers(
+    maximizeItem(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
-        buildOrder: Array<IBuildOrderElement>
+        buildOrder: Array<IBuildOrderElement>,
+        removeItemBefore: boolean
     ): any {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
         let initialWorkerCount = 0
         for (let unit of currentGamelogic.units) {
-            if (["SCV", "Probe", "Drone"].indexOf(unit.name) >= 0) {
+            if (unit.name === worker.name) {
                 initialWorkerCount++
             }
         }
 
         const bo = cloneDeep(buildOrder)
 
+        // Remove items before
+        if (removeItemBefore) {
+            for (let i = 0; i < bo.length; i++) {
+                const item = bo[i]
+                if (item.name === worker.name) {
+                    bo.splice(i, 1)
+                    i--
+                }
+            }
+        }
+
         let bestGameLogic: GameLogic = currentGamelogic
         let gamelogic: GameLogic = currentGamelogic
         let addedWorkerCount = 0
         for (let whereToAddWorker = 0; whereToAddWorker <= bo.length; whereToAddWorker++) {
             let isBetter = false
+            if (whereToAddWorker < bo.length && bo[whereToAddWorker].name === worker.name) {
+                continue
+            }
             do {
-                const boToTest = cloneDeep(bo)
+                let boToTest = cloneDeep(bo)
                 boToTest.splice(whereToAddWorker, 0, worker)
                 gamelogic = this.simulateBo(boToTest)
                 isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage

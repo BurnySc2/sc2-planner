@@ -184,6 +184,15 @@ export default withRouter(
                 }
             })
 
+            // Re-calculate the whole simulation
+            // TODO optimize: only recalculate if settings were changed that affected it
+            const gamelogic = new GameLogic(
+                this.state.race,
+                this.state.bo,
+                this.state.settings,
+                cloneDeep(optimizeSettings)
+            )
+            this.rerunBuildOrder(gamelogic, this.state.bo)
             this.updateUrl(this.state.race, this.state.bo, this.state.settings, optimizeSettings)
         }
 
