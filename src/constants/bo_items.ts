@@ -56,6 +56,10 @@ const supplyUnitNameByRace: { [race: string]: any } = {
     },
 }
 
+// Fix wrong first uppercased letter in inject action
+delete BO_ITEMS["Inject"]
+BO_ITEMS["inject"] = { name: "inject", type: "action" }
+
 console.assert(Object.keys(BO_ITEMS).length === 235, `${Object.keys(BO_ITEMS).length} is not 235`)
 
 console.assert(BO_ITEMS["Zergling"].name === "Zergling", `${BO_ITEMS["Zergling"].name}`)

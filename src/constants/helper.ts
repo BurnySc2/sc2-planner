@@ -172,6 +172,17 @@ const defaultOptimizeSettings = [
         max: 1,
         step: 1,
     },
+
+    {
+        name: "Add as many larva injects as possible. Remove existing injects:",
+        tooltip: "You need at least one queen for this optimizaion.",
+        variableName: "removeInjectsBeforeMaximizing",
+        n: "ribm",
+        v: 1,
+        min: 0,
+        max: 1,
+        step: 1,
+    },
 ]
 
 const optimizeSettingsDefaultValues: { [name: string]: number } = {}

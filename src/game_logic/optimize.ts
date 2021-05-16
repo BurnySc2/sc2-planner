@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual } from "lodash"
+import { cloneDeep, isEqual, findIndex } from "lodash"
 
 import { defaultOptimizeSettings } from "../constants/helper"
 import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
@@ -37,12 +37,16 @@ class OptimizeLogic {
             const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings[
                 "maximizeWorkersOption2"
             ]
-            return this.maximizeItem(
+            return this.maximizeWorkers(
                 currentGamelogic,
                 buildOrder,
                 maximizeWorkersOption1,
                 maximizeWorkersOption2
             )
+        }
+
+        if (optimizationList.indexOf("removeInjectsBeforeMaximizing") >= 0) {
+            return this.maximizeInjects(currentGamelogic, buildOrder)
         }
     }
 
@@ -79,13 +83,11 @@ class OptimizeLogic {
 
     /**
      * Adds workers at each bo step while the bo doesn't end later
-     * TODO2 remove existing workers/supply if it allows to build more workers
-     * TODO2 also add additional supply
      */
-    maximizeItem(
+    maximizeWorkers(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
-        removeItemBefore: boolean,
+        removeWorkersBefore: boolean,
         addNecessarySupply: boolean
     ): GameLogic | undefined {
         const frameCountAllowed = currentGamelogic.frame
@@ -101,7 +103,7 @@ class OptimizeLogic {
         const bo = cloneDeep(buildOrder)
 
         // Remove items before
-        if (removeItemBefore) {
+        if (removeWorkersBefore) {
             this.removeFromBO(bo, worker.name)
         }
 
@@ -136,6 +138,58 @@ class OptimizeLogic {
                 isBetter ||
                 initialWorkerCount + addedWorkerCount >= this.optimizeSettings.maximizeWorkers
             )
+        }
+
+        if (bestGameLogic === currentGamelogic) {
+            return
+        }
+        //else
+        return bestGameLogic
+    }
+
+    /**
+     * Adds as many injects as possible
+     */
+    maximizeInjects(
+        currentGamelogic: GameLogic, // Used for comparison with future optimizations
+        buildOrder: Array<IBuildOrderElement>
+    ): GameLogic | undefined {
+        const frameCountAllowed = currentGamelogic.frame
+        const inject = BO_ITEMS["inject"]
+
+        const bo = cloneDeep(buildOrder)
+
+        // Remove items before
+        if (this.optimizeSettings.removeInjectsBeforeMaximizing) {
+            this.removeFromBO(bo, inject.name)
+        }
+
+        let bestGameLogic: GameLogic = currentGamelogic
+        let gamelogic: GameLogic = currentGamelogic
+        const firstQueenPosition = findIndex(bo, BO_ITEMS["Queen"])
+        if (firstQueenPosition < 0) {
+            return
+        }
+        for (
+            let whereToAddInject = firstQueenPosition + 1;
+            whereToAddInject <= bo.length;
+            whereToAddInject++
+        ) {
+            let isBetter = false
+            if (whereToAddInject < bo.length && bo[whereToAddInject].name === inject.name) {
+                continue
+            }
+            do {
+                let boToTest = cloneDeep(bo)
+                boToTest.splice(whereToAddInject, 0, inject)
+                gamelogic = this.simulateBo(boToTest)
+                isBetter = gamelogic.frame <= frameCountAllowed && !gamelogic.errorMessage
+                if (isBetter) {
+                    bo.splice(whereToAddInject, 0, inject)
+                    whereToAddInject++
+                    bestGameLogic = gamelogic
+                }
+            } while (isBetter)
         }
 
         if (bestGameLogic === currentGamelogic) {
