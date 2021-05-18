@@ -406,6 +406,7 @@ export default withRouter(
         }
 
         render() {
+            const read = !Read.isSupported() ? "" : <Read gamelogic={this.state.gamelogic} />
             return (
                 <div
                     className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
@@ -431,7 +432,7 @@ export default withRouter(
                                 updateOptimize={this.updateOptimize}
                                 applyOpitimization={this.applyOpitimization}
                             />
-                            <Read gamelogic={this.state.gamelogic} />
+                            {read}
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">

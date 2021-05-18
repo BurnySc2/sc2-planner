@@ -66,6 +66,10 @@ export default class Read extends Component<MyProps, MyState> {
         }
     }
 
+    static isSupported(): boolean {
+        return !!window.speechSynthesis
+    }
+
     showSettings = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         this.setState({
             show: true,
