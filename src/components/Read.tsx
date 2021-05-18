@@ -154,7 +154,6 @@ export default class Read extends Component<MyProps, MyState> {
         this.recognition.onresult = (event) => {
             const voice = event.results[0][0].transcript
             let startTime = startAt
-            console.log("voice", voice)
             if (/^stop$/.test(voice)) {
                 this.stopReading()
                 this.speak("Stopping")
@@ -173,7 +172,6 @@ export default class Read extends Component<MyProps, MyState> {
                         this.speak(`${startTime} seconds`)
                     }
                 }
-                console.log("startTime", startTime, this.listeningToSpeach)
                 this.readBuildOrder(startTime)
             }
         }
@@ -287,7 +285,6 @@ export default class Read extends Component<MyProps, MyState> {
     }
 
     stopReading() {
-        console.log("stopReading")
         this.listeningToSpeach = false
         this.recognition?.stop()
         this.stop()
@@ -297,7 +294,6 @@ export default class Read extends Component<MyProps, MyState> {
     }
 
     stop() {
-        console.log("stop")
         this.lineHandlers.forEach(clearTimeout)
         this.lineHandlers = []
         this.synth.cancel()
