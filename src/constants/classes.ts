@@ -27,7 +27,8 @@ const CLASSES = {
     boItemInvalidDragging: "m-0 p-0 h-16 w-16 bg-red-300 cursor-move",
     boItemHighlighting: "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border",
     // Build order area in the bottom left
-    boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
+    boArea: "relative m-2 overflow-x-auto bg-indigo-400",
+    boAreaPadding: "p-1",
     // Time bar at the top of the area
     timeBar: "",
     // Build order bars things

@@ -71,6 +71,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             highlightStart: item.start,
             highlightEnd: item.end,
         })
+        ReactTooltip.rebuild()
     }
 
     onMouseLeave() {
@@ -80,6 +81,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             highlightStart: 0,
             highlightEnd: 0,
         })
+        ReactTooltip.rebuild()
     }
 
     showResourceTooltip(
@@ -268,7 +270,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                         <div
                             key={`boArea${barType}${index1}${index2}${item.name}${item.id}`}
                             className="flex flex-row"
-                            data-tip
+                            data-tip=""
                             data-for="boAreaTooltip"
                             onMouseEnter={(e) => this.onMouseEnter(item)}
                             onMouseLeave={(e) => this.onMouseLeave()}
@@ -352,7 +354,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                                   key={`boArea${resourceType}${index1}`}
                                   style={style}
                                   className={CLASSES.boResource}
-                                  data-tip
+                                  data-tip=""
                                   data-for="boAreaTooltip"
                                   onMouseEnter={(e) =>
                                       this.showResourceTooltip(
@@ -409,15 +411,12 @@ export default class BOArea extends Component<MyProps, MyState> {
         const resourceHighlight = !highlightStyle.width ? (
             ""
         ) : (
-            <div className={CLASSES.boResourceHighlight} style={highlightStyle}></div>
-        )
-
-        const resourceContent = (
-            <div className={CLASSES.boResourceContainer}>
-                {resourceBars}
-                {resourceHighlight}
+            <div className={CLASSES.boAreaPadding}>
+                <div className={CLASSES.boResourceHighlight} style={highlightStyle}></div>
             </div>
         )
+
+        const resourceContent = <div className={CLASSES.boResourceContainer}>{resourceBars}</div>
 
         // Generate time bar
         let maxTime = 0
@@ -460,7 +459,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             return <div></div>
         }
         return (
-            <div className={CLASSES.boArea}>
+            <div className={`${CLASSES.boArea} ${CLASSES.boAreaPadding}`}>
                 <ReactTooltip
                     place="bottom"
                     id="boAreaTooltip"
@@ -469,6 +468,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                 {resourceContent}
                 {timeBarContent}
                 {verticalBarsContent}
+                {resourceHighlight}
             </div>
         )
     }
