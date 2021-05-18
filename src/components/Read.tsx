@@ -134,6 +134,10 @@ export default class Read extends Component<MyProps, MyState> {
     }
 
     startReading(startAt: number) {
+        if (this.listeningToSpeach) {
+            return
+        }
+        //else
         this.setState({
             canStop: true,
         })
@@ -144,13 +148,13 @@ export default class Read extends Component<MyProps, MyState> {
         }
         //else
 
-        this.stop()
         this.recognition.start()
         this.listeningToSpeach = true
 
         this.recognition.onresult = (event) => {
             const voice = event.results[0][0].transcript
             let startTime = startAt
+            console.log("voice", voice)
             if (/^stop$/.test(voice)) {
                 this.stopReading()
                 this.speak("Stopping")
@@ -169,22 +173,21 @@ export default class Read extends Component<MyProps, MyState> {
                         this.speak(`${startTime} seconds`)
                     }
                 }
+                console.log("startTime", startTime, this.listeningToSpeach)
                 this.readBuildOrder(startTime)
             }
         }
 
         this.recognition.onnomatch = (event) => {
             console.log("I didn't recognise what was said.")
-            this.recognition?.stop()
         }
 
         this.recognition.onerror = (event) => {
             const error = (event as any).error
             console.log("Error occurred in recognition: " + error)
             if (error !== "no-speech") {
-                this.listeningToSpeach = false
+                this.stopReading()
             }
-            this.recognition?.stop()
         }
 
         this.recognition.onend = (event) => {
@@ -284,20 +287,20 @@ export default class Read extends Component<MyProps, MyState> {
     }
 
     stopReading() {
+        console.log("stopReading")
         this.listeningToSpeach = false
+        this.recognition?.stop()
         this.stop()
+        this.setState({
+            canStop: false,
+        })
     }
 
     stop() {
-        this.recognition?.stop()
-        if (this.lineHandlers.length) {
-            this.lineHandlers.forEach(clearTimeout)
-            this.lineHandlers = []
-            this.setState({
-                canStop: false,
-            })
-            this.synth.cancel()
-        }
+        console.log("stop")
+        this.lineHandlers.forEach(clearTimeout)
+        this.lineHandlers = []
+        this.synth.cancel()
     }
 
     onStartAtSpeachChange() {
