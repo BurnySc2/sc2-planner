@@ -1,7 +1,13 @@
 import { cloneDeep } from "lodash"
 
 import { defaultOptimizeSettings } from "../constants/helper"
-import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
+import {
+    IBuildOrderElement,
+    ISettingsElement,
+    IAllRaces,
+    WebPageState,
+    Log,
+} from "../constants/interfaces"
 import { GameLogic } from "../game_logic/gamelogic"
 import { BO_ITEMS, workerNameByRace } from "../constants/bo_items"
 
@@ -29,10 +35,11 @@ class OptimizeLogic {
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         optimizationList: string[]
-    ): any {
+    ): [Partial<WebPageState> | undefined, Log | undefined] {
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
             return this.maximizeWorkers(currentGamelogic, buildOrder)
         }
+        return [undefined, undefined]
     }
 
     /**
@@ -43,7 +50,7 @@ class OptimizeLogic {
     maximizeWorkers(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>
-    ): any {
+    ): [Partial<WebPageState> | undefined, Log | undefined] {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
         let initialWorkerCount = 0
@@ -79,16 +86,26 @@ class OptimizeLogic {
         }
 
         if (bestGameLogic === currentGamelogic) {
-            return false
+            return [
+                undefined,
+                {
+                    notice: "No optimization could be performed",
+                },
+            ]
         }
         //else
-        return {
-            race: this.race,
-            bo: bo,
-            gamelogic: bestGameLogic,
-            settings: this.customSettings,
-            hoverIndex: -1,
-        }
+        return [
+            {
+                race: this.race,
+                bo: bo,
+                gamelogic: bestGameLogic,
+                settings: this.customSettings,
+                hoverIndex: -1,
+            },
+            {
+                success: `Added ${addedWorkerCount} workers!`,
+            },
+        ]
     }
 
     simulateBo(boToTest: IBuildOrderElement[]): GameLogic {

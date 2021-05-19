@@ -10,6 +10,7 @@ import BOArea from "./BOArea"
 import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
 import Optimize from "./Optimize"
+import Logging from "./Logging"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
@@ -28,25 +29,16 @@ import {
     ISettingsElement,
     ICustomAction,
     IAllRaces,
+    WebPageState,
+    Log,
 } from "../constants/interfaces"
 import CLASSES from "../constants/classes"
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
-interface MyState {
-    race: IAllRaces
-    bo: Array<IBuildOrderElement>
-    gamelogic: GameLogic
-    settings: Array<ISettingsElement>
-    optimizeSettings: Array<ISettingsElement>
-    hoverIndex: number
-    insertIndex: number
-    multilineBuildOrder: boolean
-    minimizedActionsSelection: boolean
-}
-
 export default withRouter(
-    class WebPage extends Component<RouteComponentProps, MyState> {
+    class WebPage extends Component<RouteComponentProps, WebPageState> {
+        onLogCallback: (line: Log | undefined) => void = () => null
         // TODO I dont know how to fix these properly
         constructor(props: RouteComponentProps) {
             super(props)
@@ -187,21 +179,23 @@ export default withRouter(
             this.updateUrl(this.state.race, this.state.bo, this.state.settings, optimizeSettings)
         }
 
-        applyOpitimization = (optimizationList: string[]) => {
+        applyOpitimization = (optimizationList: string[]): Log | undefined => {
             const optimize = new OptimizeLogic(
                 this.state.race,
                 this.state.settings,
                 this.state.optimizeSettings
             )
-            const state = optimize.optimizeBuildOrder(
+            const [_state, log] = optimize.optimizeBuildOrder(
                 this.state.gamelogic,
                 this.state.bo,
                 optimizationList
             )
-            if (state) {
+            const state = _state as any // setState doesn't like Partial<MyState>
+            if (state !== undefined) {
                 this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
                 this.setState(state)
             }
+            return log
         }
 
         raceSelectionClicked = (
@@ -404,6 +398,14 @@ export default withRouter(
             })
         }
 
+        log = (line: Log | undefined) => {
+            this.onLogCallback(line)
+        }
+
+        onLog = (callback: (line: Log | undefined) => void) => {
+            this.onLogCallback = callback
+        }
+
         render() {
             return (
                 <div
@@ -429,7 +431,9 @@ export default withRouter(
                                 optimizeSettings={this.state.optimizeSettings}
                                 updateOptimize={this.updateOptimize}
                                 applyOpitimization={this.applyOpitimization}
+                                log={this.log}
                             />
+                            <Logging onLog={this.onLog} />
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">
