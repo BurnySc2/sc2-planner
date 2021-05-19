@@ -120,7 +120,7 @@ export default withRouter(
 
         updateUrl = (
             race: string | undefined,
-            buildOrder: Array<IBuildOrderElement>,
+            buildOrder: Array<IBuildOrderElement> | undefined,
             settings: Array<ISettingsElement> | undefined,
             optimizeSettings: Array<ISettingsElement> | undefined,
             pushHistory = false
@@ -185,15 +185,14 @@ export default withRouter(
                 this.state.settings,
                 this.state.optimizeSettings
             )
-            const [_state, log] = optimize.optimizeBuildOrder(
+            const [state, log] = optimize.optimizeBuildOrder(
                 this.state.gamelogic,
                 this.state.bo,
                 optimizationList
             )
-            const state = _state as any // setState doesn't like Partial<MyState>
             if (state !== undefined) {
                 this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
-                this.setState(state)
+                this.setState(state as WebPageState)
             }
             return log
         }
@@ -406,6 +405,12 @@ export default withRouter(
             this.onLogCallback = callback
         }
 
+        onUndoState = (state: Partial<WebPageState> | undefined) => {
+            if (state !== undefined) {
+                this.setState(state as WebPageState)
+            }
+        }
+
         render() {
             return (
                 <div
@@ -433,7 +438,7 @@ export default withRouter(
                                 applyOpitimization={this.applyOpitimization}
                                 log={this.log}
                             />
-                            <Logging onLog={this.onLog} />
+                            <Logging onLog={this.onLog} undoState={this.onUndoState} />
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">

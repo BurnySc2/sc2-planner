@@ -108,11 +108,13 @@ interface WebPageState {
 }
 
 interface Log {
+    autoClose?: boolean
     error?: string
     warning?: string
     notice?: string
     success?: string
     failure?: string
+    undo?: Partial<WebPageState>
 }
 
 export type {

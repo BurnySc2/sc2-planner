@@ -11,6 +11,8 @@ import {
 import { GameLogic } from "../game_logic/gamelogic"
 import { BO_ITEMS, workerNameByRace } from "../constants/bo_items"
 
+export type OptimizationReturn = [Partial<WebPageState> | undefined, Log | undefined]
+
 class OptimizeLogic {
     race: IAllRaces
     customSettings: Array<ISettingsElement>
@@ -35,11 +37,15 @@ class OptimizeLogic {
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         optimizationList: string[]
-    ): [Partial<WebPageState> | undefined, Log | undefined] {
+    ): OptimizationReturn {
+        let ret: OptimizationReturn = [undefined, undefined]
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
-            return this.maximizeWorkers(currentGamelogic, buildOrder)
+            ret = this.maximizeWorkers(currentGamelogic, buildOrder)
         }
-        return [undefined, undefined]
+        if (ret[1] !== undefined) {
+            ret[1].undo = { gamelogic: currentGamelogic, bo: buildOrder }
+        }
+        return ret
     }
 
     /**
@@ -50,7 +56,7 @@ class OptimizeLogic {
     maximizeWorkers(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>
-    ): [Partial<WebPageState> | undefined, Log | undefined] {
+    ): OptimizationReturn {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
         let initialWorkerCount = 0
