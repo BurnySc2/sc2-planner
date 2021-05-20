@@ -72,6 +72,11 @@ RESEARCHED_BY["ZergFlyerWeaponsLevel3"].requires = [
     ["GreaterSpire", "Hive"],
 ]
 
+RESEARCHED_BY["ZergMeleeWeaponsLevel2"].requires = [
+    ["ZergMeleeWeaponsLevel1", "Lair"],
+    ["ZergMeleeWeaponsLevel1", "Hive"],
+]
+
 /**
 {OverlordSpeed:
     requiredStructure: null,
