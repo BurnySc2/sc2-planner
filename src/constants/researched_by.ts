@@ -60,6 +60,18 @@ data.Unit.forEach((researcherUnit) => {
     )
 })
 
+RESEARCHED_BY["ZergFlyerWeaponsLevel1"].requires = [["Spire"], ["GreaterSpire"]]
+RESEARCHED_BY["ZergFlyerWeaponsLevel2"].requires = [
+    ["Spire", "Lair"],
+    ["Spire", "Hive"],
+    ["GreaterSpire", "Lair"],
+    ["GreaterSpire", "Hive"],
+]
+RESEARCHED_BY["ZergFlyerWeaponsLevel3"].requires = [
+    ["Spire", "Hive"],
+    ["GreaterSpire", "Hive"],
+]
+
 /**
 {OverlordSpeed:
     requiredStructure: null,
