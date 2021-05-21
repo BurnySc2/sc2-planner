@@ -10,6 +10,7 @@ import BOArea from "./BOArea"
 import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
 import Optimize from "./Optimize"
+import Logging from "./Logging"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
@@ -28,25 +29,16 @@ import {
     ISettingsElement,
     ICustomAction,
     IAllRaces,
+    WebPageState,
+    Log,
 } from "../constants/interfaces"
 import CLASSES from "../constants/classes"
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
-interface MyState {
-    race: IAllRaces
-    bo: Array<IBuildOrderElement>
-    gamelogic: GameLogic
-    settings: Array<ISettingsElement>
-    optimizeSettings: Array<ISettingsElement>
-    hoverIndex: number
-    insertIndex: number
-    multilineBuildOrder: boolean
-    minimizedActionsSelection: boolean
-}
-
 export default withRouter(
-    class WebPage extends Component<RouteComponentProps, MyState> {
+    class WebPage extends Component<RouteComponentProps, WebPageState> {
+        onLogCallback: (line: Log | undefined) => void = () => null
         // TODO I dont know how to fix these properly
         constructor(props: RouteComponentProps) {
             super(props)
@@ -128,7 +120,7 @@ export default withRouter(
 
         updateUrl = (
             race: string | undefined,
-            buildOrder: Array<IBuildOrderElement>,
+            buildOrder: Array<IBuildOrderElement> | undefined,
             settings: Array<ISettingsElement> | undefined,
             optimizeSettings: Array<ISettingsElement> | undefined,
             pushHistory = false
@@ -196,29 +188,22 @@ export default withRouter(
             this.updateUrl(this.state.race, this.state.bo, this.state.settings, optimizeSettings)
         }
 
-        applyOpitimization = (optimizationList: string[]) => {
+        applyOpitimization = (optimizationList: string[]): Log | undefined => {
             const optimize = new OptimizeLogic(
                 this.state.race,
                 this.state.settings,
                 this.state.optimizeSettings
             )
-            const newGamelogic = optimize.optimizeBuildOrder(
+            const [state, log] = optimize.optimizeBuildOrder(
                 this.state.gamelogic,
                 this.state.bo,
                 optimizationList
             )
-            if (newGamelogic) {
-                this.updateUrl(
-                    newGamelogic.race,
-                    newGamelogic.bo,
-                    this.state.settings,
-                    this.state.optimizeSettings
-                )
-                this.setState({
-                    bo: newGamelogic.bo,
-                    gamelogic: newGamelogic,
-                })
+            if (state !== undefined) {
+                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
+                this.setState(state as WebPageState)
             }
+            return log
         }
 
         raceSelectionClicked = (
@@ -421,6 +406,20 @@ export default withRouter(
             })
         }
 
+        log = (line: Log | undefined) => {
+            this.onLogCallback(line)
+        }
+
+        onLog = (callback: (line: Log | undefined) => void) => {
+            this.onLogCallback = callback
+        }
+
+        onUndoState = (state: Partial<WebPageState> | undefined) => {
+            if (state !== undefined) {
+                this.setState(state as WebPageState)
+            }
+        }
+
         render() {
             return (
                 <div
@@ -446,7 +445,9 @@ export default withRouter(
                                 optimizeSettings={this.state.optimizeSettings}
                                 updateOptimize={this.updateOptimize}
                                 applyOpitimization={this.applyOpitimization}
+                                log={this.log}
                             />
+                            <Logging onLog={this.onLog} undoState={this.onUndoState} />
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">

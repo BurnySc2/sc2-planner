@@ -1,9 +1,17 @@
 import { cloneDeep, isEqual, findIndex } from "lodash"
 
 import { defaultOptimizeSettings } from "../constants/helper"
-import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
+import {
+    IBuildOrderElement,
+    ISettingsElement,
+    IAllRaces,
+    WebPageState,
+    Log,
+} from "../constants/interfaces"
 import { GameLogic } from "../game_logic/gamelogic"
 import { BO_ITEMS, workerNameByRace, supplyUnitNameByRace } from "../constants/bo_items"
+
+export type OptimizationReturn = [Partial<WebPageState> | undefined, Log | undefined]
 
 class OptimizeLogic {
     race: IAllRaces
@@ -29,7 +37,8 @@ class OptimizeLogic {
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         optimizationList: string[]
-    ): GameLogic | undefined {
+    ): OptimizationReturn {
+        let ret: OptimizationReturn = [undefined, undefined]
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
             const maximizeWorkersOption1 = !!currentGamelogic.optimizeSettings[
                 "maximizeWorkersOption1"
@@ -37,7 +46,7 @@ class OptimizeLogic {
             const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings[
                 "maximizeWorkersOption2"
             ]
-            return this.maximizeWorkers(
+            ret = this.maximizeWorkers(
                 currentGamelogic,
                 buildOrder,
                 maximizeWorkersOption1,
@@ -46,8 +55,13 @@ class OptimizeLogic {
         }
 
         if (optimizationList.indexOf("removeInjectsBeforeMaximizing") >= 0) {
-            return this.maximizeInjects(currentGamelogic, buildOrder)
+            ret = this.maximizeInjects(currentGamelogic, buildOrder)
         }
+
+        if (ret[0] !== undefined && ret[1] !== undefined) {
+            ret[1].undo = { gamelogic: currentGamelogic, bo: buildOrder }
+        }
+        return ret
     }
 
     removeFromBO(bo: IBuildOrderElement[], itemName: string): void {
@@ -89,8 +103,8 @@ class OptimizeLogic {
         buildOrder: Array<IBuildOrderElement>,
         removeWorkersBefore: boolean,
         addNecessarySupply: boolean
-    ): GameLogic | undefined {
-        const frameCountAllowed = currentGamelogic.frame
+    ): OptimizationReturn {
+        const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
         const supplyItem = supplyUnitNameByRace[this.race]
         let initialWorkerCount = 0
@@ -127,7 +141,7 @@ class OptimizeLogic {
                 if (addNecessarySupply) {
                     gamelogic = this.addSupply(gamelogic)
                 }
-                isBetter = gamelogic.frame <= frameCountAllowed && !gamelogic.errorMessage
+                isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
                 if (isBetter) {
                     bo.splice(whereToAddWorker, 0, worker)
                     whereToAddWorker++
@@ -141,10 +155,26 @@ class OptimizeLogic {
         }
 
         if (bestGameLogic === currentGamelogic) {
-            return
+            return [
+                undefined,
+                {
+                    notice: "No optimization could be performed",
+                },
+            ]
         }
         //else
-        return bestGameLogic
+        return [
+            {
+                race: this.race,
+                bo: bo,
+                gamelogic: bestGameLogic,
+                settings: this.customSettings,
+                hoverIndex: -1,
+            },
+            {
+                success: `Added ${addedWorkerCount} workers!`,
+            },
+        ]
     }
 
     /**
@@ -153,8 +183,8 @@ class OptimizeLogic {
     maximizeInjects(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>
-    ): GameLogic | undefined {
-        const frameCountAllowed = currentGamelogic.frame
+    ): OptimizationReturn {
+        const currentFrameCount = currentGamelogic.frame
         const inject = BO_ITEMS["inject"]
 
         const bo = cloneDeep(buildOrder)
@@ -166,9 +196,15 @@ class OptimizeLogic {
 
         let bestGameLogic: GameLogic = currentGamelogic
         let gamelogic: GameLogic = currentGamelogic
+        let addedInjects = 0
         const firstQueenPosition = findIndex(bo, BO_ITEMS["Queen"])
         if (firstQueenPosition < 0) {
-            return
+            return [
+                undefined,
+                {
+                    notice: "Queens are needed before trying to maximize injects",
+                },
+            ]
         }
         for (
             let whereToAddInject = firstQueenPosition + 1;
@@ -183,20 +219,37 @@ class OptimizeLogic {
                 let boToTest = cloneDeep(bo)
                 boToTest.splice(whereToAddInject, 0, inject)
                 gamelogic = this.simulateBo(boToTest)
-                isBetter = gamelogic.frame <= frameCountAllowed && !gamelogic.errorMessage
+                isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
                 if (isBetter) {
                     bo.splice(whereToAddInject, 0, inject)
                     whereToAddInject++
+                    addedInjects++
                     bestGameLogic = gamelogic
                 }
             } while (isBetter)
         }
 
         if (bestGameLogic === currentGamelogic) {
-            return
+            return [
+                undefined,
+                {
+                    notice: "No optimization could be performed",
+                },
+            ]
         }
         //else
-        return bestGameLogic
+        return [
+            {
+                race: this.race,
+                bo: bo,
+                gamelogic: bestGameLogic,
+                settings: this.customSettings,
+                hoverIndex: -1,
+            },
+            {
+                success: `Added ${addedInjects} injects!`,
+            },
+        ]
     }
 
     simulateBo(boToTest: IBuildOrderElement[]): GameLogic {

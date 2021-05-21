@@ -3,12 +3,13 @@ import ReactTooltip from "react-tooltip"
 import { filter } from "lodash"
 
 import CLASSES from "../constants/classes"
-import { ISettingsElement } from "../constants/interfaces"
+import { ISettingsElement, Log } from "../constants/interfaces"
 
 interface MyProps {
     optimizeSettings: Array<ISettingsElement>
     updateOptimize: (fieldKey: string, fieldValue: number) => void
-    applyOpitimization: (optimizationList: string[]) => void
+    applyOpitimization: (optimizationList: string[]) => Log | undefined
+    log: (log: Log | undefined) => void
 }
 
 interface MyState {
@@ -61,7 +62,8 @@ export default class Optimize extends Component<MyProps, MyState> {
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         optimizationName: string | number
     ) => {
-        this.props.applyOpitimization([`${optimizationName}`])
+        const log = this.props.applyOpitimization([`${optimizationName}`])
+        this.props.log(log)
     }
 
     mouseEnterFunc = (e: React.MouseEvent<HTMLElement, MouseEvent>, tooltip: string | number) => {
