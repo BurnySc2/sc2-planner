@@ -211,29 +211,25 @@ class OptimizeLogic {
             whereToAddInject <= bo.length;
             whereToAddInject++
         ) {
-            let isBetter = false
             if (whereToAddInject < bo.length && bo[whereToAddInject].name === inject.name) {
                 continue
             }
-            do {
-                let boToTest = cloneDeep(bo)
-                boToTest.splice(whereToAddInject, 0, inject)
-                gamelogic = this.simulateBo(boToTest)
-                isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
-                if (isBetter) {
-                    bo.splice(whereToAddInject, 0, inject)
-                    whereToAddInject++
-                    addedInjects++
-                    bestGameLogic = gamelogic
-                }
-            } while (isBetter)
+            let boToTest = cloneDeep(bo)
+            boToTest.splice(whereToAddInject, 0, inject)
+            gamelogic = this.simulateBo(boToTest)
+            const isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
+            if (isBetter) {
+                bo.splice(whereToAddInject, 0, inject)
+                addedInjects++
+                bestGameLogic = gamelogic
+            }
         }
 
         if (bestGameLogic === currentGamelogic) {
             return [
                 undefined,
                 {
-                    notice: "No optimization could be performed",
+                    notice: "There are as many injects as possible already",
                 },
             ]
         }
