@@ -185,23 +185,10 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
     },
 
     {
-        name: "Remove injects before",
-        tooltip: "You need at least one queen for this optimizaion.",
-        variableName: "removeInjectsBeforeMaximizing",
-        n: "ribm",
-        v: 1,
-        min: 0,
-        max: 1,
-        step: 1,
-        races: "zerg",
-        apply: "Add as many injects as possible",
-    },
-
-    {
         name: "Remove chronos on nexus before",
         tooltip: "You need at least one nexus for this optimizaion.",
-        variableName: "removeNexusChronosBeforeMaximizing",
-        n: "rncbm",
+        variableName: "maximizeNexusChronos",
+        n: "mbc",
         v: 0,
         min: 0,
         max: 1,
@@ -213,14 +200,27 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
     {
         name: "Remove MULEs before",
         tooltip: "You need at least one Orbital Command for this optimizaion.",
-        variableName: "removeMULEsBeforeMaximizing",
-        n: "rmbm",
+        variableName: "maximizeMULEs",
+        n: "mm",
         v: 0,
         min: 0,
         max: 1,
         step: 1,
         races: "terran",
         apply: "Add as many MULEs as possible",
+    },
+
+    {
+        name: "Remove injects before",
+        tooltip: "You need at least one queen for this optimizaion.",
+        variableName: "maximizeInjects",
+        n: "mi",
+        v: 1,
+        min: 0,
+        max: 1,
+        step: 1,
+        races: "zerg",
+        apply: "Add as many injects as possible",
     },
 ]
 

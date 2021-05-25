@@ -58,32 +58,32 @@ class OptimizeLogic {
             )
         }
 
-        if (optimizationList.indexOf("removeInjectsBeforeMaximizing") >= 0) {
-            ret = this.maximizeAddingItem(
-                currentGamelogic,
-                buildOrder,
-                { name: "inject", type: "action" },
-                !!this.optimizeSettings.removeInjectsBeforeMaximizing,
-                BO_ITEMS["Queen"]
-            )
-        }
-
-        if (optimizationList.indexOf("removeNexusChronosBeforeMaximizing") >= 0) {
+        if (optimizationList.indexOf("maximizeNexusChronos") >= 0) {
             ret = this.maximizeAddingItem(
                 currentGamelogic,
                 buildOrder,
                 { name: "chronoboost_busy_nexus", type: "action" },
-                !!this.optimizeSettings.removeNexusChronosBeforeMaximizing
+                !!this.optimizeSettings.maximizeNexusChronos
             )
         }
 
-        if (optimizationList.indexOf("removeMULEsBeforeMaximizing") >= 0) {
+        if (optimizationList.indexOf("maximizeMULEs") >= 0) {
             ret = this.maximizeAddingItem(
                 currentGamelogic,
                 buildOrder,
                 { name: "call_down_mule", type: "action" },
-                !!this.optimizeSettings.removeMULEsBeforeMaximizing,
+                !!this.optimizeSettings.maximizeMULEs,
                 BO_ITEMS["OrbitalCommand"]
+            )
+        }
+
+        if (optimizationList.indexOf("maximizeInjects") >= 0) {
+            ret = this.maximizeAddingItem(
+                currentGamelogic,
+                buildOrder,
+                { name: "inject", type: "action" },
+                !!this.optimizeSettings.maximizeInjects,
+                BO_ITEMS["Queen"]
             )
         }
 
@@ -280,7 +280,7 @@ class OptimizeLogic {
         const asManyAsPossible = {
             notice: "There are as many as possible already",
         }
-        if (bestGameLogic === currentGamelogic) {
+        if (bestGameLogic === currentGamelogic || isEqual(bestGameLogic.bo, currentGamelogic.bo)) {
             return [undefined, asManyAsPossible]
         }
         //else

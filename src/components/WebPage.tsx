@@ -23,7 +23,7 @@ import {
     decodeBuildOrder,
     createUrlParams,
 } from "../constants/helper"
-import { cloneDeep } from "lodash"
+import { cloneDeep, defaults } from "lodash"
 import {
     IBuildOrderElement,
     ISettingsElement,
@@ -200,8 +200,9 @@ export default withRouter(
                 optimizationList
             )
             if (state !== undefined) {
-                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
                 this.setState(state as WebPageState)
+                defaults(state, this.state)
+                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
             }
             return log
         }
@@ -417,6 +418,8 @@ export default withRouter(
         onUndoState = (state: Partial<WebPageState> | undefined) => {
             if (state !== undefined) {
                 this.setState(state as WebPageState)
+                defaults(state, this.state)
+                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
             }
         }
 
