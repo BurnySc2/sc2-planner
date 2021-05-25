@@ -27,7 +27,8 @@ const CLASSES = {
     boItemInvalidDragging: "m-0 p-0 h-16 w-16 bg-red-300 cursor-move",
     boItemHighlighting: "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border",
     // Build order area in the bottom left
-    boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
+    boArea: "relative m-2 overflow-x-auto bg-indigo-400",
+    boAreaPadding: "p-1",
     // Time bar at the top of the area
     timeBar: "",
     // Build order bars things
@@ -60,6 +61,13 @@ const CLASSES = {
     boCol: "flex table-row m-0 p-0 border border-black",
     boRow: "flex m-0 p-0 border border-black",
     boTimeElement: "z-40 flex flex-shrink-0 items-center border-l border-r border-black",
+    boResourceIcon: "m-0 p-0 h-5 absolute left-0 top-0",
+    boResourceContainer: "relative flex flex-col",
+    boResourceBar: "relative flex flex-row",
+    boResourceWideBar: "m-0 p-0",
+    boResourceBorderBar: "flex items-end m-0 p-0 border border-black overflow-hidden",
+    boResource: "m-0 p-0 h-full border-solid",
+    boResourceHighlight: "z-60 absolute top-0 left-0 border border-black h-full",
     boElementContainer: "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",

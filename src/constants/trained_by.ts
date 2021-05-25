@@ -195,7 +195,6 @@ TRAINED_BY["EvolutionChamber"].requires = [
 TRAINED_BY["Ravager"].requires = [["Roach", "RoachWarren"]]
 // Hardcoded fix for when only GreaterSpire available
 TRAINED_BY["Corruptor"].requires = [["Spire"], ["GreaterSpire"]]
-
 // Reorder requirements to optimize build duration
 const requirementPriority = ["Hive", "GreaterSpire", "Corruptor", "Lair"]
 for (let itemName in TRAINED_BY) {

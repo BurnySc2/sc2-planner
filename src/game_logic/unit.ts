@@ -161,6 +161,11 @@ class Unit {
                 this.hasInjectUntilFrame = -1
                 this.larvaCount += 3
             }
+            gamelogic.raceSpecificResource += this.larvaCount
+        }
+
+        if (["Nexus", "OrbitalCommand"].includes(this.name)) {
+            gamelogic.raceSpecificResource += Math.floor(this.energy / 50)
         }
     }
 

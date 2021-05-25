@@ -117,6 +117,13 @@ interface Log {
     undo?: Partial<WebPageState>
 }
 
+interface IResourceHistory {
+    minerals: number[]
+    vespene: number[]
+    supplyLeft: number[]
+    raceSpecificResource: number[]
+}
+
 export type {
     IReplaceString,
     IAllRaces,
@@ -133,4 +140,5 @@ export type {
     ITrainedBy,
     WebPageState,
     Log,
+    IResourceHistory,
 }

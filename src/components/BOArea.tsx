@@ -3,7 +3,7 @@ import CLASSES from "../constants/classes"
 import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import Event from "../game_logic/event"
-import { IBarTypes } from "../constants/interfaces"
+import { IBarTypes, IResourceHistory } from "../constants/interfaces"
 import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 import ReactTooltip from "react-tooltip"
 
@@ -15,11 +15,25 @@ interface MyProps {
 }
 
 interface MyState {
-    tooltipText: string | JSX.Element
+    highlightStart: number
+    highlightEnd: number
 }
 
 export default class BOArea extends Component<MyProps, MyState> {
     timeInterval: number
+
+    // Resource constants
+    resourceTypes: {
+        resourceType: keyof IResourceHistory
+        resourceName: string
+        icon: string
+    }[] = []
+    quantityRoundings: { [resourceType: string]: number } = {}
+    quantityMaxes: { [resourceType: string]: number } = {}
+    tooltipPrevQuantity: number | undefined
+    prevTooltipResourceType: keyof IResourceHistory | undefined
+    tooltipContent: JSX.Element | undefined
+
     /**
      * Receives even items from WebPage.js, then recalcuates the items below
      * If an item is clicked, remove it from the build order and the BOArea
@@ -32,7 +46,8 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.timeInterval = 20
 
         this.state = {
-            tooltipText: "",
+            highlightStart: 0,
+            highlightEnd: 0,
         }
     }
 
@@ -45,24 +60,74 @@ export default class BOArea extends Component<MyProps, MyState> {
 
         const finishText = endTime === "" ? "" : `Finish: ${endTime}`
 
+        this.tooltipContent = (
+            <div className="flex flex-col text-center">
+                <div>Start: {startTime}</div>
+                <div>{finishText}</div>
+                <div>Supply: {item.supply}</div>
+            </div>
+        )
         this.setState({
-            tooltipText: (
-                <div className="flex flex-col text-center">
-                    <div>Start: {startTime}</div>
-                    <div>{finishText}</div>
-                    <div>Supply: {item.supply}</div>
-                </div>
-            ),
+            highlightStart: item.start,
+            highlightEnd: item.end,
         })
-        // TODO This should probably be done somewhere else, so that it is called less often
         ReactTooltip.rebuild()
     }
 
     onMouseLeave() {
         this.props.changeHoverIndex(-1)
+        this.tooltipContent = undefined
         this.setState({
-            tooltipText: "",
+            highlightStart: 0,
+            highlightEnd: 0,
         })
+        ReactTooltip.rebuild()
+    }
+
+    showResourceTooltip(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        resourceType: keyof IResourceHistory,
+        resourceName: string,
+        startFrame: number
+    ) {
+        this.setResourceConstants()
+        this.tooltipPrevQuantity = undefined
+        this.prevTooltipResourceType = undefined
+        this.updateResourceTooltip(event, resourceType, resourceName, startFrame)
+        ReactTooltip.rebuild()
+    }
+
+    updateResourceTooltip(
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        resourceType: keyof IResourceHistory,
+        resourceName: string,
+        startFrame: number
+    ) {
+        const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
+        let currentTargetRect = event.currentTarget.getBoundingClientRect()
+        const eventOffsetX = event.pageX - currentTargetRect.left
+        const frame = Math.floor(startFrame + eventOffsetX / widthFactor)
+        const history = this.props.gamelogic.resourceHistory[resourceType]
+        const quantity = Math.round(history[frame])
+
+        if (
+            quantity !== this.tooltipPrevQuantity ||
+            resourceType !== this.prevTooltipResourceType
+        ) {
+            this.tooltipPrevQuantity = quantity
+            this.prevTooltipResourceType = resourceType
+            this.tooltipContent = (
+                <div className="flex flex-col text-center">
+                    <div>
+                        {resourceName}: {quantity}
+                    </div>
+                </div>
+            )
+        }
+    }
+
+    hideResourceTooltip() {
+        this.tooltipContent = undefined
     }
 
     getFillerElement(width: number, key: string) {
@@ -82,6 +147,59 @@ export default class BOArea extends Component<MyProps, MyState> {
         return `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`
     }
 
+    setResourceConstants(): void {
+        this.resourceTypes = [
+            {
+                resourceType: "minerals",
+                resourceName: "Minerals",
+                icon: "png/icon-mineral-nobg.png",
+            },
+            {
+                resourceType: "vespene",
+                resourceName: "Vespene gas",
+                icon: "png/icon-gas-terran-nobg.png",
+            },
+            {
+                resourceType: "supplyLeft",
+                resourceName: "Supply left",
+                icon: {
+                    protoss: "png/btn-building-protoss-pylon.png",
+                    terran: "png/btn-building-terran-supplydepot.png",
+                    zerg: "png/btn-unit-zerg-overlord.png",
+                }[this.props.gamelogic.race],
+            },
+            {
+                resourceType: "raceSpecificResource",
+                resourceName: {
+                    protoss: "Available chronoboosts",
+                    terran: "Available MULEs",
+                    zerg: "Larva count",
+                }[this.props.gamelogic.race],
+                icon: {
+                    protoss: "png/btn-ability-spearofadun-chronosurge.png",
+                    terran: "png/btn-unit-terran-mule.png",
+                    zerg: "png/btn-unit-zerg-larva.png",
+                }[this.props.gamelogic.race],
+            },
+        ]
+        this.quantityRoundings = {
+            minerals: 25,
+            vespene: 25,
+            supplyLeft: 1,
+            raceSpecificResource: 1,
+        }
+        this.quantityMaxes = {
+            minerals: 400,
+            vespene: 400,
+            supplyLeft: 8,
+            raceSpecificResource: {
+                protoss: 4,
+                terran: 3,
+                zerg: 6,
+            }[this.props.gamelogic.race],
+        }
+    }
+
     render() {
         const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
 
@@ -97,9 +215,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             "upgrade",
         ]
 
-        const verticalContent: Array<Array<JSX.Element>> = []
-
-        verticalBarNames.forEach((barType) => {
+        const verticalBarsContent = verticalBarNames.map((barType) => {
             const bgColor: string = CLASSES.bgColor[barType]
             barBgClasses[barType] = `${bgColor} ${CLASSES.boCol}`
             const typeColor: string = CLASSES.typeColor[barType]
@@ -154,7 +270,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                         <div
                             key={`boArea${barType}${index1}${index2}${item.name}${item.id}`}
                             className="flex flex-row"
-                            data-tip
+                            data-tip=""
                             data-for="boAreaTooltip"
                             onMouseEnter={(e) => this.onMouseEnter(item)}
                             onMouseLeave={(e) => this.onMouseLeave()}
@@ -177,22 +293,130 @@ export default class BOArea extends Component<MyProps, MyState> {
                     </div>
                 )
             })
-            verticalContent.push(verticalBar)
-            return <div>{verticalBar}</div>
+
+            // Hide bar if it has no content to show
+            if (verticalBar.length <= 0) {
+                return ""
+            }
+            //else
+            return (
+                <div key={`verticalBar ${barType}`} className={barBgClasses[barType]}>
+                    {verticalBar}
+                </div>
+            )
         })
 
-        const verticalBarsContent = verticalBarNames.map((barName, index) => {
-            const bar = verticalContent[index]
-            // Hide bar if it has no content to show
-            if (bar.length > 0) {
-                return (
-                    <div key={`verticalBar ${barName}`} className={barBgClasses[barName]}>
-                        {bar}
-                    </div>
-                )
-            }
-            return ""
-        })
+        this.setResourceConstants()
+        const resourceHeight = this.props.gamelogic.settings.htmlResourceHeight
+        const resourceBars = !resourceHeight
+            ? []
+            : this.resourceTypes.map((resourceDetails) => {
+                  const { resourceType, resourceName, icon } = resourceDetails
+                  const history = this.props.gamelogic.resourceHistory[resourceType]
+                  if (!history.length) {
+                      return ""
+                  }
+                  //else
+
+                  const quantityRounding: number = this.quantityRoundings[resourceType]
+                  const quantityMax: number = this.quantityMaxes[resourceType]
+
+                  // Concatenate same height quantities to add less DOM elements
+                  const dimensions: [number, number, number][] = history.reduce<
+                      [number, number, number][]
+                  >((res, quantity: number, frame: number) => {
+                      const previousDimension = res[res.length - 1]
+                      const roundedQuantity =
+                          Math.floor(quantity / quantityRounding) * quantityRounding
+                      if (!previousDimension || previousDimension[1] !== roundedQuantity) {
+                          res.push([widthFactor, roundedQuantity, frame])
+                      } else {
+                          previousDimension[0] += widthFactor
+                      }
+                      return res
+                  }, [])
+
+                  const rowContent: Array<JSX.Element | string> = dimensions.map(
+                      ([width, roundedQuantity, startFrame], index1) => {
+                          const height = Math.min(quantityMax, roundedQuantity)
+                          const style = {
+                              width,
+                              borderTopWidth:
+                                  resourceHeight - (height / quantityMax) * resourceHeight + "rem",
+                              borderTopColor: "#7f9cf5",
+                              backgroundColor:
+                                  roundedQuantity > quantityMax
+                                      ? `rgba(30%, 30%, 30%, 0.5)`
+                                      : "rgba(0, 0, 0, 0)",
+                          }
+                          return (
+                              <div
+                                  key={`boArea${resourceType}${index1}`}
+                                  style={style}
+                                  className={CLASSES.boResource}
+                                  data-tip=""
+                                  data-for="boAreaTooltip"
+                                  onMouseEnter={(e) =>
+                                      this.showResourceTooltip(
+                                          e,
+                                          resourceType,
+                                          resourceName,
+                                          startFrame
+                                      )
+                                  }
+                                  onMouseMove={(e) =>
+                                      this.showResourceTooltip(
+                                          e,
+                                          resourceType,
+                                          resourceName,
+                                          startFrame
+                                      )
+                                  }
+                                  onMouseLeave={(e) => this.hideResourceTooltip()}
+                              ></div>
+                          )
+                      }
+                  )
+
+                  const wideBarStyle = {
+                      backgroundImage: `url(${require(`../icons/${resourceType}.jpg`)})`,
+                      backgroundSize: "contain",
+                  }
+                  const borderBarHeightStyle = {
+                      height: resourceHeight + "rem",
+                  }
+                  return (
+                      <div key={`row${resourceType}`} className={CLASSES.boResourceBar}>
+                          <img
+                              className={CLASSES.boResourceIcon}
+                              src={require("../icons/" + icon)}
+                              alt={resourceName}
+                          />
+                          <div className={CLASSES.boResourceWideBar} style={wideBarStyle}>
+                              <div
+                                  className={CLASSES.boResourceBorderBar}
+                                  style={borderBarHeightStyle}
+                              >
+                                  {rowContent}
+                              </div>
+                          </div>
+                      </div>
+                  )
+              })
+
+        const highlightStyle = {
+            left: widthFactor * this.state.highlightStart,
+            width: widthFactor * (this.state.highlightEnd - this.state.highlightStart),
+        }
+        const resourceHighlight = !highlightStyle.width ? (
+            ""
+        ) : (
+            <div className={CLASSES.boAreaPadding}>
+                <div className={CLASSES.boResourceHighlight} style={highlightStyle}></div>
+            </div>
+        )
+
+        const resourceContent = <div className={CLASSES.boResourceContainer}>{resourceBars}</div>
 
         // Generate time bar
         let maxTime = 0
@@ -235,12 +459,16 @@ export default class BOArea extends Component<MyProps, MyState> {
             return <div></div>
         }
         return (
-            <div className={CLASSES.boArea}>
-                <ReactTooltip place="bottom" id="boAreaTooltip">
-                    {this.state.tooltipText}
-                </ReactTooltip>
+            <div className={`${CLASSES.boArea} ${CLASSES.boAreaPadding}`}>
+                <ReactTooltip
+                    place="bottom"
+                    id="boAreaTooltip"
+                    getContent={() => this.tooltipContent}
+                ></ReactTooltip>
+                {resourceContent}
                 {timeBarContent}
                 {verticalBarsContent}
+                {resourceHighlight}
             </div>
         )
     }

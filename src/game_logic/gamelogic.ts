@@ -12,7 +12,13 @@ import Event from "./event"
 import Task from "./task"
 import executeAction from "./execute_action"
 import { defaultSettings, defaultOptimizeSettings } from "../constants/helper"
-import { IBuildOrderElement, ISettingsElement, ICost, IAllRaces } from "../constants/interfaces"
+import {
+    IBuildOrderElement,
+    ISettingsElement,
+    ICost,
+    IAllRaces,
+    IResourceHistory,
+} from "../constants/interfaces"
 
 /** Logic of this file:
 Each frame
@@ -40,6 +46,8 @@ class GameLogic {
     supplyUsed: number
     supplyLeft: number
     supplyCap: number
+    raceSpecificResource: number
+    resourceHistory: IResourceHistory
     units: Set<Unit>
     idleUnits: Set<Unit>
     busyUnits: Set<Unit>
@@ -77,6 +85,13 @@ class GameLogic {
         this.supplyUsed = 12
         this.supplyLeft = this.race === "zerg" ? 2 : 3
         this.supplyCap = this.race === "zerg" ? 14 : 15
+        this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
+        this.resourceHistory = {
+            minerals: [this.minerals],
+            vespene: [this.vespene],
+            supplyLeft: [this.supplyLeft],
+            raceSpecificResource: [this.raceSpecificResource],
+        }
         // All units that are alive
         this.units = new Set()
         // Units that have a slot open to do something, e.g. a barracks with reactor will be idle if it only trains one marine
@@ -146,6 +161,13 @@ class GameLogic {
         this.supplyUsed = 12
         this.supplyLeft = this.race === "zerg" ? 2 : 3
         this.supplyCap = this.race === "zerg" ? 14 : 15
+        this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
+        this.resourceHistory = {
+            minerals: [this.minerals],
+            vespene: [this.vespene],
+            supplyLeft: [this.supplyLeft],
+            raceSpecificResource: [this.raceSpecificResource],
+        }
         this.units = new Set()
         this.idleUnits = new Set()
         this.busyUnits = new Set()
@@ -303,6 +325,7 @@ class GameLogic {
      */
     runFrame() {
         // Run one frame in game logic
+        this.raceSpecificResource = 0
         this.addIncome()
         this.updateUnitsProgress()
 
@@ -357,6 +380,11 @@ class GameLogic {
                 // and i want to remove depot, i can resume from cached state of index 0
             }
         }
+
+        this.resourceHistory.minerals.push(this.minerals)
+        this.resourceHistory.vespene.push(this.vespene)
+        this.resourceHistory.supplyLeft.push(this.supplyLeft)
+        this.resourceHistory.raceSpecificResource.push(this.raceSpecificResource)
     }
 
     /**
@@ -866,6 +894,7 @@ class GameLogic {
      */
     updateUnitsProgress() {
         // Updates the energy on each unit and their task progress
+
         this.units.forEach((unit) => {
             unit.updateUnitState(this)
         })
