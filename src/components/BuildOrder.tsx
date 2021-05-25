@@ -22,18 +22,16 @@ interface MyProps {
     hoverIndex: number
     insertIndex: number
     removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
-    rerunBuildOrder: (
-        race: IAllRaces | undefined,
-        buildOrder: IBuildOrderElement[],
-        settings: ISettingsElement[] | undefined
-    ) => void
+    rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
-        settings: ISettingsElement[] | undefined
+        settings: ISettingsElement[] | undefined,
+        optimizeSettings: ISettingsElement[] | undefined
     ) => void
     changeHoverIndex: (index: number) => void
     changeInsertIndex: (index: number) => void
+    multilineBuildOrder: boolean
 }
 
 interface MyState {
@@ -70,16 +68,13 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             result.destination.index
         )
 
-        this.props.rerunBuildOrder(
-            this.props.gamelogic.race,
-            items,
-            this.props.gamelogic.exportSettings()
-        )
+        this.props.rerunBuildOrder(items)
 
         this.props.updateUrl(
             this.props.gamelogic.race,
             items,
-            this.props.gamelogic.exportSettings()
+            this.props.gamelogic.exportSettings(),
+            this.props.gamelogic.exportOptimizeSettings()
         )
     }
 
@@ -169,7 +164,10 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                     <Droppable droppableId="droppable" direction="horizontal">
                         {(provided, snapshot) => (
                             <div
-                                className="flex flex-shrink-0"
+                                className={
+                                    (this.props.multilineBuildOrder ? "flex-wrap flex-row" : "") +
+                                    " flex"
+                                }
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >

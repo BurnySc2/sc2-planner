@@ -3,6 +3,7 @@ import Unit from "./unit"
 import Task from "./task"
 import { GameLogic } from "./gamelogic"
 import { IBuildOrderElement } from "../constants/interfaces"
+import { workerNameByRace, gasBuildingByRace } from "../constants/bo_items"
 const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
@@ -17,6 +18,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "worker_to_mins") {
         gamelogic.errorMessage = `Could not find a worker that is mining vespene.`
+        gamelogic.requirements = [
+            {
+                name: "worker_to_gas",
+                type: "action",
+            },
+        ]
         if (gamelogic.workersVespene > 0) {
             for (const unit of gamelogic.units) {
                 if (workerTypes.has(unit.name) && unit.isMiningGas) {
@@ -32,6 +39,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "worker_to_gas") {
         gamelogic.errorMessage = `Could not find a worker that is mining minerals or a gas structure. Max allowed workers per gas are 3.`
+        gamelogic.requirements = [
+            {
+                name: gasBuildingByRace[gamelogic.race],
+                type: "structure",
+            },
+        ]
         if (
             gamelogic.workersMinerals > 0 &&
             gamelogic.gasCount > 0 &&
@@ -51,6 +64,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "3worker_to_gas") {
         gamelogic.errorMessage = `Could not find three worker that are mining minerals or a gas structure. Max allowed workers per gas are 3.`
+        gamelogic.requirements = [
+            {
+                name: gasBuildingByRace[gamelogic.race],
+                type: "structure",
+            },
+        ]
         if (
             gamelogic.workersMinerals >= 3 &&
             gamelogic.gasCount > 0 &&
@@ -77,6 +96,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "worker_to_scout") {
         gamelogic.errorMessage = `Could not find a worker that is mining minerals.`
+        gamelogic.requirements = [
+            {
+                name: workerNameByRace[gamelogic.race],
+                type: "worker",
+            },
+        ]
         if (gamelogic.workersMinerals > 0) {
             for (const unit of gamelogic.idleUnits) {
                 if (workerTypes.has(unit.name) && unit.isMiningMinerals()) {
@@ -155,6 +180,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 // Find target
                 gamelogic.errorMessage = "No busy Nexus could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "Probe",
+                        type: "unit",
+                    },
+                ]
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "Nexus" && target.hasChronoUntilFrame === -1) {
                         target.addChrono(gamelogic.frame)
@@ -175,6 +206,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Gateway could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "Zealot",
+                        type: "unit",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "Gateway" && target.hasChronoUntilFrame === -1) {
@@ -196,6 +233,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Warpgate could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "Zealot",
+                        type: "unit",
+                    },
+                    {
+                        name: "convert_gateway_to_warpgate",
+                        type: "action",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "WarpGate" && target.hasChronoUntilFrame === -1) {
@@ -217,6 +264,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Cybernetics Core could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "WarpGateResearch",
+                        type: "upgrade",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "CyberneticsCore" && target.hasChronoUntilFrame === -1) {
@@ -238,6 +291,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Forge could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "ProtossGroundWeaponsLevel1",
+                        type: "upgrade",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "Forge" && target.hasChronoUntilFrame === -1) {
@@ -259,6 +318,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Robotics Facility could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "Immortal",
+                        type: "unit",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "RoboticsFacility" && target.hasChronoUntilFrame === -1) {
@@ -280,6 +345,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Robotics Bay could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "ExtendedThermalLance",
+                        type: "upgrade",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "RoboticsBay" && target.hasChronoUntilFrame === -1) {
@@ -301,6 +372,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Stargate could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "Phoenix",
+                        type: "unit",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "Stargate" && target.hasChronoUntilFrame === -1) {
@@ -322,6 +399,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Fleet Beacon could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "PhoenixRangeUpgrade",
+                        type: "upgrade",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "FleetBeacon" && target.hasChronoUntilFrame === -1) {
@@ -343,6 +426,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Twilight Council could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "Charge",
+                        type: "upgrade",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "TwilightCouncil" && target.hasChronoUntilFrame === -1) {
@@ -364,6 +453,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Templar Archive could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "PsiStormTech",
+                        type: "upgrade",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "TemplarArchive" && target.hasChronoUntilFrame === -1) {
@@ -385,6 +480,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const unit of gamelogic.units) {
             if (unit.name === "Nexus" && unit.energy >= 50) {
                 gamelogic.errorMessage = "No busy Dark Shrine could be found."
+                gamelogic.requirements = [
+                    {
+                        name: "DarkTemplarBlinkUpgrade",
+                        type: "upgrade",
+                    },
+                ]
                 // Find target
                 for (const target of gamelogic.busyUnits) {
                     if (target.name === "DarkShrine" && target.hasChronoUntilFrame === -1) {
@@ -403,6 +504,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "convert_gateway_to_warpgate") {
         gamelogic.errorMessage = `Required upgrade 'WarpGateResearch' not researched.`
+        gamelogic.requirements = [
+            {
+                name: "WarpGateResearch",
+                type: "upgrade",
+            },
+        ]
         if (gamelogic.upgrades.has("WarpGateResearch")) {
             gamelogic.errorMessage = `Could not find a gateway.`
             for (const unit of gamelogic.idleUnits) {
@@ -419,6 +526,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "convert_warpgate_to_gateway") {
         gamelogic.errorMessage = `Could not find a warpgate.`
+        gamelogic.requirements = [
+            {
+                name: "convert_gateway_to_warpgate",
+                type: "action",
+            },
+        ]
         for (const unit of gamelogic.idleUnits) {
             if (unit.name === "WarpGate") {
                 const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
@@ -432,6 +545,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "morph_archon_from_dt_dt") {
         gamelogic.errorMessage = `Could not find two dark templars.`
+        gamelogic.requirements = [
+            {
+                name: "DarkTemplar",
+                type: "unit",
+            },
+            {
+                name: "DarkTemplar",
+                type: "unit",
+            },
+        ]
         for (const dt1 of gamelogic.idleUnits) {
             if (dt1.name === "DarkTemplar") {
                 for (const dt2 of gamelogic.idleUnits) {
@@ -453,6 +576,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "morph_archon_from_ht_ht") {
         gamelogic.errorMessage = `Could not find two high templars.`
+        gamelogic.requirements = [
+            {
+                name: "HighTemplar",
+                type: "unit",
+            },
+            {
+                name: "HighTemplar",
+                type: "unit",
+            },
+        ]
         for (const ht1 of gamelogic.idleUnits) {
             if (ht1.name === "HighTemplar") {
                 for (const ht2 of gamelogic.idleUnits) {
@@ -474,6 +607,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "morph_archon_from_ht_dt") {
         gamelogic.errorMessage = `Could not find one high templar and one dark templar.`
+        gamelogic.requirements = [
+            {
+                name: "HighTemplar",
+                type: "unit",
+            },
+            {
+                name: "DarkTemplar",
+                type: "unit",
+            },
+        ]
         for (const dt of gamelogic.idleUnits) {
             if (dt.name === "DarkTemplar") {
                 for (const ht of gamelogic.idleUnits) {
@@ -497,6 +640,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "call_down_mule") {
         gamelogic.errorMessage = `Could not find an orbital command.`
+        gamelogic.requirements = [
+            {
+                name: "OrbitalCommand",
+                type: "structure",
+            },
+        ]
         for (const unit of gamelogic.units) {
             // Find orbital with >=50 energy
             if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
@@ -515,6 +664,16 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "call_down_supply") {
         gamelogic.errorMessage = `Could not find an orbital command.`
+        gamelogic.requirements = [
+            {
+                name: "SupplyDepot",
+                type: "structure",
+            },
+            {
+                name: "OrbitalCommand",
+                type: "structure",
+            },
+        ]
         for (const unit of gamelogic.units) {
             gamelogic.errorMessage = `Could not find a depopt with no supply drop.`
             // Find orbital with >=50 energy
@@ -537,6 +696,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "salvage_bunker") {
         gamelogic.errorMessage = `Could not find a Bunker.`
+        gamelogic.requirements = [
+            {
+                name: "Bunker",
+                type: "structure",
+            },
+        ]
         for (const unit of gamelogic.units) {
             // Find any bunker
             if (unit.name === "Bunker") {
@@ -554,11 +719,23 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         if (!attachReactor) {
             if (gamelogic.freeTechlabs === 0) {
                 gamelogic.errorMessage = `There are no free techlabs.`
+                gamelogic.requirements = [
+                    {
+                        name: `dettach_${structureName.toLowerCase()}_from_techlab`,
+                        type: "action",
+                    },
+                ]
                 return false
             }
         } else {
             if (gamelogic.freeReactors === 0) {
                 gamelogic.errorMessage = `There are no free reactors.`
+                gamelogic.requirements = [
+                    {
+                        name: `dettach_${structureName.toLowerCase()}_from_reactor`,
+                        type: "action",
+                    },
+                ]
                 return false
             }
         }
@@ -611,8 +788,20 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     const dettach_from_addon = (structureName: string, dettachReactor = false) => {
         if (!dettachReactor) {
             gamelogic.errorMessage = `Could not find a '${structureName}' with Techlab to dettach from.`
+            gamelogic.requirements = [
+                {
+                    name: structureName + "TechLab",
+                    type: "structure",
+                },
+            ]
         } else {
             gamelogic.errorMessage = `Could not find a '${structureName}' with Reactor to attach to addon.`
+            gamelogic.requirements = [
+                {
+                    name: structureName + "Reactor",
+                    type: "structure",
+                },
+            ]
         }
         for (const unit of gamelogic.idleUnits) {
             if (
@@ -665,6 +854,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
 
     if (action.internal_name === "inject") {
         gamelogic.errorMessage = `Could not find a Queen to inject with.`
+        gamelogic.requirements = [
+            {
+                name: "Queen",
+                type: "unit",
+            },
+        ]
         for (const queen of gamelogic.idleUnits) {
             // Find queen with >=25 energy
             if (queen.name === "Queen" && queen.energy >= 25) {
@@ -689,6 +884,12 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
     if (action.internal_name === "creep_tumor") {
         gamelogic.errorMessage = `Could not find a Queen to create a Creep Tumor with.`
+        gamelogic.requirements = [
+            {
+                name: "Queen",
+                type: "unit",
+            },
+        ]
         for (const queen of gamelogic.idleUnits) {
             // Find queen with >=25 energy
             if (queen.name === "Queen" && queen.energy >= 25) {

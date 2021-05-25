@@ -67,6 +67,7 @@ const CLASSES = {
     // Dropdown of export, import, settings
     dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
+    dropDownSubContainer: "w-full m-0 p-0 flex flex-row justify-between",
     // Only export import
     dropDownButton: "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-pointer",
     // Only settings
@@ -78,7 +79,7 @@ const CLASSES = {
     buttons:
         "hover:bg-blue-500 relative bg-gray-300 text-gray-700 font-semibold mx-1 py-2 px-4 rounded items-center select-none h-10",
     tinyButtons:
-        "hover:bg-blue-500 relative bg-gray-300 text-gray-700 font-semibold mx-1 py-0 px-1 rounded items-center select-none h-6 w-6 cursor-pointer",
+        "hover:bg-blue-500 bg-gray-300 text-gray-700 font-semibold mx-1 py-0 px-1 rounded items-center select-none h-6 w-6 cursor-pointer",
 }
 
 export default CLASSES

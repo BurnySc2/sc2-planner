@@ -1,4 +1,5 @@
 import { GameLogic } from "./gamelogic"
+import { IBuildOrderElement } from "../constants/interfaces"
 
 test("Get the train time of SCV", () => {
     const logic = new GameLogic("terran")
@@ -21,7 +22,7 @@ test("Get the train cost of Depot", () => {
 
 test("Build an SCV", () => {
     // Test if building one worker works
-    const bo = [{ name: "SCV", type: "worker" }]
+    const bo: IBuildOrderElement[] = [{ name: "SCV", type: "worker" }]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
@@ -31,7 +32,7 @@ test("Build an SCV", () => {
 
 test("Build two SCVs", () => {
     // Test if building two workers works
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SCV", type: "worker" },
         { name: "SCV", type: "worker" },
     ]
@@ -44,7 +45,7 @@ test("Build two SCVs", () => {
 
 test("Build depot", () => {
     // Test if building a structure works
-    const bo = [{ name: "SupplyDepot", type: "structure" }]
+    const bo: IBuildOrderElement[] = [{ name: "SupplyDepot", type: "structure" }]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
@@ -53,7 +54,7 @@ test("Build depot", () => {
 })
 
 test("Build SCV then depot", () => {
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SCV", type: "worker" },
         { name: "SupplyDepot", type: "structure" },
     ]
@@ -67,7 +68,7 @@ test("Build SCV then depot", () => {
 
 test("Build 4 SCVs", () => {
     // Test to see if supply block matters
-    const bo = []
+    const bo: IBuildOrderElement[] = []
     for (let i = 0; i < 4; i++) {
         bo.push({ name: "SCV", type: "worker" })
     }
@@ -81,7 +82,7 @@ test("Build 4 SCVs", () => {
 })
 
 test("Build 3 SCVs then depot then one more SCV", () => {
-    const bo = []
+    const bo: IBuildOrderElement[] = []
     for (let i = 0; i < 3; i++) {
         bo.push({ name: "SCV", type: "worker" })
     }
@@ -100,7 +101,7 @@ test("Build 3 SCVs then depot then one more SCV", () => {
 
 test("Build commandcenter", () => {
     // Test command center - idleLimit cannot be set too low by default
-    const bo = [{ name: "CommandCenter", type: "structure" }]
+    const bo: IBuildOrderElement[] = [{ name: "CommandCenter", type: "structure" }]
     const logic = new GameLogic("terran", bo)
     logic.settings.idleLimit = 50
     logic.setStart()
@@ -111,7 +112,7 @@ test("Build commandcenter", () => {
 
 test("Build refinery", () => {
     // Test refinery
-    const bo = [{ name: "Refinery", type: "structure" }]
+    const bo: IBuildOrderElement[] = [{ name: "Refinery", type: "structure" }]
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
@@ -121,7 +122,7 @@ test("Build refinery", () => {
 
 test("Build 2 drones, 1 overlord, 4 drones", () => {
     // Test zerg mechanics
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "Drone", type: "worker" },
         { name: "Drone", type: "worker" },
         { name: "Overlord", type: "unit" },
@@ -139,7 +140,7 @@ test("Build 2 drones, 1 overlord, 4 drones", () => {
 })
 
 test("Test spore requirements", () => {
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SpawningPool", type: "structure" },
         { name: "SporeCrawler", type: "structure" },
     ]
@@ -153,7 +154,7 @@ test("Test spore requirements", () => {
 
 test("Build OC and call down MULE", () => {
     // Morph CC to OC, then call down a mule
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Barracks", type: "structure" },
         { name: "OrbitalCommand", type: "structure" },
@@ -168,7 +169,7 @@ test("Build OC and call down MULE", () => {
 
 test("Test if able to create a gas unit (reaper)", () => {
     // Morph CC to OC, then call down a mule
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Barracks", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -184,7 +185,7 @@ test("Test if able to create a gas unit (reaper)", () => {
 
 test("Test if able to research +1 from ebay", () => {
     // Morph CC to OC, then call down a mule
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
         { name: "3worker_to_gas", type: "action" },
@@ -201,7 +202,7 @@ test("Test if able to research +1 from ebay", () => {
 
 test("Test if able to research +2 from ebay after requirements are met", () => {
     // Morph CC to OC, then call down a mule
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -226,7 +227,7 @@ test("Test if able to research +2 from ebay after requirements are met", () => {
 
 test("Test if able upgrade to PF", () => {
     // Morph CC to OC, then call down a mule
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -251,7 +252,7 @@ test("Test if able upgrade to PF", () => {
 
 test("Test if able lift Barracks from reactor and let factory attach to it", () => {
     // Morph CC to OC, then call down a mule
-    const bo = [
+    const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
         { name: "Barracks", type: "structure" },
@@ -285,4 +286,73 @@ test("Test if able lift Barracks from reactor and let factory attach to it", () 
 
     expect(logic.units.size).toBe(17)
     expect(logic.eventLog.length).toBe(8)
+})
+
+test("Add Battlecruiser with required tech", () => {
+    const prevLogic = new GameLogic("terran", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "Battlecruiser", type: "unit" },
+        0
+    )
+
+    expect(insertedItems).toBe(9)
+    expect(logic.units.size).toBe(20)
+    expect(logic.eventLog.length).toBe(9)
+    expect(logic.supplyCap).toBe(23)
+})
+
+test("Add BroodLord with required tech", () => {
+    const prevLogic = new GameLogic("zerg", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "BroodLord", type: "unit" },
+        0
+    )
+
+    expect(insertedItems).toBe(10)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(10)
+    expect(logic.supplyCap).toBe(14)
+})
+
+test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
+    const prevLogic = new GameLogic("zerg", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "ZergFlyerWeaponsLevel3", type: "upgrade" },
+        0
+    )
+
+    expect(logic.upgrades.has("ZergFlyerWeaponsLevel1")).toBe(true)
+    expect(logic.upgrades.has("ZergFlyerWeaponsLevel2")).toBe(true)
+    expect(logic.upgrades.has("ZergFlyerWeaponsLevel3")).toBe(true)
+    expect(insertedItems).toBe(10)
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(10)
+    expect(logic.supplyCap).toBe(14)
+})
+
+test("Add two Archons with required tech", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    let [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "morph_archon_from_ht_ht", type: "action" },
+        0
+    )
+
+    expect(insertedItems).toBe(11)
+    expect(logic.units.size).toBe(21)
+    expect(logic.eventLog.length).toBe(11)
+    expect(logic.supplyCap).toBe(31)
+    ;[logic, insertedItems] = GameLogic.addItemToBO(
+        logic,
+        { name: "morph_archon_from_ht_ht", type: "action" },
+        insertedItems
+    )
+
+    expect(insertedItems).toBe(3)
+    expect(logic.units.size).toBe(22)
+    expect(logic.eventLog.length).toBe(14)
+    expect(logic.supplyCap).toBe(31)
 })

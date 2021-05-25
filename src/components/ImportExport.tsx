@@ -16,15 +16,12 @@ import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 interface MyProps {
     gamelogic: GameLogic
-    rerunBuildOrder: (
-        race: IAllRaces | undefined,
-        buildOrder: IBuildOrderElement[],
-        settings: ISettingsElement[] | undefined
-    ) => void
+    rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined,
+        optimizeSettings: ISettingsElement[] | undefined,
         pushHistory?: boolean
     ) => void
 }
@@ -95,12 +92,12 @@ export default class ImportExport extends Component<MyProps, MyState> {
         navigator.clipboard.readText().then((data) => {
             const decodedSALT = decodeSALT(data)
             const race = decodedSALT.race as IAllRaces | undefined
-            const bo = decodedSALT.bo
+            const bo = decodedSALT.bo as IBuildOrderElement[]
             this.setState({
                 tooltipText: "Pasted!",
             })
-            this.props.rerunBuildOrder(race, bo, undefined)
-            this.props.updateUrl(race, bo, undefined)
+            this.props.rerunBuildOrder(bo)
+            this.props.updateUrl(race, bo, undefined, undefined)
         })
     }
 
@@ -113,7 +110,12 @@ export default class ImportExport extends Component<MyProps, MyState> {
     generateShareableLink() {
         // Returns the string of the shareable link
         const gamelogic = this.props.gamelogic
-        const newUrl = createUrlParams(gamelogic.race, gamelogic.exportSettings(), gamelogic.bo)
+        const newUrl = createUrlParams(
+            gamelogic.race,
+            gamelogic.exportSettings(),
+            gamelogic.exportOptimizeSettings(),
+            gamelogic.bo
+        )
         const shareUrl = `https://burnysc2.github.io/sc2-planner/${newUrl}`
         return shareUrl
     }
@@ -184,7 +186,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
     }
 
     generateSALTEncoding() {
-        const encodedSalt = encodeSALT(this.props.gamelogic.eventLog)
+        const encodedSalt = encodeSALT(this.props.gamelogic.eventLog as IBuildOrderElement[])
         console.log(encodedSalt)
         return encodedSalt
     }

@@ -14,7 +14,7 @@ interface ISettingsElement {
 
 interface IBuildOrderElement {
     name: string
-    type: string
+    type: IBarTypes
 }
 
 interface ICost {
@@ -75,6 +75,7 @@ interface IResearchedBy {
     [name: string]: {
         requiredStructure: string | null
         requiredUpgrade: string | null
+        requires: string[][]
         researchedBy: Set<string>
     }
 }
@@ -83,6 +84,8 @@ interface ITrainedBy {
     [name: string]: {
         requiredStructure: string | null
         requiredUpgrade: string | null
+        requiresUnits: string[] | null
+        requires: string[][]
         trainedBy: Set<string>
         requiresTechlab: boolean
         isMorph: boolean
