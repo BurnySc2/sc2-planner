@@ -46,11 +46,15 @@ class OptimizeLogic {
             const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings[
                 "maximizeWorkersOption2"
             ]
+            const maximizeWorkersOption3 = !!currentGamelogic.optimizeSettings[
+                "maximizeWorkersOption3"
+            ]
             ret = this.maximizeWorkers(
                 currentGamelogic,
                 buildOrder,
                 maximizeWorkersOption1,
-                maximizeWorkersOption2
+                maximizeWorkersOption2,
+                maximizeWorkersOption3
             )
         }
 
@@ -106,7 +110,7 @@ class OptimizeLogic {
      * Adds supply to a bo wherever it's needed
      * gamelogic is assumed to have been run until the end
      */
-    addSupply(gamelogic: GameLogic): GameLogic {
+    addSupply(gamelogic: GameLogic): [GameLogic, number] {
         const supplyItem = supplyUnitNameByRace[this.race]
         let addedSupply = 0
         while (
@@ -116,11 +120,11 @@ class OptimizeLogic {
         ) {
             // Start getting additional supply 1 bo item before the one needing it
             const bo = cloneDeep(gamelogic.bo)
-            bo.splice(gamelogic.boIndex - 1, 0, supplyItem) //TODO2 minus [0, 1, 2, 3] should be tested here for perfect results, not just minus [1]
+            bo.splice(gamelogic.boIndex - 1, 0, cloneDeep(supplyItem)) //TODO2 minus [0, 1, 2, 3] should be tested here for perfect results, not just minus [1]
             addedSupply++
             gamelogic = this.simulateBo(bo)
         }
-        return gamelogic
+        return [gamelogic, addedSupply]
     }
 
     /**
@@ -130,11 +134,11 @@ class OptimizeLogic {
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         removeWorkersBefore: boolean,
-        addNecessarySupply: boolean
+        addNecessarySupply: boolean,
+        removeSupplyBefore: boolean
     ): OptimizationReturn {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
-        const supplyItem = supplyUnitNameByRace[this.race]
         let initialWorkerCount = 0
         for (let unit of currentGamelogic.units) {
             if (unit.name === worker.name) {
@@ -142,7 +146,14 @@ class OptimizeLogic {
             }
         }
 
-        const bo = cloneDeep(buildOrder)
+        let initialBOWorkerCount = 0
+        for (let item of currentGamelogic.bo) {
+            if (item.name === worker.name) {
+                initialBOWorkerCount++
+            }
+        }
+
+        let bo = cloneDeep(buildOrder)
 
         // Remove items before
         if (removeWorkersBefore) {
@@ -150,13 +161,15 @@ class OptimizeLogic {
         }
 
         // Remove supply before
-        if (addNecessarySupply) {
+        if (removeSupplyBefore && addNecessarySupply) {
+            const supplyItem = supplyUnitNameByRace[this.race]
             this.removeFromBO(bo, supplyItem.name)
         }
 
         let bestGameLogic: GameLogic = currentGamelogic
         let gamelogic: GameLogic = currentGamelogic
         let addedWorkerCount = 0
+        let addedSupplyCount = 0
         for (let whereToAddWorker = 0; whereToAddWorker <= bo.length; whereToAddWorker++) {
             let isBetter = false
             if (whereToAddWorker < bo.length && bo[whereToAddWorker].name === worker.name) {
@@ -164,16 +177,18 @@ class OptimizeLogic {
             }
             do {
                 let boToTest = cloneDeep(bo)
-                boToTest.splice(whereToAddWorker, 0, worker)
+                boToTest.splice(whereToAddWorker, 0, cloneDeep(worker))
                 gamelogic = this.simulateBo(boToTest)
+                let addedSupply = 0
                 if (addNecessarySupply) {
-                    gamelogic = this.addSupply(gamelogic)
+                    ;[gamelogic, addedSupply] = this.addSupply(gamelogic)
                 }
                 isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
                 if (isBetter) {
-                    bo.splice(whereToAddWorker, 0, worker)
-                    whereToAddWorker++
-                    addedWorkerCount++
+                    bo = gamelogic.bo
+                    addedWorkerCount += 1
+                    addedSupplyCount += addedSupply
+                    whereToAddWorker += 1 + addedSupply
                     bestGameLogic = gamelogic
                 }
             } while (
@@ -191,6 +206,16 @@ class OptimizeLogic {
             ]
         }
         //else
+        const supplyMessage = addedSupplyCount
+            ? ` and ${addedSupplyCount} ${supplyUnitNameByRace[this.race].name}(s)`
+            : ""
+        const workerCountDiff = addedWorkerCount - initialBOWorkerCount
+        const newWorkerCount =
+            workerCountDiff !== 0 && initialBOWorkerCount > 1
+                ? ` (${Math.abs(workerCountDiff)} ${
+                      workerCountDiff < 0 ? "less" : "more"
+                  } than before}`
+                : ""
         return [
             {
                 race: this.race,
@@ -200,7 +225,7 @@ class OptimizeLogic {
                 hoverIndex: -1,
             },
             {
-                success: `Added ${addedWorkerCount} workers!`,
+                success: `Added ${addedWorkerCount} worker(s)${newWorkerCount}${supplyMessage}`,
             },
         ]
     }
@@ -243,11 +268,11 @@ class OptimizeLogic {
                 continue
             }
             let boToTest = cloneDeep(bo)
-            boToTest.splice(whereToAddInject, 0, itemToAdd)
+            boToTest.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
             gamelogic = this.simulateBo(boToTest)
             const isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
             if (isBetter) {
-                bo.splice(whereToAddInject, 0, itemToAdd)
+                bo.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
                 addedItemsCount++
                 bestGameLogic = gamelogic
             }
