@@ -79,6 +79,7 @@ const CLASSES = {
     // Only export import
     dropDownButton:
         "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-pointer rounded border border-black border-black border-solid shadow",
+    dropDownWideButton: "w-full hover:bg-gray-400 p-2 flex flex-row justify-between cursor-pointer",
     // Only settings
     dropDownLabel: "hover:bg-gray-400 px-2 flex flex-row justify-between",
     dropDownInput: "rounded w-20 mx-2 z-50",
@@ -89,6 +90,7 @@ const CLASSES = {
         "hover:bg-blue-500 relative bg-gray-300 text-gray-700 font-semibold mx-1 py-2 px-4 rounded items-center select-none h-10",
     tinyButtons:
         "hover:bg-blue-500 bg-gray-300 text-gray-700 font-semibold mx-1 py-0 px-1 rounded items-center select-none h-6 w-6 cursor-pointer",
+    centeredButton: "text-center w-full",
 }
 
 export default CLASSES

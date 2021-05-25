@@ -11,6 +11,7 @@ import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
 import Optimize from "./Optimize"
 import Logging from "./Logging"
+import Read from "./Read"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
@@ -424,6 +425,7 @@ export default withRouter(
         }
 
         render() {
+            const read = !Read.isSupported() ? "" : <Read gamelogic={this.state.gamelogic} />
             return (
                 <div
                     className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
@@ -451,6 +453,7 @@ export default withRouter(
                                 applyOpitimization={this.applyOpitimization}
                                 log={this.log}
                             />
+                            {read}
                             <Logging onLog={this.onLog} undoState={this.onUndoState} />
 
                             <div className="absolute w-full h-0 text-right">
