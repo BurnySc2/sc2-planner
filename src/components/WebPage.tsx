@@ -442,6 +442,7 @@ export default withRouter(
                                 updateSettings={this.updateSettings}
                             />
                             <Optimize
+                                race={this.state.race}
                                 optimizeSettings={this.state.optimizeSettings}
                                 updateOptimize={this.updateOptimize}
                                 applyOpitimization={this.applyOpitimization}

@@ -12,5 +12,4 @@ CUSTOMACTIONS.forEach((customAction) => {
     // Load image from path
     // customAction["image"] = require(`../icons/png/${customAction.path}`)
 })
-
 export { CUSTOMACTIONS, CUSTOMACTIONS_BY_NAME, CUSTOMACTIONS_BY_ID }

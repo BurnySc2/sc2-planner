@@ -55,7 +55,32 @@ class OptimizeLogic {
         }
 
         if (optimizationList.indexOf("removeInjectsBeforeMaximizing") >= 0) {
-            ret = this.maximizeInjects(currentGamelogic, buildOrder)
+            ret = this.maximizeAddingItem(
+                currentGamelogic,
+                buildOrder,
+                { name: "inject", type: "action" },
+                !!this.optimizeSettings.removeInjectsBeforeMaximizing,
+                BO_ITEMS["Queen"]
+            )
+        }
+
+        if (optimizationList.indexOf("removeNexusChronosBeforeMaximizing") >= 0) {
+            ret = this.maximizeAddingItem(
+                currentGamelogic,
+                buildOrder,
+                { name: "chronoboost_busy_nexus", type: "action" },
+                !!this.optimizeSettings.removeNexusChronosBeforeMaximizing
+            )
+        }
+
+        if (optimizationList.indexOf("removeMULEsBeforeMaximizing") >= 0) {
+            ret = this.maximizeAddingItem(
+                currentGamelogic,
+                buildOrder,
+                { name: "call_down_mule", type: "action" },
+                !!this.optimizeSettings.removeMULEsBeforeMaximizing,
+                BO_ITEMS["OrbitalCommand"]
+            )
         }
 
         if (ret[0] !== undefined && ret[1] !== undefined) {
@@ -64,14 +89,17 @@ class OptimizeLogic {
         return ret
     }
 
-    removeFromBO(bo: IBuildOrderElement[], itemName: string): void {
+    removeFromBO(bo: IBuildOrderElement[], itemName: string): number {
+        let removeCount = 0
         for (let i = 0; i < bo.length; i++) {
             const item = bo[i]
             if (item.name === itemName) {
+                removeCount++
                 bo.splice(i, 1)
                 i--
             }
         }
+        return removeCount
     }
 
     /**
@@ -180,29 +208,29 @@ class OptimizeLogic {
     /**
      * Adds as many injects as possible
      */
-    maximizeInjects(
+    maximizeAddingItem(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
-        buildOrder: Array<IBuildOrderElement>
+        buildOrder: Array<IBuildOrderElement>,
+        itemToAdd: IBuildOrderElement,
+        removeBefore: boolean,
+        itemToStartAtt?: IBuildOrderElement
     ): OptimizationReturn {
         const currentFrameCount = currentGamelogic.frame
-        const inject = BO_ITEMS["inject"]
 
         const bo = cloneDeep(buildOrder)
 
         // Remove items before
-        if (this.optimizeSettings.removeInjectsBeforeMaximizing) {
-            this.removeFromBO(bo, inject.name)
-        }
+        const removedCount = removeBefore ? this.removeFromBO(bo, itemToAdd.name) : 0
 
         let bestGameLogic: GameLogic = currentGamelogic
         let gamelogic: GameLogic = currentGamelogic
-        let addedInjects = 0
-        const firstQueenPosition = findIndex(bo, BO_ITEMS["Queen"])
-        if (firstQueenPosition < 0) {
+        let addedItemsCount = -removedCount
+        const firstQueenPosition = itemToStartAtt === undefined ? 0 : findIndex(bo, itemToStartAtt)
+        if (itemToStartAtt !== undefined && firstQueenPosition < 0) {
             return [
                 undefined,
                 {
-                    notice: "Queens are needed before trying to maximize injects",
+                    notice: `A ${itemToStartAtt.name} is needed before trying to maximize`,
                 },
             ]
         }
@@ -211,27 +239,24 @@ class OptimizeLogic {
             whereToAddInject <= bo.length;
             whereToAddInject++
         ) {
-            if (whereToAddInject < bo.length && bo[whereToAddInject].name === inject.name) {
+            if (whereToAddInject < bo.length && bo[whereToAddInject].name === itemToAdd.name) {
                 continue
             }
             let boToTest = cloneDeep(bo)
-            boToTest.splice(whereToAddInject, 0, inject)
+            boToTest.splice(whereToAddInject, 0, itemToAdd)
             gamelogic = this.simulateBo(boToTest)
             const isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
             if (isBetter) {
-                bo.splice(whereToAddInject, 0, inject)
-                addedInjects++
+                bo.splice(whereToAddInject, 0, itemToAdd)
+                addedItemsCount++
                 bestGameLogic = gamelogic
             }
         }
-
+        const asManyAsPossible = {
+            notice: "There are as many as possible already",
+        }
         if (bestGameLogic === currentGamelogic) {
-            return [
-                undefined,
-                {
-                    notice: "There are as many injects as possible already",
-                },
-            ]
+            return [undefined, asManyAsPossible]
         }
         //else
         return [
@@ -242,9 +267,11 @@ class OptimizeLogic {
                 settings: this.customSettings,
                 hoverIndex: -1,
             },
-            {
-                success: `Added ${addedInjects} injects!`,
-            },
+            addedItemsCount === 0
+                ? asManyAsPossible
+                : {
+                      success: `Added ${addedItemsCount}`,
+                  },
         ]
     }
 

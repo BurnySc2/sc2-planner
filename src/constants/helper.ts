@@ -40,7 +40,7 @@ const getImageOfItem = (item: { name: string; type: string }): string => {
     return image
 }
 
-const defaultSettings = [
+const defaultSettings: Array<ISettingsElement> = [
     {
         // Pretty name displayed in gui
         name: "Worker start delay",
@@ -133,7 +133,7 @@ defaultSettings.forEach((item) => {
     settingsDefaultValues[item.n] = item.v
 })
 
-const defaultOptimizeSettings = [
+const defaultOptimizeSettings: Array<ISettingsElement> = [
     {
         // Pretty name displayed in gui
         name: "Maximize workers up to",
@@ -151,9 +151,10 @@ const defaultOptimizeSettings = [
         max: 200,
         // Step size of values in GUI if you press the arrow things
         step: 1,
+        apply: "Add as many workers as possible",
     },
     {
-        name: "Remove workers before maxing",
+        name: "Remove workers before",
         tooltip: "Remove all workers before adding as many.",
         variableName: "maximizeWorkersOption1",
         n: "mw1",
@@ -174,7 +175,7 @@ const defaultOptimizeSettings = [
     },
 
     {
-        name: "Add as many larva injects as possible. Remove existing injects:",
+        name: "Remove injects before",
         tooltip: "You need at least one queen for this optimizaion.",
         variableName: "removeInjectsBeforeMaximizing",
         n: "ribm",
@@ -182,6 +183,34 @@ const defaultOptimizeSettings = [
         min: 0,
         max: 1,
         step: 1,
+        races: "zerg",
+        apply: "Add as many injects as possible",
+    },
+
+    {
+        name: "Remove chronos on nexus before",
+        tooltip: "You need at least one nexus for this optimizaion.",
+        variableName: "removeNexusChronosBeforeMaximizing",
+        n: "rncbm",
+        v: 0,
+        min: 0,
+        max: 1,
+        step: 1,
+        races: "protoss",
+        apply: "Add as many chronos on nexus as possible",
+    },
+
+    {
+        name: "Remove MULEs before",
+        tooltip: "You need at least one Orbital Command for this optimizaion.",
+        variableName: "removeMULEsBeforeMaximizing",
+        n: "rmbm",
+        v: 0,
+        min: 0,
+        max: 1,
+        step: 1,
+        races: "terran",
+        apply: "Add as many MULEs as possible",
     },
 ]
 

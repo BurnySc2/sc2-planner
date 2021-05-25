@@ -3,9 +3,10 @@ import ReactTooltip from "react-tooltip"
 import { filter } from "lodash"
 
 import CLASSES from "../constants/classes"
-import { ISettingsElement, Log } from "../constants/interfaces"
+import { ISettingsElement, Log, IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
+    race: IAllRaces
     optimizeSettings: Array<ISettingsElement>
     updateOptimize: (fieldKey: string, fieldValue: number) => void
     applyOpitimization: (optimizationList: string[]) => Log | undefined
@@ -71,6 +72,9 @@ export default class Optimize extends Component<MyProps, MyState> {
     }
 
     createInput(item: ISettingsElement): JSX.Element {
+        if (item.min === undefined) {
+            return <></>
+        }
         return item.min === 0 && item.max === 1 ? (
             <div key={item.n} className={CLASSES.dropDownSubContainer}>
                 <label
@@ -124,7 +128,9 @@ export default class Optimize extends Component<MyProps, MyState> {
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
         const optionlessSettings = filter(
             this.props.optimizeSettings,
-            (setting: ISettingsElement) => !/Option[0-9]+/.test(`${setting.variableName}`)
+            (setting: ISettingsElement) =>
+                !/Option[0-9]+/.test(`${setting.variableName}`) &&
+                (setting.races === undefined || `${setting.races}`.indexOf(this.props.race) >= 0)
         )
 
         const settingsElements = optionlessSettings.map((item, index) => {
@@ -132,15 +138,20 @@ export default class Optimize extends Component<MyProps, MyState> {
                 new RegExp(`^${item.variableName}Option[0-9]+$`).test(`${setting.variableName}`)
             )
             const additionalField = addiItems.map((item) => this.createInput(item))
+            const classes = [
+                CLASSES.dropDownContainer,
+                "flex flex-col",
+                index > 0 ? "border-t border-black pt-3" : "",
+            ]
             return (
-                <div key={index} className={CLASSES.dropDownContainer + "flex flex-col"}>
+                <div key={index} className={classes.join(" ")}>
                     {this.createInput(item)}
                     {additionalField}
                     <div
-                        className={`${CLASSES.dropDownButton} pb-1`}
+                        className={`${CLASSES.dropDownButton} m-2 p-2`}
                         onClick={(e) => this.onApply(e, item.variableName)}
                     >
-                        Apply
+                        {item.apply}
                     </div>
                 </div>
             )
