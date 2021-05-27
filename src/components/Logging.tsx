@@ -87,15 +87,20 @@ export default class Logging extends Component<MyProps, MyState> {
                     )
                 }
             })
-            messages.push(
-                <div
-                    key="closeButton"
-                    className={CLASSES.tinyButtons + " ml-2"}
-                    onClick={() => this.onClose()}
-                >
-                    ✖
-                </div>
-            )
+            if (log.element) {
+                messages.push(log.element)
+            }
+            if (!log.hideCloseButton) {
+                messages.push(
+                    <div
+                        key="closeButton"
+                        className={CLASSES.tinyButtons + " ml-2"}
+                        onClick={() => this.onClose()}
+                    >
+                        ✖
+                    </div>
+                )
+            }
         }
 
         const style = {

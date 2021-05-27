@@ -91,6 +91,14 @@ const CLASSES = {
     tinyButtons:
         "hover:bg-blue-500 bg-gray-300 text-gray-700 font-semibold mx-1 py-0 px-1 rounded items-center select-none h-6 w-6 cursor-pointer",
     centeredButton: "text-center w-full",
+
+    readContainer: "flex flex-row items-end",
+    readCurrentTime: "m-2",
+    readInstructionList: "flex flex-row items-end",
+    readInstruction: "flex flex-col",
+    readTime: "text-center",
+    readIconGroup: "",
+    readIcon: "flex flex-row items-center",
 }
 
 export default CLASSES

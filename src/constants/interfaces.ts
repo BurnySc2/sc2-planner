@@ -115,6 +115,8 @@ interface Log {
     success?: string
     failure?: string
     undo?: Partial<WebPageState>
+    hideCloseButton?: boolean
+    element?: JSX.Element
 }
 
 interface IResourceHistory {

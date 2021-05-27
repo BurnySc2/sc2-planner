@@ -425,14 +425,18 @@ export default withRouter(
         }
 
         render() {
-            const read = !Read.isSupported() ? "" : <Read gamelogic={this.state.gamelogic} />
+            const read = !Read.isSupported() ? (
+                ""
+            ) : (
+                <Read gamelogic={this.state.gamelogic} log={this.log} />
+            )
             return (
                 <div
                     className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}
                 >
                     <div className="flex flex-col">
                         <Title />
-                        <div className="select-none flex flex-row items-center">
+                        <div className="select-none flex flex-row items-end">
                             <ImportExport
                                 gamelogic={this.state.gamelogic}
                                 rerunBuildOrder={(bo) =>

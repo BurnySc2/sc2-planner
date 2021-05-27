@@ -1,14 +1,22 @@
 import React, { Component } from "react"
 import ReactTooltip from "react-tooltip"
-import { find, countBy, uniq, last } from "lodash"
+import { find, countBy, uniqBy, last } from "lodash"
 
+import { getImageOfItem } from "../constants/helper"
 import CLASSES from "../constants/classes"
-import { GameLogic } from "../game_logic/gamelogic"
+import { GameLogic, Event } from "../game_logic/gamelogic"
+import { Log } from "../constants/interfaces"
 
-type Instruction = [string[], number, boolean]
+interface Instruction {
+    events: Event[]
+    when: number
+    isLastMessage: boolean
+    ingameWhen: number
+}
 
 interface MyProps {
     gamelogic: GameLogic
+    log: (log?: Log) => void
 }
 
 interface MyState {
@@ -82,7 +90,7 @@ export default class Read extends Component<MyProps, MyState> {
         })
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
+    onMouseEnter = (e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element) => {
         this.setState({
             tooltipText: item,
         })
@@ -181,12 +189,13 @@ export default class Read extends Component<MyProps, MyState> {
         }
 
         this.recognition.onnomatch = (event) => {
-            console.log("I didn't recognise what was said.")
+            this.props.log({
+                error: "I didn't recognise what was said.",
+            })
         }
 
         this.recognition.onerror = (event) => {
             const error = (event as any).error
-            console.log("Error occurred in recognition: " + error)
             if (error !== "no-speech") {
                 this.stopReading()
             }
@@ -211,62 +220,134 @@ export default class Read extends Component<MyProps, MyState> {
     }
 
     readBuildOrderWithoutTimer(startAt = 0) {
+        // Prepare BO instructions
         const instructionList: Instruction[] = []
         const lastEvent = this.props.gamelogic.eventLog[this.props.gamelogic.eventLog.length - 1]
         let prevInstruction: Instruction | undefined
         let boEndTime = 0
         for (let event of this.props.gamelogic.eventLog) {
-            const time = (event.start * 1000) / 22.4 - startAt * 1000
-            if (time >= 0) {
+            const when = (event.start * 1000) / 22.4 - startAt * 1000
+            if (when >= 0) {
                 const isLastMessage = event === lastEvent
-                const text = event.name.replace(/_/g, " ")
                 boEndTime = Math.max(boEndTime, event?.end || event.start)
-                if (prevInstruction && prevInstruction[1] === time) {
-                    prevInstruction[0].push(text)
-                    prevInstruction[2] = isLastMessage
+                if (prevInstruction && prevInstruction.when === when) {
+                    prevInstruction.events.push(event)
+                    prevInstruction.isLastMessage = isLastMessage
                 } else {
-                    prevInstruction = [[text], time, isLastMessage]
+                    prevInstruction = {
+                        events: [event],
+                        when,
+                        ingameWhen: Math.floor(event.start / 22.4),
+                        isLastMessage,
+                    }
                     instructionList.push(prevInstruction)
-                }
-                if (isLastMessage) {
-                    const minutes = Math.floor(boEndTime / 22.4 / 60)
-                    const seconds = Math.floor(boEndTime / 22.4) % 60
-                    prevInstruction[0].push(
-                        `Then the build order ends at ${
-                            minutes >= 1 ? `${minutes}:${seconds}` : `${seconds} seconds`
-                        }`
-                    )
                 }
             }
         }
 
-        instructionList.forEach((instruction) => {
-            const items = instruction[0]
-            const count = countBy(items)
-            const uniqItems = uniq(items)
-            const itemsWithPlurals = uniqItems.map((item) =>
-                count[item] === 1 ? item : `${count[item]} ${item}s`
+        const shownInstructions: JSX.Element[][] = []
+        instructionList.forEach((instruction, i) => {
+            const events = instruction.events
+            const counts = countBy(events, "name")
+            const uniqItems = uniqBy(events, "name")
+
+            // Set voice timers
+            const eventsWithPlurals = uniqItems.map((event) => {
+                const name = event.name.replace(/_/g, " ")
+                const count = counts[event.name]
+                return count === 1 ? name : `${count} ${name}s`
+            })
+            let text =
+                eventsWithPlurals.length === 1
+                    ? eventsWithPlurals[0]
+                    : `${eventsWithPlurals.slice(0, -1).join(", ")}, and ${last(eventsWithPlurals)}`
+            if (instruction.isLastMessage) {
+                text += ` Then the build order ends at ${this.secondsToTimestamp(
+                    Math.floor(boEndTime / 22.4),
+                    "seconds"
+                )}`
+            }
+
+            this.speak(text, instruction.when, instruction.isLastMessage)
+
+            // Prepare logs
+            const eventElements: JSX.Element[] = uniqItems.map((event, j) => {
+                const count = counts[event.name]
+                const image = getImageOfItem(event)
+                const element = <img key={`read_icon_${i}_${j}`} src={image} alt={event.name} />
+                return count === 1 ? (
+                    element
+                ) : (
+                    <span key={`read_group_${i}_${j}`} className={CLASSES.readIcon}>
+                        {element} ✖{count}
+                    </span>
+                )
+            })
+            const elements = (
+                <div key={`instruc_${i}`} className={CLASSES.readInstruction}>
+                    <div className={CLASSES.readIconGroup}>{eventElements}</div>
+                    <div className={CLASSES.readTime}>
+                        {this.secondsToTimestamp(instruction.ingameWhen)}
+                    </div>
+                </div>
             )
-            const text =
-                itemsWithPlurals.length === 1
-                    ? itemsWithPlurals[0]
-                    : `${itemsWithPlurals.slice(0, -1).join(", ")}, and ${last(itemsWithPlurals)}`
-            this.speak(text, instruction[1], instruction[2])
+            for (
+                let ingameTime = instructionList[i - 2]?.ingameWhen || 0;
+                ingameTime < instruction.ingameWhen;
+                ingameTime++
+            ) {
+                if (shownInstructions[ingameTime] === undefined) {
+                    shownInstructions[ingameTime] = []
+                }
+                shownInstructions[ingameTime].push(elements)
+            }
         })
+
+        // Set log timers
+        for (let ingameTime = startAt; shownInstructions[ingameTime]; ingameTime++) {
+            this.lineHandlers.push(
+                setTimeout(() => {
+                    this.props.log({
+                        element: (
+                            <div key="instructions" className={CLASSES.readContainer}>
+                                <div className={CLASSES.readCurrentTime}>
+                                    {this.secondsToTimestamp(ingameTime)}
+                                </div>
+                                <div className={CLASSES.readInstructionList}>
+                                    {shownInstructions[ingameTime]}
+                                </div>
+                            </div>
+                        ),
+                        hideCloseButton: true,
+                    })
+                }, (ingameTime - startAt) * 1000)
+            )
+        }
+        this.lineHandlers.push(
+            setTimeout(() => this.props.log(), (shownInstructions.length - startAt + 7) * 1000)
+        )
+    }
+
+    secondsToTimestamp(time: number, secondsText = "s"): string {
+        const minutes = Math.floor(time / 60)
+        const seconds = time % 60
+        return minutes >= 1
+            ? `${minutes}:${seconds > 9 ? "" : "0"}${seconds}`
+            : `${seconds}${secondsText}`
     }
 
     speak(
-        whatToSay: string,
+        events: string,
         when = 0,
         isLastMessage = false,
         language = "Google UK English Female"
-    ) {
+    ): void {
         if (this.synth.speaking) {
             this.stop()
         }
         this.lineHandlers.push(
             setTimeout(() => {
-                const utterThis = new SpeechSynthesisUtterance(whatToSay)
+                const utterThis = new SpeechSynthesisUtterance(events)
                 if (utterThis) {
                     if (!this.voices.length) {
                         // Insist on initializing this.voices, sometimes it doesn't work straight away
@@ -300,6 +381,7 @@ export default class Read extends Component<MyProps, MyState> {
     stop() {
         this.lineHandlers.forEach(clearTimeout)
         this.lineHandlers = []
+        this.props.log()
         this.synth.cancel()
     }
 
@@ -317,7 +399,7 @@ export default class Read extends Component<MyProps, MyState> {
         } cursor-pointer`
 
         const mouseEnterFunc = (tooltip: string) => (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>
+            e: React.MouseEvent<HTMLElement, MouseEvent>
         ) => {
             this.onMouseEnter(e, <div>{tooltip}</div>)
         }
@@ -327,7 +409,8 @@ export default class Read extends Component<MyProps, MyState> {
         ) : (
             <div className={CLASSES.dropDownContainer}>
                 <div className={CLASSES.dropDownSubContainer}>
-                    <div
+                    <label
+                        htmlFor="voiceCommand"
                         className={CLASSES.dropDownLabel}
                         data-tip
                         data-for="readTooltip"
@@ -340,8 +423,10 @@ export default class Read extends Component<MyProps, MyState> {
                         or e.g. "Go 2:15"
                         <br />
                         Stop listening at "Stop"
-                    </div>
+                    </label>
                     <input
+                        name="voiceCommand"
+                        id="voiceCommand"
                         className={CLASSES.dropDownInput}
                         type="checkbox"
                         checked={this.state.startAtSpeach}
