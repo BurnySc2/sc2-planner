@@ -320,6 +320,7 @@ export default withRouter(
                     state.insertIndex = stateUpdate.insertIndex
                     this.setState(stateUpdate)
                 }
+                this.updateHistory(state)
             } else {
                 const gamelogic = new GameLogic(
                     this.state.race,
