@@ -67,7 +67,7 @@ const CLASSES = {
     boResourceWideBar: "m-0 p-0",
     boResourceBorderBar: "flex items-end m-0 p-0 border border-black overflow-hidden",
     boResource: "m-0 p-0 h-full border-solid",
-    boResourceHighlight: "z-60 absolute top-0 left-0 border border-black h-full",
+    boResourceHighlight: "z-60 absolute top-0 left-0 m-0 p-0 border border-black h-full",
     boElementContainer: "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",

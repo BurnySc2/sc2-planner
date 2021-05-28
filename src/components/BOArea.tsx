@@ -405,7 +405,7 @@ export default class BOArea extends Component<MyProps, MyState> {
               })
 
         const highlightStyle = {
-            left: widthFactor * this.state.highlightStart,
+            left: widthFactor * this.state.highlightStart + 1,
             width: widthFactor * (this.state.highlightEnd - this.state.highlightStart),
         }
         const resourceHighlight = !highlightStyle.width ? (
@@ -459,7 +459,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             return <div></div>
         }
         return (
-            <div className={`${CLASSES.boArea} ${CLASSES.boAreaPadding}`}>
+            <div className={`${CLASSES.boArea}`}>
                 <ReactTooltip
                     place="bottom"
                     id="boAreaTooltip"
