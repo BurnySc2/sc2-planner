@@ -33,6 +33,7 @@ export default class Read extends Component<MyProps, MyState> {
     startTime: number
     listeningToSpeach: boolean
     recognition: SpeechRecognition | undefined
+    ingameTime: number = 0
     /**
      * A small settings menu to enable and disable things
      * And to be able to adjust certain sizes
@@ -138,7 +139,7 @@ export default class Read extends Component<MyProps, MyState> {
             var x = /^[0-9]+$/.test(w) ? +w : small[w]
             if (x != null) {
                 g = g + x
-            } else if (w === "hundred" || w === "100") {
+            } else if (w === "hundred" || w === "100" || /^minutes?$/.test(w)) {
                 g = g * 100
             }
         })
@@ -169,20 +170,26 @@ export default class Read extends Component<MyProps, MyState> {
             if (/^stop$/.test(voice)) {
                 this.stopReading()
                 this.speak("Stopping")
+            } else if (/^pause$/.test(voice)) {
+                this.pauseSpeach()
+                this.speak(`Pausing at ${this.timeToWords(this.ingameTime)}`)
+            } else if (/^resume$/.test(voice)) {
+                this.speak(`Resuming at ${this.timeToWords(this.ingameTime)}`)
+                this.readBuildOrder(this.ingameTime)
             } else if (/^go\b/.test(voice)) {
                 this.stop()
                 const numberWords = voice.replace(/^go\s+/, "")
                 const time = this.wordsToNumber(numberWords)
                 if (time) {
+                    const speach = this.timeToWords(time)
                     if (time >= 60) {
                         const minutes = Math.floor(time / 100)
                         const seconds = time % 100
                         startTime = minutes * 60 + seconds
-                        this.speak(`${minutes}:${seconds}`)
                     } else {
                         startTime = time
-                        this.speak(`${startTime} seconds`)
                     }
+                    this.speak(speach)
                 }
                 this.readBuildOrder(startTime)
             }
@@ -205,6 +212,20 @@ export default class Read extends Component<MyProps, MyState> {
             if (this.listeningToSpeach) {
                 this.recognition?.start()
             }
+        }
+    }
+
+    timeToWords(time: number): string {
+        if (time >= 60) {
+            const minutes = Math.floor(time / 100)
+            const seconds = time % 100
+            if (seconds === 0) {
+                return `${minutes} minutes`
+            } else {
+                return `${minutes}:${seconds}`
+            }
+        } else {
+            return `${time} seconds`
         }
     }
 
@@ -304,9 +325,11 @@ export default class Read extends Component<MyProps, MyState> {
         })
 
         // Set log timers
+        this.ingameTime = startAt
         for (let ingameTime = startAt; shownInstructions[ingameTime]; ingameTime++) {
             this.lineHandlers.push(
                 setTimeout(() => {
+                    this.ingameTime = ingameTime
                     this.props.log({
                         element: (
                             <div key="instructions" className={CLASSES.readContainer}>
@@ -369,7 +392,7 @@ export default class Read extends Component<MyProps, MyState> {
         )
     }
 
-    stopReading() {
+    stopReading(): void {
         this.listeningToSpeach = false
         this.recognition?.stop()
         this.stop()
@@ -378,10 +401,15 @@ export default class Read extends Component<MyProps, MyState> {
         })
     }
 
-    stop() {
+    stop(): void {
+        this.pauseSpeach()
+        this.props.log()
+        this.synth.cancel()
+    }
+
+    pauseSpeach(): void {
         this.lineHandlers.forEach(clearTimeout)
         this.lineHandlers = []
-        this.props.log()
         this.synth.cancel()
     }
 
