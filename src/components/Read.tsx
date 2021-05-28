@@ -502,7 +502,7 @@ export default class Read extends Component<MyProps, MyState> {
                             className={CLASSES.dropDownWideButton}
                             onClick={(e) => this.startReading(this.startTime)}
                         >
-                            <span className={CLASSES.centeredButton}>Read</span>
+                            <span className={CLASSES.centeredButton}>Read (Beta)</span>
                         </div>
                     </div>
                 </div>

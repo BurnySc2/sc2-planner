@@ -130,7 +130,7 @@ const defaultSettings: Array<ISettingsElement> = [
         tooltip: "The height of the resource rows displayed in the browser.",
         variableName: "htmlResourceHeight",
         n: "rh",
-        v: 2,
+        v: 1.5,
         min: 0,
         max: 10,
         step: 0.1,
@@ -161,7 +161,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         max: 200,
         // Step size of values in GUI if you press the arrow things
         step: 1,
-        apply: "Add as many workers as possible",
+        apply: "Add as many workers as possible (Beta)",
     },
     {
         name: "Remove workers before",
@@ -204,7 +204,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         max: 1,
         step: 1,
         races: "protoss",
-        apply: "Add as many chronos on nexus as possible",
+        apply: "Add as many chronos on nexus as possible (Beta)",
     },
 
     {
@@ -217,7 +217,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         max: 1,
         step: 1,
         races: "terran",
-        apply: "Add as many MULEs as possible",
+        apply: "Add as many MULEs as possible (Beta)",
     },
 
     {
@@ -225,12 +225,12 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         tooltip: "You need at least one queen for this optimizaion.",
         variableName: "maximizeInjects",
         n: "mi",
-        v: 1,
+        v: 0,
         min: 0,
         max: 1,
         step: 1,
         races: "zerg",
-        apply: "Add as many injects as possible",
+        apply: "Add as many injects as possible (Beta)",
     },
 ]
 
