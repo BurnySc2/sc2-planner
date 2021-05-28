@@ -448,9 +448,9 @@ export default class Read extends Component<MyProps, MyState> {
                     >
                         Start reading when you say "Go"
                         <br />
-                        or e.g. "Go 2:15"
+                        or "Go 2:15". React to "Stop",
                         <br />
-                        Stop listening at "Stop"
+                        "Pause" and "Resume"
                     </label>
                     <input
                         name="voiceCommand"
