@@ -66,7 +66,7 @@ export default class Logging extends Component<MyProps, MyState> {
                         className="underline ml-2 text-purple-800"
                         onClick={this.onUndo}
                     >
-                        undo
+                        undo (ctrl+z)
                     </button>
                 )
             }

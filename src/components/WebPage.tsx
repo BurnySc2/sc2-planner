@@ -35,18 +35,31 @@ import {
 } from "../constants/interfaces"
 import CLASSES from "../constants/classes"
 
+interface Save {
+    search: string
+    insertIndex: number
+}
+
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
 export default withRouter(
     class WebPage extends Component<RouteComponentProps, WebPageState> {
         onLogCallback: (line: Log | undefined) => void = () => null
+        history: Save[] = []
+        historyPosition: number = 0
+
         // TODO I dont know how to fix these properly
         constructor(props: RouteComponentProps) {
             super(props)
 
             // Get information from url
             // is "" local dev, file:///home/burny/Github/sc2-planner-react/build/index.html local build, /sc2-planner/ on github pages
-            const urlParams = new URLSearchParams(this.props.location.search)
+            this.state = this.getStateFromUrl(this.props.location.search)
+            this.undoPush(this.state, this.props.location.search)
+        }
+
+        getStateFromUrl(urlSearch: string): WebPageState {
+            const urlParams = new URLSearchParams(urlSearch)
             const raceUrl: string | null = urlParams.get("race")
             const settingsEncoded: string | null = urlParams.get("settings")
             const optimizeSettingsEncoded: string | null = urlParams.get("optimizeSettings")
@@ -102,7 +115,7 @@ export default withRouter(
                 gamelogic.runUntilEnd()
             }
 
-            this.state = {
+            return {
                 race: race,
                 // Build order
                 // Each element needs to have an .image attached and tooltip with: name, minerals, vespene, time
@@ -119,13 +132,13 @@ export default withRouter(
             }
         }
 
-        updateUrl = (
-            race: string | undefined,
-            buildOrder: Array<IBuildOrderElement> | undefined,
-            settings: Array<ISettingsElement> | undefined,
-            optimizeSettings: Array<ISettingsElement> | undefined,
-            pushHistory = false
-        ) => {
+        updateHistory = (state: Partial<WebPageState>, pushHistory = false) => {
+            const race: IAllRaces = state?.race || state?.gamelogic?.race || "terran"
+            const settings: Array<ISettingsElement> =
+                state?.settings || state?.gamelogic?.customSettings || []
+            const optimizeSettings: Array<ISettingsElement> =
+                state?.optimizeSettings || state?.gamelogic?.customOptimizeSettings || []
+            const buildOrder: Array<IBuildOrderElement> = state?.bo || state?.gamelogic?.bo || []
             // See router props
             const newUrl = createUrlParams(race, settings, optimizeSettings, buildOrder)
 
@@ -135,17 +148,60 @@ export default withRouter(
             } else {
                 this.props.history.replace(`${newUrl}`)
             }
+
+            this.undoPush(state, newUrl)
         }
 
-        rerunBuildOrder(gamelogic: GameLogic, buildOrder: Array<IBuildOrderElement>) {
+        undoPush(state: Partial<WebPageState>, search: string): void {
+            const prevSearch = this.history[this.historyPosition - 1]?.search
+            if (prevSearch === search) {
+                return
+            }
+            this.history.splice(this.historyPosition)
+            this.history.push({ search, insertIndex: state?.insertIndex || 0 })
+            this.historyPosition = this.history.length
+        }
+
+        restoreSave(save: Save): void {
+            this.props.history.replace(save.search)
+            const state = this.getStateFromUrl(save.search)
+            state.insertIndex = save.insertIndex
+            this.setState(state)
+            this.log()
+        }
+
+        undo = () => {
+            if (this.historyPosition === 1) {
+                return
+            }
+            this.historyPosition--
+            const save = this.history[this.historyPosition - 1]
+            this.restoreSave(save)
+        }
+
+        redo(): void {
+            if (this.historyPosition === this.history.length) {
+                return
+            }
+            const save = this.history[this.historyPosition]
+            this.historyPosition++
+            this.restoreSave(save)
+        }
+
+        rerunBuildOrder(
+            gamelogic: GameLogic,
+            buildOrder: Array<IBuildOrderElement>
+        ): Partial<WebPageState> {
             const newGamelogic = GameLogic.simulatedBuildOrder(gamelogic, buildOrder)
-            this.setState({
+            const state = {
                 race: newGamelogic.race,
                 bo: buildOrder,
                 gamelogic: newGamelogic,
                 settings: newGamelogic.customSettings,
                 hoverIndex: -1,
-            })
+            }
+            this.setState(state)
+            return state
         }
 
         // TODO Pass the settings to Settings.js and let the user input handle it
@@ -166,7 +222,7 @@ export default withRouter(
                 this.state.optimizeSettings
             )
             this.rerunBuildOrder(gamelogic, this.state.bo)
-            this.updateUrl(this.state.race, this.state.bo, settings, this.state.optimizeSettings)
+            this.updateHistory({ gamelogic })
         }
 
         updateOptimize = (fieldKey: string, fieldValue: number) => {
@@ -186,7 +242,7 @@ export default withRouter(
                 cloneDeep(optimizeSettings)
             )
             this.rerunBuildOrder(gamelogic, this.state.bo)
-            this.updateUrl(this.state.race, this.state.bo, this.state.settings, optimizeSettings)
+            this.updateHistory({ gamelogic })
         }
 
         applyOpitimization = (optimizationList: string[]): Log | undefined => {
@@ -203,7 +259,7 @@ export default withRouter(
             if (state !== undefined) {
                 this.setState(state as WebPageState)
                 defaults(state, this.state)
-                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
+                this.updateHistory(state)
             }
             return log
         }
@@ -220,16 +276,16 @@ export default withRouter(
                 this.state.optimizeSettings
             )
             gamelogic.setStart()
-
-            this.setState({
+            const newState = {
                 race: race,
                 bo: [],
                 gamelogic: gamelogic,
                 insertIndex: 0,
-            })
+            }
+            this.setState(newState)
 
             // If settings are unchanged, change url to just '/race' instead of encoded settings
-            this.updateUrl(race, [], this.state.settings, this.state.optimizeSettings, true)
+            this.updateHistory(newState, true)
             // this.props.history.replace(`/${race}`)
             // this.props.history.push(`/race=${race}`)
         }
@@ -242,18 +298,14 @@ export default withRouter(
                 this.state.insertIndex
             )
 
-            this.updateUrl(
-                this.state.race,
-                gamelogic.bo,
-                this.state.settings,
-                this.state.optimizeSettings
-            )
             // Increment index because we appended a new build order item
-            this.setState({
+            const state = {
                 bo: gamelogic.bo,
                 gamelogic: gamelogic,
                 insertIndex: this.state.insertIndex + insertedItems,
-            })
+            }
+            this.setState(state)
+            this.updateHistory(state)
         }
 
         removeItemFromBO = (index: number) => {
@@ -262,7 +314,12 @@ export default withRouter(
 
             // TODO load snapshot from shortly before the removed bo index
             if (bo.length > 0) {
-                this.rerunBuildOrder(this.state.gamelogic, bo)
+                const state = this.rerunBuildOrder(this.state.gamelogic, bo)
+                if (this.state.insertIndex > this.state.hoverIndex) {
+                    const stateUpdate = { insertIndex: Math.max(0, this.state.insertIndex - 1) }
+                    state.insertIndex = stateUpdate.insertIndex
+                    this.setState(stateUpdate)
+                }
             } else {
                 const gamelogic = new GameLogic(
                     this.state.race,
@@ -271,18 +328,14 @@ export default withRouter(
                     this.state.optimizeSettings
                 )
                 gamelogic.setStart()
-                this.setState({
+                const state: Partial<WebPageState> = {
                     bo: bo,
                     gamelogic: gamelogic,
                     hoverIndex: -1,
-                })
-            }
-
-            this.updateUrl(this.state.race, bo, this.state.settings, this.state.optimizeSettings)
-
-            // Decrement index because we removed a build order item
-            if (this.state.insertIndex > this.state.hoverIndex) {
-                this.setState({ insertIndex: Math.max(0, this.state.insertIndex - 1) })
+                    insertIndex: 0,
+                }
+                this.setState(state as any)
+                this.updateHistory(state)
             }
         }
 
@@ -356,6 +409,25 @@ export default withRouter(
         }
 
         handleKeyDown = (e: KeyboardEvent) => {
+            // Undo/redo
+            if (e.metaKey || e.ctrlKey) {
+                // metaKey is for macs
+                if (e.which === 89) {
+                    this.redo()
+                    e.preventDefault()
+                    return
+                } else if (e.which === 90) {
+                    if (e.shiftKey) {
+                        // On macs, Cmd+Shift+z is redo
+                        this.redo()
+                    } else {
+                        this.undo()
+                    }
+                    e.preventDefault()
+                    return
+                }
+            }
+
             // Handle keyboard presses: Arrow keys (left / right) to change insert-index
             let currentIndex = this.state.insertIndex
             let targetIndex = currentIndex
@@ -408,7 +480,7 @@ export default withRouter(
             })
         }
 
-        log = (line: Log | undefined) => {
+        log = (line?: Log) => {
             this.onLogCallback(line)
         }
 
@@ -420,7 +492,7 @@ export default withRouter(
             if (state !== undefined) {
                 this.setState(state as WebPageState)
                 defaults(state, this.state)
-                this.updateUrl(state.race, state.bo, state.settings, this.state.optimizeSettings)
+                this.updateHistory(state)
             }
         }
 
@@ -443,7 +515,10 @@ export default withRouter(
                                     this.rerunBuildOrder(this.state.gamelogic, bo)
                                 }
                                 updateUrl={(race, bo, settings, optimizeSettings) =>
-                                    this.updateUrl(race, bo, settings, optimizeSettings, true)
+                                    this.updateHistory(
+                                        { race, bo, settings, optimizeSettings },
+                                        true
+                                    )
                                 }
                             />
                             <Settings
@@ -507,7 +582,12 @@ export default withRouter(
                                             this.rerunBuildOrder(this.state.gamelogic, bo)
                                         }
                                         updateUrl={(race, bo, settings, optimizeSettings) =>
-                                            this.updateUrl(race, bo, settings, optimizeSettings)
+                                            this.updateHistory({
+                                                race,
+                                                bo,
+                                                settings,
+                                                optimizeSettings,
+                                            })
                                         }
                                         changeHoverIndex={(index) => {
                                             this.changeHoverIndex(index)
