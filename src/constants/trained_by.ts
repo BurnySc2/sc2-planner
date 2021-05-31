@@ -191,6 +191,8 @@ TRAINED_BY["EvolutionChamber"].requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
+// Hardcoded fix for LurkerDenMP
+TRAINED_BY["LurkerDenMP"].requires = [["HydraliskDen", "Lair", "Drone"]]
 // Hardcoded fix for Ravager requiring Hatchery instead of RoachWarren
 TRAINED_BY["Ravager"].requires = [["Roach", "RoachWarren"]]
 // Hardcoded fix for when only GreaterSpire available

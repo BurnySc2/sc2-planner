@@ -6,7 +6,6 @@ import { BO_ITEMS, supplyUnitNameByRace } from "../constants/bo_items"
 import { incomeMinerals, incomeVespene } from "./income"
 
 import { cloneDeep, minBy, find, remove } from "lodash"
-
 import Unit from "./unit"
 import Event from "./event"
 import Task from "./task"
@@ -37,6 +36,7 @@ let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
+console.log("TRAINED_BY", TRAINED_BY)
 class GameLogic {
     race: IAllRaces
     bo: Array<IBuildOrderElement>
