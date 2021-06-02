@@ -9,7 +9,7 @@ interface MyProps {
     race: IAllRaces
     optimizeSettings: Array<ISettingsElement>
     updateOptimize: (fieldKey: string, fieldValue: number) => void
-    applyOpitimization: (optimizationList: string[]) => Log | undefined
+    applyOpitimization: (optimizationList: string[]) => Promise<Log | undefined>
     log: (log: Log | undefined) => void
 }
 
@@ -59,11 +59,11 @@ export default class Optimize extends Component<MyProps, MyState> {
         })
     }
 
-    onApply = (
+    onApply = async (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         optimizationName: string | number
     ) => {
-        const log = this.props.applyOpitimization([`${optimizationName}`])
+        const log = await this.props.applyOpitimization([`${optimizationName}`])
         this.props.log(log)
     }
 
@@ -150,6 +150,9 @@ export default class Optimize extends Component<MyProps, MyState> {
                     <div
                         className={`${CLASSES.dropDownButton} m-2 p-2`}
                         onClick={(e) => this.onApply(e, item.variableName)}
+                        onMouseEnter={(e) => this.mouseEnterFunc(e, item.tooltip)}
+                        data-tip
+                        data-for="optimizeSettingsTooltip"
                     >
                         {item.apply}
                     </div>

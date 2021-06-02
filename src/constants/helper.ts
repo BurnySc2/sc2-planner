@@ -2,7 +2,7 @@
 import lzbase62 from "lzbase62"
 import { isEqual, pick } from "lodash"
 
-import { ISettingsElement, IBuildOrderElement, IAllRaces } from "./interfaces"
+import { ISettingsElement, IBuildOrderElement, IAllRaces, Log } from "./interfaces"
 import UNITS_BY_NAME from "./units_by_name"
 import UPGRADES_BY_NAME from "./upgrade_by_name"
 import UPGRADES_BY_ID from "./upgrade_by_id"
@@ -232,6 +232,15 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         races: "zerg",
         apply: "Add as many injects as possible (Beta)",
     },
+
+    {
+        tooltip:
+            "Tries all possible swaps, and does it in multiple passes as long as it's more optimizing.",
+        variableName: "improveByReordering",
+        n: "ibr",
+        v: 0,
+        apply: "Improve BO end time by swaping items (Beta)",
+    },
 ]
 
 const optimizeSettingsDefaultValues: { [name: string]: number } = {}
@@ -453,6 +462,25 @@ const decodeSALT = (saltEncoding: string) => {
         race: race,
         bo: bo,
     }
+}
+/**
+ * Adds cancellation to a log line
+ * Returns a promise that rejects when the log is cancelled, so it can raise an exception
+ * Returned promise has to be wrapped in a function otherwise it's auto-resolved
+ */
+export async function cancelableLog(
+    logFunc: (line?: Log) => void,
+    line: Log
+): Promise<() => Promise<void>> {
+    let cancel: () => void = () => {}
+    const cancellationPromise = new Promise<void>((resolve, reject) => {
+        cancel = reject
+    })
+    line.cancel = cancel
+    logFunc(line)
+    await new Promise((resolve) => setTimeout(resolve, 10)) // Required pause to let the logFunc render to the DOM
+
+    return () => cancellationPromise
 }
 
 export {

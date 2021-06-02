@@ -47,6 +47,14 @@ export default class Logging extends Component<MyProps, MyState> {
         this.onClose()
     }
 
+    onCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
+        if (this.state.log?.cancel) {
+            this.state.log.cancel()
+        }
+        this.onClose()
+    }
+
     render() {
         const log = this.state.log
         const messages: JSX.Element[] = []
@@ -63,7 +71,7 @@ export default class Logging extends Component<MyProps, MyState> {
                     <button
                         key="undo"
                         style={style}
-                        className="underline ml-2 text-purple-800"
+                        className={CLASSES.linkButton}
                         onClick={this.onUndo}
                     >
                         undo (ctrl+z)
@@ -89,6 +97,25 @@ export default class Logging extends Component<MyProps, MyState> {
             })
             if (log.element) {
                 messages.push(log.element)
+            }
+            if (log.cancel !== undefined) {
+                const style = {
+                    background: "none!important",
+                    border: "none",
+                    color: "#069",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                }
+                messages.push(
+                    <button
+                        key="cancel"
+                        style={style}
+                        className={CLASSES.linkButton}
+                        onClick={this.onCancel}
+                    >
+                        cancel
+                    </button>
+                )
             }
             if (!log.hideCloseButton) {
                 messages.push(

@@ -36,7 +36,6 @@ let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
-console.log("TRAINED_BY", TRAINED_BY)
 class GameLogic {
     race: IAllRaces
     bo: Array<IBuildOrderElement>

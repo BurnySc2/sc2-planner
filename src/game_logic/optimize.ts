@@ -1,6 +1,6 @@
 import { cloneDeep, isEqual, findIndex } from "lodash"
 
-import { defaultOptimizeSettings } from "../constants/helper"
+import { defaultOptimizeSettings, cancelableLog } from "../constants/helper"
 import {
     IBuildOrderElement,
     ISettingsElement,
@@ -10,19 +10,35 @@ import {
 } from "../constants/interfaces"
 import { GameLogic } from "../game_logic/gamelogic"
 import { BO_ITEMS, workerNameByRace, supplyUnitNameByRace } from "../constants/bo_items"
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
+import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
+import UNITS_BY_NAME from "../constants/units_by_name"
 
 export type OptimizationReturn = [Partial<WebPageState> | undefined, Log | undefined]
+
+interface MaxReordParams {
+    swapPos: number
+    boCode: string
+    bo: Array<IBuildOrderElement>
+    boCodes: { [code: string]: true }
+    bestGameLogic: GameLogic
+    improvedSinceStart: boolean
+    improvedSinceLastPass: boolean
+}
 
 class OptimizeLogic {
     race: IAllRaces
     customSettings: Array<ISettingsElement>
     customOptimizeSettings: Array<ISettingsElement>
+    log: (line?: Log) => void
     optimizeSettings: { [name: string]: number }
+    nameToCode: { [name: string]: string }
 
     constructor(
         race: IAllRaces = "terran",
         customSettings: Array<ISettingsElement> = [],
-        customOptimizeSettings: Array<ISettingsElement> = []
+        customOptimizeSettings: Array<ISettingsElement> = [],
+        log: (line?: Log) => void
     ) {
         this.optimizeSettings = {}
         this.loadOptimizeSettings(defaultOptimizeSettings)
@@ -31,13 +47,26 @@ class OptimizeLogic {
         this.race = race || ("terran" as IAllRaces)
         this.customSettings = customSettings
         this.customOptimizeSettings = customOptimizeSettings
+        this.log = log
+
+        let code = 1
+        this.nameToCode = {}
+        for (let name in UNITS_BY_NAME) {
+            this.nameToCode[name] = String.fromCharCode(code++)
+        }
+        for (let name in CUSTOMACTIONS_BY_NAME) {
+            this.nameToCode[name] = String.fromCharCode(code++)
+        }
+        for (let name in UPGRADES_BY_NAME) {
+            this.nameToCode[name] = String.fromCharCode(code++)
+        }
     }
 
-    optimizeBuildOrder(
+    async optimizeBuildOrder(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         optimizationList: string[]
-    ): OptimizationReturn {
+    ): Promise<OptimizationReturn> {
         let ret: OptimizationReturn = [undefined, undefined]
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
             const maximizeWorkersOption1 = !!currentGamelogic.optimizeSettings[
@@ -49,7 +78,7 @@ class OptimizeLogic {
             const maximizeWorkersOption3 = !!currentGamelogic.optimizeSettings[
                 "maximizeWorkersOption3"
             ]
-            ret = this.maximizeWorkers(
+            ret = await this.maximizeWorkers(
                 currentGamelogic,
                 buildOrder,
                 maximizeWorkersOption1,
@@ -59,7 +88,7 @@ class OptimizeLogic {
         }
 
         if (optimizationList.indexOf("maximizeNexusChronos") >= 0) {
-            ret = this.maximizeAddingItem(
+            ret = await this.maximizeAddingItem(
                 currentGamelogic,
                 buildOrder,
                 { name: "chronoboost_busy_nexus", type: "action" },
@@ -68,7 +97,7 @@ class OptimizeLogic {
         }
 
         if (optimizationList.indexOf("maximizeMULEs") >= 0) {
-            ret = this.maximizeAddingItem(
+            ret = await this.maximizeAddingItem(
                 currentGamelogic,
                 buildOrder,
                 { name: "call_down_mule", type: "action" },
@@ -78,13 +107,17 @@ class OptimizeLogic {
         }
 
         if (optimizationList.indexOf("maximizeInjects") >= 0) {
-            ret = this.maximizeAddingItem(
+            ret = await this.maximizeAddingItem(
                 currentGamelogic,
                 buildOrder,
                 { name: "inject", type: "action" },
                 !!this.optimizeSettings.maximizeInjects,
                 BO_ITEMS["Queen"]
             )
+        }
+
+        if (optimizationList.indexOf("improveByReordering") >= 0) {
+            ret = await this.maximizeByReordering(currentGamelogic)
         }
 
         if (ret[0] !== undefined && ret[1] !== undefined) {
@@ -130,13 +163,13 @@ class OptimizeLogic {
     /**
      * Adds workers at each bo step while the bo doesn't end later
      */
-    maximizeWorkers(
+    async maximizeWorkers(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         removeWorkersBefore: boolean,
         addNecessarySupply: boolean,
         removeSupplyBefore: boolean
-    ): OptimizationReturn {
+    ): Promise<OptimizationReturn> {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
         let initialWorkerCount = 0
@@ -175,26 +208,40 @@ class OptimizeLogic {
             if (whereToAddWorker < bo.length && bo[whereToAddWorker].name === worker.name) {
                 continue
             }
-            do {
-                let boToTest = cloneDeep(bo)
-                boToTest.splice(whereToAddWorker, 0, cloneDeep(worker))
-                gamelogic = this.simulateBo(boToTest)
-                let addedSupply = 0
-                if (addNecessarySupply) {
-                    ;[gamelogic, addedSupply] = this.addSupply(gamelogic)
-                }
-                isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
-                if (isBetter) {
-                    bo = gamelogic.bo
-                    addedWorkerCount += 1
-                    addedSupplyCount += addedSupply
-                    whereToAddWorker += 1 + addedSupply
-                    bestGameLogic = gamelogic
-                }
-            } while (
-                isBetter ||
-                initialWorkerCount + addedWorkerCount >= this.optimizeSettings.maximizeWorkers
-            )
+            const percent = Math.round((whereToAddWorker / bo.length) * 100)
+            const cancellationPromise = (
+                await cancelableLog(this.log, {
+                    notice: `${percent}%`,
+                })
+            )()
+            // eslint-disable-next-line
+            await Promise.race([
+                cancellationPromise,
+                new Promise((resolve) => {
+                    do {
+                        let boToTest = cloneDeep(bo)
+                        boToTest.splice(whereToAddWorker, 0, cloneDeep(worker))
+                        gamelogic = this.simulateBo(boToTest)
+                        let addedSupply = 0
+                        if (addNecessarySupply) {
+                            ;[gamelogic, addedSupply] = this.addSupply(gamelogic)
+                        }
+                        isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
+                        if (isBetter) {
+                            bo = gamelogic.bo
+                            addedWorkerCount += 1
+                            addedSupplyCount += addedSupply
+                            whereToAddWorker += 1 + addedSupply
+                            bestGameLogic = gamelogic
+                        }
+                    } while (
+                        isBetter ||
+                        initialWorkerCount + addedWorkerCount >=
+                            this.optimizeSettings.maximizeWorkers
+                    )
+                    resolve()
+                }),
+            ])
         }
 
         if (bestGameLogic === currentGamelogic) {
@@ -233,13 +280,13 @@ class OptimizeLogic {
     /**
      * Adds as many injects as possible
      */
-    maximizeAddingItem(
+    async maximizeAddingItem(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
         itemToAdd: IBuildOrderElement,
         removeBefore: boolean,
         itemToStartAtt?: IBuildOrderElement
-    ): OptimizationReturn {
+    ): Promise<OptimizationReturn> {
         const currentFrameCount = currentGamelogic.frame
 
         const bo = cloneDeep(buildOrder)
@@ -267,15 +314,29 @@ class OptimizeLogic {
             if (whereToAddInject < bo.length && bo[whereToAddInject].name === itemToAdd.name) {
                 continue
             }
-            let boToTest = cloneDeep(bo)
-            boToTest.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
-            gamelogic = this.simulateBo(boToTest)
-            const isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
-            if (isBetter) {
-                bo.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
-                addedItemsCount++
-                bestGameLogic = gamelogic
-            }
+
+            const percent = Math.round((whereToAddInject / bo.length) * 100)
+            const cancellationPromise = (
+                await cancelableLog(this.log, {
+                    notice: `${percent}%`,
+                })
+            )()
+            // eslint-disable-next-line
+            await Promise.race([
+                cancellationPromise,
+                new Promise((resolve) => {
+                    let boToTest = cloneDeep(bo)
+                    boToTest.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
+                    gamelogic = this.simulateBo(boToTest)
+                    const isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
+                    if (isBetter) {
+                        bo.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
+                        addedItemsCount++
+                        bestGameLogic = gamelogic
+                    }
+                    resolve()
+                }),
+            ])
         }
         const asManyAsPossible = {
             notice: "There are as many as possible already",
@@ -298,6 +359,124 @@ class OptimizeLogic {
                       success: `Added ${addedItemsCount}`,
                   },
         ]
+    }
+
+    /**
+     * Reorder BO items as long as it makes it end sooner
+     */
+    async maximizeByReordering(
+        initialGameLogic: GameLogic // Requires to have been run until the end
+    ): Promise<OptimizationReturn> {
+        const startTime = +new Date()
+        let bo = cloneDeep(initialGameLogic.bo)
+        let bestGameLogic: GameLogic = initialGameLogic
+        let improvedSinceStart = false
+        let boCode = this.boToCode(bo)
+        let boCodes: { [code: string]: true } = {}
+        let savedTime = 0
+        const finalPass = 50
+        for (let pass = 1; pass <= finalPass; pass++) {
+            let improvedSinceLastPass = false
+            let maxSwapPos = 0
+            for (let swapPos = 0; swapPos < bo.length - 1; swapPos++) {
+                maxSwapPos = Math.max(maxSwapPos, swapPos)
+                const percent = Math.round((maxSwapPos / bo.length) * 100)
+                const cancellationPromise = (
+                    await cancelableLog(this.log, {
+                        notice: `${percent}% of pass #${pass}${
+                            savedTime ? `; so far, ${savedTime}s faster` : ""
+                        }`,
+                    })
+                )()
+                // eslint-disable-next-line
+                await Promise.race([
+                    cancellationPromise,
+                    new Promise((resolve) => {
+                        const spreadingMax = bo.length - swapPos - 1
+                        for (let spreading = 1; spreading <= spreadingMax; spreading++) {
+                            const boCodeToTest = this.swapChars(
+                                boCode,
+                                swapPos,
+                                swapPos + spreading
+                            )
+                            if (boCodeToTest === boCode || boCodes[boCodeToTest]) {
+                                continue
+                            }
+                            //else
+                            boCodes[boCodeToTest] = true
+
+                            let boToTest = cloneDeep(bo)
+                            this.swapBOItems(boToTest, swapPos, swapPos + spreading)
+
+                            const gamelogic = this.simulateBo(boToTest)
+                            const isBetter =
+                                gamelogic.frame < bestGameLogic.frame && !gamelogic.errorMessage
+                            if (isBetter) {
+                                this.swapBOItems(bo, swapPos, swapPos + spreading)
+                                bestGameLogic = gamelogic
+                                boCode = boCodeToTest
+                                improvedSinceStart = true
+                                improvedSinceLastPass = true
+                                swapPos = Math.max(-1, swapPos - 2)
+                                break
+                            }
+                        }
+                        resolve()
+                    }),
+                ])
+            }
+            const avoidedFramesCount = (initialGameLogic.frame - bestGameLogic.frame) / 22.4
+            savedTime = Math.floor(avoidedFramesCount * 10) / 10
+
+            if (!improvedSinceLastPass) {
+                break
+            }
+        }
+
+        if (improvedSinceStart) {
+            const calculationsTime = Math.round((+new Date() - startTime) / 1000)
+            return [
+                {
+                    race: this.race,
+                    bo: bo,
+                    gamelogic: bestGameLogic,
+                    settings: this.customSettings,
+                    hoverIndex: -1,
+                },
+                {
+                    success: `Improved by ${savedTime}s (This took ${calculationsTime}s to calculate)`,
+                },
+            ]
+        }
+        // else
+
+        return [
+            undefined,
+            {
+                notice: "No adjacent swap could improve this BO",
+            },
+        ]
+    }
+
+    boToCode(bo: Array<IBuildOrderElement>): string {
+        return bo.map((item) => this.nameToCode[item.name]).join("")
+    }
+
+    swapChars(boCode: string, swapA: number, swapB = swapA + 1): string {
+        return (
+            boCode.slice(0, swapA) +
+            boCode[swapB] +
+            boCode.slice(swapA + 1, swapB) +
+            boCode[swapA] +
+            boCode.slice(swapB + 1)
+        )
+    }
+
+    swapBOItems(bo: Array<IBuildOrderElement>, swapA: number, swapB = swapA + 1): void {
+        const removedB = bo.splice(swapB, 1)
+        const removedA = bo.splice(swapA, 1)
+        bo.splice(swapA, 0, removedB[0])
+        bo.splice(swapB, 0, removedA[0])
     }
 
     simulateBo(boToTest: IBuildOrderElement[]): GameLogic {

@@ -245,13 +245,14 @@ export default withRouter(
             this.updateHistory({ gamelogic })
         }
 
-        applyOpitimization = (optimizationList: string[]): Log | undefined => {
+        applyOpitimization = async (optimizationList: string[]): Promise<Log | undefined> => {
             const optimize = new OptimizeLogic(
                 this.state.race,
                 this.state.settings,
-                this.state.optimizeSettings
+                this.state.optimizeSettings,
+                this.log
             )
-            const [state, log] = optimize.optimizeBuildOrder(
+            const [state, log] = await optimize.optimizeBuildOrder(
                 this.state.gamelogic,
                 this.state.bo,
                 optimizationList
