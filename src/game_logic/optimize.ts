@@ -212,11 +212,12 @@ class OptimizeLogic {
             const cancellationPromise = (
                 await cancelableLog(this.log, {
                     notice: `${percent}%`,
+                    temporary: true,
                 })
             )()
-            // eslint-disable-next-line
             await Promise.race([
                 cancellationPromise,
+                // eslint-disable-next-line
                 new Promise((resolve) => {
                     do {
                         let boToTest = cloneDeep(bo)
@@ -319,11 +320,12 @@ class OptimizeLogic {
             const cancellationPromise = (
                 await cancelableLog(this.log, {
                     notice: `${percent}%`,
+                    temporary: true,
                 })
             )()
-            // eslint-disable-next-line
             await Promise.race([
                 cancellationPromise,
+                // eslint-disable-next-line
                 new Promise((resolve) => {
                     let boToTest = cloneDeep(bo)
                     boToTest.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
@@ -386,11 +388,12 @@ class OptimizeLogic {
                         notice: `${percent}% of pass #${pass}${
                             savedTime ? `; so far, ${savedTime}s faster` : ""
                         }`,
+                        temporary: true,
                     })
                 )()
-                // eslint-disable-next-line
                 await Promise.race([
                     cancellationPromise,
+                    // eslint-disable-next-line
                     new Promise((resolve) => {
                         const spreadingMax = bo.length - swapPos - 1
                         for (let spreading = 1; spreading <= spreadingMax; spreading++) {

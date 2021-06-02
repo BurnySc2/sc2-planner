@@ -118,6 +118,7 @@ interface Log {
     hideCloseButton?: boolean
     element?: JSX.Element
     cancel?: () => void
+    temporary?: boolean
 }
 
 interface IResourceHistory {

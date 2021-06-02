@@ -3,8 +3,9 @@ import CLASSES from "../constants/classes"
 import { Log, WebPageState } from "../constants/interfaces"
 
 interface MyProps {
-    onLog: (callback: (log: Log | undefined) => void) => void
-    undoState: (state: Partial<WebPageState> | undefined) => void
+    onLog: (callback: (log: Log | undefined, isRestoringLogs: boolean) => void) => void
+    undoPush: (state: Partial<WebPageState>) => void
+    undo: () => void
 }
 
 interface MyState {
@@ -17,12 +18,15 @@ export default class Logging extends Component<MyProps, MyState> {
 
     constructor(props: MyProps) {
         super(props)
-        props.onLog((log) => {
+        props.onLog((log, isRestoringLogs) => {
             if (this.autoClose !== undefined) {
                 clearTimeout(this.autoClose)
             }
             if (this.state.log?.autoClose) {
                 this.autoClose = setTimeout(() => this.onClose(), 5000)
+            }
+            if (!isRestoringLogs && this.state.log?.undo) {
+                this.props.undoPush(this.state.log.undo)
             }
             this.setState({ log, showLogs: !!log })
         })
@@ -43,7 +47,7 @@ export default class Logging extends Component<MyProps, MyState> {
 
     onUndo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        this.props.undoState(this.state.log?.undo)
+        this.props.undo()
         this.onClose()
     }
 

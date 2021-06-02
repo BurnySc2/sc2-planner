@@ -38,15 +38,17 @@ import CLASSES from "../constants/classes"
 interface Save {
     search: string
     insertIndex: number
+    log?: Log
 }
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
 export default withRouter(
     class WebPage extends Component<RouteComponentProps, WebPageState> {
-        onLogCallback: (line: Log | undefined) => void = () => null
+        onLogCallback: (line: Log | undefined, isRestoringLogs: boolean) => void = () => null
         history: Save[] = []
         historyPosition: number = 0
+        currentLogLine?: Log
 
         // TODO I dont know how to fix these properly
         constructor(props: RouteComponentProps) {
@@ -152,13 +154,25 @@ export default withRouter(
             this.undoPush(state, newUrl)
         }
 
-        undoPush(state: Partial<WebPageState>, search: string): void {
+        undoPush(state: Partial<WebPageState>, search?: string): void {
+            if (search === undefined) {
+                search = createUrlParams(
+                    state.race || state.gamelogic?.race,
+                    state.gamelogic?.customSettings,
+                    state.gamelogic?.customOptimizeSettings,
+                    state.bo || state.gamelogic?.bo
+                )
+            }
             const prevSearch = this.history[this.historyPosition - 1]?.search
             if (prevSearch === search) {
                 return
             }
             this.history.splice(this.historyPosition)
-            this.history.push({ search, insertIndex: state?.insertIndex || 0 })
+            this.history.push({
+                search,
+                insertIndex: state?.insertIndex || 0,
+                log: this.currentLogLine,
+            })
             this.historyPosition = this.history.length
         }
 
@@ -167,7 +181,7 @@ export default withRouter(
             const state = this.getStateFromUrl(save.search)
             state.insertIndex = save.insertIndex
             this.setState(state)
-            this.log()
+            this.logRestore(save.log)
         }
 
         undo = () => {
@@ -482,20 +496,21 @@ export default withRouter(
             })
         }
 
-        log = (line?: Log) => {
-            this.onLogCallback(line)
+        logRestore = (log?: Log) => {
+            this.currentLogLine = log
+            this.onLogCallback(log, true)
         }
 
-        onLog = (callback: (line: Log | undefined) => void) => {
-            this.onLogCallback = callback
-        }
-
-        onUndoState = (state: Partial<WebPageState> | undefined) => {
-            if (state !== undefined) {
-                this.setState(state as WebPageState)
-                defaults(state, this.state)
-                this.updateHistory(state)
+        log = (log?: Log, temporary?: boolean) => {
+            this.currentLogLine = log
+            if (!temporary && !log?.temporary) {
+                this.history[this.historyPosition - 1].log = log
             }
+            this.onLogCallback(log, false)
+        }
+
+        onLog = (callback: (line: Log | undefined, isRestoringLogs: boolean) => void) => {
+            this.onLogCallback = callback
         }
 
         render() {
@@ -535,7 +550,11 @@ export default withRouter(
                                 log={this.log}
                             />
                             {read}
-                            <Logging onLog={this.onLog} undoState={this.onUndoState} />
+                            <Logging
+                                onLog={this.onLog}
+                                undoPush={(state) => this.undoPush(state)}
+                                undo={() => this.undo()}
+                            />
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">
