@@ -73,48 +73,48 @@
     },
     {
         "internal_name": "attach_barracks_to_free_techlab",
-        "name": "Barracks to free Techlab",
-        "imageSource": "btn-building-terran-barracks.png",
+        "name": "Land Barracks at Techlab",
+        "imageSource": "btn-building-terran-barracks-to-free-techlab.png",
         "duration": 40,
         "race": "terran",
         "id": 9
     },
     {
         "internal_name": "attach_barracks_to_free_reactor",
-        "name": "Barracks to free Reactor",
-        "imageSource": "btn-building-terran-barracksmengsk.png",
+        "name": "Land Barracks at Reactor",
+        "imageSource": "btn-building-terran-barracks-to-free-reactor.png",
         "duration": 40,
         "race": "terran",
         "id": 10
     },
     {
         "internal_name": "attach_factory_to_free_techlab",
-        "name": "Factory to free Techlab",
-        "imageSource": "btn-building-terran-factory.png",
+        "name": "Land Factory at Techlab",
+        "imageSource": "btn-building-terran-factory-to-free-techlab.png",
         "duration": 40,
         "race": "terran",
         "id": 11
     },
     {
         "internal_name": "attach_factory_to_free_reactor",
-        "name": "Factory to free Reactor",
-        "imageSource": "btn-building-terran-factorymengsk.png",
+        "name": "Land Factory at Reactor",
+        "imageSource": "btn-building-terran-factory-to-free-reactor.png",
         "duration": 40,
         "race": "terran",
         "id": 12
     },
     {
         "internal_name": "attach_starport_to_free_techlab",
-        "name": "Starport to free Techlab",
-        "imageSource": "btn-building-terran-starport.png",
+        "name": "Land Starport at Techlab",
+        "imageSource": "btn-building-terran-starport-to-free-techlab.png",
         "duration": 40,
         "race": "terran",
         "id": 13
     },
     {
         "internal_name": "attach_starport_to_free_reactor",
-        "name": "Starport to free Reactor",
-        "imageSource": "btn-building-terran-starportmengsk.png",
+        "name": "Land Starport at Reactor",
+        "imageSource": "btn-building-terran-starport-to-free-reactor.png",
         "duration": 40,
         "race": "terran",
         "id": 14
@@ -122,7 +122,7 @@
     {
         "internal_name": "dettach_barracks_from_techlab",
         "name": "Lift Barracks from Techlab",
-        "imageSource": "btn-building-nova-barracks.png",
+        "imageSource": "btn-building-terran-barracks-lift-from-techlab.png",
         "duration": 40,
         "race": "terran",
         "id": 15
@@ -130,7 +130,7 @@
     {
         "internal_name": "dettach_barracks_from_reactor",
         "name": "Lift Barracks from Reactor",
-        "imageSource": "btn-building-stukov-infestedbarracks.png",
+        "imageSource": "btn-building-terran-barracks-lift-from-reactor.png",
         "duration": 40,
         "race": "terran",
         "id": 16
@@ -138,7 +138,7 @@
     {
         "internal_name": "dettach_factory_from_techlab",
         "name": "Lift Factory from Techlab",
-        "imageSource": "btn-building-terran-factory-covertops.png",
+        "imageSource": "btn-building-terran-factory-lift-from-techlab.png",
         "duration": 40,
         "race": "terran",
         "id": 17
@@ -146,7 +146,7 @@
     {
         "internal_name": "dettach_factory_from_reactor",
         "name": "Lift Factory from Reactor",
-        "imageSource": "btn-building-terran-factorymengsk.png",
+        "imageSource": "btn-building-terran-factory-lift-from-reactor.png",
         "duration": 40,
         "race": "terran",
         "id": 18
@@ -154,7 +154,7 @@
     {
         "internal_name": "dettach_starport_from_techlab",
         "name": "Lift Starport from Techlab",
-        "imageSource": "btn-building-nova-starport.png",
+        "imageSource": "btn-building-terran-starport-lift-from-techlab.png",
         "duration": 40,
         "race": "terran",
         "id": 19
@@ -162,7 +162,7 @@
     {
         "internal_name": "dettach_starport_from_reactor",
         "name": "Lift Starport from Reactor",
-        "imageSource": "btn-building-stukov-infestedstarport.png",
+        "imageSource": "btn-building-terran-starport-lift-from-reactor.png",
         "duration": 40,
         "race": "terran",
         "id": 20
