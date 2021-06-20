@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "93f58ef33219a494f883271692ed30ae",
+    "revision": "1e9f808e6ffbf4926b7108439061f0c2",
     "url": "./index.html"
   },
   {
-    "revision": "493e9ed26c99ad32cd71",
+    "revision": "1ecce4deac7d68236753",
     "url": "./static/css/main.e8547ae8.chunk.css"
   },
   {
-    "revision": "c01e74f6b2cf6ae59705",
-    "url": "./static/js/2.623ff95c.chunk.js"
+    "revision": "e81513d4c6ae3a9ac0a6",
+    "url": "./static/js/2.74eb6009.chunk.js"
   },
   {
     "revision": "33490309eac47256b827830c802fd4a5",
-    "url": "./static/js/2.623ff95c.chunk.js.LICENSE.txt"
+    "url": "./static/js/2.74eb6009.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "493e9ed26c99ad32cd71",
-    "url": "./static/js/main.9bcab8d9.chunk.js"
+    "revision": "1ecce4deac7d68236753",
+    "url": "./static/js/main.15e9e53d.chunk.js"
   },
   {
     "revision": "42effd31e3ad0d35d698",
@@ -88,8 +88,80 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/media/btn-building-protoss-nexus.61dcb5dd.png"
   },
   {
+    "revision": "51526cd9437c1c4e556f1bf8b023281c",
+    "url": "./static/media/btn-building-terran-barracks-lift-from-reactor.51526cd9.png"
+  },
+  {
+    "revision": "2861be1bfce42853da094fb56e3895c7",
+    "url": "./static/media/btn-building-terran-barracks-lift-from-techlab.2861be1b.png"
+  },
+  {
+    "revision": "ca47cd42d35b4616a4b8a3ec34b94033",
+    "url": "./static/media/btn-building-terran-barracks-reactor.ca47cd42.png"
+  },
+  {
+    "revision": "620d0c2876116b6a3b96cd44255b76f2",
+    "url": "./static/media/btn-building-terran-barracks-techlab.620d0c28.png"
+  },
+  {
+    "revision": "d0cb87db0de89c99072dae2d9b484c1d",
+    "url": "./static/media/btn-building-terran-barracks-to-free-reactor.d0cb87db.png"
+  },
+  {
+    "revision": "12e1ad2ced30868658da18c8fad284b8",
+    "url": "./static/media/btn-building-terran-barracks-to-free-techlab.12e1ad2c.png"
+  },
+  {
+    "revision": "5c0e3628fe4404462c5ab2712f7eeb82",
+    "url": "./static/media/btn-building-terran-factory-lift-from-reactor.5c0e3628.png"
+  },
+  {
+    "revision": "7a174de011b1d965060fd082f3bcb8e5",
+    "url": "./static/media/btn-building-terran-factory-lift-from-techlab.7a174de0.png"
+  },
+  {
+    "revision": "98bfcacd79a51a55b5a4c4553ca156b7",
+    "url": "./static/media/btn-building-terran-factory-reactor.98bfcacd.png"
+  },
+  {
+    "revision": "6b7de0eadeeb2b534fa799ef6faf8c54",
+    "url": "./static/media/btn-building-terran-factory-techlab.6b7de0ea.png"
+  },
+  {
+    "revision": "0dffa7440bc15338cb39030983089050",
+    "url": "./static/media/btn-building-terran-factory-to-free-reactor.0dffa744.png"
+  },
+  {
+    "revision": "264c4fdb61e868bca604a3b004f4c3cb",
+    "url": "./static/media/btn-building-terran-factory-to-free-techlab.264c4fdb.png"
+  },
+  {
     "revision": "6ad5571b8e517eab4945081d25b1705b",
     "url": "./static/media/btn-building-terran-factorymengsk.6ad5571b.png"
+  },
+  {
+    "revision": "4d63fb46f4e30a7a9fd54af19f5d4b87",
+    "url": "./static/media/btn-building-terran-starport-lift-from-reactor.4d63fb46.png"
+  },
+  {
+    "revision": "4c7bd1af902e46f2f8200e583f07e094",
+    "url": "./static/media/btn-building-terran-starport-lift-from-techlab.4c7bd1af.png"
+  },
+  {
+    "revision": "60f5902f74c46fe093f901cdd4f0d487",
+    "url": "./static/media/btn-building-terran-starport-reactor.60f5902f.png"
+  },
+  {
+    "revision": "a809f71e9a1ac80421aa6bdc034e9069",
+    "url": "./static/media/btn-building-terran-starport-techlab.a809f71e.png"
+  },
+  {
+    "revision": "7bf18eca24bd535b2bffd89242b1db11",
+    "url": "./static/media/btn-building-terran-starport-to-free-reactor.7bf18eca.png"
+  },
+  {
+    "revision": "c99e4a82445e3322321a63aa9d5096a3",
+    "url": "./static/media/btn-building-terran-starport-to-free-techlab.c99e4a82.png"
   },
   {
     "revision": "7840716a574e77736af55ea533c4e166",
