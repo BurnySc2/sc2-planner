@@ -27,7 +27,8 @@ const CLASSES = {
     boItemInvalidDragging: "m-0 p-0 h-16 w-16 bg-red-300 cursor-move",
     boItemHighlighting: "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border",
     // Build order area in the bottom left
-    boArea: "m-1 p-1 overflow-x-auto bg-indigo-400",
+    boArea: "relative m-2 overflow-x-auto bg-indigo-400",
+    boAreaPadding: "p-1",
     // Time bar at the top of the area
     timeBar: "",
     // Build order bars things
@@ -60,6 +61,13 @@ const CLASSES = {
     boCol: "flex table-row m-0 p-0 border border-black",
     boRow: "flex m-0 p-0 border border-black",
     boTimeElement: "z-40 flex flex-shrink-0 items-center border-l border-r border-black",
+    boResourceIcon: "m-0 p-0 h-5 absolute left-0 top-0",
+    boResourceContainer: "relative flex flex-col",
+    boResourceBar: "relative flex flex-row",
+    boResourceWideBar: "m-0 p-0",
+    boResourceBorderBar: "flex items-end m-0 p-0 border border-black overflow-hidden",
+    boResource: "m-0 p-0 h-full border-solid",
+    boResourceHighlight: "z-60 absolute top-0 left-0 m-0 p-0 border border-black h-full",
     boElementContainer: "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black",
     boElementIcon: "m-0 p-0 h-8",
     boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
@@ -67,9 +75,11 @@ const CLASSES = {
     // Dropdown of export, import, settings
     dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
-    dropDownSubContainer: "w-full m-0 p-0 flex flex-row justify-between",
+    dropDownSubContainer: "w-full my-1 py-1 flex flex-row justify-between items-center",
     // Only export import
-    dropDownButton: "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-pointer",
+    dropDownButton:
+        "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-pointer rounded border border-black border-black border-solid shadow",
+    dropDownWideButton: "w-full hover:bg-gray-400 p-2 flex flex-row justify-between cursor-pointer",
     // Only settings
     dropDownLabel: "hover:bg-gray-400 px-2 flex flex-row justify-between",
     dropDownInput: "rounded w-20 mx-2 z-50",
@@ -80,6 +90,15 @@ const CLASSES = {
         "hover:bg-blue-500 relative bg-gray-300 text-gray-700 font-semibold mx-1 py-2 px-4 rounded items-center select-none h-10",
     tinyButtons:
         "hover:bg-blue-500 bg-gray-300 text-gray-700 font-semibold mx-1 py-0 px-1 rounded items-center select-none h-6 w-6 cursor-pointer",
+    centeredButton: "text-center w-full",
+
+    readContainer: "flex flex-row items-end",
+    readCurrentTime: "m-2",
+    readInstructionList: "flex flex-row items-end",
+    readInstruction: "flex flex-col",
+    readTime: "text-center",
+    readIconGroup: "",
+    readIcon: "flex flex-row items-center",
 }
 
 export default CLASSES

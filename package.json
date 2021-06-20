@@ -32,7 +32,7 @@
         "typescript": "^3.9.7"
     },
     "scripts": {
-        "start": "npm run tailwind:css:dev && BROWSER=none react-scripts start",
+        "start": "npm run tailwind:css:dev && BROWSER=none HTTPS=true react-scripts start",
         "build": "npm run tailwind:css && react-scripts build",
         "tailwind:css": "tailwind build src/tailwind.css -c tailwind.config.js -o src/index.css",
         "tailwind:css:dev": "tailwind build src/tailwind.css -c tailwind.config.dev.js -o src/index.css",

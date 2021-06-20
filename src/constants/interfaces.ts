@@ -1,3 +1,5 @@
+import { GameLogic } from "../game_logic/gamelogic"
+
 type IAllRaces = "zerg" | "terran" | "protoss"
 
 type IBarTypes = "worker" | "action" | "unit" | "structure" | "upgrade"
@@ -93,6 +95,37 @@ interface ITrainedBy {
     }
 }
 
+interface WebPageState {
+    race: IAllRaces
+    bo: Array<IBuildOrderElement>
+    gamelogic: GameLogic
+    settings: Array<ISettingsElement>
+    optimizeSettings: Array<ISettingsElement>
+    hoverIndex: number
+    insertIndex: number
+    multilineBuildOrder: boolean
+    minimizedActionsSelection: boolean
+}
+
+interface Log {
+    autoClose?: boolean
+    error?: string
+    warning?: string
+    notice?: string
+    success?: string
+    failure?: string
+    undo?: Partial<WebPageState>
+    hideCloseButton?: boolean
+    element?: JSX.Element
+}
+
+interface IResourceHistory {
+    minerals: number[]
+    vespene: number[]
+    supplyLeft: number[]
+    raceSpecificResource: number[]
+}
+
 export type {
     IReplaceString,
     IAllRaces,
@@ -107,4 +140,7 @@ export type {
     IDataAbility,
     IResearchedBy,
     ITrainedBy,
+    WebPageState,
+    Log,
+    IResourceHistory,
 }

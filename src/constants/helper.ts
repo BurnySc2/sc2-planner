@@ -40,7 +40,7 @@ const getImageOfItem = (item: { name: string; type: string }): string => {
     return image
 }
 
-const defaultSettings = [
+const defaultSettings: Array<ISettingsElement> = [
     {
         // Pretty name displayed in gui
         name: "Worker start delay",
@@ -125,6 +125,16 @@ const defaultSettings = [
         max: 10,
         step: 0.01,
     },
+    {
+        name: "Resource height",
+        tooltip: "The height of the resource rows displayed in the browser.",
+        variableName: "htmlResourceHeight",
+        n: "rh",
+        v: 1.5,
+        min: 0,
+        max: 10,
+        step: 0.1,
+    },
 ]
 const settingsDefaultValues: { [name: string]: number } = {}
 defaultSettings.forEach((item) => {
@@ -133,7 +143,7 @@ defaultSettings.forEach((item) => {
     settingsDefaultValues[item.n] = item.v
 })
 
-const defaultOptimizeSettings = [
+const defaultOptimizeSettings: Array<ISettingsElement> = [
     {
         // Pretty name displayed in gui
         name: "Maximize workers up to",
@@ -151,6 +161,76 @@ const defaultOptimizeSettings = [
         max: 200,
         // Step size of values in GUI if you press the arrow things
         step: 1,
+        apply: "Add as many workers as possible (Beta)",
+    },
+    {
+        name: "Remove workers before",
+        tooltip: "Remove all workers before starting the optimization.",
+        variableName: "maximizeWorkersOption1",
+        n: "mw1",
+        v: 1,
+        min: 0,
+        max: 1,
+        step: 1,
+    },
+    {
+        name: "Add necessary supply",
+        tooltip: "Doesn't work as expected when main buildings adding supply are added to the bo.",
+        variableName: "maximizeWorkersOption2",
+        n: "mw2",
+        v: 1,
+        min: 0,
+        max: 1,
+        step: 1,
+    },
+    {
+        name: "Remove supply before",
+        tooltip: "Remove all supply before starting the optimization.",
+        variableName: "maximizeWorkersOption3",
+        n: "mw3",
+        v: 0,
+        min: 0,
+        max: 1,
+        step: 1,
+    },
+
+    {
+        name: "Remove chronos on nexus before",
+        tooltip: "You need at least one nexus for this optimizaion.",
+        variableName: "maximizeNexusChronos",
+        n: "mbc",
+        v: 0,
+        min: 0,
+        max: 1,
+        step: 1,
+        races: "protoss",
+        apply: "Add as many chronos on nexus as possible (Beta)",
+    },
+
+    {
+        name: "Remove MULEs before",
+        tooltip: "You need at least one Orbital Command for this optimizaion.",
+        variableName: "maximizeMULEs",
+        n: "mm",
+        v: 0,
+        min: 0,
+        max: 1,
+        step: 1,
+        races: "terran",
+        apply: "Add as many MULEs as possible (Beta)",
+    },
+
+    {
+        name: "Remove injects before",
+        tooltip: "You need at least one queen for this optimizaion.",
+        variableName: "maximizeInjects",
+        n: "mi",
+        v: 0,
+        min: 0,
+        max: 1,
+        step: 1,
+        races: "zerg",
+        apply: "Add as many injects as possible (Beta)",
     },
 ]
 
