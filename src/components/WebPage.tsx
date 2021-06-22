@@ -24,7 +24,7 @@ import {
     decodeBuildOrder,
     createUrlParams,
 } from "../constants/helper"
-import { cloneDeep, defaults } from "lodash"
+import { cloneDeep, defaults, isEqual, remove } from "lodash"
 import {
     IBuildOrderElement,
     ISettingsElement,
@@ -323,15 +323,29 @@ export default withRouter(
             this.updateHistory(state)
         }
 
+        removeAllItemFromBO = (index: number) => {
+            const bo = this.state.bo
+            const itemToRemove = cloneDeep(bo[index])
+            let removedCount = bo.length
+            remove(bo, (item, i) => i >= index && isEqual(item, itemToRemove))
+            removedCount += bo.length
+            this.updateBO(bo, removedCount)
+        }
+
         removeItemFromBO = (index: number) => {
             const bo = this.state.bo
             bo.splice(index, 1)
+            this.updateBO(bo, 1)
+        }
 
+        updateBO = (bo: IBuildOrderElement[], removedCount: number) => {
             // TODO load snapshot from shortly before the removed bo index
             if (bo.length > 0) {
                 const state = this.rerunBuildOrder(this.state.gamelogic, bo)
                 if (this.state.insertIndex > this.state.hoverIndex) {
-                    const stateUpdate = { insertIndex: Math.max(0, this.state.insertIndex - 1) }
+                    const stateUpdate = {
+                        insertIndex: Math.max(0, this.state.insertIndex - removedCount),
+                    }
                     state.insertIndex = stateUpdate.insertIndex
                     this.setState(stateUpdate)
                 }
@@ -409,7 +423,11 @@ export default withRouter(
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             index: number
         ) => {
-            this.removeItemFromBO(index)
+            if (e.ctrlKey) {
+                this.removeAllItemFromBO(index)
+            } else {
+                this.removeItemFromBO(index)
+            }
         }
 
         changeHoverIndex = (index: number) => {
