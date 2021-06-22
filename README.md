@@ -4,7 +4,7 @@ This is a (hopefully better) remake of the [original (but deprecated) sc2planner
 
 You can create build orders for [StarCraft 2 Legacy of the Void](https://starcraft2.com/en-us/), and this web-application will simulate/calculate the time at which those actions can be executed.
 
-# Demo
+# Live Demo
 
 You can [find a live version here](https://burnysc2.github.io/sc2-planner)
 
@@ -24,7 +24,10 @@ You can [find a live version here](https://burnysc2.github.io/sc2-planner)
 
 [17 Hatch, 17 pool, 16 gas](https://burnysc2.github.io/sc2-planner/?&race=zerg&bo=uDritmrisSJEritSf2HtL2NtZUxODsIM2QtkuBtgV2LritnfibViriuFsExbIsOxbJtleZkxZLx0bxb9xbSsQzKKtjkilTkli2Mx4ksRx4bsQQyY2xb2sKxZJtR3ttZfeySm1EKtleZkxZKsKxZxsINxZotNuF)
 
-# Building it yourself
+## Hotkeys
+With the arrow keys (left and right) you can navigate through the build order. Holding `shift` will jump by 5, and holding `ctrl` will jump to the start with left arrow or to the end with right arrow.
+
+# Development - Building it yourself
 
 ## Requirements
 
@@ -77,4 +80,3 @@ Tasks that still need to be done, also see the [issues page](https://github.com/
 -   Grey out actions / icons that are currently not available (locked by techtree)
 -   Sort zerg townhalls by how much larva it has (build units from hatchery first which has the most free larva)
 -   Sort terran production structures by: `has reactor`, `has no addon`, `has techlab` when trying to queue new units that do not require a techlab.
--   Add snapshots [as described here](https://www.reddit.com/r/starcraft2/comments/g66i2p/build_order_planner_website/foeu08a/) so that you can click the time bar and it shows you the status of resources and amount of units at a certain time
