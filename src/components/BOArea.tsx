@@ -15,7 +15,7 @@ interface MyProps {
 }
 
 interface MyState {
-    showTooltip: boolean
+    showTooltip: boolean //Needed to force render() when removing the ReactTooltip
     highlightStart: number
     highlightEnd: number
 }
