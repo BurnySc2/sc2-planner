@@ -15,6 +15,7 @@ interface MyProps {
 }
 
 interface MyState {
+    showTooltip: boolean //Needed to force render() when removing the ReactTooltip
     highlightStart: number
     highlightEnd: number
 }
@@ -28,7 +29,18 @@ export default class BOArea extends Component<MyProps, MyState> {
         resourceName: string
         icon: string
     }[] = []
-    quantityRoundings: { [resourceType: string]: number } = {}
+    quantityRoundings: { [resourceType: string]: number } = {
+        minerals: 5,
+        vespene: 4,
+        supplyLeft: 1,
+        raceSpecificResource: 1,
+    }
+    histogramRoundings: { [resourceType: string]: number } = {
+        minerals: 25,
+        vespene: 25,
+        supplyLeft: 1,
+        raceSpecificResource: 1,
+    }
     quantityMaxes: { [resourceType: string]: number } = {}
     tooltipPrevQuantity: number | undefined
     prevTooltipResourceType: keyof IResourceHistory | undefined
@@ -46,6 +58,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.timeInterval = 20
 
         this.state = {
+            showTooltip: false,
             highlightStart: 0,
             highlightEnd: 0,
         }
@@ -68,6 +81,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             </div>
         )
         this.setState({
+            showTooltip: true,
             highlightStart: item.start,
             highlightEnd: item.end,
         })
@@ -75,9 +89,11 @@ export default class BOArea extends Component<MyProps, MyState> {
     }
 
     onMouseLeave() {
+        console.log("left")
         this.props.changeHoverIndex(-1)
         this.tooltipContent = undefined
         this.setState({
+            showTooltip: false,
             highlightStart: 0,
             highlightEnd: 0,
         })
@@ -94,6 +110,10 @@ export default class BOArea extends Component<MyProps, MyState> {
         this.tooltipPrevQuantity = undefined
         this.prevTooltipResourceType = undefined
         this.updateResourceTooltip(event, resourceType, resourceName, startFrame)
+
+        this.setState({
+            showTooltip: true,
+        })
         ReactTooltip.rebuild()
     }
 
@@ -108,18 +128,20 @@ export default class BOArea extends Component<MyProps, MyState> {
         const eventOffsetX = event.pageX - currentTargetRect.left
         const frame = Math.floor(startFrame + eventOffsetX / widthFactor)
         const history = this.props.gamelogic.resourceHistory[resourceType]
-        const quantity = Math.round(history[frame])
+        const quantityRounding: number = this.quantityRoundings[resourceType]
+        const roundedQuantity =
+            Math.floor(Math.round(history[frame]) / quantityRounding) * quantityRounding
 
         if (
-            quantity !== this.tooltipPrevQuantity ||
+            roundedQuantity !== this.tooltipPrevQuantity ||
             resourceType !== this.prevTooltipResourceType
         ) {
-            this.tooltipPrevQuantity = quantity
+            this.tooltipPrevQuantity = roundedQuantity
             this.prevTooltipResourceType = resourceType
             this.tooltipContent = (
                 <div className="flex flex-col text-center">
                     <div>
-                        {resourceName}: {quantity}
+                        {resourceName}: {roundedQuantity}
                     </div>
                 </div>
             )
@@ -128,6 +150,10 @@ export default class BOArea extends Component<MyProps, MyState> {
 
     hideResourceTooltip() {
         this.tooltipContent = undefined
+
+        this.setState({
+            showTooltip: false,
+        })
     }
 
     getFillerElement(width: number, key: string) {
@@ -182,12 +208,6 @@ export default class BOArea extends Component<MyProps, MyState> {
                 }[this.props.gamelogic.race],
             },
         ]
-        this.quantityRoundings = {
-            minerals: 25,
-            vespene: 25,
-            supplyLeft: 1,
-            raceSpecificResource: 1,
-        }
         this.quantityMaxes = {
             minerals: 400,
             vespene: 400,
@@ -269,7 +289,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                     rowContent.push(
                         <div
                             key={`boArea${barType}${index1}${index2}${item.name}${item.id}`}
-                            className="flex flex-row"
+                            className="flex flex-row wtf"
                             data-tip=""
                             data-for="boAreaTooltip"
                             onMouseEnter={(e) => this.onMouseEnter(item)}
@@ -318,7 +338,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                   }
                   //else
 
-                  const quantityRounding: number = this.quantityRoundings[resourceType]
+                  const histogramRounding: number = this.histogramRoundings[resourceType]
                   const quantityMax: number = this.quantityMaxes[resourceType]
 
                   // Concatenate same height quantities to add less DOM elements
@@ -326,10 +346,10 @@ export default class BOArea extends Component<MyProps, MyState> {
                       [number, number, number][]
                   >((res, quantity: number, frame: number) => {
                       const previousDimension = res[res.length - 1]
-                      const roundedQuantity =
-                          Math.floor(quantity / quantityRounding) * quantityRounding
-                      if (!previousDimension || previousDimension[1] !== roundedQuantity) {
-                          res.push([widthFactor, roundedQuantity, frame])
+                      const roundedHistogramQuantity =
+                          Math.floor(quantity / histogramRounding) * histogramRounding
+                      if (!previousDimension || previousDimension[1] !== roundedHistogramQuantity) {
+                          res.push([widthFactor, roundedHistogramQuantity, frame])
                       } else {
                           previousDimension[0] += widthFactor
                       }
@@ -365,7 +385,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                                       )
                                   }
                                   onMouseMove={(e) =>
-                                      this.showResourceTooltip(
+                                      this.updateResourceTooltip(
                                           e,
                                           resourceType,
                                           resourceName,

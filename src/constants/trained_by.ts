@@ -191,6 +191,26 @@ TRAINED_BY["EvolutionChamber"].requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
+// Hardcoded fix for LurkerDenMP
+TRAINED_BY["LurkerDenMP"].requires = [
+    ["HydraliskDen", "Lair", "Drone"],
+    ["HydraliskDen", "Hive", "Drone"],
+]
+// Hardcoded fix for HydraliskDen
+TRAINED_BY["HydraliskDen"].requires = [
+    ["Lair", "Drone"],
+    ["Hive", "Drone"],
+]
+// Hardcoded fix for Spire
+TRAINED_BY["Spire"].requires = [
+    ["Lair", "Drone"],
+    ["Hive", "Drone"],
+]
+// Hardcoded fix for Spire
+TRAINED_BY["InfestationPit"].requires = [
+    ["Lair", "Drone"],
+    ["Hive", "Drone"],
+]
 // Hardcoded fix for Ravager requiring Hatchery instead of RoachWarren
 TRAINED_BY["Ravager"].requires = [["Roach", "RoachWarren"]]
 // Hardcoded fix for when only GreaterSpire available

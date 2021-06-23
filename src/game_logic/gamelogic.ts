@@ -6,7 +6,6 @@ import { BO_ITEMS, supplyUnitNameByRace } from "../constants/bo_items"
 import { incomeMinerals, incomeVespene } from "./income"
 
 import { cloneDeep, minBy, find, remove } from "lodash"
-
 import Unit from "./unit"
 import Event from "./event"
 import Task from "./task"
