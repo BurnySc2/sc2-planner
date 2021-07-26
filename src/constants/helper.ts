@@ -23,6 +23,14 @@ const CONVERT_SECONDS_TO_TIME_STRING = (totalSeconds: number) => {
     return `${minutes}:${seconds}`
 }
 
+const CONVERT_TIME_STRING_TO_SECONDS = (timeString: string) => {
+    const minutesReg = timeString.match(/([0-9]+):/)
+    const minutes = minutesReg ? +minutesReg[1] : 0
+    const secondsReg = timeString.match(/:([0-9]+)$/)
+    const seconds = secondsReg ? +secondsReg[1] : 0
+    return minutes * 60 + seconds
+}
+
 const getImageOfItem = (item: { name: string; type: string }): string => {
     let image = ""
     try {
@@ -136,7 +144,7 @@ const defaultSettings: Array<ISettingsElement> = [
         step: 0.1,
     },
 ]
-const settingsDefaultValues: { [name: string]: number } = {}
+const settingsDefaultValues: { [name: string]: number | string } = {}
 defaultSettings.forEach((item) => {
     // TODO Fix type annotation
     // @ts-ignor
@@ -144,6 +152,15 @@ defaultSettings.forEach((item) => {
 })
 
 const defaultOptimizeSettings: Array<ISettingsElement> = [
+    {
+        name:
+            "Constraints on item building end time for all optimizations.\nE.g: Reaper#1<=01:52, Reaper#1<=Factory#1",
+        tooltip: "List timing constraints, comma separated",
+        variableName: "constraints",
+        n: "c",
+        v: "",
+    },
+
     {
         // Pretty name displayed in gui
         name: "Maximize workers up to",
@@ -243,7 +260,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
     },
 ]
 
-const optimizeSettingsDefaultValues: { [name: string]: number } = {}
+const optimizeSettingsDefaultValues: { [name: string]: number | string } = {}
 defaultOptimizeSettings.forEach((item) => {
     // TODO Fix type annotation
     // @ts-ignor
@@ -252,7 +269,7 @@ defaultOptimizeSettings.forEach((item) => {
 
 const encodeSettings = (
     settingsObject: Array<ISettingsElement>,
-    settingsDefaultValues: { [name: string]: number }
+    settingsDefaultValues: { [name: string]: number | string }
 ): string => {
     // Strip away unwanted values
     let strippedObject = settingsObject.map((item) => {
@@ -487,6 +504,7 @@ export {
     defaultSettings,
     defaultOptimizeSettings,
     CONVERT_SECONDS_TO_TIME_STRING,
+    CONVERT_TIME_STRING_TO_SECONDS,
     getImageOfItem,
     encodeSettings,
     decodeSettings,

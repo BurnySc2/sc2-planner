@@ -9,13 +9,13 @@ import BuildOrder from "./BuildOrder"
 import BOArea from "./BOArea"
 import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
-import Optimize from "./Optimize"
+import { Optimize } from "./Optimize"
 import Logging from "./Logging"
 import Read from "./Read"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
-import { OptimizeLogic } from "../game_logic/optimize"
+import { OptimizeLogic, ConstraintType } from "../game_logic/optimize"
 import {
     defaultSettings,
     defaultOptimizeSettings,
@@ -24,7 +24,7 @@ import {
     decodeBuildOrder,
     createUrlParams,
 } from "../constants/helper"
-import { cloneDeep, defaults, isEqual, remove } from "lodash"
+import { cloneDeep, defaults, isEqual, remove, includes } from "lodash"
 import {
     IBuildOrderElement,
     ISettingsElement,
@@ -46,6 +46,7 @@ interface Save {
 export default withRouter(
     class WebPage extends Component<RouteComponentProps, WebPageState> {
         onLogCallback: (line: Log | undefined, isRestoringLogs: boolean) => void = () => null
+        onAddConstraint: (index: number, action: ConstraintType) => void = () => null
         history: Save[] = []
         historyPosition: number = 0
         currentLogLine?: Log
@@ -239,7 +240,7 @@ export default withRouter(
             this.updateHistory({ gamelogic })
         }
 
-        updateOptimize = (fieldKey: string, fieldValue: number) => {
+        updateOptimize = (fieldKey: string, fieldValue: number | string, doRerunBO = true) => {
             const optimizeSettings = this.state.optimizeSettings
             optimizeSettings.forEach((item) => {
                 if (item.n === fieldKey) {
@@ -255,7 +256,9 @@ export default withRouter(
                 this.state.settings,
                 cloneDeep(optimizeSettings)
             )
-            this.rerunBuildOrder(gamelogic, this.state.bo)
+            if (doRerunBO) {
+                this.rerunBuildOrder(gamelogic, this.state.bo)
+            }
             this.updateHistory({ gamelogic })
         }
 
@@ -446,11 +449,11 @@ export default withRouter(
             // Undo/redo
             if (e.metaKey || e.ctrlKey) {
                 // metaKey is for macs
-                if (e.which === 89) {
+                if (e.key === "y" || e.key === "Y") {
                     this.redo()
                     e.preventDefault()
                     return
-                } else if (e.which === 90) {
+                } else if (e.key === "z" || e.key === "Z") {
                     if (e.shiftKey) {
                         // On macs, Cmd+Shift+z is redo
                         this.redo()
@@ -460,6 +463,21 @@ export default withRouter(
                     e.preventDefault()
                     return
                 }
+            }
+
+            //Optimize constraints
+            const keyToConstraintType: { [key: string]: ConstraintType } = {
+                e: "after",
+                E: "after",
+                r: "at",
+                R: "at",
+                t: "before",
+                T: "before",
+                y: "remove",
+                Y: "remove",
+            }
+            if (!e.ctrlKey && includes(Object.keys(keyToConstraintType), e.key)) {
+                this.onAddConstraint(this.state.hoverIndex, keyToConstraintType[e.key])
             }
 
             // Handle keyboard presses: Arrow keys (left / right) to change insert-index
@@ -514,6 +532,10 @@ export default withRouter(
             })
         }
 
+        getOnAddConstraint(callback: (index: number, action: ConstraintType) => void): void {
+            this.onAddConstraint = callback
+        }
+
         logRestore = (log?: Log) => {
             this.currentLogLine = log
             this.onLogCallback(log, true)
@@ -565,6 +587,8 @@ export default withRouter(
                                 optimizeSettings={this.state.optimizeSettings}
                                 updateOptimize={this.updateOptimize}
                                 applyOpitimization={this.applyOpitimization}
+                                gamelogic={this.state.gamelogic}
+                                getOnAddConstraint={this.getOnAddConstraint.bind(this)}
                                 log={this.log}
                             />
                             {read}

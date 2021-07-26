@@ -744,7 +744,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
             if (unit.name === structureName && !unit.hasAddon() && !unit.isBusy()) {
                 unit.isFlying = true
                 const task = new Task(
-                    gamelogic.settings.addonSwapDelay * 22.4,
+                    +gamelogic.settings.addonSwapDelay * 22.4,
                     gamelogic.frame,
                     gamelogic.supplyUsed,
                     -1
@@ -811,7 +811,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
             ) {
                 unit.isFlying = true
                 const task = new Task(
-                    gamelogic.settings.addonSwapDelay * 22.4,
+                    +gamelogic.settings.addonSwapDelay * 22.4,
                     gamelogic.frame,
                     gamelogic.supplyUsed,
                     -1

@@ -11,7 +11,7 @@ type IReplaceString = "$time" | "$supply" | "$action"
 interface ISettingsElement {
     [name: string]: number | string
     n: string
-    v: number
+    v: number | string
 }
 
 interface IBuildOrderElement {

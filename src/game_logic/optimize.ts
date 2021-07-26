@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual, findIndex } from "lodash"
+import { cloneDeep, isEqual, findIndex, find, filter } from "lodash"
 
 import { defaultOptimizeSettings, cancelableLog } from "../constants/helper"
 import {
@@ -8,13 +8,33 @@ import {
     WebPageState,
     Log,
 } from "../constants/interfaces"
+import { CONVERT_SECONDS_TO_TIME_STRING, CONVERT_TIME_STRING_TO_SECONDS } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import { BO_ITEMS, workerNameByRace, supplyUnitNameByRace } from "../constants/bo_items"
 import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 import UNITS_BY_NAME from "../constants/units_by_name"
+import Event from "../game_logic/event"
 
 export type OptimizationReturn = [Partial<WebPageState> | undefined, Log | undefined]
+
+export type TimeConstraint = {
+    type: "time"
+    name: string
+    pos: number
+    after: number
+    before: number
+}
+export type OrderConstraint = {
+    type: "order"
+    name: string
+    pos: number
+    followingName: string
+    followingPos: number
+}
+export type Constraint = TimeConstraint | OrderConstraint
+
+export type ConstraintType = "after" | "at" | "before" | "remove"
 
 interface MaxReordParams {
     swapPos: number
@@ -30,8 +50,9 @@ class OptimizeLogic {
     race: IAllRaces
     customSettings: Array<ISettingsElement>
     customOptimizeSettings: Array<ISettingsElement>
+    constraintList: Constraint[]
     log: (line?: Log) => void
-    optimizeSettings: { [name: string]: number }
+    optimizeSettings: { [name: string]: number | string }
     nameToCode: { [name: string]: string }
 
     constructor(
@@ -47,6 +68,7 @@ class OptimizeLogic {
         this.race = race || ("terran" as IAllRaces)
         this.customSettings = customSettings
         this.customOptimizeSettings = customOptimizeSettings
+        this.constraintList = getConstraintList(customOptimizeSettings)
         this.log = log
 
         let code = 1
@@ -146,8 +168,10 @@ class OptimizeLogic {
     addSupply(gamelogic: GameLogic): [GameLogic, number] {
         const supplyItem = supplyUnitNameByRace[this.race]
         let addedSupply = 0
+        let validatesConstraints = true
         while (
             addedSupply < 15 &&
+            validatesConstraints &&
             gamelogic.errorMessage &&
             isEqual(gamelogic.requirements, [supplyItem])
         ) {
@@ -156,6 +180,7 @@ class OptimizeLogic {
             bo.splice(gamelogic.boIndex - 1, 0, cloneDeep(supplyItem)) //TODO2 minus [0, 1, 2, 3] should be tested here for perfect results, not just minus [1]
             addedSupply++
             gamelogic = this.simulateBo(bo)
+            validatesConstraints = this.validatedConstraints(gamelogic)
         }
         return [gamelogic, addedSupply]
     }
@@ -219,24 +244,29 @@ class OptimizeLogic {
                 cancellationPromise,
                 // eslint-disable-next-line
                 new Promise((resolve) => {
+                    let validatesConstraints: boolean
                     do {
                         let boToTest = cloneDeep(bo)
                         boToTest.splice(whereToAddWorker, 0, cloneDeep(worker))
                         gamelogic = this.simulateBo(boToTest)
-                        let addedSupply = 0
-                        if (addNecessarySupply) {
-                            ;[gamelogic, addedSupply] = this.addSupply(gamelogic)
-                        }
-                        isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
-                        if (isBetter) {
-                            bo = gamelogic.bo
-                            addedWorkerCount += 1
-                            addedSupplyCount += addedSupply
-                            whereToAddWorker += 1 + addedSupply
-                            bestGameLogic = gamelogic
+                        validatesConstraints = this.validatedConstraints(gamelogic)
+                        if (validatesConstraints) {
+                            let addedSupply = 0
+                            if (addNecessarySupply) {
+                                ;[gamelogic, addedSupply] = this.addSupply(gamelogic)
+                            }
+                            isBetter =
+                                gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
+                            if (isBetter) {
+                                bo = gamelogic.bo
+                                addedWorkerCount += 1
+                                addedSupplyCount += addedSupply
+                                whereToAddWorker += 1 + addedSupply
+                                bestGameLogic = gamelogic
+                            }
                         }
                     } while (
-                        isBetter ||
+                        (validatesConstraints && isBetter) ||
                         initialWorkerCount + addedWorkerCount >=
                             this.optimizeSettings.maximizeWorkers
                     )
@@ -330,8 +360,9 @@ class OptimizeLogic {
                     let boToTest = cloneDeep(bo)
                     boToTest.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
                     gamelogic = this.simulateBo(boToTest)
+                    const validatesConstraints = this.validatedConstraints(gamelogic)
                     const isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
-                    if (isBetter) {
+                    if (validatesConstraints && isBetter) {
                         bo.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
                         addedItemsCount++
                         bestGameLogic = gamelogic
@@ -412,9 +443,10 @@ class OptimizeLogic {
                             this.swapBOItems(boToTest, swapPos, swapPos + spreading)
 
                             const gamelogic = this.simulateBo(boToTest)
+                            const validatesConstraints = this.validatedConstraints(gamelogic)
                             const isBetter =
                                 gamelogic.frame < bestGameLogic.frame && !gamelogic.errorMessage
-                            if (isBetter) {
+                            if (validatesConstraints && isBetter) {
                                 this.swapBOItems(bo, swapPos, swapPos + spreading)
                                 bestGameLogic = gamelogic
                                 boCode = boCodeToTest
@@ -461,6 +493,50 @@ class OptimizeLogic {
         ]
     }
 
+    getEventLogFromConstraint(gamelogic: GameLogic, name: string, pos: number): Event {
+        return filter(gamelogic.eventLog, { name })[pos]
+    }
+
+    validatedConstraints(gamelogic: GameLogic): boolean {
+        for (let constraint of this.constraintList) {
+            if (constraint.type === "time") {
+                const eventLog: Event = this.getEventLogFromConstraint(
+                    gamelogic,
+                    constraint.name,
+                    constraint.pos
+                )
+                if (eventLog) {
+                    //Consider constraint as valid if item is not in the BO anymore
+                    const endTime = Math.floor((eventLog.end || eventLog.start) / 22.4)
+                    if (endTime < constraint.after || endTime > constraint.before) {
+                        return false
+                    }
+                }
+            } else if (constraint.type === "order") {
+                const eventLog: Event = this.getEventLogFromConstraint(
+                    gamelogic,
+                    constraint.name,
+                    constraint.pos
+                )
+                const eventLogPos: number = gamelogic.eventLog.indexOf(eventLog)
+                const followingEventLog: Event = this.getEventLogFromConstraint(
+                    gamelogic,
+                    constraint.followingName,
+                    constraint.followingPos
+                )
+                const followingEventLogPos: number = gamelogic.eventLog.indexOf(followingEventLog)
+                if (
+                    eventLogPos >= 0 &&
+                    followingEventLogPos >= 0 &&
+                    eventLogPos > followingEventLogPos
+                ) {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+
     boToCode(bo: Array<IBuildOrderElement>): string {
         return bo.map((item) => this.nameToCode[item.name]).join("")
     }
@@ -499,6 +575,68 @@ class OptimizeLogic {
             this.optimizeSettings[item.variableName] = item.v
         }
     }
+}
+
+export function getConstraintList(optimizeSettings: Array<ISettingsElement>): Constraint[] {
+    const constraintSetting = find(optimizeSettings, { n: "c" })
+    const list: Constraint[] = []
+    if (constraintSetting) {
+        for (let constraintStr of (constraintSetting.v as string).split(/\n/)) {
+            const afterReg = constraintStr.match(/^([0-9:]+)<=?/)
+            const beforeReg = constraintStr.match(/<=?([0-9:]+)$/)
+            const after = afterReg ? CONVERT_TIME_STRING_TO_SECONDS(afterReg[1]) : -Infinity
+            const before = beforeReg ? CONVERT_TIME_STRING_TO_SECONDS(beforeReg[1]) : Infinity
+            if (afterReg || beforeReg) {
+                const fullName = constraintStr
+                    .replace(afterReg ? afterReg[0] : "", "")
+                    .replace(beforeReg ? beforeReg[0] : "", "")
+                const reg = fullName.match(/(.+)#([0-9]+)/)
+                if (reg) {
+                    const name = reg[1]
+                    const pos = +reg[2] - 1
+                    list.push({ type: "time", name, pos, after, before })
+                }
+            } else {
+                // Could be item before other item constraint
+                const tokens = constraintStr.split(/<?=/)
+                if (tokens.length === 2) {
+                    const firstReg = tokens[0].match(/(.+)#([0-9]+)/)
+                    const secondReg = tokens[1].match(/(.+)#([0-9]+)/)
+                    if (firstReg && secondReg) {
+                        const name = firstReg[1]
+                        const pos = +firstReg[2] - 1
+                        const followingName = secondReg[1]
+                        const followingPos = +secondReg[2] - 1
+                        list.push({ type: "order", name, pos, followingName, followingPos })
+                    }
+                }
+            }
+        }
+    }
+    return list
+}
+
+export function setConstraintList(list: Constraint[]): string {
+    const constraintList = filter(
+        list.map((constraint: Constraint) => {
+            if (constraint.type === "order") {
+                return `${constraint.name}#${constraint.pos + 1}<=${constraint.followingName}#${
+                    constraint.followingPos + 1
+                }`
+            }
+            const afterStr =
+                constraint.after === -Infinity
+                    ? ""
+                    : `${CONVERT_SECONDS_TO_TIME_STRING(constraint.after)}<=`
+            const beforeStr =
+                constraint.before === Infinity
+                    ? ""
+                    : `<=${CONVERT_SECONDS_TO_TIME_STRING(constraint.before)}`
+            const nameStr = afterStr || beforeStr ? `${constraint.name}#${constraint.pos + 1}` : ""
+            return `${afterStr}${nameStr}${beforeStr}`
+        })
+    )
+    return constraintList.join("\n")
 }
 
 export { OptimizeLogic }

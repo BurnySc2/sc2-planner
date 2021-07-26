@@ -76,13 +76,16 @@ const CLASSES = {
     dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
     dropDownSubContainer: "w-full my-1 py-1 flex flex-row justify-between items-center",
+    dropDownSubContainerMultiline: "w-full my-1 py-1 flex flex-col",
     // Only export import
     dropDownButton:
         "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-pointer rounded border border-black border-black border-solid shadow",
     dropDownWideButton: "w-full hover:bg-gray-400 p-2 flex flex-row justify-between cursor-pointer",
     // Only settings
     dropDownLabel: "hover:bg-gray-400 px-2 flex flex-row justify-between",
+    dropDownLabelMultiline: "hover:bg-gray-400 px-2 flex flex-col justify-between",
     dropDownInput: "rounded w-20 mx-2 z-50",
+    dropDownInputMultiline: "rounded w-full mx-2 z-50",
 
     // Rectangle items in the BOArea
     // Import export buttons
