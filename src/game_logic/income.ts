@@ -64,22 +64,47 @@ const incomeMinerals = (workers: number, bases: number, mules: number = 0): numb
     return (1.4 * income_per_min) / 60 + mules * mule_rate
 }
 
-const incomeVespene = (workers: number, geysers: number): number => {
+const incomeVespenePerGeyser = (workers: number): number => {
+    // Returns vespene income per second for one geyser.
+    const gas_per_trip = 4
+    const seconds_per_trip_close_gas = [6.3, 2.9, 2.07]
+    const seconds_per_trip =
+        seconds_per_trip_close_gas[Math.min(seconds_per_trip_close_gas.length, workers) - 1]
+    return 1.4 * gas_per_trip * (1 / seconds_per_trip)
+}
+
+const incomeVespene = (workers: number, geysers: number, baseCount: number): number => {
     // Returns vespene income per second.
+
     if (workers === 0 || geysers === 0) {
         return 0
     }
-    workers = Math.min(4 * geysers, workers)
-    if (geysers > 1) {
-        const w1 = Math.floor(workers / geysers)
-        const w2 = workers % geysers
-        return (
-            geysers * incomeVespene(w1, 1) + w2 * (incomeVespene(w1 + 1, 1) - incomeVespene(w1, 1))
-        )
+    const closeGeysers = Math.min(geysers, baseCount * 2)
+    const closeDistanceWorkers = Math.min(3 * closeGeysers, workers)
+    const minWorkersPerGeyser = Math.floor(closeDistanceWorkers / closeGeysers)
+    const workersLeft = closeDistanceWorkers % closeGeysers
+    const closeDistanceIncome =
+        closeGeysers * incomeVespenePerGeyser(minWorkersPerGeyser) +
+        workersLeft *
+            (incomeVespenePerGeyser(minWorkersPerGeyser + 1) -
+                incomeVespenePerGeyser(minWorkersPerGeyser))
+
+    let longDistanceIncome = 0
+    workers -= closeDistanceWorkers
+    geysers -= closeGeysers
+    const longDistanceMiningRatio = [8.175, 8.95, 10.4, 14.8] //Distance from long distance geyser divided by distance from base geyser
+    for (let miningRatio of longDistanceMiningRatio) {
+        if (geysers > 0) {
+            geysers--
+            const longDistanceWorkers = Math.min(Math.floor(miningRatio * 3), workers)
+            if (longDistanceWorkers > 0) {
+                workers -= longDistanceWorkers
+                longDistanceIncome +=
+                    (incomeVespenePerGeyser(3) * longDistanceWorkers) / 3 / miningRatio
+            }
+        }
     }
-    const gas_per_trip = 4
-    const seconds_per_trip_close_gas = [6.3, 2.9, 2.07, 2.07]
-    return 1.4 * gas_per_trip * (1 / seconds_per_trip_close_gas[workers - 1])
+    return closeDistanceIncome + longDistanceIncome
 }
 
 export { incomeMinerals, incomeVespene }
