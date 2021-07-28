@@ -44,6 +44,19 @@ export default class Footer extends Component<MyProps, MyState> {
                 </div>
             ),
         },
+        shortcuts: {
+            name: "Shortcuts",
+            url: "",
+            tooltip: (
+                <div>
+                    <div>Click on an item with:</div>
+                    <div>Nothing to remove it</div>
+                    <div>Ctrl to remove it and all future occurences</div>
+                    <div>Shift to move it earlier without delaying any other item</div>
+                    <div>Shift and Ctrl to move it earlier without delaying the end of the BO</div>
+                </div>
+            ),
+        },
         legal: {
             name: "Legal",
             url: "http://blizzard.com/company/about/legal-faq.html",
@@ -81,6 +94,7 @@ export default class Footer extends Component<MyProps, MyState> {
             "contribute",
             "report_bugs",
             "contact",
+            "shortcuts",
             "legal",
         ]
         const buttons = buttonNames.map((myKey, index) => {

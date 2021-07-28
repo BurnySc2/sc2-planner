@@ -205,7 +205,8 @@ export default withRouter(
 
         rerunBuildOrder(
             gamelogic: GameLogic,
-            buildOrder: Array<IBuildOrderElement>
+            buildOrder: Array<IBuildOrderElement>,
+            doSetState = true
         ): Partial<WebPageState> {
             const newGamelogic = GameLogic.simulatedBuildOrder(gamelogic, buildOrder)
             const state = {
@@ -215,7 +216,9 @@ export default withRouter(
                 settings: newGamelogic.customSettings,
                 hoverIndex: -1,
             }
-            this.setState(state)
+            if (doSetState) {
+                this.setState(state)
+            }
             return state
         }
 
@@ -341,10 +344,61 @@ export default withRouter(
             this.updateBO(bo, 1)
         }
 
-        updateBO = (bo: IBuildOrderElement[], removedCount: number) => {
+        // Start the item earlier without delaying any item
+        preponeItemFromBO = (index: number, canDelayAnythingButLastItem: boolean) => {
+            const bo = this.state.bo
+            const deleted = bo.splice(index, 1)
+            let pushDistance
+            let prevState: Partial<WebPageState> | undefined = undefined
+            for (pushDistance = 1; pushDistance <= index; pushDistance++) {
+                bo.splice(index - pushDistance, 0, deleted[0])
+                const state = this.rerunBuildOrder(this.state.gamelogic, bo, false)
+                bo.splice(index - pushDistance, 1)
+                if (
+                    !state.gamelogic ||
+                    state.gamelogic.errorMessage ||
+                    state.gamelogic.frame > this.state.gamelogic.frame + 3
+                ) {
+                    break
+                }
+                if (!canDelayAnythingButLastItem) {
+                    let isLate = false
+                    for (let pos = index - pushDistance; pos < bo.length; pos++) {
+                        if (
+                            state.gamelogic.eventLog[pos + 1].start >
+                            this.state.gamelogic.eventLog[pos].start + 3
+                        ) {
+                            isLate = true
+                            break
+                        }
+                    }
+                    if (isLate) {
+                        break
+                    }
+                }
+                prevState = state
+            }
+            bo.splice(index - pushDistance + 1, 0, deleted[0])
+            if (pushDistance === 1) {
+                this.log({ notice: "Can't be preponed", temporary: true, autoClose: true })
+            } else {
+                this.log({
+                    notice: `Preponed by ${pushDistance - 1} item(s)`,
+                    temporary: true,
+                    autoClose: true,
+                })
+                this.updateBO(bo, 0, prevState)
+            }
+        }
+
+        updateBO = (
+            bo: IBuildOrderElement[],
+            removedCount: number = 0,
+            state?: Partial<WebPageState>
+        ) => {
             // TODO load snapshot from shortly before the removed bo index
             if (bo.length > 0) {
-                const state = this.rerunBuildOrder(this.state.gamelogic, bo)
+                state = state || this.rerunBuildOrder(this.state.gamelogic, bo)
                 if (this.state.insertIndex > this.state.hoverIndex) {
                     const stateUpdate = {
                         insertIndex: Math.max(0, this.state.insertIndex - removedCount),
@@ -426,8 +480,12 @@ export default withRouter(
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             index: number
         ) => {
-            if (e.ctrlKey) {
+            if (e.ctrlKey && !e.shiftKey) {
                 this.removeAllItemFromBO(index)
+            } else if (!e.ctrlKey && e.shiftKey) {
+                this.preponeItemFromBO(index, false)
+            } else if (e.ctrlKey && e.shiftKey) {
+                this.preponeItemFromBO(index, true)
             } else {
                 this.removeItemFromBO(index)
             }

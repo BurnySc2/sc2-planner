@@ -4,7 +4,7 @@ type IAllRaces = "zerg" | "terran" | "protoss"
 
 type IBarTypes = "worker" | "action" | "unit" | "structure" | "upgrade"
 
-type IButton = "donate" | "contribute" | "report_bugs" | "contact" | "legal"
+type IButton = "donate" | "contribute" | "report_bugs" | "contact" | "shortcuts" | "legal"
 
 type IReplaceString = "$time" | "$supply" | "$action"
 

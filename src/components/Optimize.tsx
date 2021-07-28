@@ -7,7 +7,6 @@ import { ISettingsElement, Log, IAllRaces } from "../constants/interfaces"
 import {
     Constraint,
     TimeConstraint,
-    OrderConstraint,
     ConstraintType,
     getConstraintList,
     setConstraintList,
