@@ -312,7 +312,7 @@ export default withRouter(
         }
 
         // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
-        addItemToBO = (item: IBuildOrderElement) => {
+        addItemToBO = (item: IBuildOrderElement, doUpdateHistory = true) => {
             const [gamelogic, insertedItems] = GameLogic.addItemToBO(
                 this.state.gamelogic,
                 item,
@@ -326,7 +326,9 @@ export default withRouter(
                 insertIndex: this.state.insertIndex + insertedItems,
             }
             this.setState(state)
-            this.updateHistory(state)
+            if (doUpdateHistory) {
+                this.updateHistory(state)
+            }
         }
 
         removeAllItemFromBO = (index: number) => {
@@ -345,11 +347,15 @@ export default withRouter(
         }
 
         // Start the item earlier without delaying any item
-        preponeItemFromBO = (index: number, canDelayAnythingButLastItem: boolean) => {
+        preponeItemFromBO = (
+            index: number,
+            canDelayAnythingButLastItem: boolean,
+            doUpdateHistory = true
+        ) => {
             const bo = this.state.bo
+            index = index === -1 ? bo.length - 1 : index
             const deleted = bo.splice(index, 1)
             let pushDistance
-            let prevState: Partial<WebPageState> | undefined = undefined
             for (pushDistance = 1; pushDistance <= index; pushDistance++) {
                 bo.splice(index - pushDistance, 0, deleted[0])
                 const state = this.rerunBuildOrder(this.state.gamelogic, bo, false)
@@ -376,7 +382,6 @@ export default withRouter(
                         break
                     }
                 }
-                prevState = state
             }
             bo.splice(index - pushDistance + 1, 0, deleted[0])
             if (pushDistance === 1) {
@@ -387,14 +392,15 @@ export default withRouter(
                     temporary: true,
                     autoClose: true,
                 })
-                this.updateBO(bo, 0, prevState)
+                this.updateBO(bo, 0, undefined, doUpdateHistory)
             }
         }
 
         updateBO = (
             bo: IBuildOrderElement[],
             removedCount: number = 0,
-            state?: Partial<WebPageState>
+            state?: Partial<WebPageState>,
+            doUpdateHistory = true
         ) => {
             // TODO load snapshot from shortly before the removed bo index
             if (bo.length > 0) {
@@ -406,7 +412,6 @@ export default withRouter(
                     state.insertIndex = stateUpdate.insertIndex
                     this.setState(stateUpdate)
                 }
-                this.updateHistory(state)
             } else {
                 const gamelogic = new GameLogic(
                     this.state.race,
@@ -422,18 +427,48 @@ export default withRouter(
                     insertIndex: 0,
                 }
                 this.setState(state as any)
+            }
+            if (doUpdateHistory && state) {
                 this.updateHistory(state)
             }
+        }
+
+        preponeEventHandler(
+            e: React.MouseEvent<HTMLElement, MouseEvent>,
+            index = -1,
+            doUpdateHistory = true
+        ): boolean {
+            if (e.shiftKey) {
+                this.preponeItemFromBO(index, e.ctrlKey, doUpdateHistory)
+                return true
+            }
+            return false
+        }
+
+        updateHistoryFromState(): void {
+            this.updateHistory({
+                bo: this.state.bo,
+                gamelogic: this.state.gamelogic,
+                insertIndex: this.state.insertIndex,
+            })
         }
 
         // If a button is pressed in the action selection, add it to the build order
         // Then re-calculate the resulting time of all the items
         // Then send all items and events to the BOArea
+        actionSelectionClicked(
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            item: IBuildOrderElement
+        ): void {
+            this.addItemToBO(item, false)
+            this.preponeEventHandler(e)
+            this.updateHistoryFromState()
+        }
         actionSelectionActionClicked = (
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             action: ICustomAction
         ) => {
-            this.addItemToBO({
+            this.actionSelectionClicked(e, {
                 name: action.internal_name,
                 type: "action",
             })
@@ -443,24 +478,18 @@ export default withRouter(
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             unit: string
         ) => {
-            if (["SCV", "Probe", "Drone"].indexOf(unit) >= 0) {
-                this.addItemToBO({
-                    name: unit,
-                    type: "worker",
-                })
-            } else {
-                this.addItemToBO({
-                    name: unit,
-                    type: "unit",
-                })
-            }
+            const isWorker = ["SCV", "Probe", "Drone"].indexOf(unit) >= 0
+            this.actionSelectionClicked(e, {
+                name: unit,
+                type: isWorker ? "worker" : "unit",
+            })
         }
 
         actionSelectionStructureClicked = (
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             structure: string
         ) => {
-            this.addItemToBO({
+            this.actionSelectionClicked(e, {
                 name: structure,
                 type: "structure",
             })
@@ -470,24 +499,26 @@ export default withRouter(
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             upgrade: string
         ) => {
-            this.addItemToBO({
-                name: upgrade,
-                type: "upgrade",
-            })
+            this.addItemToBO(
+                {
+                    name: upgrade,
+                    type: "upgrade",
+                },
+                false
+            )
+            this.preponeEventHandler(e)
+            this.updateHistoryFromState()
         }
 
-        buildOrderRemoveClicked = (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-            index: number
-        ) => {
-            if (e.ctrlKey && !e.shiftKey) {
-                this.removeAllItemFromBO(index)
-            } else if (!e.ctrlKey && e.shiftKey) {
-                this.preponeItemFromBO(index, false)
-            } else if (e.ctrlKey && e.shiftKey) {
-                this.preponeItemFromBO(index, true)
+        buildOrderClicked = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+            if (this.preponeEventHandler(e, index)) {
+                this.updateHistoryFromState()
             } else {
-                this.removeItemFromBO(index)
+                if (e.ctrlKey && !e.shiftKey) {
+                    this.removeAllItemFromBO(index)
+                } else {
+                    this.removeItemFromBO(index)
+                }
             }
         }
 
@@ -698,7 +729,7 @@ export default withRouter(
                                         gamelogic={this.state.gamelogic}
                                         hoverIndex={this.state.hoverIndex}
                                         insertIndex={this.state.insertIndex}
-                                        removeClick={this.buildOrderRemoveClicked}
+                                        removeClick={this.buildOrderClicked}
                                         rerunBuildOrder={(bo) =>
                                             this.rerunBuildOrder(this.state.gamelogic, bo)
                                         }
@@ -722,7 +753,7 @@ export default withRouter(
                                 <BOArea
                                     gamelogic={this.state.gamelogic}
                                     hoverIndex={this.state.hoverIndex}
-                                    removeClick={this.buildOrderRemoveClicked}
+                                    removeClick={this.buildOrderClicked}
                                     changeHoverIndex={(index) => {
                                         this.changeHoverIndex(index)
                                     }}

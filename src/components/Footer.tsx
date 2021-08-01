@@ -49,7 +49,7 @@ export default class Footer extends Component<MyProps, MyState> {
             url: "",
             tooltip: (
                 <div>
-                    <div>Click on an item with:</div>
+                    <div>Click on an item anywhere with:</div>
                     <div>Nothing to remove it</div>
                     <div>Ctrl to remove it and all future occurences</div>
                     <div>Shift to move it earlier without delaying any other item</div>
