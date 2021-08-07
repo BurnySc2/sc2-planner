@@ -5,6 +5,7 @@ const CLASSES = {
     titleVersion: "mx-2 text-xs italic antialiased hover:text-blue-600",
 
     errorLabel: "text-red-600 text-2xl font-bold",
+    warningLabel: "w-full text-blue-600 text-sm font-bold",
     // Race icon and the items on the right side icons
     raceIcon: "h-8 w-8 mx-1 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
     timeIcon: "h-24 w-24 mx-1 p-0 z-10",

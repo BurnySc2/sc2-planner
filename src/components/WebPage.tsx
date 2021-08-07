@@ -45,7 +45,7 @@ interface Save {
 
 export default withRouter(
     class WebPage extends Component<RouteComponentProps, WebPageState> {
-        onLogCallback: (line: Log | undefined, isRestoringLogs: boolean) => void = () => null
+        onLogCallback: (line?: Log) => void = () => null
         onAddConstraint: (index: number, action: ConstraintType) => void = () => null
         history: Save[] = []
         historyPosition: number = 0
@@ -175,6 +175,12 @@ export default withRouter(
                 log: this.currentLogLine,
             })
             this.historyPosition = this.history.length
+            console.log(
+                "this.historyPosition",
+                this.historyPosition,
+                "BO length:",
+                (state.bo || state.gamelogic?.bo)?.length
+            )
         }
 
         restoreSave(save: Save): void {
@@ -280,6 +286,7 @@ export default withRouter(
             if (state !== undefined) {
                 this.setState(state as WebPageState)
                 defaults(state, this.state)
+                console.log("this.updateHistory")
                 this.updateHistory(state)
             }
             return log
@@ -627,7 +634,7 @@ export default withRouter(
 
         logRestore = (log?: Log) => {
             this.currentLogLine = log
-            this.onLogCallback(log, true)
+            this.onLogCallback(log)
         }
 
         log = (log?: Log, temporary?: boolean) => {
@@ -635,10 +642,10 @@ export default withRouter(
             if (!temporary && !log?.temporary) {
                 this.history[this.historyPosition - 1].log = log
             }
-            this.onLogCallback(log, false)
+            this.onLogCallback(log)
         }
 
-        onLog = (callback: (line: Log | undefined, isRestoringLogs: boolean) => void) => {
+        onLog = (callback: (line?: Log) => void) => {
             this.onLogCallback = callback
         }
 
@@ -681,11 +688,7 @@ export default withRouter(
                                 log={this.log}
                             />
                             {read}
-                            <Logging
-                                onLog={this.onLog}
-                                undoPush={(state) => this.undoPush(state)}
-                                undo={() => this.undo()}
-                            />
+                            <Logging onLog={this.onLog} undo={() => this.undo()} />
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">

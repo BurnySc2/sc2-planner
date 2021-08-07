@@ -170,13 +170,13 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeWorkers",
         // Short name for base64 string
         n: "mw",
-        // The given value
+        // The given value, can be a string
         v: 80,
         // Min value in GUI
         min: 0,
         // Max value in GUI
         max: 200,
-        // Step size of values in GUI if you press the arrow things
+        // Step size of values in GUI if you press the arrow things. If absent and value is not a string, no input is shown
         step: 1,
         apply: "Add as many workers as possible (Beta)",
     },
@@ -186,6 +186,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeWorkersOption1",
         n: "mw1",
         v: 1,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -206,6 +207,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeWorkersOption3",
         n: "mw3",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -217,6 +219,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeNexusChronos",
         n: "mbc",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -230,6 +233,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeMULEs",
         n: "mm",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -243,6 +247,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeInjects",
         n: "mi",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,

@@ -183,7 +183,7 @@ export class Optimize extends Component<MyProps, MyState> {
         }
     }
 
-    createInput(item: ISettingsElement): JSX.Element {
+    createInput(item: ISettingsElement, doesHaveConstraints: boolean): JSX.Element {
         if (item.v === undefined) {
             return <></>
         }
@@ -218,7 +218,7 @@ export class Optimize extends Component<MyProps, MyState> {
                     }}
                 />
             )
-        } else {
+        } else if (item.step !== undefined) {
             inputElement = (
                 <input
                     className={CLASSES.dropDownInput}
@@ -236,7 +236,10 @@ export class Optimize extends Component<MyProps, MyState> {
                     }}
                 />
             )
+        } else {
+            return <></>
         }
+        //else
         return (
             <div
                 key={item.n}
@@ -255,6 +258,15 @@ export class Optimize extends Component<MyProps, MyState> {
                     {`${item.name}`.split("\n").map((item, key) => {
                         return <div key={key}>{item}</div>
                     })}
+                    {item.removes && doesHaveConstraints && item.v === 1 ? (
+                        <div className={CLASSES.warningLabel}>
+                            Warning: for this optimization to work,constraints will
+                            <br />
+                            have to be matched when these items are removed!
+                        </div>
+                    ) : (
+                        <></>
+                    )}
                 </div>
                 {inputElement}
             </div>
@@ -273,12 +285,15 @@ export class Optimize extends Component<MyProps, MyState> {
                 !/Option[0-9]+/.test(`${setting.variableName}`) &&
                 (setting.races === undefined || `${setting.races}`.indexOf(this.props.race) >= 0)
         )
+        const doesHaveConstraints = getConstraintList(optionlessSettings).length > 0
 
         const settingsElements = optionlessSettings.map((item, index) => {
             const addiItems = filter(this.props.optimizeSettings, (setting) =>
                 new RegExp(`^${item.variableName}Option[0-9]+$`).test(`${setting.variableName}`)
             )
-            const additionalField = addiItems.map((item) => this.createInput(item))
+            const additionalField = addiItems.map((item) =>
+                this.createInput(item, doesHaveConstraints)
+            )
             const classes = [
                 CLASSES.dropDownContainer,
                 "flex flex-col",
@@ -297,7 +312,7 @@ export class Optimize extends Component<MyProps, MyState> {
             ) : undefined
             return (
                 <div key={index} className={classes.join(" ")}>
-                    {this.createInput(item)}
+                    {this.createInput(item, doesHaveConstraints)}
                     {additionalField}
                     {applyButton}
                 </div>
