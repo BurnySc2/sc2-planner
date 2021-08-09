@@ -312,7 +312,7 @@ export default withRouter(
         }
 
         // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
-        addItemToBO = (item: IBuildOrderElement, doUpdateHistory = true) => {
+        addItemToBO = (item: IBuildOrderElement, doUpdateHistory = true): Partial<WebPageState> => {
             const [gamelogic, insertedItems] = GameLogic.addItemToBO(
                 this.state.gamelogic,
                 item,
@@ -329,6 +329,7 @@ export default withRouter(
             if (doUpdateHistory) {
                 this.updateHistory(state)
             }
+            return state
         }
 
         removeAllItemFromBO = (index: number) => {
@@ -350,20 +351,23 @@ export default withRouter(
         preponeItemFromBO = (
             index: number,
             canDelayAnythingButLastItem: boolean,
-            doUpdateHistory = true
+            doUpdateHistory = true,
+            bo?: Array<IBuildOrderElement>,
+            gamelogic?: GameLogic
         ) => {
-            const bo = this.state.bo
+            bo = bo || this.state.bo
+            gamelogic = gamelogic || this.state.gamelogic
             index = index === -1 ? bo.length - 1 : index
             const deleted = bo.splice(index, 1)
             let pushDistance
             for (pushDistance = 1; pushDistance <= index; pushDistance++) {
                 bo.splice(index - pushDistance, 0, deleted[0])
-                const state = this.rerunBuildOrder(this.state.gamelogic, bo, false)
+                const state = this.rerunBuildOrder(gamelogic, bo, false)
                 bo.splice(index - pushDistance, 1)
                 if (
                     !state.gamelogic ||
                     state.gamelogic.errorMessage ||
-                    state.gamelogic.frame > this.state.gamelogic.frame + 3
+                    state.gamelogic.frame > gamelogic.frame + 3
                 ) {
                     break
                 }
@@ -372,7 +376,7 @@ export default withRouter(
                     for (let pos = index - pushDistance; pos < bo.length; pos++) {
                         if (
                             state.gamelogic.eventLog[pos + 1].start >
-                            this.state.gamelogic.eventLog[pos].start + 3
+                            gamelogic.eventLog[pos].start + 3
                         ) {
                             isLate = true
                             break
@@ -436,10 +440,12 @@ export default withRouter(
         preponeEventHandler(
             e: React.MouseEvent<HTMLElement, MouseEvent>,
             index = -1,
-            doUpdateHistory = true
+            doUpdateHistory = true,
+            bo?: Array<IBuildOrderElement>,
+            gamelogic?: GameLogic
         ): boolean {
             if (e.shiftKey) {
-                this.preponeItemFromBO(index, e.ctrlKey, doUpdateHistory)
+                this.preponeItemFromBO(index, e.ctrlKey, doUpdateHistory, bo, gamelogic)
                 return true
             }
             return false
@@ -460,8 +466,9 @@ export default withRouter(
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             item: IBuildOrderElement
         ): void {
-            this.addItemToBO(item, false)
-            this.preponeEventHandler(e)
+            const state: Partial<WebPageState> = this.addItemToBO(item, false)
+            const addedItemIndex = (state.insertIndex || 0) - 1
+            this.preponeEventHandler(e, addedItemIndex, true, state.bo, state.gamelogic)
             this.updateHistoryFromState()
         }
         actionSelectionActionClicked = (
