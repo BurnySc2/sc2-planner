@@ -66,6 +66,9 @@ const incomeMinerals = (workers: number, bases: number, mules: number = 0): numb
 
 const incomeVespenePerGeyser = (workers: number): number => {
     // Returns vespene income per second for one geyser.
+    if (workers === 0) {
+        return 0
+    }
     const gas_per_trip = 4
     const seconds_per_trip_close_gas = [6.3, 2.9, 2.07]
     const seconds_per_trip =

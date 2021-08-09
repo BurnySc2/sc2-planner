@@ -175,12 +175,6 @@ export default withRouter(
                 log: this.currentLogLine,
             })
             this.historyPosition = this.history.length
-            console.log(
-                "this.historyPosition",
-                this.historyPosition,
-                "BO length:",
-                (state.bo || state.gamelogic?.bo)?.length
-            )
         }
 
         restoreSave(save: Save): void {
@@ -286,7 +280,6 @@ export default withRouter(
             if (state !== undefined) {
                 this.setState(state as WebPageState)
                 defaults(state, this.state)
-                console.log("this.updateHistory")
                 this.updateHistory(state)
             }
             return log
