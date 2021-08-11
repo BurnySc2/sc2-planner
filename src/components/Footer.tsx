@@ -52,8 +52,11 @@ export default class Footer extends Component<MyProps, MyState> {
                     <div>Click on an item anywhere with:</div>
                     <div>Nothing to remove it</div>
                     <div>Ctrl to remove it and all future occurences</div>
-                    <div>Shift to move it earlier without delaying any other item</div>
-                    <div>Shift and Ctrl to move it earlier without delaying the end of the BO</div>
+                    <div>Shift to move (or insert) it earlier without delaying any other item</div>
+                    <div>
+                        Shift and Ctrl to move (or insert) it earlier without delaying the end of
+                        the BO
+                    </div>
                 </div>
             ),
         },
