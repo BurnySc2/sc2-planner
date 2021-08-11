@@ -102,6 +102,7 @@ interface WebPageState {
     settings: Array<ISettingsElement>
     optimizeSettings: Array<ISettingsElement>
     hoverIndex: number
+    highlightedIndexes: number[]
     insertIndex: number
     multilineBuildOrder: boolean
     minimizedActionsSelection: boolean

@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import CLASSES from "../constants/classes"
+import { includes } from "lodash"
 import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import Event from "../game_logic/event"
@@ -10,8 +11,10 @@ import ReactTooltip from "react-tooltip"
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
+    highlightedIndexes: number[]
     removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
     changeHoverIndex: (index: number) => void
+    changeHighlight: (item?: Event) => void
 }
 
 interface MyState {
@@ -80,6 +83,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                 <div>Supply: {item.supply}</div>
             </div>
         )
+        this.props.changeHighlight(item)
         this.setState({
             showTooltip: true,
             highlightStart: item.start,
@@ -90,6 +94,7 @@ export default class BOArea extends Component<MyProps, MyState> {
 
     onMouseLeave() {
         this.props.changeHoverIndex(-1)
+        this.props.changeHighlight()
         this.tooltipContent = undefined
         this.setState({
             showTooltip: false,
@@ -166,10 +171,19 @@ export default class BOArea extends Component<MyProps, MyState> {
     }
 
     getClass(barType: IBarTypes, index: number) {
+        const classes: string[] = []
         if (index === this.props.hoverIndex) {
-            return `${CLASSES.boElementContainer} ${CLASSES.hoverColor[barType]}`
+            classes.push(`${CLASSES.boElementContainer} ${CLASSES.hoverColor[barType]}`)
+        } else {
+            classes.push(
+                `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`
+            )
         }
-        return `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`
+
+        if (includes(this.props.highlightedIndexes, index)) {
+            classes.push(CLASSES.boItemDim)
+        }
+        return classes.join(" ")
     }
 
     setResourceConstants(): void {

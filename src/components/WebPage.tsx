@@ -15,6 +15,7 @@ import Read from "./Read"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
+import Event from "../game_logic/event"
 import { OptimizeLogic, ConstraintType } from "../game_logic/optimize"
 import {
     defaultSettings,
@@ -128,6 +129,7 @@ export default withRouter(
                 optimizeSettings: optimizeSettings,
                 // Index the mouse is hovering over
                 hoverIndex: -1,
+                highlightedIndexes: [],
                 // Index at which new build order items should be inserted (selected index)
                 insertIndex: 0,
                 multilineBuildOrder: true,
@@ -535,6 +537,26 @@ export default withRouter(
             })
         }
 
+        changeHighlight = (highlightedItem?: Event) => {
+            if (highlightedItem) {
+                const toBeHighlighted: number[] = []
+                let index = 0
+                for (let item of this.state.gamelogic.eventLog) {
+                    if (highlightedItem.start <= item.start && item.start <= highlightedItem.end) {
+                        toBeHighlighted.push(index)
+                    }
+                    index++
+                }
+                this.setState({
+                    highlightedIndexes: toBeHighlighted,
+                })
+            } else {
+                this.setState({
+                    highlightedIndexes: [],
+                })
+            }
+        }
+
         changeInsertIndex = (index: number) => {
             this.setState({
                 insertIndex: index,
@@ -731,6 +753,7 @@ export default withRouter(
                                     <BuildOrder
                                         gamelogic={this.state.gamelogic}
                                         hoverIndex={this.state.hoverIndex}
+                                        highlightedIndexes={this.state.highlightedIndexes}
                                         insertIndex={this.state.insertIndex}
                                         removeClick={this.buildOrderClicked}
                                         rerunBuildOrder={(bo) =>
@@ -747,6 +770,9 @@ export default withRouter(
                                         changeHoverIndex={(index) => {
                                             this.changeHoverIndex(index)
                                         }}
+                                        changeHighlight={(item?: Event) => {
+                                            this.changeHighlight(item)
+                                        }}
                                         changeInsertIndex={(index) => {
                                             this.changeInsertIndex(index)
                                         }}
@@ -756,9 +782,13 @@ export default withRouter(
                                 <BOArea
                                     gamelogic={this.state.gamelogic}
                                     hoverIndex={this.state.hoverIndex}
+                                    highlightedIndexes={this.state.highlightedIndexes}
                                     removeClick={this.buildOrderClicked}
                                     changeHoverIndex={(index) => {
                                         this.changeHoverIndex(index)
+                                    }}
+                                    changeHighlight={(item?: Event) => {
+                                        this.changeHighlight(item)
                                     }}
                                 />
                                 <ErrorMessage gamelogic={this.state.gamelogic} />

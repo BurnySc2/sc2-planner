@@ -27,6 +27,7 @@ const CLASSES = {
     boItemInvalid: "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-500 cursor-move",
     boItemInvalidDragging: "m-0 p-0 h-16 w-16 bg-red-300 cursor-move",
     boItemHighlighting: "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border",
+    boItemDim: "bg-opacity-50",
     // Build order area in the bottom left
     boArea: "relative m-2 overflow-x-auto bg-indigo-400",
     boAreaPadding: "p-1",
