@@ -558,7 +558,6 @@ export default withRouter(
         }
 
         changeInsertIndex = (index: number) => {
-            console.log("changeInsertIndex", this.history.length)
             if (this.historyPosition > 0) {
                 this.history[this.historyPosition - 1].insertIndex = index
             }
