@@ -131,7 +131,7 @@ export default withRouter(
                 hoverIndex: -1,
                 highlightedIndexes: [],
                 // Index at which new build order items should be inserted (selected index)
-                insertIndex: 0,
+                insertIndex: bo.length,
                 multilineBuildOrder: true,
                 minimizedActionsSelection: false,
             }
@@ -558,6 +558,9 @@ export default withRouter(
         }
 
         changeInsertIndex = (index: number) => {
+            if (this.history.length > 0) {
+                this.history[this.history.length - 1].insertIndex = index
+            }
             this.setState({
                 insertIndex: index,
             })
