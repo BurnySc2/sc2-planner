@@ -353,6 +353,7 @@ export default withRouter(
         preponeItemFromBO = (
             index: number,
             canDelayAnythingButLastItem: boolean,
+            aimForFastestBO: boolean,
             doUpdateHistory = true,
             bo?: Array<IBuildOrderElement>,
             gamelogic?: GameLogic
@@ -362,11 +363,22 @@ export default withRouter(
             index = index === -1 ? bo.length - 1 : index
             const deleted = bo.splice(index, 1)
             let pushDistance
+            let bestTime = Number.MAX_VALUE
+            let bestPushDistance: number = 0
             for (pushDistance = 1; pushDistance <= index; pushDistance++) {
                 bo.splice(index - pushDistance, 0, deleted[0])
                 const state = this.rerunBuildOrder(gamelogic, bo, false)
                 bo.splice(index - pushDistance, 1)
-                if (
+                if (aimForFastestBO) {
+                    if (
+                        state.gamelogic &&
+                        !state.gamelogic.errorMessage &&
+                        state.gamelogic.frame <= bestTime
+                    ) {
+                        bestTime = state.gamelogic.frame
+                        bestPushDistance = pushDistance
+                    }
+                } else if (
                     !state.gamelogic ||
                     state.gamelogic.errorMessage ||
                     state.gamelogic.frame > gamelogic.frame + 3
@@ -376,9 +388,11 @@ export default withRouter(
                 if (!canDelayAnythingButLastItem) {
                     let isLate = false
                     for (let pos = index - pushDistance; pos < bo.length; pos++) {
-                        if (
+                        if (aimForFastestBO) {
+                        } else if (
+                            !state.gamelogic ||
                             state.gamelogic.eventLog[pos + 1].start >
-                            gamelogic.eventLog[pos].start + 3
+                                gamelogic.eventLog[pos].start + 3
                         ) {
                             isLate = true
                             break
@@ -389,10 +403,14 @@ export default withRouter(
                     }
                 }
             }
-            bo.splice(index - pushDistance + 1, 0, deleted[0])
+            bo.splice(index - (bestPushDistance || pushDistance + 1), 0, deleted[0])
             if (pushDistance === 1) {
                 this.log({ notice: "Can't be preponed", temporary: true, autoClose: true })
             } else {
+                if (bestPushDistance > 0) {
+                    pushDistance = bestPushDistance
+                    this.rerunBuildOrder(gamelogic, bo, false)
+                }
                 this.log({
                     notice: `Preponed by ${pushDistance - 1} item(s)`,
                     temporary: true,
@@ -447,7 +465,7 @@ export default withRouter(
             gamelogic?: GameLogic
         ): boolean {
             if (e.shiftKey) {
-                this.preponeItemFromBO(index, e.ctrlKey, doUpdateHistory, bo, gamelogic)
+                this.preponeItemFromBO(index, e.ctrlKey, e.altKey, doUpdateHistory, bo, gamelogic)
                 return true
             }
             return false
