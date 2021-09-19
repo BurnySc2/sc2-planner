@@ -44,6 +44,27 @@ export default class Footer extends Component<MyProps, MyState> {
                 </div>
             ),
         },
+        shortcuts: {
+            name: "Shortcuts",
+            url: "",
+            tooltip: (
+                <div>
+                    <div>Click on an item anywhere with:</div>
+                    <div>Nothing to remove it</div>
+                    <div>Ctrl, to remove it and all future occurences</div>
+                    <div>Shift, to move it earlier without delaying any other item</div>
+                    <div>
+                        Shift + Ctrl, to move it as early as possible without delaying the end of
+                        the BO
+                    </div>
+                    <div>Shift + Alt, to move it earlier where it shortens the BO the most</div>
+                    <div>
+                        These shortcuts can be used from where you can add new items! It will add
+                        them then try to prepone them.
+                    </div>
+                </div>
+            ),
+        },
         legal: {
             name: "Legal",
             url: "http://blizzard.com/company/about/legal-faq.html",
@@ -81,6 +102,7 @@ export default class Footer extends Component<MyProps, MyState> {
             "contribute",
             "report_bugs",
             "contact",
+            "shortcuts",
             "legal",
         ]
         const buttons = buttonNames.map((myKey, index) => {

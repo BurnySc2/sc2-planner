@@ -9,13 +9,14 @@ import BuildOrder from "./BuildOrder"
 import BOArea from "./BOArea"
 import ActionsSelection from "./ActionSelection"
 import Settings from "./Settings"
-import Optimize from "./Optimize"
+import { Optimize } from "./Optimize"
 import Logging from "./Logging"
 import Read from "./Read"
 import Footer from "./Footer"
 import ErrorMessage from "./ErrorMessage"
 import { GameLogic } from "../game_logic/gamelogic"
-import { OptimizeLogic } from "../game_logic/optimize"
+import Event from "../game_logic/event"
+import { OptimizeLogic, ConstraintType } from "../game_logic/optimize"
 import {
     defaultSettings,
     defaultOptimizeSettings,
@@ -24,7 +25,7 @@ import {
     decodeBuildOrder,
     createUrlParams,
 } from "../constants/helper"
-import { cloneDeep, defaults } from "lodash"
+import { cloneDeep, defaults, isEqual, remove, includes } from "lodash"
 import {
     IBuildOrderElement,
     ISettingsElement,
@@ -38,15 +39,18 @@ import CLASSES from "../constants/classes"
 interface Save {
     search: string
     insertIndex: number
+    log?: Log
 }
 
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
 export default withRouter(
     class WebPage extends Component<RouteComponentProps, WebPageState> {
-        onLogCallback: (line: Log | undefined) => void = () => null
+        onLogCallback: (line?: Log) => void = () => null
+        onAddConstraint: (index: number, action: ConstraintType) => void = () => null
         history: Save[] = []
         historyPosition: number = 0
+        currentLogLine?: Log
 
         // TODO I dont know how to fix these properly
         constructor(props: RouteComponentProps) {
@@ -125,8 +129,9 @@ export default withRouter(
                 optimizeSettings: optimizeSettings,
                 // Index the mouse is hovering over
                 hoverIndex: -1,
+                highlightedIndexes: [],
                 // Index at which new build order items should be inserted (selected index)
-                insertIndex: 0,
+                insertIndex: bo.length,
                 multilineBuildOrder: true,
                 minimizedActionsSelection: false,
             }
@@ -152,13 +157,25 @@ export default withRouter(
             this.undoPush(state, newUrl)
         }
 
-        undoPush(state: Partial<WebPageState>, search: string): void {
+        undoPush(state: Partial<WebPageState>, search?: string): void {
+            if (search === undefined) {
+                search = createUrlParams(
+                    state.race || state.gamelogic?.race,
+                    state.gamelogic?.customSettings,
+                    state.gamelogic?.customOptimizeSettings,
+                    state.bo || state.gamelogic?.bo
+                )
+            }
             const prevSearch = this.history[this.historyPosition - 1]?.search
             if (prevSearch === search) {
                 return
             }
             this.history.splice(this.historyPosition)
-            this.history.push({ search, insertIndex: state?.insertIndex || 0 })
+            this.history.push({
+                search,
+                insertIndex: state?.insertIndex || 0,
+                log: this.currentLogLine,
+            })
             this.historyPosition = this.history.length
         }
 
@@ -167,7 +184,7 @@ export default withRouter(
             const state = this.getStateFromUrl(save.search)
             state.insertIndex = save.insertIndex
             this.setState(state)
-            this.log()
+            this.logRestore(save.log)
         }
 
         undo = () => {
@@ -190,7 +207,8 @@ export default withRouter(
 
         rerunBuildOrder(
             gamelogic: GameLogic,
-            buildOrder: Array<IBuildOrderElement>
+            buildOrder: Array<IBuildOrderElement>,
+            doSetState = true
         ): Partial<WebPageState> {
             const newGamelogic = GameLogic.simulatedBuildOrder(gamelogic, buildOrder)
             const state = {
@@ -200,7 +218,9 @@ export default withRouter(
                 settings: newGamelogic.customSettings,
                 hoverIndex: -1,
             }
-            this.setState(state)
+            if (doSetState) {
+                this.setState(state)
+            }
             return state
         }
 
@@ -225,7 +245,7 @@ export default withRouter(
             this.updateHistory({ gamelogic })
         }
 
-        updateOptimize = (fieldKey: string, fieldValue: number) => {
+        updateOptimize = (fieldKey: string, fieldValue: number | string, doRerunBO = true) => {
             const optimizeSettings = this.state.optimizeSettings
             optimizeSettings.forEach((item) => {
                 if (item.n === fieldKey) {
@@ -241,17 +261,20 @@ export default withRouter(
                 this.state.settings,
                 cloneDeep(optimizeSettings)
             )
-            this.rerunBuildOrder(gamelogic, this.state.bo)
+            if (doRerunBO) {
+                this.rerunBuildOrder(gamelogic, this.state.bo)
+            }
             this.updateHistory({ gamelogic })
         }
 
-        applyOpitimization = (optimizationList: string[]): Log | undefined => {
+        applyOpitimization = async (optimizationList: string[]): Promise<Log | undefined> => {
             const optimize = new OptimizeLogic(
                 this.state.race,
                 this.state.settings,
-                this.state.optimizeSettings
+                this.state.optimizeSettings,
+                this.log
             )
-            const [state, log] = optimize.optimizeBuildOrder(
+            const [state, log] = await optimize.optimizeBuildOrder(
                 this.state.gamelogic,
                 this.state.bo,
                 optimizationList
@@ -291,7 +314,7 @@ export default withRouter(
         }
 
         // item.type is one of ["worker", "action", "unit", "structure", "upgrade"]
-        addItemToBO = (item: IBuildOrderElement) => {
+        addItemToBO = (item: IBuildOrderElement, doUpdateHistory = true): Partial<WebPageState> => {
             const [gamelogic, insertedItems] = GameLogic.addItemToBO(
                 this.state.gamelogic,
                 item,
@@ -305,22 +328,114 @@ export default withRouter(
                 insertIndex: this.state.insertIndex + insertedItems,
             }
             this.setState(state)
-            this.updateHistory(state)
+            if (doUpdateHistory) {
+                this.updateHistory(state)
+            }
+            return state
+        }
+
+        removeAllItemFromBO = (index: number) => {
+            const bo = this.state.bo
+            const itemToRemove = cloneDeep(bo[index])
+            let removedCount = bo.length
+            remove(bo, (item, i) => i >= index && isEqual(item, itemToRemove))
+            removedCount += bo.length
+            this.updateBO(bo, removedCount)
         }
 
         removeItemFromBO = (index: number) => {
             const bo = this.state.bo
             bo.splice(index, 1)
+            this.updateBO(bo, 1)
+        }
 
+        // Start the item earlier without delaying any item
+        preponeItemFromBO = (
+            index: number,
+            canDelayAnythingButLastItem: boolean,
+            aimForFastestBO: boolean,
+            doUpdateHistory = true,
+            bo?: Array<IBuildOrderElement>,
+            gamelogic?: GameLogic
+        ) => {
+            bo = bo || this.state.bo
+            gamelogic = gamelogic || this.state.gamelogic
+            index = index === -1 ? bo.length - 1 : index
+            const deleted = bo.splice(index, 1)
+            let pushDistance
+            let bestTime = Number.MAX_VALUE
+            let bestPushDistance: number = 0
+            for (pushDistance = 1; pushDistance <= index; pushDistance++) {
+                bo.splice(index - pushDistance, 0, deleted[0])
+                const state = this.rerunBuildOrder(gamelogic, bo, false)
+                bo.splice(index - pushDistance, 1)
+                if (aimForFastestBO) {
+                    if (
+                        state.gamelogic &&
+                        !state.gamelogic.errorMessage &&
+                        state.gamelogic.frame <= bestTime
+                    ) {
+                        bestTime = state.gamelogic.frame
+                        bestPushDistance = pushDistance
+                    }
+                } else if (
+                    !state.gamelogic ||
+                    state.gamelogic.errorMessage ||
+                    state.gamelogic.frame > gamelogic.frame + 3
+                ) {
+                    break
+                }
+                if (!canDelayAnythingButLastItem) {
+                    let isLate = false
+                    for (let pos = index - pushDistance; pos < bo.length; pos++) {
+                        if (aimForFastestBO) {
+                        } else if (
+                            !state.gamelogic ||
+                            state.gamelogic.eventLog[pos + 1].start >
+                                gamelogic.eventLog[pos].start + 3
+                        ) {
+                            isLate = true
+                            break
+                        }
+                    }
+                    if (isLate) {
+                        break
+                    }
+                }
+            }
+            bo.splice(index - (bestPushDistance || pushDistance + 1), 0, deleted[0])
+            if (pushDistance === 1) {
+                this.log({ notice: "Can't be preponed", temporary: true, autoClose: true })
+            } else {
+                if (bestPushDistance > 0) {
+                    pushDistance = bestPushDistance
+                    this.rerunBuildOrder(gamelogic, bo, false)
+                }
+                this.log({
+                    notice: `Preponed by ${pushDistance - 1} item(s)`,
+                    temporary: true,
+                    autoClose: true,
+                })
+                this.updateBO(bo, 0, undefined, doUpdateHistory)
+            }
+        }
+
+        updateBO = (
+            bo: IBuildOrderElement[],
+            removedCount: number = 0,
+            state?: Partial<WebPageState>,
+            doUpdateHistory = true
+        ) => {
             // TODO load snapshot from shortly before the removed bo index
             if (bo.length > 0) {
-                const state = this.rerunBuildOrder(this.state.gamelogic, bo)
+                state = state || this.rerunBuildOrder(this.state.gamelogic, bo)
                 if (this.state.insertIndex > this.state.hoverIndex) {
-                    const stateUpdate = { insertIndex: Math.max(0, this.state.insertIndex - 1) }
+                    const stateUpdate = {
+                        insertIndex: Math.max(0, this.state.insertIndex - removedCount),
+                    }
                     state.insertIndex = stateUpdate.insertIndex
                     this.setState(stateUpdate)
                 }
-                this.updateHistory(state)
             } else {
                 const gamelogic = new GameLogic(
                     this.state.race,
@@ -336,18 +451,51 @@ export default withRouter(
                     insertIndex: 0,
                 }
                 this.setState(state as any)
+            }
+            if (doUpdateHistory && state) {
                 this.updateHistory(state)
             }
+        }
+
+        preponeEventHandler(
+            e: React.MouseEvent<HTMLElement, MouseEvent>,
+            index = -1,
+            doUpdateHistory = true,
+            bo?: Array<IBuildOrderElement>,
+            gamelogic?: GameLogic
+        ): boolean {
+            if (e.shiftKey) {
+                this.preponeItemFromBO(index, e.ctrlKey, e.altKey, doUpdateHistory, bo, gamelogic)
+                return true
+            }
+            return false
+        }
+
+        updateHistoryFromState(): void {
+            this.updateHistory({
+                bo: this.state.bo,
+                gamelogic: this.state.gamelogic,
+                insertIndex: this.state.insertIndex,
+            })
         }
 
         // If a button is pressed in the action selection, add it to the build order
         // Then re-calculate the resulting time of all the items
         // Then send all items and events to the BOArea
+        actionSelectionClicked(
+            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            item: IBuildOrderElement
+        ): void {
+            const state: Partial<WebPageState> = this.addItemToBO(item, false)
+            const addedItemIndex = (state.insertIndex || 0) - 1
+            this.preponeEventHandler(e, addedItemIndex, true, state.bo, state.gamelogic)
+            this.updateHistoryFromState()
+        }
         actionSelectionActionClicked = (
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             action: ICustomAction
         ) => {
-            this.addItemToBO({
+            this.actionSelectionClicked(e, {
                 name: action.internal_name,
                 type: "action",
             })
@@ -357,24 +505,18 @@ export default withRouter(
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             unit: string
         ) => {
-            if (["SCV", "Probe", "Drone"].indexOf(unit) >= 0) {
-                this.addItemToBO({
-                    name: unit,
-                    type: "worker",
-                })
-            } else {
-                this.addItemToBO({
-                    name: unit,
-                    type: "unit",
-                })
-            }
+            const isWorker = ["SCV", "Probe", "Drone"].indexOf(unit) >= 0
+            this.actionSelectionClicked(e, {
+                name: unit,
+                type: isWorker ? "worker" : "unit",
+            })
         }
 
         actionSelectionStructureClicked = (
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             structure: string
         ) => {
-            this.addItemToBO({
+            this.actionSelectionClicked(e, {
                 name: structure,
                 type: "structure",
             })
@@ -384,17 +526,27 @@ export default withRouter(
             e: React.MouseEvent<HTMLDivElement, MouseEvent>,
             upgrade: string
         ) => {
-            this.addItemToBO({
-                name: upgrade,
-                type: "upgrade",
-            })
+            this.addItemToBO(
+                {
+                    name: upgrade,
+                    type: "upgrade",
+                },
+                false
+            )
+            this.preponeEventHandler(e)
+            this.updateHistoryFromState()
         }
 
-        buildOrderRemoveClicked = (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-            index: number
-        ) => {
-            this.removeItemFromBO(index)
+        buildOrderClicked = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+            if (this.preponeEventHandler(e, index)) {
+                this.updateHistoryFromState()
+            } else {
+                if (e.ctrlKey && !e.shiftKey) {
+                    this.removeAllItemFromBO(index)
+                } else {
+                    this.removeItemFromBO(index)
+                }
+            }
         }
 
         changeHoverIndex = (index: number) => {
@@ -403,7 +555,30 @@ export default withRouter(
             })
         }
 
+        changeHighlight = (highlightedItem?: Event) => {
+            if (highlightedItem) {
+                const toBeHighlighted: number[] = []
+                let index = 0
+                for (let item of this.state.gamelogic.eventLog) {
+                    if (highlightedItem.start <= item.start && item.start <= highlightedItem.end) {
+                        toBeHighlighted.push(index)
+                    }
+                    index++
+                }
+                this.setState({
+                    highlightedIndexes: toBeHighlighted,
+                })
+            } else {
+                this.setState({
+                    highlightedIndexes: [],
+                })
+            }
+        }
+
         changeInsertIndex = (index: number) => {
+            if (this.historyPosition > 0) {
+                this.history[this.historyPosition - 1].insertIndex = index
+            }
             this.setState({
                 insertIndex: index,
             })
@@ -413,11 +588,11 @@ export default withRouter(
             // Undo/redo
             if (e.metaKey || e.ctrlKey) {
                 // metaKey is for macs
-                if (e.which === 89) {
+                if (e.key === "y" || e.key === "Y") {
                     this.redo()
                     e.preventDefault()
                     return
-                } else if (e.which === 90) {
+                } else if (e.key === "z" || e.key === "Z") {
                     if (e.shiftKey) {
                         // On macs, Cmd+Shift+z is redo
                         this.redo()
@@ -427,6 +602,21 @@ export default withRouter(
                     e.preventDefault()
                     return
                 }
+            }
+
+            //Optimize constraints
+            const keyToConstraintType: { [key: string]: ConstraintType } = {
+                e: "after",
+                E: "after",
+                r: "at",
+                R: "at",
+                t: "before",
+                T: "before",
+                y: "remove",
+                Y: "remove",
+            }
+            if (!e.ctrlKey && includes(Object.keys(keyToConstraintType), e.key)) {
+                this.onAddConstraint(this.state.hoverIndex, keyToConstraintType[e.key])
             }
 
             // Handle keyboard presses: Arrow keys (left / right) to change insert-index
@@ -481,20 +671,25 @@ export default withRouter(
             })
         }
 
-        log = (line?: Log) => {
-            this.onLogCallback(line)
+        getOnAddConstraint(callback: (index: number, action: ConstraintType) => void): void {
+            this.onAddConstraint = callback
         }
 
-        onLog = (callback: (line: Log | undefined) => void) => {
-            this.onLogCallback = callback
+        logRestore = (log?: Log) => {
+            this.currentLogLine = log
+            this.onLogCallback(log)
         }
 
-        onUndoState = (state: Partial<WebPageState> | undefined) => {
-            if (state !== undefined) {
-                this.setState(state as WebPageState)
-                defaults(state, this.state)
-                this.updateHistory(state)
+        log = (log?: Log, temporary?: boolean) => {
+            this.currentLogLine = log
+            if (!temporary && !log?.temporary) {
+                this.history[this.historyPosition - 1].log = log
             }
+            this.onLogCallback(log)
+        }
+
+        onLog = (callback: (line?: Log) => void) => {
+            this.onLogCallback = callback
         }
 
         render() {
@@ -531,10 +726,12 @@ export default withRouter(
                                 optimizeSettings={this.state.optimizeSettings}
                                 updateOptimize={this.updateOptimize}
                                 applyOpitimization={this.applyOpitimization}
+                                gamelogic={this.state.gamelogic}
+                                getOnAddConstraint={this.getOnAddConstraint.bind(this)}
                                 log={this.log}
                             />
                             {read}
-                            <Logging onLog={this.onLog} undoState={this.onUndoState} />
+                            <Logging onLog={this.onLog} undo={() => this.undo()} />
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">
@@ -577,8 +774,9 @@ export default withRouter(
                                     <BuildOrder
                                         gamelogic={this.state.gamelogic}
                                         hoverIndex={this.state.hoverIndex}
+                                        highlightedIndexes={this.state.highlightedIndexes}
                                         insertIndex={this.state.insertIndex}
-                                        removeClick={this.buildOrderRemoveClicked}
+                                        removeClick={this.buildOrderClicked}
                                         rerunBuildOrder={(bo) =>
                                             this.rerunBuildOrder(this.state.gamelogic, bo)
                                         }
@@ -593,6 +791,9 @@ export default withRouter(
                                         changeHoverIndex={(index) => {
                                             this.changeHoverIndex(index)
                                         }}
+                                        changeHighlight={(item?: Event) => {
+                                            this.changeHighlight(item)
+                                        }}
                                         changeInsertIndex={(index) => {
                                             this.changeInsertIndex(index)
                                         }}
@@ -602,9 +803,13 @@ export default withRouter(
                                 <BOArea
                                     gamelogic={this.state.gamelogic}
                                     hoverIndex={this.state.hoverIndex}
-                                    removeClick={this.buildOrderRemoveClicked}
+                                    highlightedIndexes={this.state.highlightedIndexes}
+                                    removeClick={this.buildOrderClicked}
                                     changeHoverIndex={(index) => {
                                         this.changeHoverIndex(index)
+                                    }}
+                                    changeHighlight={(item?: Event) => {
+                                        this.changeHighlight(item)
                                     }}
                                 />
                                 <ErrorMessage gamelogic={this.state.gamelogic} />

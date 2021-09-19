@@ -1,10 +1,10 @@
 import React, { Component } from "react"
 import CLASSES from "../constants/classes"
-import { Log, WebPageState } from "../constants/interfaces"
+import { Log } from "../constants/interfaces"
 
 interface MyProps {
-    onLog: (callback: (log: Log | undefined) => void) => void
-    undoState: (state: Partial<WebPageState> | undefined) => void
+    onLog: (callback: (log?: Log) => void) => void
+    undo: () => void
 }
 
 interface MyState {
@@ -17,7 +17,7 @@ export default class Logging extends Component<MyProps, MyState> {
 
     constructor(props: MyProps) {
         super(props)
-        props.onLog((log) => {
+        props.onLog((log?: Log) => {
             if (this.autoClose !== undefined) {
                 clearTimeout(this.autoClose)
             }
@@ -43,7 +43,15 @@ export default class Logging extends Component<MyProps, MyState> {
 
     onUndo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        this.props.undoState(this.state.log?.undo)
+        this.props.undo()
+        this.onClose()
+    }
+
+    onCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        e.preventDefault()
+        if (this.state.log?.cancel) {
+            this.state.log.cancel()
+        }
         this.onClose()
     }
 
@@ -63,7 +71,7 @@ export default class Logging extends Component<MyProps, MyState> {
                     <button
                         key="undo"
                         style={style}
-                        className="underline ml-2 text-purple-800"
+                        className={CLASSES.linkButton}
                         onClick={this.onUndo}
                     >
                         undo (ctrl+z)
@@ -89,6 +97,25 @@ export default class Logging extends Component<MyProps, MyState> {
             })
             if (log.element) {
                 messages.push(log.element)
+            }
+            if (log.cancel !== undefined) {
+                const style = {
+                    background: "none!important",
+                    border: "none",
+                    color: "#069",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                }
+                messages.push(
+                    <button
+                        key="cancel"
+                        style={style}
+                        className={CLASSES.linkButton}
+                        onClick={this.onCancel}
+                    >
+                        cancel
+                    </button>
+                )
             }
             if (!log.hideCloseButton) {
                 messages.push(

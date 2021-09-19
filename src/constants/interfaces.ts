@@ -4,14 +4,14 @@ type IAllRaces = "zerg" | "terran" | "protoss"
 
 type IBarTypes = "worker" | "action" | "unit" | "structure" | "upgrade"
 
-type IButton = "donate" | "contribute" | "report_bugs" | "contact" | "legal"
+type IButton = "donate" | "contribute" | "report_bugs" | "contact" | "shortcuts" | "legal"
 
 type IReplaceString = "$time" | "$supply" | "$action"
 
 interface ISettingsElement {
     [name: string]: number | string
     n: string
-    v: number
+    v: number | string
 }
 
 interface IBuildOrderElement {
@@ -102,6 +102,7 @@ interface WebPageState {
     settings: Array<ISettingsElement>
     optimizeSettings: Array<ISettingsElement>
     hoverIndex: number
+    highlightedIndexes: number[]
     insertIndex: number
     multilineBuildOrder: boolean
     minimizedActionsSelection: boolean
@@ -117,6 +118,8 @@ interface Log {
     undo?: Partial<WebPageState>
     hideCloseButton?: boolean
     element?: JSX.Element
+    cancel?: () => void
+    temporary?: boolean
 }
 
 interface IResourceHistory {

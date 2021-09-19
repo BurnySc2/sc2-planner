@@ -5,6 +5,7 @@ const CLASSES = {
     titleVersion: "mx-2 text-xs italic antialiased hover:text-blue-600",
 
     errorLabel: "text-red-600 text-2xl font-bold",
+    warningLabel: "w-full text-blue-600 text-sm font-bold",
     // Race icon and the items on the right side icons
     raceIcon: "h-8 w-8 mx-1 p-0 z-10 flex-shrink-0 hover:bg-gray-400 cursor-pointer",
     timeIcon: "h-24 w-24 mx-1 p-0 z-10",
@@ -26,6 +27,7 @@ const CLASSES = {
     boItemInvalid: "m-0 p-0 h-16 w-16 bg-red-700 hover:bg-red-500 cursor-move",
     boItemInvalidDragging: "m-0 p-0 h-16 w-16 bg-red-300 cursor-move",
     boItemHighlighting: "m-0 p-0 h-16 w-16 bg-green-300 cursor-move border",
+    boItemDim: "bg-opacity-50",
     // Build order area in the bottom left
     boArea: "relative m-2 overflow-x-auto bg-indigo-400",
     boAreaPadding: "p-1",
@@ -76,13 +78,16 @@ const CLASSES = {
     dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
     dropDownSubContainer: "w-full my-1 py-1 flex flex-row justify-between items-center",
+    dropDownSubContainerMultiline: "w-full my-1 py-1 flex flex-col",
     // Only export import
     dropDownButton:
         "hover:bg-gray-400 px-2 flex flex-row justify-between cursor-pointer rounded border border-black border-black border-solid shadow",
     dropDownWideButton: "w-full hover:bg-gray-400 p-2 flex flex-row justify-between cursor-pointer",
     // Only settings
     dropDownLabel: "hover:bg-gray-400 px-2 flex flex-row justify-between",
+    dropDownLabelMultiline: "hover:bg-gray-400 px-2 flex flex-col justify-between",
     dropDownInput: "rounded w-20 mx-2 z-50",
+    dropDownInputMultiline: "rounded w-full mx-2 z-50",
 
     // Rectangle items in the BOArea
     // Import export buttons
@@ -90,6 +95,7 @@ const CLASSES = {
         "hover:bg-blue-500 relative bg-gray-300 text-gray-700 font-semibold mx-1 py-2 px-4 rounded items-center select-none h-10",
     tinyButtons:
         "hover:bg-blue-500 bg-gray-300 text-gray-700 font-semibold mx-1 py-0 px-1 rounded items-center select-none h-6 w-6 cursor-pointer",
+    linkButton: "underline ml-2 text-purple-800",
     centeredButton: "text-center w-full",
 
     readContainer: "flex flex-row items-end",

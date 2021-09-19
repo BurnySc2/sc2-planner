@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import CLASSES from "../constants/classes"
+import { includes } from "lodash"
 import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import Event from "../game_logic/event"
@@ -10,8 +11,10 @@ import ReactTooltip from "react-tooltip"
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
+    highlightedIndexes: number[]
     removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
     changeHoverIndex: (index: number) => void
+    changeHighlight: (item?: Event) => void
 }
 
 interface MyState {
@@ -80,6 +83,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                 <div>Supply: {item.supply}</div>
             </div>
         )
+        this.props.changeHighlight(item)
         this.setState({
             showTooltip: true,
             highlightStart: item.start,
@@ -91,6 +95,7 @@ export default class BOArea extends Component<MyProps, MyState> {
     onMouseLeave() {
         console.log("left")
         this.props.changeHoverIndex(-1)
+        this.props.changeHighlight()
         this.tooltipContent = undefined
         this.setState({
             showTooltip: false,
@@ -123,7 +128,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         resourceName: string,
         startFrame: number
     ) {
-        const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
+        const widthFactor = +this.props.gamelogic.settings.htmlElementWidthFactor
         let currentTargetRect = event.currentTarget.getBoundingClientRect()
         const eventOffsetX = event.pageX - currentTargetRect.left
         const frame = Math.floor(startFrame + eventOffsetX / widthFactor)
@@ -161,16 +166,25 @@ export default class BOArea extends Component<MyProps, MyState> {
             return ""
         }
         const myStyle = {
-            width: `${width * this.props.gamelogic.settings.htmlElementWidthFactor}px`,
+            width: `${width * +this.props.gamelogic.settings.htmlElementWidthFactor}px`,
         }
         return <div key={key} style={myStyle}></div>
     }
 
     getClass(barType: IBarTypes, index: number) {
+        const classes: string[] = []
         if (index === this.props.hoverIndex) {
-            return `${CLASSES.boElementContainer} ${CLASSES.hoverColor[barType]}`
+            classes.push(`${CLASSES.boElementContainer} ${CLASSES.hoverColor[barType]}`)
+        } else {
+            classes.push(
+                `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`
+            )
         }
-        return `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`
+
+        if (includes(this.props.highlightedIndexes, index)) {
+            classes.push(CLASSES.boItemDim)
+        }
+        return classes.join(" ")
     }
 
     setResourceConstants(): void {
@@ -221,7 +235,7 @@ export default class BOArea extends Component<MyProps, MyState> {
     }
 
     render() {
-        const widthFactor = this.props.gamelogic.settings.htmlElementWidthFactor
+        const widthFactor = +this.props.gamelogic.settings.htmlElementWidthFactor
 
         // Build vertical bars
         const barBgClasses: { [name: string]: string } = {}
@@ -327,7 +341,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         })
 
         this.setResourceConstants()
-        const resourceHeight = this.props.gamelogic.settings.htmlResourceHeight
+        const resourceHeight = +this.props.gamelogic.settings.htmlResourceHeight
         const resourceBars = !resourceHeight
             ? []
             : this.resourceTypes.map((resourceDetails) => {
@@ -454,7 +468,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         const timeIntervalContent = timeBarCalc.map((item, index) => {
             const myStyle = {
                 width: `${
-                    this.timeInterval * this.props.gamelogic.settings.htmlElementWidthFactor * 22.4
+                    this.timeInterval * +this.props.gamelogic.settings.htmlElementWidthFactor * 22.4
                 }px`,
             }
             const timeString = CONVERT_SECONDS_TO_TIME_STRING(item.start)

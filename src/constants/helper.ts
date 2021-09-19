@@ -2,7 +2,7 @@
 import lzbase62 from "lzbase62"
 import { isEqual, pick } from "lodash"
 
-import { ISettingsElement, IBuildOrderElement, IAllRaces } from "./interfaces"
+import { ISettingsElement, IBuildOrderElement, IAllRaces, Log } from "./interfaces"
 import UNITS_BY_NAME from "./units_by_name"
 import UPGRADES_BY_NAME from "./upgrade_by_name"
 import UPGRADES_BY_ID from "./upgrade_by_id"
@@ -21,6 +21,14 @@ const CONVERT_SECONDS_TO_TIME_STRING = (totalSeconds: number) => {
     const minutes = `${Math.floor(totalSeconds / 60)}`.padStart(2, "0")
     const seconds = `${totalSeconds % 60}`.padStart(2, "0")
     return `${minutes}:${seconds}`
+}
+
+const CONVERT_TIME_STRING_TO_SECONDS = (timeString: string) => {
+    const minutesReg = timeString.match(/([0-9]+):/)
+    const minutes = minutesReg ? +minutesReg[1] : 0
+    const secondsReg = timeString.match(/:([0-9]+)$/)
+    const seconds = secondsReg ? +secondsReg[1] : 0
+    return minutes * 60 + seconds
 }
 
 const getImageOfItem = (item: { name: string; type: string }): string => {
@@ -136,7 +144,7 @@ const defaultSettings: Array<ISettingsElement> = [
         step: 0.1,
     },
 ]
-const settingsDefaultValues: { [name: string]: number } = {}
+const settingsDefaultValues: { [name: string]: number | string } = {}
 defaultSettings.forEach((item) => {
     // TODO Fix type annotation
     // @ts-ignor
@@ -144,6 +152,15 @@ defaultSettings.forEach((item) => {
 })
 
 const defaultOptimizeSettings: Array<ISettingsElement> = [
+    {
+        name:
+            "Constraints on item building end time for all optimizations.\nE.g: Reaper#1<=01:52, Reaper#1<=Factory#1",
+        tooltip: "List timing constraints, comma separated",
+        variableName: "constraints",
+        n: "c",
+        v: "",
+    },
+
     {
         // Pretty name displayed in gui
         name: "Maximize workers up to",
@@ -153,13 +170,13 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeWorkers",
         // Short name for base64 string
         n: "mw",
-        // The given value
+        // The given value, can be a string
         v: 80,
         // Min value in GUI
         min: 0,
         // Max value in GUI
         max: 200,
-        // Step size of values in GUI if you press the arrow things
+        // Step size of values in GUI if you press the arrow things. If absent and value is not a string, no input is shown
         step: 1,
         apply: "Add as many workers as possible (Beta)",
     },
@@ -169,6 +186,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeWorkersOption1",
         n: "mw1",
         v: 1,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -189,6 +207,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeWorkersOption3",
         n: "mw3",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -200,6 +219,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeNexusChronos",
         n: "mbc",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -213,6 +233,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeMULEs",
         n: "mm",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
@@ -226,15 +247,25 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
         variableName: "maximizeInjects",
         n: "mi",
         v: 0,
+        removes: 1,
         min: 0,
         max: 1,
         step: 1,
         races: "zerg",
         apply: "Add as many injects as possible (Beta)",
     },
+
+    {
+        tooltip:
+            "Tries all possible swaps, and does it in multiple passes as long as it's more optimizing.",
+        variableName: "improveByReordering",
+        n: "ibr",
+        v: 0,
+        apply: "Improve BO end time by swaping items (Beta)",
+    },
 ]
 
-const optimizeSettingsDefaultValues: { [name: string]: number } = {}
+const optimizeSettingsDefaultValues: { [name: string]: number | string } = {}
 defaultOptimizeSettings.forEach((item) => {
     // TODO Fix type annotation
     // @ts-ignor
@@ -243,7 +274,7 @@ defaultOptimizeSettings.forEach((item) => {
 
 const encodeSettings = (
     settingsObject: Array<ISettingsElement>,
-    settingsDefaultValues: { [name: string]: number }
+    settingsDefaultValues: { [name: string]: number | string }
 ): string => {
     // Strip away unwanted values
     let strippedObject = settingsObject.map((item) => {
@@ -454,11 +485,31 @@ const decodeSALT = (saltEncoding: string) => {
         bo: bo,
     }
 }
+/**
+ * Adds cancellation to a log line
+ * Returns a promise that rejects when the log is cancelled, so it can raise an exception
+ * Returned promise has to be wrapped in a function otherwise it's auto-resolved
+ */
+export async function cancelableLog(
+    logFunc: (line?: Log) => void,
+    line: Log
+): Promise<() => Promise<void>> {
+    let cancel: () => void = () => {}
+    const cancellationPromise = new Promise<void>((resolve, reject) => {
+        cancel = reject
+    })
+    line.cancel = cancel
+    logFunc(line)
+    await new Promise((resolve) => setTimeout(resolve, 10)) // Required pause to let the logFunc render to the DOM
+
+    return () => cancellationPromise
+}
 
 export {
     defaultSettings,
     defaultOptimizeSettings,
     CONVERT_SECONDS_TO_TIME_STRING,
+    CONVERT_TIME_STRING_TO_SECONDS,
     getImageOfItem,
     encodeSettings,
     decodeSettings,

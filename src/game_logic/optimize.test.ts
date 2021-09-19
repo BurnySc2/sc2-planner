@@ -2,7 +2,7 @@ import { GameLogic } from "./gamelogic"
 import { OptimizeLogic } from "./optimize"
 import { IBuildOrderElement } from "../constants/interfaces"
 
-test("Optimize workers", () => {
+test("Optimize workers", async () => {
     const bo: IBuildOrderElement[] = [
         { name: "Extractor", type: "structure" },
         { name: "3worker_to_gas", type: "action" },
@@ -14,8 +14,8 @@ test("Optimize workers", () => {
     logic.setStart()
     logic.runUntilEnd()
 
-    const optimize = new OptimizeLogic(logic.race, [], [])
-    const [state, log] = optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeWorkers"])
+    const optimize = new OptimizeLogic(logic.race, [], [], () => null)
+    const [state, log] = await optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeWorkers"])
 
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)
@@ -26,7 +26,7 @@ test("Optimize workers", () => {
     }
 })
 
-test("Optimize nexus chronos", () => {
+test("Optimize nexus chronos", async () => {
     const bo: IBuildOrderElement[] = [
         { name: "Probe", type: "unit" },
         { name: "Pylon", type: "structure" },
@@ -39,8 +39,10 @@ test("Optimize nexus chronos", () => {
     logic.setStart()
     logic.runUntilEnd()
 
-    const optimize = new OptimizeLogic(logic.race, [], [])
-    const [state, log] = optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeNexusChronos"])
+    const optimize = new OptimizeLogic(logic.race, [], [], () => null)
+    const [state, log] = await optimize.optimizeBuildOrder(logic, logic.bo, [
+        "maximizeNexusChronos",
+    ])
 
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)
@@ -51,7 +53,7 @@ test("Optimize nexus chronos", () => {
     }
 })
 
-test("Optimize MULEs", () => {
+test("Optimize MULEs", async () => {
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Barracks", type: "structure" },
@@ -65,8 +67,8 @@ test("Optimize MULEs", () => {
     logic.setStart()
     logic.runUntilEnd()
 
-    const optimize = new OptimizeLogic(logic.race, [], [])
-    const [state, log] = optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeMULEs"])
+    const optimize = new OptimizeLogic(logic.race, [], [], () => null)
+    const [state, log] = await optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeMULEs"])
 
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)
@@ -77,7 +79,7 @@ test("Optimize MULEs", () => {
     }
 })
 
-test("Optimize injects", () => {
+test("Optimize injects", async () => {
     const bo: IBuildOrderElement[] = [
         { name: "Hatchery", type: "structure" },
         { name: "SpawningPool", type: "structure" },
@@ -91,8 +93,8 @@ test("Optimize injects", () => {
     logic.setStart()
     logic.runUntilEnd()
 
-    const optimize = new OptimizeLogic(logic.race, [], [])
-    const [state, log] = optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeInjects"])
+    const optimize = new OptimizeLogic(logic.race, [], [], () => null)
+    const [state, log] = await optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeInjects"])
 
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)

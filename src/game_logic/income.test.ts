@@ -33,11 +33,23 @@ test("Get mineral income of one MULE", () => {
 })
 
 test("Get gas income of one Worker", () => {
-    expect(incomeVespene(1, 1)).toBeCloseTo(0.888)
+    expect(incomeVespene(1, 1, 1)).toBeCloseTo(0.888)
 })
 
 test("Get gas income of three Workers", () => {
     // Benchmark: 3 workers for 5 minutes: 812 gas
-    expect(incomeVespene(3, 1) * 5 * 60).toBeGreaterThan(810)
-    expect(incomeVespene(3, 1) * 5 * 60).toBeLessThan(814)
+    expect(incomeVespene(3, 1, 1) * 5 * 60).toBeGreaterThan(810)
+    expect(incomeVespene(3, 1, 1) * 5 * 60).toBeLessThan(814)
+})
+
+test("Get gas income of five Workers on two geysers", () => {
+    // Benchmark: unknown
+    expect(incomeVespene(5, 2, 1) * 5 * 60).toBeGreaterThan(1388)
+    expect(incomeVespene(5, 2, 1) * 5 * 60).toBeLessThan(1392)
+})
+
+test("Get gas income of ten Workers on one base but three geysers", () => {
+    // Benchmark: unknown
+    expect(incomeVespene(10, 3, 1) * 5 * 60).toBeGreaterThan(1753)
+    expect(incomeVespene(10, 3, 1) * 5 * 60).toBeLessThan(1757)
 })

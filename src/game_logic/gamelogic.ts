@@ -65,9 +65,9 @@ class GameLogic {
     unitsCountArray: Array<{ [name: string]: number }>
     errorMessage: string
     requirements?: IBuildOrderElement[]
-    settings: { [name: string]: number }
+    settings: { [name: string]: number | string }
     customSettings: Array<ISettingsElement>
-    optimizeSettings: { [name: string]: number }
+    optimizeSettings: { [name: string]: number | string }
     customOptimizeSettings: Array<ISettingsElement>
 
     constructor(
@@ -261,7 +261,7 @@ class GameLogic {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
             const workerStartDelayTask = new Task(
-                22.4 * this.settings.workerStartDelay,
+                22.4 * +this.settings.workerStartDelay,
                 this.frame,
                 this.supplyUsed
             )
@@ -290,8 +290,8 @@ class GameLogic {
 
             // Abort if units idle for too long (waiting for resources), e.g. when making all workers scout and only one more worker is mining, then build a cc will take forever
             if (this.busyUnits.size === 0) {
-                this.settings.idleTime += 1
-                if (this.settings.idleTime >= this.settings.idleLimit * 22.4) {
+                this.settings.idleTime = +this.settings.idleTime + 1
+                if (this.settings.idleTime >= +this.settings.idleLimit * 22.4) {
                     break
                 }
             } else {
@@ -702,12 +702,12 @@ class GameLogic {
                 this.workersMinerals -= 1
                 // Worker moving to location delay
                 const workerMovingToConstructionSite = new Task(
-                    this.settings.workerBuildDelay * 22.4,
+                    +this.settings.workerBuildDelay * 22.4,
                     this.frame,
                     this.supplyUsed
                 )
                 trainerUnit.addTask(this, workerMovingToConstructionSite)
-                buildStartDelay = this.settings.workerBuildDelay * 22.4
+                buildStartDelay = +this.settings.workerBuildDelay * 22.4
                 // Since this task is run immediately, it needs to end later when made by probes
                 if (trainerUnit.name === "Probe") {
                     buildTime += buildStartDelay
@@ -763,7 +763,7 @@ class GameLogic {
             if (["Probe", "SCV"].includes(trainerUnit.name)) {
                 // Probe and SCV return to mining after they are done with their task
                 const workerReturnToMinerals = new Task(
-                    this.settings.workerReturnDelay * 22.4,
+                    +this.settings.workerReturnDelay * 22.4,
                     this.frame,
                     this.supplyUsed
                 )
@@ -1017,7 +1017,7 @@ class GameLogic {
         if (minerals === undefined) {
             minerals =
                 incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) /
-                this.settings.incomeFactor
+                +this.settings.incomeFactor
             mineralIncomeCache[
                 // TODO Fix me: array[number] cannot be used as index type
                 // @ts-ignore
@@ -1029,7 +1029,9 @@ class GameLogic {
         // @ts-ignore
         let vespene = vespeneIncomeCache[[this.workersVespene, this.gasCount]]
         if (vespene === undefined) {
-            vespene = incomeVespene(this.workersVespene, this.gasCount) / this.settings.incomeFactor
+            vespene =
+                incomeVespene(this.workersVespene, this.gasCount, this.baseCount) /
+                +this.settings.incomeFactor
             // TODO Fix me: array[number] cannot be used as index type
             // @ts-ignore
             vespeneIncomeCache[[this.workersVespene, this.gasCount]] = vespene

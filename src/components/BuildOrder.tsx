@@ -1,8 +1,10 @@
 import React, { Component } from "react"
 import CLASSES from "../constants/classes"
 
+import { includes } from "lodash"
 import { getImageOfItem } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
+import Event from "../game_logic/event"
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
 import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
 
@@ -20,6 +22,7 @@ const reorder = (list: Array<IBuildOrderElement>, startIndex: number, endIndex: 
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
+    highlightedIndexes: number[]
     insertIndex: number
     removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
     rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
@@ -30,6 +33,7 @@ interface MyProps {
         optimizeSettings: ISettingsElement[] | undefined
     ) => void
     changeHoverIndex: (index: number) => void
+    changeHighlight: (item?: Event) => void
     changeInsertIndex: (index: number) => void
     multilineBuildOrder: boolean
 }
@@ -51,9 +55,11 @@ export default class BuildOrder extends Component<MyProps, MyState> {
 
     onMouseEnter(index: number) {
         this.props.changeHoverIndex(index)
+        this.props.changeHighlight(this.props.gamelogic.eventLog[index])
     }
     onMouseLeave() {
         this.props.changeHoverIndex(-1)
+        this.props.changeHighlight()
     }
 
     onDragEnd(result: DropResult) {
@@ -94,19 +100,25 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         const getItemClass = (dragging: boolean, index: number) => {
             // Build order is invalid after this index, mark background or border red
             // Set color based on if it is dragging
+            const classes: string[] = []
             if (dragging) {
                 if (index >= this.props.gamelogic.boIndex) {
-                    return CLASSES.boItemInvalidDragging
+                    classes.push(CLASSES.boItemInvalidDragging)
+                } else {
+                    classes.push(CLASSES.boItemDragging)
                 }
-                return CLASSES.boItemDragging
             } else if (index === this.props.hoverIndex) {
-                return CLASSES.boItemHighlighting
+                classes.push(CLASSES.boItemHighlighting)
             } else {
                 if (index >= this.props.gamelogic.boIndex) {
-                    return CLASSES.boItemInvalid
+                    classes.push(CLASSES.boItemInvalid)
                 }
-                return CLASSES.boItem
+                classes.push(CLASSES.boItem)
             }
+            if (includes(this.props.highlightedIndexes, index)) {
+                classes.push(CLASSES.boItemDim)
+            }
+            return classes.join(" ")
         }
 
         let buildOrderItems: JSX.Element[] = []
