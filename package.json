@@ -38,6 +38,8 @@
         "tailwind:css:dev": "tailwind build src/tailwind.css -c tailwind.config.dev.js -o src/index.css",
         "test": "react-scripts test --env=jsdom",
         "testAll": "react-scripts test --env=jsdom --watchAll=false",
+        "prune": "rm package-lock.json -f && rm node_modules -rf && npm i",
+        "format": "npx prettier --write \"src/**/*.{json,js,ts,tsx}\"",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
@@ -56,6 +58,7 @@
         ]
     },
     "devDependencies": {
+        "npm-check-updates": "^11.8.5",
         "prettier": "2.0.4"
     }
 }

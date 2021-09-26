@@ -9,7 +9,7 @@ import {
     Log,
 } from "../constants/interfaces"
 import { CONVERT_SECONDS_TO_TIME_STRING, CONVERT_TIME_STRING_TO_SECONDS } from "../constants/helper"
-import { GameLogic } from "../game_logic/gamelogic"
+import { GameLogic } from "./gamelogic"
 import { BO_ITEMS, workerNameByRace, supplyUnitNameByRace } from "../constants/bo_items"
 import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
@@ -36,6 +36,7 @@ export type Constraint = TimeConstraint | OrderConstraint
 
 export type ConstraintType = "after" | "at" | "before" | "remove"
 
+// Unused interface? TODO remove me
 interface MaxReordParams {
     swapPos: number
     boCode: string

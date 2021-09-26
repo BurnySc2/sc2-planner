@@ -43,7 +43,7 @@ Install packages:
 
 To test:
 
-`npm test`
+`npm run test`
 
 To start dev server:
 
@@ -69,7 +69,7 @@ Most image assets are owned by Blizzard and are used according to http://blizzar
 
 Prettify all .ts and .tsx files:
 
-`npx prettier --write "**/*.{ts,tsx}"`
+`npm run format`
 
 # TODO
 

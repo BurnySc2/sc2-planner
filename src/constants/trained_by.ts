@@ -5,7 +5,6 @@ import { ITrainedBy } from "./interfaces"
 import { sortBy, uniq, without, pull } from "lodash"
 
 import data from "./data.json"
-// const data = require("./data.json")
 
 const TRAINED_BY: ITrainedBy = {}
 

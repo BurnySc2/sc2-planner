@@ -122,12 +122,12 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         }
 
         let buildOrderItems: JSX.Element[] = []
-        let seperatorClass =
-            this.props.insertIndex === 0 ? CLASSES.boItemSeperatorSelected : CLASSES.boItemSeperator
+        let separatorClass =
+            this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
         buildOrderItems.push(
             <div
-                key={`seperator0`}
-                className={seperatorClass}
+                key={`separator0`}
+                className={separatorClass}
                 onClick={(e) => {
                     this.props.changeInsertIndex(0)
                 }}
@@ -155,14 +155,14 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                 </Draggable>
             )
 
-            seperatorClass =
+            separatorClass =
                 this.props.insertIndex === index + 1
-                    ? CLASSES.boItemSeperatorSelected
-                    : CLASSES.boItemSeperator
+                    ? CLASSES.boItemSeparatorSelected
+                    : CLASSES.boItemSeparator
             buildOrderItems.push(
                 <div
-                    key={`seperator${index + 1}`}
-                    className={seperatorClass}
+                    key={`separator${index + 1}`}
+                    className={separatorClass}
                     onClick={(e) => {
                         this.props.changeInsertIndex(index + 1)
                     }}
