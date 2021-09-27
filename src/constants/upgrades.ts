@@ -2,7 +2,6 @@ import ENABLED_UPGRADES from "./enabled_upgrades"
 import data from "./data.json"
 import { IDataUpgrade, IAllRaces } from "./interfaces"
 import { iconSortUpgradeFunction } from "./icon_order"
-// const data = require("./data.json")
 
 // Maps ability id to upgrade id
 const ABILITY_TO_UPGRADES: { [name: number]: number } = {}

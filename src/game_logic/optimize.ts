@@ -37,15 +37,15 @@ export type Constraint = TimeConstraint | OrderConstraint
 export type ConstraintType = "after" | "at" | "before" | "remove"
 
 // Unused interface? TODO remove me
-interface MaxReordParams {
-    swapPos: number
-    boCode: string
-    bo: Array<IBuildOrderElement>
-    boCodes: { [code: string]: true }
-    bestGameLogic: GameLogic
-    improvedSinceStart: boolean
-    improvedSinceLastPass: boolean
-}
+// interface MaxReordParams {
+//     swapPos: number
+//     boCode: string
+//     bo: Array<IBuildOrderElement>
+//     boCodes: { [code: string]: true }
+//     bestGameLogic: GameLogic
+//     improvedSinceStart: boolean
+//     improvedSinceLastPass: boolean
+// }
 
 class OptimizeLogic {
     race: IAllRaces
@@ -92,15 +92,12 @@ class OptimizeLogic {
     ): Promise<OptimizationReturn> {
         let ret: OptimizationReturn = [undefined, undefined]
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
-            const maximizeWorkersOption1 = !!currentGamelogic.optimizeSettings[
-                "maximizeWorkersOption1"
-            ]
-            const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings[
-                "maximizeWorkersOption2"
-            ]
-            const maximizeWorkersOption3 = !!currentGamelogic.optimizeSettings[
-                "maximizeWorkersOption3"
-            ]
+            const maximizeWorkersOption1 =
+                !!currentGamelogic.optimizeSettings["maximizeWorkersOption1"]
+            const maximizeWorkersOption2 =
+                !!currentGamelogic.optimizeSettings["maximizeWorkersOption2"]
+            const maximizeWorkersOption3 =
+                !!currentGamelogic.optimizeSettings["maximizeWorkersOption3"]
             ret = await this.maximizeWorkers(
                 currentGamelogic,
                 buildOrder,
@@ -244,7 +241,7 @@ class OptimizeLogic {
             await Promise.race([
                 cancellationPromise,
                 // eslint-disable-next-line
-                new Promise((resolve) => {
+                new Promise<void>((resolve) => {
                     let validatesConstraints: boolean
                     do {
                         let boToTest = cloneDeep(bo)
@@ -357,7 +354,7 @@ class OptimizeLogic {
             await Promise.race([
                 cancellationPromise,
                 // eslint-disable-next-line
-                new Promise((resolve) => {
+                new Promise<void>((resolve) => {
                     let boToTest = cloneDeep(bo)
                     boToTest.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
                     gamelogic = this.simulateBo(boToTest)
@@ -426,7 +423,7 @@ class OptimizeLogic {
                 await Promise.race([
                     cancellationPromise,
                     // eslint-disable-next-line
-                    new Promise((resolve) => {
+                    new Promise<void>((resolve) => {
                         const spreadingMax = bo.length - swapPos - 1
                         for (let spreading = 1; spreading <= spreadingMax; spreading++) {
                             const boCodeToTest = this.swapChars(

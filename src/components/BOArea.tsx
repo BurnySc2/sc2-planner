@@ -313,7 +313,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                             <div style={myStyle} className={this.getClass(barType, item.id)}>
                                 <img
                                     className={CLASSES.boElementIcon}
-                                    src={require("../icons/png/" + item.imageSource)}
+                                    src={require("../icons/png/" + item.imageSource).default}
                                     alt={itemName}
                                 />
                                 <div className={CLASSES.boElementText}>{itemName}</div>
@@ -413,7 +413,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                   )
 
                   const wideBarStyle = {
-                      backgroundImage: `url(${require(`../icons/${resourceType}.jpg`)})`,
+                      backgroundImage: `url(${require(`../icons/${resourceType}.jpg`).default})`,
                       backgroundSize: "contain",
                   }
                   const borderBarHeightStyle = {
@@ -423,7 +423,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                       <div key={`row${resourceType}`} className={CLASSES.boResourceBar}>
                           <img
                               className={CLASSES.boResourceIcon}
-                              src={require("../icons/" + icon)}
+                              src={require("../icons/" + icon).default}
                               alt={resourceName}
                           />
                           <div className={CLASSES.boResourceWideBar} style={wideBarStyle}>

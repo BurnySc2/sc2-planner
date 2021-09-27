@@ -1,6 +1,5 @@
 import ENABLED_ABILITIES from "./enabled_abilities"
 import data from "./data.json"
-// const data = require("./data.json")
 
 const ENABLED_UNITS: Set<number> = new Set()
 

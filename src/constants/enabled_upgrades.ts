@@ -1,5 +1,4 @@
 import data from "./data.json"
-// const data = require("./data.json")
 
 const ENABLED_UPGRADES: Set<number> = new Set()
 

@@ -1,5 +1,4 @@
 import data from "./data.json"
-// const data = require("./data.json")
 
 let ENABLED_ABILITIES: Set<number> = new Set()
 data.Unit.forEach((unit) => {

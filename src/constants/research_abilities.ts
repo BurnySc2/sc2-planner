@@ -1,5 +1,4 @@
 import data from "./data.json"
-// const data = require("./data.json")
 
 const RESEARCH_ABILITIES: { [name: number]: number } = {}
 

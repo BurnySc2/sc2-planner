@@ -35,11 +35,11 @@ const getImageOfItem = (item: { name: string; type: string }): string => {
     let image = ""
     try {
         if (item.type === "upgrade") {
-            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
+            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`).default
         } else if (item.type === "action") {
-            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
+            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`).default
         } else {
-            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
+            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`).default
         }
     } catch {
         console.error(`Missing image for: ${item.name}`)
@@ -153,8 +153,7 @@ defaultSettings.forEach((item) => {
 
 const defaultOptimizeSettings: Array<ISettingsElement> = [
     {
-        name:
-            "Constraints on item building end time for all optimizations.\nE.g: Reaper#1<=01:52, Reaper#1<=Factory#1",
+        name: "Constraints on item building end time for all optimizations.\nE.g: Reaper#1<=01:52, Reaper#1<=Factory#1",
         tooltip: "List timing constraints, comma separated",
         variableName: "constraints",
         n: "c",

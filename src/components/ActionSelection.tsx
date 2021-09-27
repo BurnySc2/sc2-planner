@@ -88,7 +88,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
             return (
                 <div key={item.name} className={this.classString}>
-                    <img src={require("../icons/png/" + item.path)} alt={item.name} />
+                    <img src={require("../icons/png/" + item.path).default} alt={item.name} />
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>

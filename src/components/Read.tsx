@@ -32,6 +32,7 @@ export default class Read extends Component<MyProps, MyState> {
     lineHandlers: NodeJS.Timeout[]
     startTime: number
     listeningToSpeach: boolean
+    // @ts-ignore
     recognition: SpeechRecognition | undefined
     ingameTime: number = 0
     /**
@@ -55,6 +56,7 @@ export default class Read extends Component<MyProps, MyState> {
         const wordList = ["go"]
         const grammar = `#JSGF V1.0; grammar colors; public <color> = ${wordList.join(" | ")} ;`
         const anyWindow = window as any
+        // @ts-ignore
         let speechRecognitionList: SpeechGrammarList | undefined
         for (let prefix of ["", "webkit", "moz", "ms", "o"]) {
             this.recognition =
@@ -164,7 +166,7 @@ export default class Read extends Component<MyProps, MyState> {
         this.recognition.start()
         this.listeningToSpeach = true
 
-        this.recognition.onresult = (event) => {
+        this.recognition.onresult = (event: { results: { transcript: any }[][] }) => {
             const voice = event.results[0][0].transcript
             let startTime = startAt
             if (/^stop$/.test(voice)) {
@@ -195,20 +197,20 @@ export default class Read extends Component<MyProps, MyState> {
             }
         }
 
-        this.recognition.onnomatch = (event) => {
+        this.recognition.onnomatch = () => {
             this.props.log({
                 error: "I didn't recognise what was said.",
             })
         }
 
-        this.recognition.onerror = (event) => {
+        this.recognition.onerror = (event: any) => {
             const error = (event as any).error
             if (error !== "no-speech") {
                 this.stopReading()
             }
         }
 
-        this.recognition.onend = (event) => {
+        this.recognition.onend = () => {
             if (this.listeningToSpeach) {
                 this.recognition?.start()
             }
@@ -426,11 +428,10 @@ export default class Read extends Component<MyProps, MyState> {
             this.state.canStop ? "visible" : "hidden"
         } cursor-pointer`
 
-        const mouseEnterFunc = (tooltip: string) => (
-            e: React.MouseEvent<HTMLElement, MouseEvent>
-        ) => {
-            this.onMouseEnter(e, <div>{tooltip}</div>)
-        }
+        const mouseEnterFunc =
+            (tooltip: string) => (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                this.onMouseEnter(e, <div>{tooltip}</div>)
+            }
 
         const speachStart = !this.recognition ? (
             ""

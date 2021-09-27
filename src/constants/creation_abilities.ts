@@ -1,6 +1,5 @@
 import ENABLED_ABILITIES from "./enabled_abilities"
 import data from "./data.json"
-// const data = require("./data.json")
 
 const CREATION_ABILITIES: { [name: number]: number } = {}
 const MORPH_ABILITIES = new Set()
