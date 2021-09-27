@@ -72,10 +72,10 @@ const CLASSES = {
     boResourceHighlight: "z-60 absolute top-0 left-0 m-0 p-0 border border-black h-full",
     boElementContainer: "z-40 flex flex-shrink-0 items-center border-l-2 border-r-2 border-black",
     boElementIcon: "m-0 p-0 h-8",
-    boElementText: "z-20 m-0 p-0 whitespace-no-wrap",
+    boElementText: "z-20 m-0 p-0 whitespace-nowrap",
 
     // Dropdown of export, import, settings
-    dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-no-wrap flex flex-col",
+    dropDown: "absolute left-0 top-auto z-50 rounded bg-gray-300 whitespace-nowrap flex flex-col",
     dropDownContainer: "m-1 p-1 flex flex-row justify-between",
     dropDownSubContainer: "w-full my-1 py-1 flex flex-row justify-between items-center",
     dropDownSubContainerMultiline: "w-full my-1 py-1 flex flex-col",
