@@ -24,7 +24,7 @@ interface MyProps {
     hoverIndex: number
     highlightedIndexes: number[]
     insertIndex: number
-    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
+    removeClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void
     rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
@@ -126,6 +126,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
         buildOrderItems.push(
             <div
+                id={"separator_0"}
                 key={"separator0"}
                 className={separatorClass}
                 onClick={(_e) => {
@@ -138,7 +139,8 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             buildOrderItems.push(
                 <Draggable key={`${index}`} draggableId={`${index}`} index={index}>
                     {(provided, snapshot) => (
-                        <div
+                        <button
+                            id={`bo_${item.name}_${index}`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
@@ -150,7 +152,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                             }}
                         >
                             {buildOrder[index]}
-                        </div>
+                        </button>
                     )}
                 </Draggable>
             )
@@ -161,6 +163,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                     : CLASSES.boItemSeparator
             buildOrderItems.push(
                 <div
+                    id={`separator_${index + 1}`}
                     key={`separator${index + 1}`}
                     className={separatorClass}
                     onClick={(_e) => {
@@ -171,7 +174,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         })
 
         return (
-            <div className={CLASSES.bo}>
+            <div id={"buildorder"} className={CLASSES.bo}>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="droppable" direction="horizontal">
                         {(provided, _snapshot) => (

@@ -12,7 +12,7 @@ interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
     highlightedIndexes: number[]
-    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
+    removeClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void
     changeHoverIndex: (index: number) => void
     changeHighlight: (item?: Event) => void
 }
@@ -300,9 +300,10 @@ export default class BOArea extends Component<MyProps, MyState> {
                     }
 
                     rowContent.push(
-                        <div
+                        <button
+                            id={`boarea_${item.name}_${index2}`}
                             key={`boArea${barType}${index1}${index2}${item.name}${item.id}`}
-                            className="flex flex-row wtf"
+                            className="flex flex-row"
                             data-tip=""
                             data-for="boAreaTooltip"
                             onMouseEnter={(_e) => this.onMouseEnter(item)}
@@ -317,7 +318,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                                 />
                                 <div className={CLASSES.boElementText}>{itemName}</div>
                             </div>
-                        </div>
+                        </button>
                     )
                 })
                 return (

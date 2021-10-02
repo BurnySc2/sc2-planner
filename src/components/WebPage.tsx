@@ -288,7 +288,7 @@ export default withRouter(
         }
 
         raceSelectionClicked = (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
             race: IAllRaces
         ) => {
             // Set race in state after a race selection icon has been pressed
@@ -484,7 +484,7 @@ export default withRouter(
         // Then re-calculate the resulting time of all the items
         // Then send all items and events to the BOArea
         actionSelectionClicked(
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
             item: IBuildOrderElement
         ): void {
             const state: Partial<WebPageState> = this.addItemToBO(item, false)
@@ -493,7 +493,7 @@ export default withRouter(
             this.updateHistoryFromState()
         }
         actionSelectionActionClicked = (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
             action: ICustomAction
         ) => {
             this.actionSelectionClicked(e, {
@@ -503,7 +503,7 @@ export default withRouter(
         }
 
         actionSelectionUnitClicked = (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
             unit: string
         ) => {
             const isWorker = ["SCV", "Probe", "Drone"].indexOf(unit) >= 0
@@ -514,7 +514,7 @@ export default withRouter(
         }
 
         actionSelectionStructureClicked = (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
             structure: string
         ) => {
             this.actionSelectionClicked(e, {
@@ -524,7 +524,7 @@ export default withRouter(
         }
 
         actionSelectionUpgradeClicked = (
-            e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+            e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
             upgrade: string
         ) => {
             this.addItemToBO(
@@ -538,7 +538,7 @@ export default withRouter(
             this.updateHistoryFromState()
         }
 
-        buildOrderClicked = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+        buildOrderClicked = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
             if (this.preponeEventHandler(e, index)) {
                 this.updateHistoryFromState()
             } else {

@@ -15,10 +15,10 @@ interface MyProps {
     gamelogic: GameLogic
     race: IAllRaces
     insertIndex: number
-    actionClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, action: ICustomAction) => void
-    unitClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
-    structureClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
-    upgradeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
+    actionClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, action: ICustomAction) => void
+    unitClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, unit: string) => void
+    structureClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, unit: string) => void
+    upgradeClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, unit: string) => void
 }
 
 interface MyState {
@@ -36,7 +36,10 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
         }
     }
 
-    onMouseEnter = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element): void => {
+    onMouseEnter = (
+        _e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        item: JSX.Element
+    ): void => {
         this.setState({
             tooltipText: item,
         })
@@ -98,7 +101,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
         const customactions = CUSTOMACTIONS.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col">
@@ -115,8 +118,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
             const hidden = item.race === undefined || item.race === this.props.race ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -129,13 +133,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 
         const units = UNITS.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -153,8 +157,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const value = unitsCount[item.name]
             const hidden = UNIT_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -167,13 +172,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 
         const structures = STRUCTURES.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -189,8 +194,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const value = unitsCount[item.name]
             const hidden = STRUCTURE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -203,13 +209,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 
         const upgrades = UPGRADES.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -225,8 +231,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const value = unitsCount[item.name]
             const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -239,7 +246,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 

@@ -5,7 +5,7 @@ import CLASSES from "../constants/classes"
 import { IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
-    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces) => void
+    onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, race: IAllRaces) => void
 }
 
 export default class RaceSelection extends Component<MyProps> {
@@ -17,7 +17,7 @@ export default class RaceSelection extends Component<MyProps> {
     //     super(props)
     // }
 
-    onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces): void => {
+    onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, race: IAllRaces): void => {
         this.props.onClick(e, race)
     }
 
@@ -28,12 +28,17 @@ export default class RaceSelection extends Component<MyProps> {
         const races = allRaces.map((race, _index) => {
             const item: { name: string; path: string } = RACES[race]
             return (
-                <div key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
+                <button
+                    id={race}
+                    key={item.name}
+                    className={classString}
+                    onClick={(e) => this.onClick(e, race)}
+                >
                     <img src={require("../icons/png/" + item.path).default} alt={item.name} />
-                </div>
+                </button>
             )
         })
 
-        return <div>{races}</div>
+        return <div className={"flex flex-col"}>{races}</div>
     }
 }
