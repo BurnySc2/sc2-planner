@@ -49,7 +49,7 @@ class Task {
      * Updates the progress of the task, once completed, an event will be fired
      * @param {Boolean} hasChrono - If the unit has chronoboost, the task is accelerated by 50%
      */
-    updateProgress(hasChrono = false) {
+    updateProgress(hasChrono = false): void {
         if (hasChrono) {
             this.progress += 1.5
         } else {

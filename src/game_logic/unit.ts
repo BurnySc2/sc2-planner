@@ -3,7 +3,6 @@ import UNITS_BY_NAME from "../constants/units_by_name"
 import Event from "./event"
 import Task from "./task"
 import { GameLogic } from "./gamelogic"
-// import Task from "./task"
 
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
@@ -62,11 +61,12 @@ class Unit {
 
     /**
      * Adding a task will also turn the unit 'busy' - If no unit is busy anymore, the runUntilEnd() function will stop
+     * @param {GameLogic} gamelogic
      * @param {Task} task
      * @param {Boolean} taskForReactor
      * @param {Boolean} taskForLarva
      */
-    addTask(gamelogic: GameLogic, task: Task, taskForReactor = false, taskForLarva = false) {
+    addTask(gamelogic: GameLogic, task: Task, taskForReactor = false, taskForLarva = false): void {
         // console.assert([true, false].includes(taskForReactor), taskForReactor)
         // console.assert([true, false].includes(taskForLarva), taskForLarva)
         gamelogic.busyUnits.add(this)
@@ -85,7 +85,7 @@ class Unit {
     /**
      * Returns true if it has no tasks, or has reactor and reactor has no tasks, or has larva
      */
-    isIdle() {
+    isIdle(): boolean {
         return (
             (this.tasks.length === 0 ||
                 this.larvaCount > 0 ||
@@ -98,49 +98,49 @@ class Unit {
     /**
      * Returns true it has a task (hatchery builds queen, or hatchery's larva builds drone, or barrack's reactor builds a marine)
      */
-    isBusy() {
+    isBusy(): boolean {
         return this.tasks.length > 0 || this.backgroundTask.length > 0 || this.addonTasks.length > 0
     }
 
     /**
      *
      */
-    hasAddon() {
+    hasAddon(): boolean {
         return this.hasTechlab || this.hasReactor
     }
 
     /**
      * Return true if worker is not scouting and not mining vespene
      */
-    isMiningMinerals() {
+    isMiningMinerals(): boolean {
         return workerTypes.has(this.name) && this.isIdle() && !this.isMiningGas && !this.isScouting
     }
 
     /**
      * Function that checks if a unit expired (e.g. mule)
      */
-    isAlive(frame: number) {
+    isAlive(frame: number): boolean {
         return this.isAliveUntilFrame === -1 || frame < this.isAliveUntilFrame
     }
 
     /**
      * Checks if chronoboost ran out
      */
-    hasChrono(frame: number) {
+    hasChrono(frame: number): boolean {
         return this.hasChronoUntilFrame !== -1 && this.hasChronoUntilFrame > frame
     }
 
     /**
      * Activates chronoboost, automatically calculates when it should run out
      */
-    addChrono(startFrame: number) {
+    addChrono(startFrame: number): void {
         this.hasChronoUntilFrame = startFrame + 20 * 22.4
     }
 
     /**
      * Should be called every frame for each unit, spawns larva for zerg townhalls, advances in energy and injects
      */
-    updateUnitState(gamelogic: GameLogic) {
+    updateUnitState(gamelogic: GameLogic): void {
         // Energy per frame
         this.energy = Math.min(200, this.energy + 0.03515625)
 
@@ -173,7 +173,7 @@ class Unit {
      * Progresses a task by 1 frame
      * If a task was completed, this function will fire events
      */
-    updateTask(gamelogic: GameLogic, task: Task, isMainTask = false) {
+    updateTask(gamelogic: GameLogic, task: Task, isMainTask = false): boolean {
         if (isMainTask) {
             task.updateProgress(this.hasChrono(gamelogic.frame))
         } else {
@@ -354,7 +354,7 @@ class Unit {
     /**
      * Updates the unit
      */
-    updateUnit(gamelogic: GameLogic) {
+    updateUnit(gamelogic: GameLogic): void {
         // Should be called every for each busy unit (tasks.length + reactortasks.length > 0)
 
         // Update normal unit task

@@ -109,6 +109,13 @@ repos:
     entry: npm run format
     pass_filenames: false
 
+  - id: eslint
+    name: eslint
+    stages: [commit]
+    language: system
+    entry: npm run eslint
+    pass_filenames: false
+
   - id: jest_frontend_test
     name: jest frontend test
     stages: [commit]

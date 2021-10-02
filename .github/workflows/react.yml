@@ -32,6 +32,14 @@ jobs:
       run: |
         npm run test
 
+    - name: Run format
+      run: |
+        npm run format
+
+    - name: Run eslint
+      run: |
+        npm run eslint
+
   deploy_frontend:
     strategy:
       matrix:

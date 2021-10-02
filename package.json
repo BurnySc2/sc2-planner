@@ -13,6 +13,8 @@
         "update": "npx npm-check-updates -u && npm run prune",
         "prune": "rm package-lock.json -f && rm node_modules -rf && npm i",
         "format": "npx prettier --write \"src/**/*.{json,js,ts,tsx}\"",
+        "eslint": "npx eslint src/**/*.{ts,tsx} --max-warnings 0",
+        "eslintfix": "npx eslint src/**/*.{ts,tsx} --max-warnings 0 --fix",
         "eject": "react-scripts eject"
     },
     "dependencies": {
@@ -44,6 +46,10 @@
         "@testing-library/react": "^12.1.0",
         "@testing-library/user-event": "^13.2.1",
         "@types/jest": "^27.0.2",
+        "@typescript-eslint/eslint-plugin": "^4.32.0",
+        "@typescript-eslint/parser": "^4.32.0",
+        "eslint": "^7.32.0",
+        "eslint-plugin-react": "^7.26.1",
         "npm-check-updates": "^11.8.5",
         "prettier": "2.4.1"
     },

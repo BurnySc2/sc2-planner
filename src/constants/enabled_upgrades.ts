@@ -5,7 +5,7 @@ const ENABLED_UPGRADES: Set<number> = new Set()
 data.Ability.forEach((ability) => {
     const target = ability.target
     if (typeof target !== "string") {
-        let research = target.Research
+        const research = target.Research
         if (research !== undefined) {
             ENABLED_UPGRADES.add(research.upgrade)
             return

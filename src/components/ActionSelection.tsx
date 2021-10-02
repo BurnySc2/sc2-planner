@@ -36,17 +36,17 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
         }
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
+    onMouseEnter = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element): void => {
         this.setState({
             tooltipText: item,
         })
     }
 
-    render() {
-        let gameLogic: GameLogic = this.props.gamelogic
+    render(): JSX.Element {
+        const gameLogic: GameLogic = this.props.gamelogic
         // If the build order has more items than the gamelogic was able to parse (e.g. requirement not met of some item), then the insertIndex might be higher than max allowed, = bug
-        let infoIndex = Math.min(this.props.insertIndex, gameLogic.unitsCountArray.length - 1)
-        let unitsCount = gameLogic.unitsCountArray[infoIndex]
+        const infoIndex = Math.min(this.props.insertIndex, gameLogic.unitsCountArray.length - 1)
+        const unitsCount = gameLogic.unitsCountArray[infoIndex]
 
         const actionIconTextStyle = {
             bottom: "0%",
@@ -74,7 +74,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             }
             return false
         })
-        const resources = resourcesAvailble.map((item, index) => {
+        const resources = resourcesAvailble.map((item, _index) => {
             // Instead of getting the status when the last element finished, get the state after the last build order index was started
             let value: number | string = ""
             if (item.name.includes("Supply")) {
@@ -96,7 +96,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const customactions = CUSTOMACTIONS.map((item, index) => {
+        const customactions = CUSTOMACTIONS.map((item, _index) => {
             // Update tooltip function
             const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(
@@ -106,7 +106,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     </div>
                 )
             }
-            let value: number | undefined = unitsCount[item.internal_name]
+            const value: number | undefined = unitsCount[item.internal_name]
             let icon = ""
             icon = getImageOfItem({
                 name: item.internal_name,
@@ -133,7 +133,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const units = UNITS.map((item, index) => {
+        const units = UNITS.map((item, _index) => {
             // Update tooltip function
             const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(
@@ -171,7 +171,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const structures = STRUCTURES.map((item, index) => {
+        const structures = STRUCTURES.map((item, _index) => {
             // Update tooltip function
             const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(
@@ -207,7 +207,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const upgrades = UPGRADES.map((item, index) => {
+        const upgrades = UPGRADES.map((item, _index) => {
             // Update tooltip function
             const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(

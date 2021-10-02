@@ -8,9 +8,7 @@ interface MyProps {
     onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces) => void
 }
 
-interface MyState {}
-
-export default class RaceSelection extends Component<MyProps, MyState> {
+export default class RaceSelection extends Component<MyProps> {
     /**
      * If a race was selected, clear BOArea and BuildOrder and reset everything
      * Then load the right race in ActionSelection
@@ -19,15 +17,15 @@ export default class RaceSelection extends Component<MyProps, MyState> {
     //     super(props)
     // }
 
-    onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces) => {
+    onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces): void => {
         this.props.onClick(e, race)
     }
 
-    render() {
+    render(): JSX.Element {
         const classString = `${CLASSES.raceIcon}`
 
         const allRaces: Array<IAllRaces> = ["protoss", "terran", "zerg"]
-        const races = allRaces.map((race, index) => {
+        const races = allRaces.map((race, _index) => {
             const item: { name: string; path: string } = RACES[race]
             return (
                 <div key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>

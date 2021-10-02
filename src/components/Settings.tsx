@@ -27,30 +27,30 @@ export default class Settings extends Component<MyProps, MyState> {
         }
     }
 
-    showSettings = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    showSettings = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         this.setState({
             show: true,
         })
     }
 
-    hideSettings = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    hideSettings = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         this.setState({
             show: false,
         })
     }
 
-    onChange = (e: ChangeEvent<HTMLInputElement>, itemShortName: string) => {
+    onChange = (e: ChangeEvent<HTMLInputElement>, itemShortName: string): void => {
         const newValue = parseFloat(e.target.value)
         this.props.updateSettings(itemShortName, newValue)
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
+    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element): void => {
         this.setState({
             tooltipText: item,
         })
     }
 
-    render() {
+    render(): JSX.Element {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
 

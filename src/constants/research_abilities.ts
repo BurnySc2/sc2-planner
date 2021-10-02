@@ -5,7 +5,7 @@ const RESEARCH_ABILITIES: { [name: number]: number } = {}
 data.Ability.forEach((ability) => {
     const target = ability.target
     if (typeof target !== "string") {
-        let research = target.Research
+        const research = target.Research
         if (research !== undefined) {
             RESEARCH_ABILITIES[ability.id] = research.upgrade
             return

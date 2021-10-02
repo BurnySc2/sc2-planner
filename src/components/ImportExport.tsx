@@ -1,17 +1,12 @@
 import React, { Component } from "react"
 import ReactTooltip from "react-tooltip"
-import {
-    createUrlParams,
-    CONVERT_SECONDS_TO_TIME_STRING,
-    encodeSALT,
-    decodeSALT,
-} from "../constants/helper"
+import { CONVERT_SECONDS_TO_TIME_STRING, createUrlParams } from "../constants/helper"
 
 import CLASSES from "../constants/classes"
 import UNITS_BY_NAME from "../constants/units_by_name"
 import UPGRADE_BY_NAME from "../constants/upgrade_by_name"
 import { GameLogic } from "../game_logic/gamelogic"
-import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
+import { IAllRaces, IBuildOrderElement, ISettingsElement } from "../constants/interfaces"
 import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 interface MyProps {
@@ -26,8 +21,7 @@ interface MyProps {
     ) => void
 }
 
-interface MyState {}
-export default class ImportExport extends Component<MyProps, MyState> {
+export default class ImportExport extends Component<MyProps> {
     /**
      * Allow export: shareable-url, SALT, instructions
      * Allow import: shareable-url, instructions
@@ -43,7 +37,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         humanReadableIncludeActions: true,
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
+    onMouseEnter = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string): void => {
         // On mouse enter: open drop down menu with various options
         this.setState({
             [name]: true,
@@ -51,14 +45,14 @@ export default class ImportExport extends Component<MyProps, MyState> {
         this.updateTemplateStringTooltip()
     }
 
-    onMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
+    onMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string): void => {
         // On mouse exit: close the above
         this.setState({
             [name]: false,
         })
     }
 
-    onClickExport = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
+    onClickExport = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string): void => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
         let clipBoardText = ""
         // TODO Create build order in the desired format
@@ -69,7 +63,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         } else if (name === "Copy SC2 bot instructions") {
             clipBoardText = this.generateBotInstructions()
         } else if (name === "Copy SALT encoding") {
-            clipBoardText = this.generateSALTEncoding()
+            // clipBoardText = this.generateSALTEncoding()
         }
         if (clipBoardText !== "") {
             navigator.clipboard.writeText(clipBoardText).then(
@@ -87,27 +81,27 @@ export default class ImportExport extends Component<MyProps, MyState> {
         }
     }
 
-    onClickImport = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
-        // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
-        navigator.clipboard.readText().then((data) => {
-            const decodedSALT = decodeSALT(data)
-            const race = decodedSALT.race as IAllRaces | undefined
-            const bo = decodedSALT.bo as IBuildOrderElement[]
-            this.setState({
-                tooltipText: "Pasted!",
-            })
-            this.props.rerunBuildOrder(bo)
-            this.props.updateUrl(race, bo, undefined, undefined)
-        })
-    }
+    // onClickImport = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>, _name: string) => {
+    //     // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
+    //     navigator.clipboard.readText().then((data) => {
+    //         const decodedSALT = decodeSALT(data)
+    //         const race = decodedSALT.race as IAllRaces | undefined
+    //         const bo = decodedSALT.bo as IBuildOrderElement[]
+    //         this.setState({
+    //             tooltipText: 'Pasted!',
+    //         })
+    //         this.props.rerunBuildOrder(bo)
+    //         this.props.updateUrl(race, bo, undefined, undefined)
+    //     })
+    // }
 
-    onLeaveButton = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    onLeaveButton = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         this.setState({
             tooltipText: "",
         })
     }
 
-    generateShareableLink() {
+    generateShareableLink(): string {
         // Returns the string of the shareable link
         const gamelogic = this.props.gamelogic
         const newUrl = createUrlParams(
@@ -116,15 +110,14 @@ export default class ImportExport extends Component<MyProps, MyState> {
             gamelogic.exportOptimizeSettings(),
             gamelogic.bo
         )
-        const shareUrl = `https://burnysc2.github.io/sc2-planner/${newUrl}`
-        return shareUrl
+        return `https://burnysc2.github.io/sc2-planner/${newUrl}`
     }
 
     generateHumanInstructions(
         templateString = "$time $supply $action",
         includeWorkers = this.state.humanReadableIncludeWorkers,
         includeActions = this.state.humanReadableIncludeActions
-    ) {
+    ): string[] {
         // Returns a human readable build order instruction
         const gamelogic = this.props.gamelogic
         const instructions: Array<string> = []
@@ -140,7 +133,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
                 $supply: `${item.supply}`,
                 $action: itemName,
             }
-            for (let replaceString in replaceValues) {
+            for (const replaceString in replaceValues) {
                 const value = replaceValues[replaceString]
                 instructionString = instructionString.replace(replaceString, value)
             }
@@ -155,7 +148,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         return instructions
     }
 
-    generateBotInstructions() {
+    generateBotInstructions(): string {
         // Returns a bot readable build order instruction as a json
         const gamelogic = this.props.gamelogic
         // Reduce instruction to: [name, id, type, supply, time, frame]
@@ -185,13 +178,13 @@ export default class ImportExport extends Component<MyProps, MyState> {
         return JSON.stringify(instructions, null, 4)
     }
 
-    generateSALTEncoding() {
-        const encodedSalt = encodeSALT(this.props.gamelogic.eventLog as IBuildOrderElement[])
-        console.log(encodedSalt)
-        return encodedSalt
-    }
+    // generateSALTEncoding() {
+    //     const encodedSalt = encodeSALT(this.props.gamelogic.eventLog as IBuildOrderElement[])
+    //     console.log(encodedSalt)
+    //     return encodedSalt
+    // }
 
-    formatListToHtmlLines(list: Array<string>) {
+    formatListToHtmlLines(list: Array<string>): JSX.Element[] {
         // Converts a list of elements to a list where each element gets wrapped into a <div>
         const htmlStuff: Array<JSX.Element> = []
         list.forEach((item, index) => {
@@ -204,7 +197,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         templateString = this.state.templateString,
         workers = this.state.humanReadableIncludeWorkers,
         actions = this.state.humanReadableIncludeActions
-    ) {
+    ): void {
         this.setState({
             templateStringTooltip: this.formatListToHtmlLines(
                 this.generateHumanInstructions(templateString, workers, actions)
@@ -212,7 +205,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         })
     }
 
-    render() {
+    render(): JSX.Element {
         const classes = CLASSES.dropDown
         const classesExportDropdown = this.state.export ? `visible ${classes}` : `hidden ${classes}`
         const classesImportDropdown = this.state.import ? `visible ${classes}` : `hidden ${classes}`
@@ -302,7 +295,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
                     data-tip={this.state.tooltipText}
                     data-for="importExportTooltip"
                     onMouseLeave={this.onLeaveButton}
-                    onClick={(e) => this.onClickImport(e, item)}
+                    // onClick={(e) => this.onClickImport(e, item)}
                     className={CLASSES.dropDownContainer}
                 >
                     <div className={CLASSES.dropDownButton}>{item}</div>
@@ -322,7 +315,7 @@ export default class ImportExport extends Component<MyProps, MyState> {
         )
 
         // eslint-disable-next-line
-        const importButton = (
+        const _importButton = (
             <div
                 className={CLASSES.buttons}
                 onMouseEnter={(e) => this.onMouseEnter(e, "import")}

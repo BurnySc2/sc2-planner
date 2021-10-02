@@ -27,9 +27,9 @@ data.Unit.forEach((trainingUnit) => {
                 let requiredStructureId = null
                 let requiredUpgradeId = null
                 let requiresUnits = null
-                let requires = []
+                const requires = []
                 let requiresTechlab = false
-                let isMorph = MORPH_ABILITIES.has(ability.ability)
+                const isMorph = MORPH_ABILITIES.has(ability.ability)
                 if (isMorph) {
                     const morphes: { [resultingUnit: string]: string[] } = {
                         Baneling: ["Zergling"],
@@ -52,12 +52,12 @@ data.Unit.forEach((trainingUnit) => {
                 if (isFreeMorph) {
                     return
                 }
-                let consumesUnit =
+                const consumesUnit =
                     resultingUnit.race === "Zerg" &&
                     resultingUnit.is_structure &&
                     !trainingUnit.is_structure
                 if (Array.isArray(ability.requirements)) {
-                    for (let requirement of ability.requirements) {
+                    for (const requirement of ability.requirements) {
                         if (requirement.upgrade) {
                             requiredUpgradeId = requirement.upgrade
                         }
@@ -70,12 +70,12 @@ data.Unit.forEach((trainingUnit) => {
                     }
                 }
 
-                let requiredStructure =
+                const requiredStructure =
                     requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
                 if (requiredStructure) {
                     requires.push(requiredStructure)
                 }
-                let requiredUpgrade =
+                const requiredUpgrade =
                     requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
                 if (requiredUpgrade) {
                     requires.push(requiredUpgrade)
@@ -119,7 +119,7 @@ data.Unit.forEach((trainingUnit) => {
 })
 
 // Hardcoded fixes
-for (let itemName in TRAINED_BY) {
+for (const itemName in TRAINED_BY) {
     const trainInfo = TRAINED_BY[itemName]
 
     // Hardcoded fix for when Gateway is required and WarpGate would work
@@ -132,7 +132,7 @@ for (let itemName in TRAINED_BY) {
     }
 
     // Hardcoded fix so allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
-    for (let structureType of ["Barracks", "Factory", "Starport"]) {
+    for (const structureType of ["Barracks", "Factory", "Starport"]) {
         pull(trainInfo.requires[0], structureType + "Flying")
         if (
             trainInfo.requires[0].indexOf(structureType) >= 0 &&
@@ -216,7 +216,7 @@ TRAINED_BY["Ravager"].requires = [["Roach", "RoachWarren"]]
 TRAINED_BY["Corruptor"].requires = [["Spire"], ["GreaterSpire"]]
 // Reorder requirements to optimize build duration
 const requirementPriority = ["Hive", "GreaterSpire", "Corruptor", "Lair"]
-for (let itemName in TRAINED_BY) {
+for (const itemName in TRAINED_BY) {
     const trainInfo = TRAINED_BY[itemName]
 
     trainInfo.requires = trainInfo.requires.map((requires) =>

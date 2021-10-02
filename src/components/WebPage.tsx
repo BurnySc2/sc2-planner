@@ -49,7 +49,7 @@ export default withRouter(
         onLogCallback: (line?: Log) => void = () => null
         onAddConstraint: (index: number, action: ConstraintType) => void = () => null
         history: Save[] = []
-        historyPosition: number = 0
+        historyPosition = 0
         currentLogLine?: Log
 
         // TODO I dont know how to fix these properly
@@ -75,7 +75,7 @@ export default withRouter(
             }
 
             // Decode settings from url
-            let settings = cloneDeep(defaultSettings)
+            const settings = cloneDeep(defaultSettings)
             if (settingsEncoded) {
                 const decodedSettings = decodeSettings(settingsEncoded)
                 // Override default settings from settings in url
@@ -89,7 +89,7 @@ export default withRouter(
             }
 
             // Decode optimize settings from url
-            let optimizeSettings = cloneDeep(defaultOptimizeSettings)
+            const optimizeSettings = cloneDeep(defaultOptimizeSettings)
             if (optimizeSettingsEncoded) {
                 const decodedSettings = decodeOptimizeSettings(optimizeSettingsEncoded)
                 // Override default optimizeSettings from optimizeSettings in url
@@ -106,8 +106,8 @@ export default withRouter(
             let bo: Array<IBuildOrderElement> = []
             if (boEncoded) {
                 // Replace spaces with plus signs because somehow this is not retrieved
-                let search = " "
-                let replacement = "+"
+                const search = " "
+                const replacement = "+"
                 bo = decodeBuildOrder(boEncoded.split(search).join(replacement))
             }
 
@@ -364,7 +364,7 @@ export default withRouter(
             const deleted = bo.splice(index, 1)
             let pushDistance
             let bestTime = Number.MAX_VALUE
-            let bestPushDistance: number = 0
+            let bestPushDistance = 0
             for (pushDistance = 1; pushDistance <= index; pushDistance++) {
                 bo.splice(index - pushDistance, 0, deleted[0])
                 const state = this.rerunBuildOrder(gamelogic, bo, false)
@@ -388,11 +388,11 @@ export default withRouter(
                 if (!canDelayAnythingButLastItem) {
                     let isLate = false
                     for (let pos = index - pushDistance; pos < bo.length; pos++) {
-                        if (aimForFastestBO) {
-                        } else if (
-                            !state.gamelogic ||
-                            state.gamelogic.eventLog[pos + 1].start >
-                                gamelogic.eventLog[pos].start + 3
+                        if (
+                            !aimForFastestBO &&
+                            (!state.gamelogic ||
+                                state.gamelogic.eventLog[pos + 1].start >
+                                    gamelogic.eventLog[pos].start + 3)
                         ) {
                             isLate = true
                             break
@@ -422,7 +422,7 @@ export default withRouter(
 
         updateBO = (
             bo: IBuildOrderElement[],
-            removedCount: number = 0,
+            removedCount = 0,
             state?: Partial<WebPageState>,
             doUpdateHistory = true
         ) => {
@@ -450,7 +450,8 @@ export default withRouter(
                     hoverIndex: -1,
                     insertIndex: 0,
                 }
-                this.setState(state as any)
+                // @ts-ignore
+                this.setState(state)
             }
             if (doUpdateHistory && state) {
                 this.updateHistory(state)
@@ -559,7 +560,7 @@ export default withRouter(
             if (highlightedItem) {
                 const toBeHighlighted: number[] = []
                 let index = 0
-                for (let item of this.state.gamelogic.eventLog) {
+                for (const item of this.state.gamelogic.eventLog) {
                     if (highlightedItem.start <= item.start && item.start <= highlightedItem.end) {
                         toBeHighlighted.push(index)
                     }
@@ -620,7 +621,7 @@ export default withRouter(
             }
 
             // Handle keyboard presses: Arrow keys (left / right) to change insert-index
-            let currentIndex = this.state.insertIndex
+            const currentIndex = this.state.insertIndex
             let targetIndex = currentIndex
             // Move to the right with arrow key right, allow ctrl and shift modifiers
             if (!["ArrowLeft", "ArrowRight"].includes(e.key) || e.repeat) {
@@ -659,13 +660,13 @@ export default withRouter(
             window.removeEventListener("keydown", this.handleKeyDown)
         }
 
-        onMultiline = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        onMultiline = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             this.setState({
                 multilineBuildOrder: !this.state.multilineBuildOrder,
             })
         }
 
-        onMinimize = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        onMinimize = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             this.setState({
                 minimizedActionsSelection: !this.state.minimizedActionsSelection,
             })

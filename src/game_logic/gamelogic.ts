@@ -31,6 +31,12 @@ Each build order index increment
     Add the current state to snapshots for cached view
 */
 
+type IError = {
+    message: string
+    requirements: IBuildOrderElement[]
+    neededEffort: number
+}
+
 let eventId = 0
 let mineralIncomeCache = {}
 let vespeneIncomeCache = {}
@@ -153,7 +159,7 @@ class GameLogic {
     /**
      * Prepares default properties for this.setStart()
      */
-    reset() {
+    reset(): void {
         this.boIndex = 0
         this.minerals = 50
         this.vespene = 0
@@ -192,30 +198,30 @@ class GameLogic {
      *
      * @param {Object} customSettings - See helper.js for default settings
      */
-    loadSettings(customSettings: Array<ISettingsElement>) {
-        for (let item of customSettings) {
+    loadSettings(customSettings: Array<ISettingsElement>): void {
+        for (const item of customSettings) {
             this.settings[item.variableName] = item.v
         }
     }
 
-    loadOptimizeSettings(customSettings: Array<ISettingsElement>) {
-        for (let item of customSettings) {
+    loadOptimizeSettings(customSettings: Array<ISettingsElement>): void {
+        for (const item of customSettings) {
             this.optimizeSettings[item.variableName] = item.v
         }
     }
 
-    exportSettings() {
+    exportSettings(): ISettingsElement[] {
         // Update default settings from gamelogic.settings object, then return it
-        let settingsObject = cloneDeep(defaultSettings)
+        const settingsObject = cloneDeep(defaultSettings)
         settingsObject.forEach((item) => {
             item.v = this.settings[item.variableName]
         })
         return settingsObject
     }
 
-    exportOptimizeSettings() {
+    exportOptimizeSettings(): ISettingsElement[] {
         // Update default settings from gamelogic.settings object, then return it
-        let optimizeSettingsObject = cloneDeep(defaultOptimizeSettings)
+        const optimizeSettingsObject = cloneDeep(defaultOptimizeSettings)
         optimizeSettingsObject.forEach((item) => {
             item.v = this.optimizeSettings[item.variableName]
         })
@@ -225,7 +231,7 @@ class GameLogic {
     /**
      *
      */
-    getEventId() {
+    getEventId(): number {
         eventId += 1
         return eventId
     }
@@ -233,7 +239,7 @@ class GameLogic {
     /**
      * Sets the start conditions: spawns all start structures, starting resources and values will be set in this.reset()
      */
-    setStart() {
+    setStart(): void {
         this.reset()
         let townhallName = ""
         let workerName = ""
@@ -277,7 +283,7 @@ class GameLogic {
      * or until the end of build order is reached and no unit is busy (= no unit has a task)
      * or if no unit was busy for a long time, then it is assumed that the build order cannot be executed completely and must be invalid
      */
-    runUntilEnd() {
+    runUntilEnd(): void {
         // Runs until all units are idle
         while (this.frame < 22.4 * 20 * 60) {
             // Limit to 20 mins
@@ -322,7 +328,7 @@ class GameLogic {
      * Steps each unit by 1 frame (task progress, energy generation etc.)
      * Tries to execute next build order elements until it is no longer possible
      */
-    runFrame() {
+    runFrame(): void {
         // Run one frame in game logic
         this.raceSpecificResource = 0
         this.addIncome()
@@ -389,9 +395,9 @@ class GameLogic {
     /**
      * Updates the statistics of available actions, how many units and structures we have, and what upgrades are researched
      */
-    updateUnitsCount() {
+    updateUnitsCount(): { [p: string]: number } {
         // Counts all available actions and how many units, structures we have and if an upgrade is researched
-        let unitsCount: { [name: string]: number } = {}
+        const unitsCount: { [name: string]: number } = {}
         const incrementUnitName = (item: string, amount = 1) => {
             if (!unitsCount[item]) {
                 unitsCount[item] = amount
@@ -402,7 +408,7 @@ class GameLogic {
         // Count of HT and DT for archon
         let htCount = 0
         let dtCount = 0
-        this.units.forEach((unit, index) => {
+        this.units.forEach((unit, _index) => {
             // Reduce drone count by 1 if it received a task to build a structure
             // Reduce HT or DT count by 1 if it is busy morphing to archon
             if (
@@ -521,7 +527,7 @@ class GameLogic {
         incrementUnitName("morph_archon_from_dt_dt", Math.floor(dtCount / 2))
         incrementUnitName("morph_archon_from_ht_ht", Math.floor(htCount / 2))
         incrementUnitName("morph_archon_from_ht_dt", Math.min(htCount, dtCount))
-        this.upgrades.forEach((upgrade, index) => {
+        this.upgrades.forEach((upgrade, _index) => {
             incrementUnitName(upgrade)
         })
 
@@ -541,7 +547,7 @@ class GameLogic {
     addRequirements(itemName: string, requires: string[][]): boolean {
         this.requirements = this.requirements || []
         const itemPresence: { [unitName: string]: boolean } = {}
-        for (let item of this.units) {
+        for (const item of this.units) {
             let itemName = item.name
             if (item.hasTechlab) {
                 itemName += "TechLab"
@@ -551,29 +557,29 @@ class GameLogic {
             }
             itemPresence[itemName] = true
         }
-        for (let upgradeName of this.upgrades) {
+        for (const upgradeName of this.upgrades) {
             itemPresence[upgradeName] = true
         }
 
-        let errorList: any[] = []
-        let i = 0
-        for (let requirementList of requires) {
-            const errors = (errorList[i++] = {
+        const errorList: IError[] = []
+        for (const requirementList of requires) {
+            const error: IError = {
                 message: "",
-                requirements: [] as IBuildOrderElement[],
+                requirements: [],
                 neededEffort: 0,
-            })
-            for (let requiredItem of requirementList) {
+            }
+            errorList.push(error)
+            for (const requiredItem of requirementList) {
                 if (!itemPresence[requiredItem]) {
-                    errors.message = `Required ${requiredItem} for ${itemName} could not be found.`
-                    errors.requirements.push(BO_ITEMS[requiredItem])
-                    errors.neededEffort += 1 / requirementList.length
+                    error.message = `Required ${requiredItem} for ${itemName} could not be found.`
+                    error.requirements.push(BO_ITEMS[requiredItem])
+                    error.neededEffort += 1 / requirementList.length
                 }
             }
         }
 
         const leastEffortError = minBy(errorList, "neededEffort")
-        if (leastEffortError.neededEffort) {
+        if (leastEffortError && leastEffortError.neededEffort) {
             this.errorMessage = leastEffortError.message
             this.requirements.push(...leastEffortError.requirements)
             return false
@@ -584,7 +590,7 @@ class GameLogic {
     /**
      * The simulation tries to train a unit, builds a structure or morphs a unit
      */
-    trainUnit(unit: IBuildOrderElement) {
+    trainUnit(unit: IBuildOrderElement): boolean {
         // Issue train command of unit type
         console.assert(unit.name, JSON.stringify(unit, null, 4))
         console.assert(unit.type, JSON.stringify(unit, null, 4))
@@ -603,7 +609,7 @@ class GameLogic {
         }
 
         // Get cost (mineral, vespene, supply)
-        let cost = this.getCost(unit.name)
+        const cost = this.getCost(unit.name)
         if (!this._canAfford(cost) && !morphCondition) {
             // Generate error message if not able to afford (missing minerals, vespene or free supply)
             this.setCostErrorMessage(cost, unit.name)
@@ -613,7 +619,7 @@ class GameLogic {
         // The unit/structure that is training the target unit or structure
         // TODO Sort units, e.g. try to train marines first from reactor barracks, then normal barracks, then techlab barracks
         // ^ The same for warpgate first, then gateway
-        for (let trainerUnit of this.idleUnits) {
+        for (const trainerUnit of this.idleUnits) {
             // Unit might no longer be idle while iterating over idleUnits
             if (!trainerUnit.isIdle()) {
                 continue
@@ -794,7 +800,7 @@ class GameLogic {
      * The simulation tries to research an upgrade
      * Nearly the same as trainUnit(unit)
      */
-    researchUpgrade(upgrade: IBuildOrderElement) {
+    researchUpgrade(upgrade: IBuildOrderElement): boolean {
         this.requirements = []
         // Issue research command of upgrade type
         console.assert(upgrade.name, JSON.stringify(upgrade, null, 4))
@@ -807,7 +813,7 @@ class GameLogic {
         const requiredStructure = researchInfo.requiredStructure
         let requiredStructureMet = requiredStructure === null ? true : false
         if (!requiredStructureMet) {
-            for (let structure of this.units) {
+            for (const structure of this.units) {
                 if (structure.name === requiredStructure) {
                     requiredStructureMet = true
                     break
@@ -849,7 +855,7 @@ class GameLogic {
 
         // The unit/structure that is training the target unit or structure
 
-        for (let researcherStructure of this.idleUnits) {
+        for (const researcherStructure of this.idleUnits) {
             const structureCanResearchUpgrade = researchInfo.researchedBy.has(
                 researcherStructure.name
             )
@@ -891,7 +897,7 @@ class GameLogic {
     /**
      * Updates the unit state and progress of all living units
      */
-    updateUnitsProgress() {
+    updateUnitsProgress(): void {
         // Updates the energy on each unit and their task progress
 
         this.units.forEach((unit) => {
@@ -916,18 +922,18 @@ class GameLogic {
     /**
      * Kills a unit and removes it from the game logic
      */
-    killUnit(unit: Unit) {
+    killUnit(unit: Unit): void {
         this.units.delete(unit)
         this.idleUnits.delete(unit)
         this.busyUnits.delete(unit)
     }
 
-    setCostErrorMessage(cost: ICost, unitName: string) {
+    setCostErrorMessage(cost: ICost, unitName: string): void {
         if (cost.supply > this.supplyLeft) {
             this.errorMessage = `Missing ${Math.ceil(
                 cost.supply - this.supplyLeft
             )} supply to produce '${unitName}'.`
-            this.requirements = [supplyUnitNameByRace[this.race]]
+            this.requirements = [supplyUnitNameByRace[this.race] as IBuildOrderElement]
         } else if (cost.vespene > this.vespene) {
             this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
                 cost.vespene - this.vespene
@@ -947,7 +953,7 @@ class GameLogic {
         }
     }
 
-    increaseMaxSupply(amount: number) {
+    increaseMaxSupply(amount: number): void {
         const remainingTillMaxSupply = 200 - this.supplyCap
         const increaseAmount = Math.min(amount, remainingTillMaxSupply)
         this.supplyCap += increaseAmount
@@ -978,7 +984,7 @@ class GameLogic {
     /**
      * Gets build or research time of a unit, structure, morph or upgrade
      */
-    getTime(unitName: string, isUpgrade = false) {
+    getTime(unitName: string, isUpgrade = false): number {
         // Get build time of unit or structure, or research time of upgrade (in frames)
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
@@ -991,7 +997,7 @@ class GameLogic {
     /**
      * Recover time of warp gates when creating a specific unit, how long the warp gate will be on cooldown after warping in a specific unit
      */
-    warpgateRecoverTime(unitName: string) {
+    warpgateRecoverTime(unitName: string): number {
         const recoverTimes: { [name: string]: number } = {
             Zealot: 20 * 22.4,
             Adept: 20 * 22.4,
@@ -1006,7 +1012,7 @@ class GameLogic {
     /**
      * Calculates and caches the income based on how many workers (and mules), bases and gas structures we have
      */
-    addIncome() {
+    addIncome(): void {
         // Calculate income based on mineral and gas workers
         let minerals =
             mineralIncomeCache[
@@ -1042,7 +1048,7 @@ class GameLogic {
         // this.vespene +=  incomeVespene(this.workersVespene, this.gasCount) / 22.4
     }
 
-    canAfford(unit: IBuildOrderElement) {
+    canAfford(unit: IBuildOrderElement): boolean {
         // Input: unit or upgrade object {name: "SCV", type: "worker"}
         console.assert(unit.name, JSON.stringify(unit, null, 4))
         console.assert(unit.type, JSON.stringify(unit, null, 4))
@@ -1053,21 +1059,18 @@ class GameLogic {
         }
     }
 
-    _canAfford(cost: ICost) {
+    _canAfford(cost: ICost): boolean {
         // Input: cost object
         console.assert(cost.minerals, JSON.stringify(cost, null, 4))
-        if (
+        return (
             cost.minerals <= this.minerals &&
             cost.vespene <= this.vespene &&
             (cost.supply < 0 || cost.supply <= this.supplyLeft)
-        ) {
-            return true
-        }
-        return false
+        )
     }
 
     canRequirementBeDuplicated(requirementName: string, itemName: string): boolean {
-        let itemInfo = TRAINED_BY[itemName]
+        const itemInfo = TRAINED_BY[itemName]
         const isMorphedFromAnotherUnit =
             itemInfo && itemInfo.requiresUnits && itemInfo.requiresUnits.includes(requirementName)
         const isArchonMaterial =
@@ -1102,7 +1105,7 @@ class GameLogic {
         insertIndex: number
     ): [GameLogic, number] {
         const bo = prevGamelogic.bo
-        let initialBOLength = bo.length
+        const initialBOLength = bo.length
         bo.splice(insertIndex, 0, item)
         // Re-calculate build order
 
@@ -1128,7 +1131,7 @@ class GameLogic {
                 if (gamelogic.errorMessage && gamelogic.requirements) {
                     fillingLoop++
                     const duplicatesToRemove: IBuildOrderElement[] = []
-                    for (let req of gamelogic.requirements) {
+                    for (const req of gamelogic.requirements) {
                         let duplicateItem: IBuildOrderElement | undefined
                         if (!gamelogic.canRequirementBeDuplicated(req.name, item.name)) {
                             duplicateItem = find(bo, req)
@@ -1141,7 +1144,7 @@ class GameLogic {
                             }
                         }
                     }
-                    for (let duplicate of duplicatesToRemove) {
+                    for (const duplicate of duplicatesToRemove) {
                         remove(bo, (item) => item === duplicate) // Specificaly remove the later one
                     }
                 }

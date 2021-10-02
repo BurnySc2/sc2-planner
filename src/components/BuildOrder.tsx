@@ -53,16 +53,16 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         this.onDragEnd = this.onDragEnd.bind(this)
     }
 
-    onMouseEnter(index: number) {
+    onMouseEnter(index: number): void {
         this.props.changeHoverIndex(index)
         this.props.changeHighlight(this.props.gamelogic.eventLog[index])
     }
-    onMouseLeave() {
+    onMouseLeave(): void {
         this.props.changeHoverIndex(-1)
         this.props.changeHighlight()
     }
 
-    onDragEnd(result: DropResult) {
+    onDragEnd(result: DropResult): void {
         // Dropped outside the list
         if (!result.destination) {
             return
@@ -84,17 +84,17 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         )
     }
 
-    render() {
+    render(): JSX.Element {
         // Convert build order items to div elements
 
         // Hide element if no build order items are present
         if (this.props.gamelogic.bo.length === 0) {
-            return ""
+            return <div />
         }
 
         const buildOrder = this.props.gamelogic.bo.map((item, index) => {
             const image = getImageOfItem(item)
-            return <img src={image} alt={item.name} />
+            return <img key={`${item.name}_${index}`} src={image} alt={item.name} />
         })
 
         const getItemClass = (dragging: boolean, index: number) => {
@@ -121,14 +121,14 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             return classes.join(" ")
         }
 
-        let buildOrderItems: JSX.Element[] = []
+        const buildOrderItems: JSX.Element[] = []
         let separatorClass =
             this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
         buildOrderItems.push(
             <div
-                key={`separator0`}
+                key={"separator0"}
                 className={separatorClass}
-                onClick={(e) => {
+                onClick={(_e) => {
                     this.props.changeInsertIndex(0)
                 }}
             />
@@ -143,8 +143,8 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={getItemClass(snapshot.isDragging, index)}
-                            onMouseEnter={(e) => this.onMouseEnter(index)}
-                            onMouseLeave={(e) => this.onMouseLeave()}
+                            onMouseEnter={(_e) => this.onMouseEnter(index)}
+                            onMouseLeave={(_e) => this.onMouseLeave()}
                             onClick={(e) => {
                                 this.props.removeClick(e, index)
                             }}
@@ -163,7 +163,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                 <div
                     key={`separator${index + 1}`}
                     className={separatorClass}
-                    onClick={(e) => {
+                    onClick={(_e) => {
                         this.props.changeInsertIndex(index + 1)
                     }}
                 />
@@ -174,7 +174,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             <div className={CLASSES.bo}>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="droppable" direction="horizontal">
-                        {(provided, snapshot) => (
+                        {(provided, _snapshot) => (
                             <div
                                 className={
                                     (this.props.multilineBuildOrder ? "flex-wrap flex-row" : "") +

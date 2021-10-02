@@ -34,7 +34,7 @@ const UPGRADES: Array<IDataUpgrade> = []
 const alreadyUsedIds = new Set()
 
 data.Unit.forEach((unit) => {
-    unit.abilities.forEach((ability, index) => {
+    unit.abilities.forEach((ability, _index) => {
         const upgrade_id = ABILITY_TO_UPGRADES[ability.ability]
         if (ENABLED_UPGRADES.has(upgrade_id) && !alreadyUsedIds.has(upgrade_id)) {
             alreadyUsedIds.add(upgrade_id)

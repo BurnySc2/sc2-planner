@@ -74,13 +74,13 @@ class OptimizeLogic {
 
         let code = 1
         this.nameToCode = {}
-        for (let name in UNITS_BY_NAME) {
+        for (const name in UNITS_BY_NAME) {
             this.nameToCode[name] = String.fromCharCode(code++)
         }
-        for (let name in CUSTOMACTIONS_BY_NAME) {
+        for (const name in CUSTOMACTIONS_BY_NAME) {
             this.nameToCode[name] = String.fromCharCode(code++)
         }
-        for (let name in UPGRADES_BY_NAME) {
+        for (const name in UPGRADES_BY_NAME) {
             this.nameToCode[name] = String.fromCharCode(code++)
         }
     }
@@ -175,8 +175,8 @@ class OptimizeLogic {
         ) {
             // Start getting additional supply 1 bo item before the one needing it
             const bo = cloneDeep(gamelogic.bo)
-            bo.splice(gamelogic.boIndex - 1, 0, cloneDeep(supplyItem)) //TODO2 minus [0, 1, 2, 3] should be tested here for perfect results, not just minus [1]
-            addedSupply++
+            bo.splice(gamelogic.boIndex - 1, 0, <IBuildOrderElement>cloneDeep(supplyItem)) //TODO2 minus [0, 1, 2, 3] should be tested here for perfect results, not just minus [1]
+            addedSupply += 1
             gamelogic = this.simulateBo(bo)
             validatesConstraints = this.validatedConstraints(gamelogic)
         }
@@ -196,14 +196,14 @@ class OptimizeLogic {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
         let initialWorkerCount = 0
-        for (let unit of currentGamelogic.units) {
+        for (const unit of currentGamelogic.units) {
             if (unit.name === worker.name) {
                 initialWorkerCount++
             }
         }
 
         let initialBOWorkerCount = 0
-        for (let item of currentGamelogic.bo) {
+        for (const item of currentGamelogic.bo) {
             if (item.name === worker.name) {
                 initialBOWorkerCount++
             }
@@ -244,7 +244,7 @@ class OptimizeLogic {
                 new Promise<void>((resolve) => {
                     let validatesConstraints: boolean
                     do {
-                        let boToTest = cloneDeep(bo)
+                        const boToTest = cloneDeep(bo)
                         boToTest.splice(whereToAddWorker, 0, cloneDeep(worker))
                         gamelogic = this.simulateBo(boToTest)
                         validatesConstraints = this.validatedConstraints(gamelogic)
@@ -355,7 +355,7 @@ class OptimizeLogic {
                 cancellationPromise,
                 // eslint-disable-next-line
                 new Promise<void>((resolve) => {
-                    let boToTest = cloneDeep(bo)
+                    const boToTest = cloneDeep(bo)
                     boToTest.splice(whereToAddInject, 0, cloneDeep(itemToAdd))
                     gamelogic = this.simulateBo(boToTest)
                     const validatesConstraints = this.validatedConstraints(gamelogic)
@@ -399,11 +399,11 @@ class OptimizeLogic {
         initialGameLogic: GameLogic // Requires to have been run until the end
     ): Promise<OptimizationReturn> {
         const startTime = +new Date()
-        let bo = cloneDeep(initialGameLogic.bo)
+        const bo = cloneDeep(initialGameLogic.bo)
         let bestGameLogic: GameLogic = initialGameLogic
         let improvedSinceStart = false
         let boCode = this.boToCode(bo)
-        let boCodes: { [code: string]: true } = {}
+        const boCodes: { [code: string]: true } = {}
         let savedTime = 0
         const finalPass = 50
         for (let pass = 1; pass <= finalPass; pass++) {
@@ -437,7 +437,7 @@ class OptimizeLogic {
                             //else
                             boCodes[boCodeToTest] = true
 
-                            let boToTest = cloneDeep(bo)
+                            const boToTest = cloneDeep(bo)
                             this.swapBOItems(boToTest, swapPos, swapPos + spreading)
 
                             const gamelogic = this.simulateBo(boToTest)
@@ -496,7 +496,7 @@ class OptimizeLogic {
     }
 
     validatedConstraints(gamelogic: GameLogic): boolean {
-        for (let constraint of this.constraintList) {
+        for (const constraint of this.constraintList) {
             if (constraint.type === "time") {
                 const eventLog: Event = this.getEventLogFromConstraint(
                     gamelogic,
@@ -568,8 +568,8 @@ class OptimizeLogic {
         return gamelogic
     }
 
-    loadOptimizeSettings(customSettings: Array<ISettingsElement>) {
-        for (let item of customSettings) {
+    loadOptimizeSettings(customSettings: Array<ISettingsElement>): void {
+        for (const item of customSettings) {
             this.optimizeSettings[item.variableName] = item.v
         }
     }
@@ -579,7 +579,7 @@ export function getConstraintList(optimizeSettings: Array<ISettingsElement>): Co
     const constraintSetting = find(optimizeSettings, { n: "c" })
     const list: Constraint[] = []
     if (constraintSetting) {
-        for (let constraintStr of (constraintSetting.v as string).split(/\n/)) {
+        for (const constraintStr of (constraintSetting.v as string).split(/\n/)) {
             const afterReg = constraintStr.match(/^([0-9:]+)<=?/)
             const beforeReg = constraintStr.match(/<=?([0-9:]+)$/)
             const after = afterReg ? CONVERT_TIME_STRING_TO_SECONDS(afterReg[1]) : -Infinity

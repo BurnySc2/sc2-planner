@@ -8,7 +8,7 @@ const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
-const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => {
+const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): boolean => {
     // Issue action
     const action = CUSTOMACTIONS_BY_NAME[actionItem.name]
     console.assert(action !== undefined, JSON.stringify(actionItem, null, 4))
@@ -17,7 +17,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     // ALL RACES
 
     if (action.internal_name === "worker_to_mins") {
-        gamelogic.errorMessage = `Could not find a worker that is mining vespene.`
+        gamelogic.errorMessage = "Could not find a worker that is mining vespene."
         gamelogic.requirements = [
             {
                 name: "worker_to_gas",
@@ -38,7 +38,8 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "worker_to_gas") {
-        gamelogic.errorMessage = `Could not find a worker that is mining minerals or a gas structure. Max allowed workers per gas are 3.`
+        gamelogic.errorMessage =
+            "Could not find a worker that is mining minerals or a gas structure. Max allowed workers per gas are 3."
         gamelogic.requirements = [
             {
                 name: gasBuildingByRace[gamelogic.race],
@@ -63,7 +64,8 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "3worker_to_gas") {
-        gamelogic.errorMessage = `Could not find three worker that are mining minerals or a gas structure. Max allowed workers per gas are 3.`
+        gamelogic.errorMessage =
+            "Could not find three worker that are mining minerals or a gas structure. Max allowed workers per gas are 3."
         gamelogic.requirements = [
             {
                 name: gasBuildingByRace[gamelogic.race],
@@ -95,7 +97,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "worker_to_scout") {
-        gamelogic.errorMessage = `Could not find a worker that is mining minerals.`
+        gamelogic.errorMessage = "Could not find a worker that is mining minerals."
         gamelogic.requirements = [
             {
                 name: workerNameByRace[gamelogic.race],
@@ -116,7 +118,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "worker_from_scout") {
-        gamelogic.errorMessage = `Could not find a worker that is scouting.`
+        gamelogic.errorMessage = "Could not find a worker that is scouting."
         if (gamelogic.workersScouting > 0) {
             for (const unit of gamelogic.units) {
                 if (workerTypes.has(unit.name) && unit.isScouting) {
@@ -503,7 +505,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "convert_gateway_to_warpgate") {
-        gamelogic.errorMessage = `Required upgrade 'WarpGateResearch' not researched.`
+        gamelogic.errorMessage = "Required upgrade 'WarpGateResearch' not researched."
         gamelogic.requirements = [
             {
                 name: "WarpGateResearch",
@@ -511,7 +513,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
             },
         ]
         if (gamelogic.upgrades.has("WarpGateResearch")) {
-            gamelogic.errorMessage = `Could not find a gateway.`
+            gamelogic.errorMessage = "Could not find a gateway."
             for (const unit of gamelogic.idleUnits) {
                 if (unit.name === "Gateway" && !unit.isBusy()) {
                     const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
@@ -525,7 +527,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "convert_warpgate_to_gateway") {
-        gamelogic.errorMessage = `Could not find a warpgate.`
+        gamelogic.errorMessage = "Could not find a warpgate."
         gamelogic.requirements = [
             {
                 name: "convert_gateway_to_warpgate",
@@ -544,7 +546,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "morph_archon_from_dt_dt") {
-        gamelogic.errorMessage = `Could not find two dark templars.`
+        gamelogic.errorMessage = "Could not find two dark templars."
         gamelogic.requirements = [
             {
                 name: "DarkTemplar",
@@ -575,7 +577,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "morph_archon_from_ht_ht") {
-        gamelogic.errorMessage = `Could not find two high templars.`
+        gamelogic.errorMessage = "Could not find two high templars."
         gamelogic.requirements = [
             {
                 name: "HighTemplar",
@@ -606,7 +608,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "morph_archon_from_ht_dt") {
-        gamelogic.errorMessage = `Could not find one high templar and one dark templar.`
+        gamelogic.errorMessage = "Could not find one high templar and one dark templar."
         gamelogic.requirements = [
             {
                 name: "HighTemplar",
@@ -639,7 +641,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     // TERRAN
 
     if (action.internal_name === "call_down_mule") {
-        gamelogic.errorMessage = `Could not find an orbital command.`
+        gamelogic.errorMessage = "Could not find an orbital command."
         gamelogic.requirements = [
             {
                 name: "OrbitalCommand",
@@ -663,7 +665,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "call_down_supply") {
-        gamelogic.errorMessage = `Could not find an orbital command.`
+        gamelogic.errorMessage = "Could not find an orbital command."
         gamelogic.requirements = [
             {
                 name: "SupplyDepot",
@@ -675,7 +677,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
             },
         ]
         for (const unit of gamelogic.units) {
-            gamelogic.errorMessage = `Could not find a depopt with no supply drop.`
+            gamelogic.errorMessage = "Could not find a depopt with no supply drop."
             // Find orbital with >=50 energy
             if (unit.name === "OrbitalCommand" && unit.energy >= 50) {
                 // Spawn temporary unit mule
@@ -695,7 +697,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     }
 
     if (action.internal_name === "salvage_bunker") {
-        gamelogic.errorMessage = `Could not find a Bunker.`
+        gamelogic.errorMessage = "Could not find a Bunker."
         gamelogic.requirements = [
             {
                 name: "Bunker",
@@ -718,7 +720,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     const attach_to_addon = (structureName: string, attachReactor = false) => {
         if (!attachReactor) {
             if (gamelogic.freeTechlabs === 0) {
-                gamelogic.errorMessage = `There are no free techlabs.`
+                gamelogic.errorMessage = "There are no free techlabs."
                 gamelogic.requirements = [
                     {
                         name: `dettach_${structureName.toLowerCase()}_from_techlab`,
@@ -729,7 +731,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
             }
         } else {
             if (gamelogic.freeReactors === 0) {
-                gamelogic.errorMessage = `There are no free reactors.`
+                gamelogic.errorMessage = "There are no free reactors."
                 gamelogic.requirements = [
                     {
                         name: `dettach_${structureName.toLowerCase()}_from_reactor`,
@@ -853,7 +855,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
     // ZERG
 
     if (action.internal_name === "inject") {
-        gamelogic.errorMessage = `Could not find a Queen to inject with.`
+        gamelogic.errorMessage = "Could not find a Queen to inject with."
         gamelogic.requirements = [
             {
                 name: "Queen",
@@ -863,7 +865,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         for (const queen of gamelogic.idleUnits) {
             // Find queen with >=25 energy
             if (queen.name === "Queen" && queen.energy >= 25) {
-                gamelogic.errorMessage = `Could not find an inject target.`
+                gamelogic.errorMessage = "Could not find an inject target."
                 for (const hatch of gamelogic.idleUnits) {
                     // Find zerg townhall without inject
                     if (
@@ -883,7 +885,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement) => 
         }
     }
     if (action.internal_name === "creep_tumor") {
-        gamelogic.errorMessage = `Could not find a Queen to create a Creep Tumor with.`
+        gamelogic.errorMessage = "Could not find a Queen to create a Creep Tumor with."
         gamelogic.requirements = [
             {
                 name: "Queen",

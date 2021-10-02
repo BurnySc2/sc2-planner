@@ -23,7 +23,7 @@ data.Unit.forEach((researcherUnit) => {
                 let requiredStructureId = null
                 let requiredUpgradeId = null
                 if (ability.requirements && Array.isArray(ability.requirements)) {
-                    for (let requirement of ability.requirements) {
+                    for (const requirement of ability.requirements) {
                         if (requirement.upgrade) {
                             requiredUpgradeId = requirement.upgrade
                         }

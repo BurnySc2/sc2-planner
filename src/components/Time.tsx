@@ -9,10 +9,8 @@ interface MyProps {
     gamelogic: GameLogic
 }
 
-interface MyState {}
-
-export default class Time extends Component<MyProps, MyState> {
-    render() {
+export default class Time extends Component<MyProps> {
+    render(): JSX.Element {
         const topTextCss = {
             top: "0%",
             left: "50%",

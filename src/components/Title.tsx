@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import CLASSES from "../constants/classes"
 
 export default class Title extends Component {
-    render() {
+    render(): JSX.Element {
         return (
             <div>
                 <div>
