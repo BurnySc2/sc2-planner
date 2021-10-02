@@ -33,7 +33,7 @@ With the arrow keys (left and right) you can navigate through the build order. H
 ## Requirements
 
 [Node 10 or newer](https://nodejs.org/en/download/) is required to create this static website.
-[Python 3.7 or newer](https://www.python.org/downloads/) is rquired to run pre-commit hooks.
+[Python 3.7 or newer](https://www.python.org/downloads/) is rquired to run pre-commit hooks and e2e tests.
 
 ## Setup
 
@@ -49,6 +49,10 @@ poetry run pre-commit install
 ### Test
 
 `npm run test`
+
+### End-to-end test
+
+`poetry run pytest test/test_e2e.py`
 
 ### Develop
 To start dev server:

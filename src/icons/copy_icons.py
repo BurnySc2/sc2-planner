@@ -6,6 +6,7 @@ It tries to find all icons from the "icons_all" subfolder (does not exist by def
 import json
 import os
 import shutil
+import sys
 from pathlib import Path
 from typing import Set
 
@@ -14,11 +15,11 @@ unit_icons_path = folder / 'unit_icons.json'
 upgrade_icons_path = folder / 'upgrade_icons.json'
 custom_actions_icons_path = folder.parent / 'constants' / 'customactions.json'
 
-with open(unit_icons_path) as f:
+with open(unit_icons_path, encoding='utf-8') as f:
     UNIT_ICONS = json.load(f)
-with open(upgrade_icons_path) as f:
+with open(upgrade_icons_path, encoding='utf-8') as f:
     UPGRADE_ICONS = json.load(f)
-with open(custom_actions_icons_path) as f:
+with open(custom_actions_icons_path, encoding='utf-8') as f:
     CUSTOM_ACTIONS = json.load(f)
 
 if __name__ == '__main__':
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     source_folder = path / 'icons_all'
     if not source_folder.exists():
         print("'icons_all' subfolder missing. Exiting.")
-        exit(1)
+        sys.exit(1)
 
     target_folder = path / 'png'
     if not target_folder.exists():

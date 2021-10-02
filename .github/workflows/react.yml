@@ -40,13 +40,60 @@ jobs:
       run: |
         npm run eslint
 
+  test_e2e:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+        node: ['16']
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache poetry
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
+
+    - name: Set up Node ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Cache npm
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-${{ matrix.node }}-node-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install npm dependencies
+      run: |
+        npm install
+
+    - name: Run e2e tests
+      run: |
+        poetry run pytest test/test_e2e.py
+
   deploy_frontend:
     strategy:
       matrix:
         os: [ubuntu-latest]
         node: ['16']
     runs-on: ${{ matrix.os }}
-    needs: [test_frontend]
+    needs: [test_frontend, test_e2e]
 
     steps:
     - uses: actions/checkout@v2

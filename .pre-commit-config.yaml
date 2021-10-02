@@ -93,15 +93,19 @@ repos:
   # Enforce type annotation instead of comment annotation
   - id: python-use-type-annotations
 
+# Integration test / Python
+- repo: local
+  hooks:
+  - id: pylint
+    name: pylint
+    stages: [commit]
+    language: system
+    entry: poetry run pylint
+    types: [python]
+
 # FRONTEND
 - repo: local
   hooks:
-      #  - id: eslint
-      #    name: eslint
-      #    stages: [commit]
-      #    language: system
-      #    entry: npm run eslint
-
   - id: prettier
     name: prettier
     stages: [commit]
