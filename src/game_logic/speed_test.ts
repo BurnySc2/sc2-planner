@@ -2,9 +2,9 @@
 
 const testValues = [3, 20, 100, 125000]
 testValues.forEach((size) => {
-    let limit = size
-    let array = []
-    let mySet = new Set()
+    const limit = size
+    const array = []
+    const mySet = new Set()
 
     console.log(`\nitem size: ${size}`)
 

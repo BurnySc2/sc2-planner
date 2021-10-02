@@ -2,7 +2,6 @@ import ENABLED_UPGRADES from "./enabled_upgrades"
 import data from "./data.json"
 import { IDataUpgrade, IAllRaces } from "./interfaces"
 import { iconSortUpgradeFunction } from "./icon_order"
-// const data = require("./data.json")
 
 // Maps ability id to upgrade id
 const ABILITY_TO_UPGRADES: { [name: number]: number } = {}
@@ -35,7 +34,7 @@ const UPGRADES: Array<IDataUpgrade> = []
 const alreadyUsedIds = new Set()
 
 data.Unit.forEach((unit) => {
-    unit.abilities.forEach((ability, index) => {
+    unit.abilities.forEach((ability, _index) => {
         const upgrade_id = ABILITY_TO_UPGRADES[ability.ability]
         if (ENABLED_UPGRADES.has(upgrade_id) && !alreadyUsedIds.has(upgrade_id)) {
             alreadyUsedIds.add(upgrade_id)

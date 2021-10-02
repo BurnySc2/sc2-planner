@@ -32,8 +32,9 @@ export default class Read extends Component<MyProps, MyState> {
     lineHandlers: NodeJS.Timeout[]
     startTime: number
     listeningToSpeach: boolean
+    // @ts-ignore
     recognition: SpeechRecognition | undefined
-    ingameTime: number = 0
+    ingameTime = 0
     /**
      * A small settings menu to enable and disable things
      * And to be able to adjust certain sizes
@@ -54,16 +55,20 @@ export default class Read extends Component<MyProps, MyState> {
         this.listeningToSpeach = false
         const wordList = ["go"]
         const grammar = `#JSGF V1.0; grammar colors; public <color> = ${wordList.join(" | ")} ;`
+        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         const anyWindow = window as any
+        // @ts-ignore
         let speechRecognitionList: SpeechGrammarList | undefined
-        for (let prefix of ["", "webkit", "moz", "ms", "o"]) {
-            this.recognition =
-                anyWindow[`${prefix}SpeechRecognition`] &&
-                new anyWindow[`${prefix}SpeechRecognition`]()
-            speechRecognitionList =
-                anyWindow[`${prefix}SpeechGrammarList`] &&
-                new anyWindow[`${prefix}SpeechGrammarList`]()
-            if (this.recognition && speechRecognitionList) {
+        for (const prefix of ["", "webkit", "moz", "ms", "o"]) {
+            const speechRecognition = anyWindow[`${prefix}SpeechRecognition`]
+            if (speechRecognition) {
+                this.recognition = new speechRecognition()
+            }
+            const grammarList = anyWindow[`${prefix}SpeechGrammarList`]
+            if (grammarList) {
+                speechRecognitionList = new grammarList()
+            }
+            if (speechRecognition && speechRecognitionList) {
                 speechRecognitionList.addFromString(grammar, 1)
                 this.recognition.grammars = speechRecognitionList
                 this.recognition.continuous = false
@@ -79,19 +84,19 @@ export default class Read extends Component<MyProps, MyState> {
         return !!window.speechSynthesis
     }
 
-    showSettings = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    showSettings = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         this.setState({
             show: true,
         })
     }
 
-    hideSettings = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    hideSettings = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         this.setState({
             show: false,
         })
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element) => {
+    onMouseEnter = (_e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element): void => {
         this.setState({
             tooltipText: item,
         })
@@ -129,14 +134,14 @@ export default class Read extends Component<MyProps, MyState> {
             ninety: 90,
         }
 
-        let a = words
+        const a = words
             .toString()
             .toLowerCase()
             .split(/[\s-]+/)
-        let n = 0
+        const n = 0
         let g = 0
         a.forEach((w) => {
-            var x = /^[0-9]+$/.test(w) ? +w : small[w]
+            const x = /^[0-9]+$/.test(w) ? +w : small[w]
             if (x != null) {
                 g = g + x
             } else if (w === "hundred" || w === "100" || /^minutes?$/.test(w)) {
@@ -146,7 +151,7 @@ export default class Read extends Component<MyProps, MyState> {
         return n + g
     }
 
-    startReading(startAt: number) {
+    startReading(startAt: number): void {
         if (this.listeningToSpeach) {
             return
         }
@@ -164,7 +169,8 @@ export default class Read extends Component<MyProps, MyState> {
         this.recognition.start()
         this.listeningToSpeach = true
 
-        this.recognition.onresult = (event) => {
+        // @ts-ignore
+        this.recognition.onresult = (event: { results: { transcript }[][] }) => {
             const voice = event.results[0][0].transcript
             let startTime = startAt
             if (/^stop$/.test(voice)) {
@@ -195,20 +201,20 @@ export default class Read extends Component<MyProps, MyState> {
             }
         }
 
-        this.recognition.onnomatch = (event) => {
+        this.recognition.onnomatch = () => {
             this.props.log({
                 error: "I didn't recognise what was said.",
             })
         }
 
-        this.recognition.onerror = (event) => {
-            const error = (event as any).error
-            if (error !== "no-speech") {
+        // On chromium it is: SpeechRecognitionErrorEvent
+        this.recognition.onerror = (event: { error: string }) => {
+            if (event.error && event.error !== "no-speech") {
                 this.stopReading()
             }
         }
 
-        this.recognition.onend = (event) => {
+        this.recognition.onend = () => {
             if (this.listeningToSpeach) {
                 this.recognition?.start()
             }
@@ -229,7 +235,7 @@ export default class Read extends Component<MyProps, MyState> {
         }
     }
 
-    readBuildOrder(startAt = 0) {
+    readBuildOrder(startAt = 0): void {
         if (!this.state.startAtSpeach) {
             this.speak("3", 0)
             this.speak("2", 1)
@@ -240,13 +246,13 @@ export default class Read extends Component<MyProps, MyState> {
         }
     }
 
-    readBuildOrderWithoutTimer(startAt = 0) {
+    readBuildOrderWithoutTimer(startAt = 0): void {
         // Prepare BO instructions
         const instructionList: Instruction[] = []
         const lastEvent = this.props.gamelogic.eventLog[this.props.gamelogic.eventLog.length - 1]
         let prevInstruction: Instruction | undefined
         let boEndTime = 0
-        for (let event of this.props.gamelogic.eventLog) {
+        for (const event of this.props.gamelogic.eventLog) {
             const when = (event.start * 1000) / 22.4 - startAt * 1000
             if (when >= 0) {
                 const isLastMessage = event === lastEvent
@@ -413,24 +419,23 @@ export default class Read extends Component<MyProps, MyState> {
         this.synth.cancel()
     }
 
-    onStartAtSpeachChange() {
+    onStartAtSpeachChange(): void {
         this.setState({
             startAtSpeach: !this.state.startAtSpeach,
         })
     }
 
-    render() {
+    render(): JSX.Element {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
         const stopVisibility = `${CLASSES.buttons} ${
             this.state.canStop ? "visible" : "hidden"
         } cursor-pointer`
 
-        const mouseEnterFunc = (tooltip: string) => (
-            e: React.MouseEvent<HTMLElement, MouseEvent>
-        ) => {
-            this.onMouseEnter(e, <div>{tooltip}</div>)
-        }
+        const mouseEnterFunc =
+            (tooltip: string) => (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+                this.onMouseEnter(e, <div>{tooltip}</div>)
+            }
 
         const speachStart = !this.recognition ? (
             ""
@@ -443,14 +448,14 @@ export default class Read extends Component<MyProps, MyState> {
                         data-tip
                         data-for="readTooltip"
                         onMouseEnter={mouseEnterFunc(
-                            'Start reading the BO right when you say "Go" in your microphone'
+                            "Start reading the BO right when you say 'Go' in your microphone"
                         )}
                     >
-                        Start reading when you say "Go"
+                        Start reading when you say &quot;Go&quot;
                         <br />
-                        or "Go 2:15". React to "Stop",
+                        or &quot;Go 2:15&quot;. React to &quot;Stop&quot;,
                         <br />
-                        "Pause" and "Resume"
+                        &quot;Pause&quot; and &quot;Resume&quot;
                     </label>
                     <input
                         name="voiceCommand"
@@ -458,7 +463,7 @@ export default class Read extends Component<MyProps, MyState> {
                         className={CLASSES.dropDownInput}
                         type="checkbox"
                         checked={this.state.startAtSpeach}
-                        onChange={(e) => this.onStartAtSpeachChange()}
+                        onChange={(_e) => this.onStartAtSpeachChange()}
                     />
                 </div>
             </div>
@@ -500,7 +505,7 @@ export default class Read extends Component<MyProps, MyState> {
                     <div className={CLASSES.dropDownContainer}>
                         <div
                             className={CLASSES.dropDownWideButton}
-                            onClick={(e) => this.startReading(this.startTime)}
+                            onClick={(_e) => this.startReading(this.startTime)}
                         >
                             <span className={CLASSES.centeredButton}>Read (Beta)</span>
                         </div>
@@ -509,7 +514,7 @@ export default class Read extends Component<MyProps, MyState> {
             </div>
         )
         const stopButton = (
-            <div className={stopVisibility} onClick={(e) => this.stopReading()}>
+            <div className={stopVisibility} onClick={(_e) => this.stopReading()}>
                 Stop □
             </div>
         )

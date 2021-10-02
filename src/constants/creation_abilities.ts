@@ -1,6 +1,5 @@
 import ENABLED_ABILITIES from "./enabled_abilities"
 import data from "./data.json"
-// const data = require("./data.json")
 
 const CREATION_ABILITIES: { [name: number]: number } = {}
 const MORPH_ABILITIES = new Set()
@@ -23,14 +22,14 @@ data.Ability.forEach(
         const target = ability.target
         if (typeof target !== "string") {
             // Train abilities, e.g. probe
-            let train = target.Train
+            const train = target.Train
             if (train !== undefined && ENABLED_ABILITIES.has(ability.id)) {
                 CREATION_ABILITIES[ability.id] = train.produces
                 return
             }
 
             // Morph abilities, e.g. lurker
-            let morph = target.Morph
+            const morph = target.Morph
             if (morph !== undefined && ENABLED_ABILITIES.has(ability.id)) {
                 CREATION_ABILITIES[ability.id] = morph.produces
                 MORPH_ABILITIES.add(ability.id)
@@ -38,28 +37,28 @@ data.Ability.forEach(
             }
 
             // Instant build abilities, e.g. reactor
-            let build = ability.target.BuildInstant
+            const build = ability.target.BuildInstant
             if (build !== undefined && ENABLED_ABILITIES.has(ability.id)) {
                 CREATION_ABILITIES[ability.id] = build.produces
                 return
             }
 
             // Train place abilities, e.g. warp in stalker
-            let trainPlace = ability.target.TrainPlace
+            const trainPlace = ability.target.TrainPlace
             if (trainPlace !== undefined && ENABLED_ABILITIES.has(ability.id)) {
                 CREATION_ABILITIES[ability.id] = trainPlace.produces
                 return
             }
 
             // Build abilities, e.g. build nexus
-            let buildStructure = ability.target.Build
+            const buildStructure = ability.target.Build
             if (buildStructure !== undefined && ENABLED_ABILITIES.has(ability.id)) {
                 CREATION_ABILITIES[ability.id] = buildStructure.produces
                 return
             }
 
             // Build abilities, e.g. build refinery
-            let buildGas = ability.target.BuildOnUnit
+            const buildGas = ability.target.BuildOnUnit
             if (buildGas !== undefined && ENABLED_ABILITIES.has(ability.id)) {
                 CREATION_ABILITIES[ability.id] = buildGas.produces
                 return

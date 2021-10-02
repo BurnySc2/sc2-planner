@@ -1,7 +1,7 @@
 // Mule: 211 minerals per minute (real time), source: https://youtu.be/kmxeG8I5p1Y?t=14s
 // source: http://www.teamliquid.net/forum/sc2-strategy/140055-scientifically-measuring-mining-speed
 
-const incomeMinerals = (workers: number, bases: number, mules: number = 0): number => {
+const incomeMinerals = (workers: number, bases: number, mules = 0): number => {
     // Returns mineral income per second.
     if ((workers === 0 && mules === 0) || bases === 0) {
         return 0
@@ -96,7 +96,7 @@ const incomeVespene = (workers: number, geysers: number, baseCount: number): num
     workers -= closeDistanceWorkers
     geysers -= closeGeysers
     const longDistanceMiningRatio = [8.175, 8.95, 10.4, 14.8] //Distance from long distance geyser divided by distance from base geyser
-    for (let miningRatio of longDistanceMiningRatio) {
+    for (const miningRatio of longDistanceMiningRatio) {
         if (geysers > 0) {
             geysers--
             const longDistanceWorkers = Math.min(Math.floor(miningRatio * 3), workers)

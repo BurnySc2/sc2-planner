@@ -3,8 +3,6 @@ import data from "./data.json"
 import { IDataUnit } from "./interfaces"
 import { iconSortUnitFunction } from "./icon_order"
 
-// const data = require("./data.json")
-
 /**
  * This file contains all enabled units
 {

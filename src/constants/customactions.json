@@ -1,4 +1,5 @@
-[{
+[
+    {
         "internal_name": "worker_to_mins",
         "name": "Stop mine gas",
         "imageSource": "icon-mineral-nobg.png",

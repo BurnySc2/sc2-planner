@@ -9,10 +9,8 @@ interface MyProps {
     gamelogic: GameLogic
 }
 
-interface MyState {}
-
-export default class Time extends Component<MyProps, MyState> {
-    render() {
+export default class Time extends Component<MyProps> {
+    render(): JSX.Element {
         const topTextCss = {
             top: "0%",
             left: "50%",
@@ -34,9 +32,9 @@ export default class Time extends Component<MyProps, MyState> {
             fontSize: "x-large",
         }
         // Get the time in a 00:00 format
-        const frameOfLastAction = this.props.gamelogic.unitsCountArray[
-            this.props.gamelogic.unitsCountArray.length - 1
-        ].frame
+        const frameOfLastAction =
+            this.props.gamelogic.unitsCountArray[this.props.gamelogic.unitsCountArray.length - 1]
+                .frame
         const timeEndOfBO = CONVERT_SECONDS_TO_TIME_STRING(frameOfLastAction / 22.4)
         const timeEndOfEvents = CONVERT_SECONDS_TO_TIME_STRING(this.props.gamelogic.frame / 22.4)
         const item = RACES.time
@@ -45,7 +43,7 @@ export default class Time extends Component<MyProps, MyState> {
             <div key={item.name} className="relative flex-shrink-0">
                 <img
                     className={CLASSES.timeIcon}
-                    src={require("../icons/png/" + item.path)}
+                    src={require("../icons/png/" + item.path).default}
                     alt={item.name}
                 />
                 <div className={CLASSES.timeText} style={topTextCss}>

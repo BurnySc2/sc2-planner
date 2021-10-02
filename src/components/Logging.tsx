@@ -41,13 +41,13 @@ export default class Logging extends Component<MyProps, MyState> {
         })
     }
 
-    onUndo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onUndo = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
         e.preventDefault()
         this.props.undo()
         this.onClose()
     }
 
-    onCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    onCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
         e.preventDefault()
         if (this.state.log?.cancel) {
             this.state.log.cancel()
@@ -55,7 +55,7 @@ export default class Logging extends Component<MyProps, MyState> {
         this.onClose()
     }
 
-    render() {
+    render(): JSX.Element {
         const log = this.state.log
         const messages: JSX.Element[] = []
         if (log) {

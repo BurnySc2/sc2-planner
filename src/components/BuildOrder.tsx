@@ -24,7 +24,7 @@ interface MyProps {
     hoverIndex: number
     highlightedIndexes: number[]
     insertIndex: number
-    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
+    removeClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void
     rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
@@ -53,16 +53,16 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         this.onDragEnd = this.onDragEnd.bind(this)
     }
 
-    onMouseEnter(index: number) {
+    onMouseEnter(index: number): void {
         this.props.changeHoverIndex(index)
         this.props.changeHighlight(this.props.gamelogic.eventLog[index])
     }
-    onMouseLeave() {
+    onMouseLeave(): void {
         this.props.changeHoverIndex(-1)
         this.props.changeHighlight()
     }
 
-    onDragEnd(result: DropResult) {
+    onDragEnd(result: DropResult): void {
         // Dropped outside the list
         if (!result.destination) {
             return
@@ -84,17 +84,17 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         )
     }
 
-    render() {
+    render(): JSX.Element {
         // Convert build order items to div elements
 
         // Hide element if no build order items are present
         if (this.props.gamelogic.bo.length === 0) {
-            return ""
+            return <div />
         }
 
         const buildOrder = this.props.gamelogic.bo.map((item, index) => {
             const image = getImageOfItem(item)
-            return <img src={image} alt={item.name} />
+            return <img key={`${item.name}_${index}`} src={image} alt={item.name} />
         })
 
         const getItemClass = (dragging: boolean, index: number) => {
@@ -121,14 +121,15 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             return classes.join(" ")
         }
 
-        let buildOrderItems: JSX.Element[] = []
-        let seperatorClass =
-            this.props.insertIndex === 0 ? CLASSES.boItemSeperatorSelected : CLASSES.boItemSeperator
+        const buildOrderItems: JSX.Element[] = []
+        let separatorClass =
+            this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
         buildOrderItems.push(
             <div
-                key={`seperator0`}
-                className={seperatorClass}
-                onClick={(e) => {
+                id={"separator_0"}
+                key={"separator0"}
+                className={separatorClass}
+                onClick={(_e) => {
                     this.props.changeInsertIndex(0)
                 }}
             />
@@ -138,32 +139,34 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             buildOrderItems.push(
                 <Draggable key={`${index}`} draggableId={`${index}`} index={index}>
                     {(provided, snapshot) => (
-                        <div
+                        <button
+                            id={`bo_${item.name}_${index}`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={getItemClass(snapshot.isDragging, index)}
-                            onMouseEnter={(e) => this.onMouseEnter(index)}
-                            onMouseLeave={(e) => this.onMouseLeave()}
+                            onMouseEnter={(_e) => this.onMouseEnter(index)}
+                            onMouseLeave={(_e) => this.onMouseLeave()}
                             onClick={(e) => {
                                 this.props.removeClick(e, index)
                             }}
                         >
                             {buildOrder[index]}
-                        </div>
+                        </button>
                     )}
                 </Draggable>
             )
 
-            seperatorClass =
+            separatorClass =
                 this.props.insertIndex === index + 1
-                    ? CLASSES.boItemSeperatorSelected
-                    : CLASSES.boItemSeperator
+                    ? CLASSES.boItemSeparatorSelected
+                    : CLASSES.boItemSeparator
             buildOrderItems.push(
                 <div
-                    key={`seperator${index + 1}`}
-                    className={seperatorClass}
-                    onClick={(e) => {
+                    id={`separator_${index + 1}`}
+                    key={`separator${index + 1}`}
+                    className={separatorClass}
+                    onClick={(_e) => {
                         this.props.changeInsertIndex(index + 1)
                     }}
                 />
@@ -171,10 +174,10 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         })
 
         return (
-            <div className={CLASSES.bo}>
+            <div id={"buildorder"} className={CLASSES.bo}>
                 <DragDropContext onDragEnd={this.onDragEnd}>
                     <Droppable droppableId="droppable" direction="horizontal">
-                        {(provided, snapshot) => (
+                        {(provided, _snapshot) => (
                             <div
                                 className={
                                     (this.props.multilineBuildOrder ? "flex-wrap flex-row" : "") +

@@ -3,44 +3,125 @@ name: RunTests
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
+  test_frontend:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        node: [ '10' ]
+        os: [ubuntu-latest]
+        node: ['10', '12', '14', '16']
+    runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '10.x'
+    - uses: actions/checkout@v2
 
-      - uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
 
-      - name: Install dependencies
-        run: |
-          npm install
+    - name: Cache npm
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-${{ matrix.node }}-node-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Test with npm
-        run: |
-          npm test
+    - name: Install dependencies
+      run: |
+        npm install
 
-      - name: Build
-        run: |
-          npm run build
+    - name: Run tests
+      run: |
+        npm run test
 
-      - name: Publish to Github Pages
-        if: github.ref == 'refs/heads/master'
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          ACCESS_TOKEN: ${{ secrets.GITHUB_PAGES_TOKEN }}
-          BASE_BRANCH: master # The branch the action should deploy from.
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: build # The folder the action should deploy.
+    - name: Run format
+      run: |
+        npm run format
+
+    - name: Run eslint
+      run: |
+        npm run eslint
+
+  test_e2e:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.9]
+        node: ['16']
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache poetry
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-${{ matrix.python-version }}-poetry-${{ hashFiles('poetry.lock') }}
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install poetry
+        poetry install
+
+    - name: Set up Node ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Cache npm
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-${{ matrix.node }}-node-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install npm dependencies
+      run: |
+        npm install
+
+    - name: Run e2e tests
+      run: |
+        poetry run pytest test/test_e2e.py
+
+  deploy_frontend:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node: ['16']
+    runs-on: ${{ matrix.os }}
+    needs: [test_frontend, test_e2e]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Node ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: Cache npm
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-${{ matrix.node }}-node-production-${{ hashFiles('**/package-lock.json') }}
+
+    - name: Install npm dependencies
+      run: |
+        npm install --production
+
+    - name: Build
+      run: |
+        npm run build
+
+    - name: Publish to Github Pages
+      if: github.ref == 'refs/heads/master'
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        ACCESS_TOKEN: ${{ secrets.GITHUB_PAGES_TOKEN }}
+        BASE_BRANCH: master           # The branch the action should deploy from.
+        BRANCH: gh-pages           # The branch the action should deploy to.
+        FOLDER: build           # The folder the action should deploy.

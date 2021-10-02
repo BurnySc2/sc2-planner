@@ -1,7 +1,6 @@
 import data from "./data.json"
-// const data = require("./data.json")
 
-let ENABLED_ABILITIES: Set<number> = new Set()
+const ENABLED_ABILITIES: Set<number> = new Set()
 data.Unit.forEach((unit) => {
     unit.abilities.forEach((ability) => {
         ENABLED_ABILITIES.add(ability.ability)

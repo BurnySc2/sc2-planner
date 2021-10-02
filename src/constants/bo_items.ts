@@ -5,43 +5,43 @@ import { STRUCTURES } from "./structures"
 import { UPGRADES } from "./upgrades"
 
 const BO_ITEMS: { [name: string]: IBuildOrderElement } = {}
-for (let item of UNITS) {
+for (const item of UNITS) {
     BO_ITEMS[item.name] = {
         name: item.name,
         type: ["SCV", "Probe", "Drone"].indexOf(item.name) >= 0 ? "worker" : "unit",
     }
 }
-for (let item of CUSTOMACTIONS) {
+for (const item of CUSTOMACTIONS) {
     BO_ITEMS[item.name] = {
         name: item.name,
         type: "action",
     }
 }
-for (let item of STRUCTURES) {
+for (const item of STRUCTURES) {
     BO_ITEMS[item.name] = {
         name: item.name,
         type: "structure",
     }
 }
-for (let item of UPGRADES) {
+for (const item of UPGRADES) {
     BO_ITEMS[item.name] = {
         name: item.name,
         type: "upgrade",
     }
 }
 
-const workerNameByRace: { [race: string]: string } = {
+const workerNameByRace = {
     terran: "SCV",
     protoss: "Probe",
     zerg: "Drone",
 }
-const gasBuildingByRace: { [race: string]: string } = {
+const gasBuildingByRace = {
     terran: "Refinery",
     protoss: "Assimilator",
     zerg: "Extractor",
 }
 
-const supplyUnitNameByRace: { [race: string]: any } = {
+const supplyUnitNameByRace = {
     terran: {
         name: "SupplyDepot",
         type: "structure",

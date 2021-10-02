@@ -25,35 +25,52 @@ You can [find a live version here](https://burnysc2.github.io/sc2-planner)
 [17 Hatch, 17 pool, 16 gas](https://burnysc2.github.io/sc2-planner/?&race=zerg&bo=uDritmrisSJEritSf2HtL2NtZUxODsIM2QtkuBtgV2LritnfibViriuFsExbIsOxbJtleZkxZLx0bxb9xbSsQzKKtjkilTkli2Mx4ksRx4bsQQyY2xb2sKxZJtR3ttZfeySm1EKtleZkxZKsKxZxsINxZotNuF)
 
 ## Hotkeys
+
 With the arrow keys (left and right) you can navigate through the build order. Holding `shift` will jump by 5, and holding `ctrl` will jump to the start with left arrow or to the end with right arrow.
 
 # Development - Building it yourself
 
 ## Requirements
 
-[Node](https://nodejs.org/en/download/) is required to create this static website.
+[Node 10 or newer](https://nodejs.org/en/download/) is required to create this static website.
+[Python 3.7 or newer](https://www.python.org/downloads/) is rquired to run pre-commit hooks and e2e tests.
 
 ## Setup
 
-Install packages:
-
-`npm install`
+```
+npm install
+pip install poetry --user
+poetry install
+poetry run pre-commit install
+```
 
 ## Deploy
 
-To test:
+### Test
 
-`npm test`
+`npm run test`
 
+### End-to-end test
+
+`poetry run pytest test/test_e2e.py`
+
+### Develop
 To start dev server:
 
 `npm run start`
 
 Then go to [localhost:3000](http://localhost:3000)
 
+### Build and deploy
 To deploy in `/build` directory:
 
 `npm run build`
+
+### Pre-commit hooks
+
+To run pre-commit hooks manually, run
+
+`poetry run pre-commit run --all-files`
 
 ## Update
 
@@ -69,7 +86,7 @@ Most image assets are owned by Blizzard and are used according to http://blizzar
 
 Prettify all .ts and .tsx files:
 
-`npx prettier --write "**/*.{ts,tsx}"`
+`npm run format`
 
 # TODO
 

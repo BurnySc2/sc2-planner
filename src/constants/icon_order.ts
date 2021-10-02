@@ -220,7 +220,7 @@ const upgradePriority: { [name: string]: number } = {
     AnabolicSynthesis: 61,
 }
 
-const iconSortUnitFunction = (item1: IDataUnit, item2: IDataUnit) => {
+const iconSortUnitFunction = (item1: IDataUnit, item2: IDataUnit): number => {
     const result = unitPriority[item1.name] - unitPriority[item2.name]
     if (result < 0) {
         return -1
@@ -230,7 +230,7 @@ const iconSortUnitFunction = (item1: IDataUnit, item2: IDataUnit) => {
     return 0
 }
 
-const iconSortStructureFunction = (item1: IDataUnit, item2: IDataUnit) => {
+const iconSortStructureFunction = (item1: IDataUnit, item2: IDataUnit): number => {
     const result = structurePriority[item1.name] - structurePriority[item2.name]
     if (result < 0) {
         return -1
@@ -239,7 +239,7 @@ const iconSortStructureFunction = (item1: IDataUnit, item2: IDataUnit) => {
     }
     return 0
 }
-const iconSortUpgradeFunction = (item1: IDataUpgrade, item2: IDataUpgrade) => {
+const iconSortUpgradeFunction = (item1: IDataUpgrade, item2: IDataUpgrade): number => {
     const result = upgradePriority[item1.name] - upgradePriority[item2.name]
     if (result < 0) {
         return -1

@@ -15,10 +15,10 @@ interface MyProps {
     gamelogic: GameLogic
     race: IAllRaces
     insertIndex: number
-    actionClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, action: ICustomAction) => void
-    unitClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
-    structureClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
-    upgradeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, unit: string) => void
+    actionClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, action: ICustomAction) => void
+    unitClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, unit: string) => void
+    structureClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, unit: string) => void
+    upgradeClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, unit: string) => void
 }
 
 interface MyState {
@@ -36,17 +36,20 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
         }
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element) => {
+    onMouseEnter = (
+        _e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+        item: JSX.Element
+    ): void => {
         this.setState({
             tooltipText: item,
         })
     }
 
-    render() {
-        let gameLogic: GameLogic = this.props.gamelogic
+    render(): JSX.Element {
+        const gameLogic: GameLogic = this.props.gamelogic
         // If the build order has more items than the gamelogic was able to parse (e.g. requirement not met of some item), then the insertIndex might be higher than max allowed, = bug
-        let infoIndex = Math.min(this.props.insertIndex, gameLogic.unitsCountArray.length - 1)
-        let unitsCount = gameLogic.unitsCountArray[infoIndex]
+        const infoIndex = Math.min(this.props.insertIndex, gameLogic.unitsCountArray.length - 1)
+        const unitsCount = gameLogic.unitsCountArray[infoIndex]
 
         const actionIconTextStyle = {
             bottom: "0%",
@@ -74,7 +77,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             }
             return false
         })
-        const resources = resourcesAvailble.map((item, index) => {
+        const resources = resourcesAvailble.map((item, _index) => {
             // Instead of getting the status when the last element finished, get the state after the last build order index was started
             let value: number | string = ""
             if (item.name.includes("Supply")) {
@@ -88,7 +91,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
             return (
                 <div key={item.name} className={this.classString}>
-                    <img src={require("../icons/png/" + item.path)} alt={item.name} />
+                    <img src={require("../icons/png/" + item.path).default} alt={item.name} />
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
@@ -96,9 +99,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const customactions = CUSTOMACTIONS.map((item, index) => {
+        const customactions = CUSTOMACTIONS.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col">
@@ -106,7 +109,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     </div>
                 )
             }
-            let value: number | undefined = unitsCount[item.internal_name]
+            const value: number | undefined = unitsCount[item.internal_name]
             let icon = ""
             icon = getImageOfItem({
                 name: item.internal_name,
@@ -115,8 +118,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
             const hidden = item.race === undefined || item.race === this.props.race ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -129,13 +133,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 
-        const units = UNITS.map((item, index) => {
+        const units = UNITS.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -153,8 +157,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const value = unitsCount[item.name]
             const hidden = UNIT_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -167,13 +172,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 
-        const structures = STRUCTURES.map((item, index) => {
+        const structures = STRUCTURES.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -189,8 +194,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const value = unitsCount[item.name]
             const hidden = STRUCTURE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -203,13 +209,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 
-        const upgrades = UPGRADES.map((item, index) => {
+        const upgrades = UPGRADES.map((item, _index) => {
             // Update tooltip function
-            const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(
                     e,
                     <div className="flex flex-col text-center">
@@ -225,8 +231,9 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const value = unitsCount[item.name]
             const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
-                <div
-                    data-tip
+                <button
+                    id={item.name}
+                    data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
                     className={`${this.classString} ${hidden}`}
@@ -239,7 +246,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
-                </div>
+                </button>
             )
         })
 

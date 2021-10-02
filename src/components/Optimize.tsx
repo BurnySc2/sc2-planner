@@ -44,31 +44,34 @@ export class Optimize extends Component<MyProps, MyState> {
         props.getOnAddConstraint(this.onAddConstraint.bind(this))
     }
 
-    showSettings = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    showSettings = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         this.setState({
             show: true,
         })
     }
 
-    hideSettings = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    hideSettings = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
         this.setState({
             show: false,
         })
     }
 
-    onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, itemShortName: string) => {
-        const newValue =
-            e.target.constructor === HTMLTextAreaElement
-                ? e.target.value
-                : e.target.type === "checkbox"
-                ? (e.target as any).checked
-                    ? 1
-                    : 0
-                : parseFloat(e.target.value)
+    onChangeTextArea = (e: ChangeEvent<HTMLTextAreaElement>, itemShortName: string): void => {
+        const newValue = e.target.value
         this.props.updateOptimize(itemShortName, newValue)
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element) => {
+    onChangeCheckbox = (e: ChangeEvent<HTMLInputElement>, itemShortName: string): void => {
+        const newValue = e.target.checked ? 1 : 0
+        this.props.updateOptimize(itemShortName, newValue)
+    }
+
+    onChange = (e: ChangeEvent<HTMLInputElement>, itemShortName: string): void => {
+        const newValue = parseFloat(e.target.value)
+        this.props.updateOptimize(itemShortName, newValue)
+    }
+
+    onMouseEnter = (_e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element): void => {
         this.setState({
             tooltipText: item,
         })
@@ -77,16 +80,19 @@ export class Optimize extends Component<MyProps, MyState> {
     onApply = async (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         optimizationName: string | number
-    ) => {
+    ): Promise<void> => {
         const log = await this.props.applyOpitimization([`${optimizationName}`])
         this.props.log(log)
     }
 
-    mouseEnterFunc = (e: React.MouseEvent<HTMLElement, MouseEvent>, tooltip: string | number) => {
+    mouseEnterFunc = (
+        e: React.MouseEvent<HTMLElement, MouseEvent>,
+        tooltip: string | number
+    ): void => {
         this.onMouseEnter(e, <div>{tooltip}</div>)
     }
 
-    resizeTextArea(element: HTMLTextAreaElement) {
+    resizeTextArea(element: HTMLTextAreaElement): void {
         element.style.height = "inherit"
         element.style.height = `${Math.max(50, element.scrollHeight)}px`
     }
@@ -109,7 +115,7 @@ export class Optimize extends Component<MyProps, MyState> {
         } else {
             const toRemoveList: Constraint[] = []
             let foundName = false
-            for (let constraint of list) {
+            for (const constraint of list) {
                 if (
                     constraint.type === "time" &&
                     constraint.name === name &&
@@ -141,7 +147,7 @@ export class Optimize extends Component<MyProps, MyState> {
                     }
                 }
             }
-            for (let toRemove of toRemoveList) {
+            for (const toRemove of toRemoveList) {
                 remove(list, toRemove)
             }
             if (!foundName) {
@@ -176,9 +182,9 @@ export class Optimize extends Component<MyProps, MyState> {
         }
     }
 
-    componentDidMount() {
+    componentDidMount(): void {
         const textAreas = document.getElementsByTagName("textarea")
-        for (let textArea of textAreas) {
+        for (const textArea of textAreas) {
             this.resizeTextArea(textArea)
         }
     }
@@ -200,7 +206,7 @@ export class Optimize extends Component<MyProps, MyState> {
                     value={item.v}
                     placeholder="Add constraints by moving your cursor on an item and press e, r, t, or y. Then edit constraints here."
                     onChange={(e) => {
-                        this.onChange(e, item.n)
+                        this.onChangeTextArea(e, item.n)
                     }}
                 ></textarea>
             )
@@ -214,7 +220,7 @@ export class Optimize extends Component<MyProps, MyState> {
                     type="checkbox"
                     checked={!!item.v}
                     onChange={(e) => {
-                        this.onChange(e, item.n)
+                        this.onChangeCheckbox(e, item.n)
                     }}
                 />
             )
@@ -273,7 +279,7 @@ export class Optimize extends Component<MyProps, MyState> {
         )
     }
 
-    render() {
+    render(): JSX.Element {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
         if (this.state.show) {

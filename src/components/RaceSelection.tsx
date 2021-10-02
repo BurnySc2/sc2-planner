@@ -5,12 +5,10 @@ import CLASSES from "../constants/classes"
 import { IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
-    onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces) => void
+    onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, race: IAllRaces) => void
 }
 
-interface MyState {}
-
-export default class RaceSelection extends Component<MyProps, MyState> {
+export default class RaceSelection extends Component<MyProps> {
     /**
      * If a race was selected, clear BOArea and BuildOrder and reset everything
      * Then load the right race in ActionSelection
@@ -19,23 +17,28 @@ export default class RaceSelection extends Component<MyProps, MyState> {
     //     super(props)
     // }
 
-    onClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, race: IAllRaces) => {
+    onClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, race: IAllRaces): void => {
         this.props.onClick(e, race)
     }
 
-    render() {
+    render(): JSX.Element {
         const classString = `${CLASSES.raceIcon}`
 
         const allRaces: Array<IAllRaces> = ["protoss", "terran", "zerg"]
-        const races = allRaces.map((race, index) => {
+        const races = allRaces.map((race, _index) => {
             const item: { name: string; path: string } = RACES[race]
             return (
-                <div key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
-                    <img src={require("../icons/png/" + item.path)} alt={item.name} />
-                </div>
+                <button
+                    id={race}
+                    key={item.name}
+                    className={classString}
+                    onClick={(e) => this.onClick(e, race)}
+                >
+                    <img src={require("../icons/png/" + item.path).default} alt={item.name} />
+                </button>
             )
         })
 
-        return <div>{races}</div>
+        return <div className={"flex flex-col"}>{races}</div>
     }
 }

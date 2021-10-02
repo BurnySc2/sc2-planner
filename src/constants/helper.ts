@@ -2,7 +2,7 @@
 import lzbase62 from "lzbase62"
 import { isEqual, pick } from "lodash"
 
-import { ISettingsElement, IBuildOrderElement, IAllRaces, Log } from "./interfaces"
+import { ISettingsElement, IBuildOrderElement, Log } from "./interfaces"
 import UNITS_BY_NAME from "./units_by_name"
 import UPGRADES_BY_NAME from "./upgrade_by_name"
 import UPGRADES_BY_ID from "./upgrade_by_id"
@@ -16,14 +16,14 @@ const { CUSTOMACTIONS_BY_NAME } = require("./customactions")
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
-const CONVERT_SECONDS_TO_TIME_STRING = (totalSeconds: number) => {
+const CONVERT_SECONDS_TO_TIME_STRING = (totalSeconds: number): string => {
     totalSeconds = Math.floor(totalSeconds)
     const minutes = `${Math.floor(totalSeconds / 60)}`.padStart(2, "0")
     const seconds = `${totalSeconds % 60}`.padStart(2, "0")
     return `${minutes}:${seconds}`
 }
 
-const CONVERT_TIME_STRING_TO_SECONDS = (timeString: string) => {
+const CONVERT_TIME_STRING_TO_SECONDS = (timeString: string): number => {
     const minutesReg = timeString.match(/([0-9]+):/)
     const minutes = minutesReg ? +minutesReg[1] : 0
     const secondsReg = timeString.match(/:([0-9]+)$/)
@@ -35,15 +35,14 @@ const getImageOfItem = (item: { name: string; type: string }): string => {
     let image = ""
     try {
         if (item.type === "upgrade") {
-            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
+            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`).default
         } else if (item.type === "action") {
-            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
+            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`).default
         } else {
-            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
+            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`).default
         }
     } catch {
         console.error(`Missing image for: ${item.name}`)
-    } finally {
     }
     return image
 }
@@ -153,8 +152,7 @@ defaultSettings.forEach((item) => {
 
 const defaultOptimizeSettings: Array<ISettingsElement> = [
     {
-        name:
-            "Constraints on item building end time for all optimizations.\nE.g: Reaper#1<=01:52, Reaper#1<=Factory#1",
+        name: "Constraints on item building end time for all optimizations.\nE.g: Reaper#1<=01:52, Reaper#1<=Factory#1",
         tooltip: "List timing constraints, comma separated",
         variableName: "constraints",
         n: "c",
@@ -300,7 +298,7 @@ const decodeOptimizeSettings = (settingsEncoded: string): Array<ISettingsElement
 }
 
 const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string => {
-    let compactArray: Array<{
+    const compactArray: Array<{
         id: number
         type: string
     }> = []
@@ -350,15 +348,15 @@ const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string =
     // let encoded = "001" + btoa(compressed)
 
     // Encoding with zlib
-    let jsonString = JSON.stringify(compactArray)
-    let compressed = pako.deflate(jsonString, { to: "string" })
-    let encoded = "002" + btoa(compressed)
+    const jsonString = JSON.stringify(compactArray)
+    const compressed = pako.deflate(jsonString, { to: "string" })
+    const encoded = "002" + btoa(compressed)
 
     return encoded
 }
 
 const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> => {
-    let buildOrderDecoded: Array<IBuildOrderElement> = []
+    const buildOrderDecoded: Array<IBuildOrderElement> = []
     let bo: Array<{
         id: number
         type: string
@@ -417,7 +415,7 @@ const createUrlParams = (
     optimizeSettings: Array<ISettingsElement> | undefined,
     buildOrder: Array<IBuildOrderElement> = []
 ): string => {
-    let newUrl = `?`
+    let newUrl = "?"
     if (!race) {
         race = "terran"
     }
@@ -449,42 +447,43 @@ const createUrlParams = (
     return newUrl
 }
 
-const encodeSALT = (buildOrder: Array<IBuildOrderElement>): string => {
-    // TODO Encode salt build order
-    return "Some salt build order encoded"
-}
+// const encodeSALT = (_buildOrder: Array<IBuildOrderElement>): string => {
+//     // TODO Encode salt build order
+//     return "Some salt build order encoded"
+// }
 
-const decodeSALT = (saltEncoding: string) => {
-    // TODO Decode salt build order from string
-    // TODO Also need to figure out which race the SALT build order is for?!
-    let race: IAllRaces | undefined = undefined
-    let bo = [
-        { name: "SCV", type: "worker" },
-        { name: "SupplyDepot", type: "structure" },
-    ]
-    // let bo = [
-    //     {name: "Probe", type: "worker"},
-    //     {name: "Pylon", type: "structure"}
-    // ]
+// const decodeSALT = (_saltEncoding: string) => {
+//     // TODO Decode salt build order from string
+//     // TODO Also need to figure out which race the SALT build order is for?!
+//     let race: IAllRaces | undefined = undefined
+//     const bo = [
+//         { name: "SCV", type: "worker" },
+//         { name: "SupplyDepot", type: "structure" },
+//     ]
+//     // let bo = [
+//     //     {name: "Probe", type: "worker"},
+//     //     {name: "Pylon", type: "structure"}
+//     // ]
+//
+//     // Figure out the race from the build order
+//     if (bo.length === 0 && !race) {
+//         race = "terran" as IAllRaces
+//     } else if (bo.length > 0 && !race) {
+//         for (const item of bo) {
+//             if (["worker", "unit", "structure"].includes(item.type)) {
+//                 const unit = UNITS_BY_NAME[item.name]
+//                 race = unit.race.toLowerCase() as IAllRaces
+//                 break
+//             }
+//         }
+//     }
+//
+//     return {
+//         race: race,
+//         bo: bo,
+//     }
+// }
 
-    // Figure out the race from the build order
-    if (bo.length === 0 && !race) {
-        race = "terran" as IAllRaces
-    } else if (bo.length > 0 && !race) {
-        for (const item of bo) {
-            if (["worker", "unit", "structure"].includes(item.type)) {
-                const unit = UNITS_BY_NAME[item.name]
-                race = unit.race.toLowerCase() as IAllRaces
-                break
-            }
-        }
-    }
-
-    return {
-        race: race,
-        bo: bo,
-    }
-}
 /**
  * Adds cancellation to a log line
  * Returns a promise that rejects when the log is cancelled, so it can raise an exception
@@ -494,7 +493,9 @@ export async function cancelableLog(
     logFunc: (line?: Log) => void,
     line: Log
 ): Promise<() => Promise<void>> {
-    let cancel: () => void = () => {}
+    let cancel: () => void = () => {
+        return undefined
+    }
     const cancellationPromise = new Promise<void>((resolve, reject) => {
         cancel = reject
     })
@@ -517,6 +518,6 @@ export {
     encodeBuildOrder,
     decodeBuildOrder,
     createUrlParams,
-    encodeSALT,
-    decodeSALT,
+    // encodeSALT,
+    // decodeSALT,
 }
