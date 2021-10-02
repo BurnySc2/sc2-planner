@@ -33,7 +33,8 @@ With the arrow keys (left and right) you can navigate through the build order. H
 ## Requirements
 
 [Node 10 or newer](https://nodejs.org/en/download/) is required to create this static website.
-[Python 3.7 or newer](https://www.python.org/downloads/) is rquired to run pre-commit hooks and e2e tests.
+
+[Python 3.7 or newer](https://www.python.org/downloads/) is required to run pre-commit hooks and e2e tests.
 
 ## Setup
 
