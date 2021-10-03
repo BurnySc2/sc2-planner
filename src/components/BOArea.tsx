@@ -162,7 +162,7 @@ export default class BOArea extends Component<MyProps, MyState> {
 
     getFillerElement(width: number, key: string): JSX.Element {
         if (width === 0) {
-            return <div />
+            return <React.Fragment key={key} />
         }
         const myStyle = {
             width: `${width * +this.props.gamelogic.settings.htmlElementWidthFactor}px`,
@@ -298,7 +298,6 @@ export default class BOArea extends Component<MyProps, MyState> {
                     if (item.type === "action") {
                         itemName = CUSTOMACTIONS_BY_NAME[item.name].name
                     }
-
                     rowContent.push(
                         <div
                             id={`boarea_${item.name}_${index2}`}
@@ -330,7 +329,7 @@ export default class BOArea extends Component<MyProps, MyState> {
 
             // Hide bar if it has no content to show
             if (verticalBar.length <= 0) {
-                return <div />
+                return <React.Fragment key={`verticalBar_${barType}`} />
             }
             //else
             return (
@@ -348,7 +347,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                   const { resourceType, resourceName, icon } = resourceDetails
                   const history = this.props.gamelogic.resourceHistory[resourceType]
                   if (!history.length) {
-                      return <div />
+                      return <React.Fragment key={`row_${resourceType}`} />
                   }
                   //else
 
@@ -490,7 +489,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         )
 
         if (this.props.gamelogic.eventLog.length === 0) {
-            return <div />
+            return <React.Fragment />
         }
         return (
             <div className={`${CLASSES.boArea}`}>

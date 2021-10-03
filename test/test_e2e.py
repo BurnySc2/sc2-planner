@@ -63,6 +63,11 @@ class MyTestClass(BaseCase):
         self.assert_element('#Hatchery')
         self.assert_element('#ZergMeleeWeaponsLevel1')
 
+    # TODO Other test ideas:
+    # Add and remmove an item by clicking on it
+    # Drag and drop example
+    # Load a specific url to load a build order from encoded string
+
 
 class MyBenchClass(BaseCase):
     def __init__(self, *args, **kwargs):
