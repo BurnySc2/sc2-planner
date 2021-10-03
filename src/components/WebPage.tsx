@@ -538,7 +538,7 @@ export default withRouter(
             this.updateHistoryFromState()
         }
 
-        buildOrderClicked = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
+        buildOrderClicked = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
             if (this.preponeEventHandler(e, index)) {
                 this.updateHistoryFromState()
             } else {

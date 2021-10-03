@@ -24,7 +24,7 @@ interface MyProps {
     hoverIndex: number
     highlightedIndexes: number[]
     insertIndex: number
-    removeClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => void
+    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
     rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
@@ -139,7 +139,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             buildOrderItems.push(
                 <Draggable key={`${index}`} draggableId={`${index}`} index={index}>
                     {(provided, snapshot) => (
-                        <button
+                        <div
                             id={`bo_${item.name}_${index}`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
@@ -152,7 +152,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                             }}
                         >
                             {buildOrder[index]}
-                        </button>
+                        </div>
                     )}
                 </Draggable>
             )
