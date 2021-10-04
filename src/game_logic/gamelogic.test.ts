@@ -120,7 +120,7 @@ test("Build refinery", () => {
     expect(logic.eventLog.length).toBe(1)
 })
 
-test.only("Check duplicate upgrade prevention", () => {
+test("Check duplicate upgrade prevention", () => {
     const name = "Stimpack"
     const bo: IBuildOrderElement[] = [
         { name: "CommandCenter", type: "structure" },
