@@ -403,6 +403,12 @@ const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> 
         }
         if (item.type === "upgrade") {
             const upgrade = UPGRADES_BY_ID[item.id]
+
+            if (buildOrderDecoded.find((v) => v.name === upgrade.name)) {
+                // prevent duplicate upgrades
+                return
+            }
+
             buildOrderDecoded.push({ name: upgrade.name, type: item.type })
         }
     })

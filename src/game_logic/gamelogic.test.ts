@@ -120,6 +120,22 @@ test("Build refinery", () => {
     expect(logic.eventLog.length).toBe(1)
 })
 
+test.only("Check duplicate upgrade prevention", () => {
+    const name = "Stimpack"
+    const bo: IBuildOrderElement[] = [
+        { name: "CommandCenter", type: "structure" },
+        { name: "Refinery", type: "structure" },
+        { name: "3worker_to_gas", type: "action" },
+        { name: "SupplyDepot", type: "structure" },
+        { name: "Barracks", type: "structure" },
+        { name: "BarracksTechLab", type: "structure" },
+        { name, type: "upgrade" },
+    ]
+    const logic = new GameLogic("terran", bo)
+    const [newLogic] = GameLogic.addItemToBO(logic, { name, type: "upgrade" }, bo.length + 1)
+    expect(newLogic.upgrades.size).toBe(1)
+})
+
 test("Build 2 drones, 1 overlord, 4 drones", () => {
     // Test zerg mechanics
     const bo: IBuildOrderElement[] = [

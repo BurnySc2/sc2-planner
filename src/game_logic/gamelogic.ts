@@ -1106,6 +1106,12 @@ class GameLogic {
     ): [GameLogic, number] {
         const bo = prevGamelogic.bo
         const initialBOLength = bo.length
+
+        if (item.type === "upgrade" && prevGamelogic.upgrades.has(item.name)) {
+            // upgrade already researched, don't do anything.
+            return [prevGamelogic, insertIndex]
+        }
+
         bo.splice(insertIndex, 0, item)
         // Re-calculate build order
 
