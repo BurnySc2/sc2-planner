@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "./static/css/main.ffca99ed.chunk.css",
-    "main.js": "./static/js/main.e3fb85b5.chunk.js",
-    "main.js.map": "./static/js/main.e3fb85b5.chunk.js.map",
+    "main.css": "./static/css/main.610b1c81.chunk.css",
+    "main.js": "./static/js/main.46b2d55c.chunk.js",
+    "main.js.map": "./static/js/main.46b2d55c.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.d4ba9ca8.js",
     "runtime-main.js.map": "./static/js/runtime-main.d4ba9ca8.js.map",
     "static/js/2.6024dd8c.chunk.js": "./static/js/2.6024dd8c.chunk.js",
     "static/js/2.6024dd8c.chunk.js.map": "./static/js/2.6024dd8c.chunk.js.map",
     "index.html": "./index.html",
-    "static/css/main.ffca99ed.chunk.css.map": "./static/css/main.ffca99ed.chunk.css.map",
+    "static/css/main.610b1c81.chunk.css.map": "./static/css/main.610b1c81.chunk.css.map",
     "static/js/2.6024dd8c.chunk.js.LICENSE.txt": "./static/js/2.6024dd8c.chunk.js.LICENSE.txt",
     "static/media/README.md": "./static/media/README.9ac215a5.md",
     "static/media/btn-ability-spearofadun-chronosurge-cyberneticscore.png": "./static/media/btn-ability-spearofadun-chronosurge-cyberneticscore.f5621582.png",
@@ -85,7 +85,7 @@
   "entrypoints": [
     "static/js/runtime-main.d4ba9ca8.js",
     "static/js/2.6024dd8c.chunk.js",
-    "static/css/main.ffca99ed.chunk.css",
-    "static/js/main.e3fb85b5.chunk.js"
+    "static/css/main.610b1c81.chunk.css",
+    "static/js/main.46b2d55c.chunk.js"
   ]
 }
