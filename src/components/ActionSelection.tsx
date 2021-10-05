@@ -230,13 +230,16 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             const icon = getImageOfItem({ name: item.name, type: "upgrade" })
             const value = unitsCount[item.name]
             const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
+            const upgradeDisabled = this.props.gamelogic.upgrades.has(item.name)
+                ? "filter grayscale"
+                : ""
             return (
                 <button
                     id={item.name}
                     data-tip=""
                     data-for="actionTooltip"
                     key={item.name}
-                    className={`${this.classString} ${hidden}`}
+                    className={`${this.classString} ${hidden} ${upgradeDisabled}`}
                     onMouseEnter={mouseEnterFunc}
                     onClick={(e) => {
                         this.props.upgradeClick(e, item.name)

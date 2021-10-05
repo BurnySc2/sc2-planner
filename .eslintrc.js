@@ -17,7 +17,8 @@ module.exports = {
         ecmaVersion: 2018,
         sourceType: "module",
     },
-    plugins: ["react", "@typescript-eslint"],
+    plugins: ["react", "@typescript-eslint"
+    ],
     settings: {
         react: {
             version: "detect",
@@ -26,7 +27,7 @@ module.exports = {
     rules: {
         "@typescript-eslint/ban-ts-comment": 0,
         "curly": "error",
-        "quotes": ["error", "double"],
+        "quotes": ["warn", "double"],
         "@typescript-eslint/no-var-requires": 0,
         "@typescript-eslint/no-extra-semi": 0,
         "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
