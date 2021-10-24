@@ -609,7 +609,7 @@ class GameLogic {
         }
 
         // Get cost (mineral, vespene, supply)
-        const cost = this.getCost(unit.name)
+        const cost = GameLogic.getCost(unit.name)
         if (!this._canAfford(cost) && !morphCondition) {
             // Generate error message if not able to afford (missing minerals, vespene or free supply)
             this.setCostErrorMessage(cost, unit.name)
@@ -682,13 +682,6 @@ class GameLogic {
                 // Was 0.5 and 25
                 cost.supply = 1
                 cost.minerals = 50
-            } else if (morphCondition) {
-                const costTrainer = this.getCost(trainerUnit.name)
-                cost.minerals -= costTrainer.minerals
-                cost.vespene -= costTrainer.vespene
-                if (costTrainer.supply > 0) {
-                    cost.supply -= costTrainer.supply
-                }
             }
             if (!this._canAfford(cost)) {
                 // This is nearly the same error as above, but this is for a morph
@@ -847,7 +840,7 @@ class GameLogic {
         }
 
         // Get cost (mineral, vespene, supply)
-        const cost = this.getCost(upgrade.name, true)
+        const cost = GameLogic.getCost(upgrade.name, true)
         if (!this._canAfford(cost)) {
             this.setCostErrorMessage(cost, upgrade.name)
             return false
@@ -886,7 +879,7 @@ class GameLogic {
 
             researcherStructure.addTask(this, newTask, canBeResearchedByAddon)
 
-            const cost = this.getCost(upgrade.name, true)
+            const cost = GameLogic.getCost(upgrade.name, true)
             this.minerals -= cost.minerals
             this.vespene -= cost.vespene
             return true
@@ -963,7 +956,7 @@ class GameLogic {
     /**
      * Gets the cost of a unit, structure, morph or upgrade
      */
-    getCost(unitName: string, isUpgrade = false): ICost {
+    static getCost(unitName: string, isUpgrade = false): ICost {
         // Gets cost of unit, structure or upgrade
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
@@ -971,6 +964,17 @@ class GameLogic {
                 minerals: UPGRADES_BY_NAME[unitName].cost.minerals,
                 vespene: UPGRADES_BY_NAME[unitName].cost.gas,
                 supply: 0,
+            }
+        }
+        // Fixes unit cost for morphing units and structures (e.g. Hatchery to Lair, Roach to Ravager, Drone to Hatchery)
+        if (unitName in TRAINED_BY) {
+            const trained_by = TRAINED_BY[unitName]
+            if (trained_by.isMorph || trained_by.consumesUnit) {
+                return {
+                    minerals: trained_by.morphCostMinerals,
+                    vespene: trained_by.morphCostGas,
+                    supply: trained_by.morphCostSupply,
+                }
             }
         }
         console.assert(UNITS_BY_NAME[unitName], `${unitName}`)
@@ -1053,9 +1057,9 @@ class GameLogic {
         console.assert(unit.name, JSON.stringify(unit, null, 4))
         console.assert(unit.type, JSON.stringify(unit, null, 4))
         if (unit.type === "upgrade") {
-            return this._canAfford(this.getCost(unit.name, true))
+            return this._canAfford(GameLogic.getCost(unit.name, true))
         } else {
-            return this._canAfford(this.getCost(unit.name, false))
+            return this._canAfford(GameLogic.getCost(unit.name, false))
         }
     }
 

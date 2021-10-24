@@ -91,6 +91,9 @@ interface ITrainedBy {
         trainedBy: Set<string>
         requiresTechlab: boolean
         isMorph: boolean
+        morphCostMinerals: number
+        morphCostGas: number
+        morphCostSupply: number
         consumesUnit: boolean
     }
 }

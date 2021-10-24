@@ -7,17 +7,39 @@ test("Get the train time of SCV", () => {
 })
 
 test("Get the train cost of SCV", () => {
-    const logic = new GameLogic("terran")
-    expect(logic.getCost("SCV").minerals).toBe(50)
-    expect(logic.getCost("SCV").vespene).toBe(0)
-    expect(logic.getCost("SCV").supply).toBe(1)
+    expect(GameLogic.getCost("SCV").minerals).toBe(50)
+    expect(GameLogic.getCost("SCV").vespene).toBe(0)
+    expect(GameLogic.getCost("SCV").supply).toBe(1)
 })
 
 test("Get the train cost of Depot", () => {
-    const logic = new GameLogic("terran")
-    expect(logic.getCost("SupplyDepot").minerals).toBe(100)
-    expect(logic.getCost("SupplyDepot").vespene).toBe(0)
-    expect(logic.getCost("SupplyDepot").supply).toBe(-8)
+    expect(GameLogic.getCost("SupplyDepot").minerals).toBe(100)
+    expect(GameLogic.getCost("SupplyDepot").vespene).toBe(0)
+    expect(GameLogic.getCost("SupplyDepot").supply).toBe(-8)
+})
+
+test("Get the train cost of Hatchery", () => {
+    expect(GameLogic.getCost("Hatchery").minerals).toBe(300)
+    expect(GameLogic.getCost("Hatchery").vespene).toBe(0)
+    expect(GameLogic.getCost("Hatchery").supply).toBe(-6)
+})
+
+test("Get the train cost of Lair", () => {
+    expect(GameLogic.getCost("Lair").minerals).toBe(150)
+    expect(GameLogic.getCost("Lair").vespene).toBe(100)
+    expect(GameLogic.getCost("Lair").supply).toBe(0)
+})
+
+test("Get the train cost of OrbitalCommand", () => {
+    expect(GameLogic.getCost("OrbitalCommand").minerals).toBe(150)
+    expect(GameLogic.getCost("OrbitalCommand").vespene).toBe(0)
+    expect(GameLogic.getCost("OrbitalCommand").supply).toBe(0)
+})
+
+test("Get the train cost of Ravager", () => {
+    expect(GameLogic.getCost("Ravager").minerals).toBe(25)
+    expect(GameLogic.getCost("Ravager").vespene).toBe(75)
+    expect(GameLogic.getCost("Ravager").supply).toBe(1)
 })
 
 test("Build an SCV", () => {

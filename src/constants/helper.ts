@@ -145,8 +145,6 @@ const defaultSettings: Array<ISettingsElement> = [
 ]
 const settingsDefaultValues: { [name: string]: number | string } = {}
 defaultSettings.forEach((item) => {
-    // TODO Fix type annotation
-    // @ts-ignor
     settingsDefaultValues[item.n] = item.v
 })
 
@@ -265,8 +263,6 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
 
 const optimizeSettingsDefaultValues: { [name: string]: number | string } = {}
 defaultOptimizeSettings.forEach((item) => {
-    // TODO Fix type annotation
-    // @ts-ignor
     optimizeSettingsDefaultValues[item.n] = item.v
 })
 
