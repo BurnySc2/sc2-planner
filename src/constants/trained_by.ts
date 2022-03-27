@@ -29,6 +29,9 @@ data.Unit.forEach((trainingUnit) => {
                 let requiresUnits = null
                 const requires = []
                 let requiresTechlab = false
+                let morphCostMinerals = 0
+                let morphCostGas = 0
+                let morphCostSupply = 0
                 const isMorph = MORPH_ABILITIES.has(ability.ability)
                 if (isMorph) {
                     const morphes: { [resultingUnit: string]: string[] } = {
@@ -40,6 +43,9 @@ data.Unit.forEach((trainingUnit) => {
                         Archon: ["HighTemplar", "DarkTemplar"],
                     }
                     requiresUnits = morphes[resultingUnit.name]
+                    morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
+                    morphCostGas = resultingUnit.gas - trainingUnit.gas
+                    morphCostSupply = resultingUnit.supply - trainingUnit.supply
                     if (morphes[resultingUnit.name]) {
                         requires.push(...morphes[resultingUnit.name])
                     }
@@ -56,6 +62,11 @@ data.Unit.forEach((trainingUnit) => {
                     resultingUnit.race === "Zerg" &&
                     resultingUnit.is_structure &&
                     !trainingUnit.is_structure
+                if (consumesUnit) {
+                    morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
+                    morphCostGas = resultingUnit.gas - trainingUnit.gas
+                    morphCostSupply = resultingUnit.supply
+                }
                 if (Array.isArray(ability.requirements)) {
                     for (const requirement of ability.requirements) {
                         if (requirement.upgrade) {
@@ -91,11 +102,14 @@ data.Unit.forEach((trainingUnit) => {
                 if (TRAINED_BY[resultingUnit.name] === undefined) {
                     TRAINED_BY[resultingUnit.name] = {
                         trainedBy: new Set([trainingUnit.name]),
-                        requiresTechlab: requiresTechlab,
-                        requiresUnits: requiresUnits,
+                        requiresTechlab,
+                        requiresUnits,
                         requires: [requires],
-                        isMorph: isMorph,
-                        consumesUnit: consumesUnit,
+                        isMorph,
+                        morphCostMinerals,
+                        morphCostGas,
+                        morphCostSupply,
+                        consumesUnit,
                         requiredStructure: null,
                         requiredUpgrade: null,
                     }
@@ -155,6 +169,9 @@ TRAINED_BY["Mothership"].requires = [["FleetBeacon", "Nexus"]]
 TRAINED_BY["WarpGate"] = {
     consumesUnit: false,
     isMorph: false,
+    morphCostMinerals: 0,
+    morphCostGas: 0,
+    morphCostSupply: 0,
     requiredStructure: "Pylon",
     requiredUpgrade: null,
     requires: [["WarpGateResearch", "Gateway"]],

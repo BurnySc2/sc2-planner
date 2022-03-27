@@ -26,7 +26,9 @@ module.exports = {
     },
     rules: {
         "@typescript-eslint/ban-ts-comment": 0,
-        "curly": "error",
+        "curly": "warn",
+        "prefer-const": "warn",
+        "no-empty": "warn",
         "quotes": ["warn", "double"],
         "@typescript-eslint/no-var-requires": 0,
         "@typescript-eslint/no-extra-semi": 0,
