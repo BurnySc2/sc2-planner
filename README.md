@@ -71,7 +71,10 @@ To deploy in `/build` directory:
 
 To run pre-commit hooks manually, run
 
-`poetry run pre-commit run --all-files`
+```
+poetry run pre-commit install
+poetry run pre-commit run --all-files
+```
 
 ## Update
 
