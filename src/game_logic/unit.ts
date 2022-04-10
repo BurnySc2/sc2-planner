@@ -151,9 +151,9 @@ class Unit {
                 this.nextLarvaSpawn = gamelogic.frame + 10.71428571 * 22.4
             }
 
-            if (this.nextLarvaSpawn < gamelogic.frame) {
+            if (this.nextLarvaSpawn <= gamelogic.frame) {
                 this.larvaCount += 1
-                this.nextLarvaSpawn = gamelogic.frame + 10.71428571 * 22.4
+                this.nextLarvaSpawn = this.nextLarvaSpawn + 10.71428571 * 22.4
             }
 
             // If has inject: spawn larva when frame has been reached
