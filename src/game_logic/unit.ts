@@ -47,6 +47,9 @@ class Unit {
         this.hasChronoUntilFrame = -1
         // Zerg townhalls
         this.hasInjectUntilFrame = -1
+        // Larva naturally spawns every 15 seconds at normal speed
+        // Faster speed is a 1.4 multiplier, so the spawn timer at faster is
+        // 15 / 1.4 = 10.71428571...
         this.nextLarvaSpawn = 10.71428571 * 22.4
         this.larvaCount = 0
         this.backgroundTask = []
