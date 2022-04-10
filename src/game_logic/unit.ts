@@ -47,7 +47,7 @@ class Unit {
         this.hasChronoUntilFrame = -1
         // Zerg townhalls
         this.hasInjectUntilFrame = -1
-        this.nextLarvaSpawn = -1
+        this.nextLarvaSpawn = 10.71428571 * 22.4
         this.larvaCount = 0
         this.backgroundTask = []
         // Terran depot
@@ -148,12 +148,12 @@ class Unit {
         if (["Hatchery", "Lair", "Hive"].includes(this.name)) {
             // If at max larva, dont generate new one until 11 secs elapsed
             if (this.larvaCount >= 3) {
-                this.nextLarvaSpawn = gamelogic.frame + 11 * 22.4
+                this.nextLarvaSpawn = gamelogic.frame + 10.71428571 * 22.4
             }
 
             if (this.nextLarvaSpawn < gamelogic.frame) {
                 this.larvaCount += 1
-                this.nextLarvaSpawn = gamelogic.frame + 11 * 22.4
+                this.nextLarvaSpawn = gamelogic.frame + 10.71428571 * 22.4
             }
 
             // If has inject: spawn larva when frame has been reached
