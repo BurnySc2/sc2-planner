@@ -47,10 +47,7 @@ class Unit {
         this.hasChronoUntilFrame = -1
         // Zerg townhalls
         this.hasInjectUntilFrame = -1
-        // Larva naturally spawns every 15 seconds at normal speed
-        // Faster speed is a 1.4 multiplier, so the spawn timer at faster is
-        // 15 / 1.4 = 10.71428571...
-        this.nextLarvaSpawn = 10.71428571 * 22.4
+        this.nextLarvaSpawn = -1
         this.larvaCount = 0
         this.backgroundTask = []
         // Terran depot
@@ -149,14 +146,27 @@ class Unit {
 
         // If is zerg townhall: generate new larva
         if (["Hatchery", "Lair", "Hive"].includes(this.name)) {
-            // If at max larva, dont generate new one until 11 secs elapsed
+            // Larva naturally spawns every 15 seconds at normal speed
+            // Faster speed is a 1.4 multiplier, so the spawn timer at faster is
+            // 15 / 1.4 = 10.71428571...
+            const larvaSpawnTime = 10.71428571
+
+            //init larva time for new hatch
+            if (this.nextLarvaSpawn === -1) {
+                this.nextLarvaSpawn = gamelogic.frame + (larvaSpawnTime * 22.4)
+                if (this.larvaCount == 0) {
+                    this.larvaCount = 1
+                }
+            }
+
+            // If at max larva, pause larva timer
             if (this.larvaCount >= 3) {
                 this.nextLarvaSpawn += 1
             }
 
             if (this.nextLarvaSpawn <= gamelogic.frame) {
                 this.larvaCount += 1
-                this.nextLarvaSpawn = this.nextLarvaSpawn + 10.71428571 * 22.4
+                this.nextLarvaSpawn = this.nextLarvaSpawn + (larvaSpawnTime * 22.4)
             }
 
             // If has inject: spawn larva when frame has been reached
