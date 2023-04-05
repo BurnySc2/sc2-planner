@@ -34,6 +34,7 @@
             "energy_cost": 0,
             "id": 4,
             "name": "STOP_STOP",
+            "remaps_to_ability_id": 3665,
             "target": "None"
         },
         {
@@ -46,6 +47,7 @@
             "energy_cost": 0,
             "id": 5,
             "name": "STOP_HOLDFIRESPECIAL",
+            "remaps_to_ability_id": 3665,
             "target": "None"
         },
         {
@@ -58,6 +60,7 @@
             "energy_cost": 0,
             "id": 6,
             "name": "STOP_CHEER",
+            "remaps_to_ability_id": 3665,
             "target": "None"
         },
         {
@@ -70,6 +73,7 @@
             "energy_cost": 0,
             "id": 7,
             "name": "STOP_DANCE",
+            "remaps_to_ability_id": 3665,
             "target": "None"
         },
         {
@@ -82,6 +86,7 @@
             "energy_cost": 0,
             "id": 16,
             "name": "MOVE_MOVE",
+            "remaps_to_ability_id": 3794,
             "target": "PointOrUnit"
         },
         {
@@ -94,6 +99,7 @@
             "energy_cost": 0,
             "id": 17,
             "name": "PATROL_PATROL",
+            "remaps_to_ability_id": 3795,
             "target": "PointOrUnit"
         },
         {
@@ -106,6 +112,7 @@
             "energy_cost": 0,
             "id": 18,
             "name": "HOLDPOSITION_HOLD",
+            "remaps_to_ability_id": 3793,
             "target": "None"
         },
         {
@@ -118,6 +125,7 @@
             "energy_cost": 0,
             "id": 19,
             "name": "SCAN_MOVE",
+            "remaps_to_ability_id": 3674,
             "target": "PointOrUnit"
         },
         {
@@ -142,6 +150,7 @@
             "energy_cost": 0,
             "id": 23,
             "name": "ATTACK_ATTACK",
+            "remaps_to_ability_id": 3674,
             "target": "PointOrUnit"
         },
         {
@@ -178,6 +187,7 @@
             "energy_cost": 0,
             "id": 26,
             "name": "EFFECT_SPRAY_TERRAN",
+            "remaps_to_ability_id": 3684,
             "target": "Point"
         },
         {
@@ -190,6 +200,7 @@
             "energy_cost": 0,
             "id": 28,
             "name": "EFFECT_SPRAY_ZERG",
+            "remaps_to_ability_id": 3684,
             "target": "Point"
         },
         {
@@ -202,6 +213,7 @@
             "energy_cost": 0,
             "id": 30,
             "name": "EFFECT_SPRAY_PROTOSS",
+            "remaps_to_ability_id": 3684,
             "target": "Point"
         },
         {
@@ -226,6 +238,7 @@
             "energy_cost": 0,
             "id": 36,
             "name": "BEHAVIOR_HOLDFIREON_GHOST",
+            "remaps_to_ability_id": 3688,
             "target": "None"
         },
         {
@@ -238,6 +251,7 @@
             "energy_cost": 0,
             "id": 38,
             "name": "BEHAVIOR_HOLDFIREOFF_GHOST",
+            "remaps_to_ability_id": 3689,
             "target": "None"
         },
         {
@@ -388,24 +402,8 @@
             "energy_cost": 0,
             "id": 78,
             "name": "EFFECT_REPAIR_MULE",
+            "remaps_to_ability_id": 3685,
             "target": "Unit"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 80,
-            "name": "MORPHZERGLINGTOBANELING_BANELING",
-            "target": {
-                "Morph": {
-                    "produces": 9,
-                    "produces_name": "BANELING"
-                }
-            }
         },
         {
             "allow_autocast": false,
@@ -445,6 +443,7 @@
             "energy_cost": 0,
             "id": 142,
             "name": "EFFECT_MASSRECALL_STRATEGICRECALL",
+            "remaps_to_ability_id": 3686,
             "target": "Point"
         },
         {
@@ -577,6 +576,7 @@
             "energy_cost": 0,
             "id": 166,
             "name": "HARVEST_GATHER_MULE",
+            "remaps_to_ability_id": 3666,
             "target": "Unit"
         },
         {
@@ -589,6 +589,7 @@
             "energy_cost": 0,
             "id": 167,
             "name": "HARVEST_RETURN_MULE",
+            "remaps_to_ability_id": 3667,
             "target": "None"
         },
         {
@@ -625,6 +626,7 @@
             "energy_cost": 0,
             "id": 174,
             "name": "CANCEL_GRAVITONBEAM",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -637,6 +639,7 @@
             "energy_cost": 0,
             "id": 175,
             "name": "BUILDINPROGRESSNYDUSCANAL_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -666,6 +669,7 @@
             "energy_cost": 0,
             "id": 195,
             "name": "RALLY_BUILDING",
+            "remaps_to_ability_id": 3673,
             "target": "PointOrUnit"
         },
         {
@@ -678,6 +682,7 @@
             "energy_cost": 0,
             "id": 199,
             "name": "RALLY_MORPHING_UNIT",
+            "remaps_to_ability_id": 3673,
             "target": "PointOrUnit"
         },
         {
@@ -690,6 +695,7 @@
             "energy_cost": 0,
             "id": 203,
             "name": "RALLY_COMMANDCENTER",
+            "remaps_to_ability_id": 3690,
             "target": "PointOrUnit"
         },
         {
@@ -702,6 +708,7 @@
             "energy_cost": 0,
             "id": 207,
             "name": "RALLY_NEXUS",
+            "remaps_to_ability_id": 3690,
             "target": "PointOrUnit"
         },
         {
@@ -714,6 +721,7 @@
             "energy_cost": 0,
             "id": 211,
             "name": "RALLY_HATCHERY_UNITS",
+            "remaps_to_ability_id": 3673,
             "target": "PointOrUnit"
         },
         {
@@ -726,6 +734,7 @@
             "energy_cost": 0,
             "id": 212,
             "name": "RALLY_HATCHERY_WORKERS",
+            "remaps_to_ability_id": 3690,
             "target": "PointOrUnit"
         },
         {
@@ -813,6 +822,7 @@
             "energy_cost": 0,
             "id": 250,
             "name": "CANCEL_NEURALPARASITE",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -837,6 +847,7 @@
             "energy_cost": 0,
             "id": 253,
             "name": "EFFECT_STIM_MARAUDER",
+            "remaps_to_ability_id": 3675,
             "target": "None"
         },
         {
@@ -895,6 +906,7 @@
             "energy_cost": 0,
             "id": 295,
             "name": "HARVEST_GATHER_SCV",
+            "remaps_to_ability_id": 3666,
             "target": "Unit"
         },
         {
@@ -907,6 +919,7 @@
             "energy_cost": 0,
             "id": 296,
             "name": "HARVEST_RETURN_SCV",
+            "remaps_to_ability_id": 3667,
             "target": "None"
         },
         {
@@ -919,6 +932,7 @@
             "energy_cost": 0,
             "id": 298,
             "name": "HARVEST_GATHER_PROBE",
+            "remaps_to_ability_id": 3666,
             "target": "Unit"
         },
         {
@@ -931,6 +945,7 @@
             "energy_cost": 0,
             "id": 299,
             "name": "HARVEST_RETURN_PROBE",
+            "remaps_to_ability_id": 3667,
             "target": "None"
         },
         {
@@ -979,6 +994,7 @@
             "energy_cost": 0,
             "id": 304,
             "name": "CANCEL_QUEUE1",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -991,6 +1007,7 @@
             "energy_cost": 0,
             "id": 305,
             "name": "CANCELSLOT_QUEUE1",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -1003,6 +1020,7 @@
             "energy_cost": 0,
             "id": 306,
             "name": "CANCEL_QUEUE5",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -1015,6 +1033,7 @@
             "energy_cost": 0,
             "id": 307,
             "name": "CANCELSLOT_QUEUE5",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -1027,6 +1046,7 @@
             "energy_cost": 0,
             "id": 308,
             "name": "CANCEL_QUEUECANCELTOSELECTION",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -1039,6 +1059,7 @@
             "energy_cost": 0,
             "id": 309,
             "name": "CANCELSLOT_QUEUECANCELTOSELECTION",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -1051,6 +1072,7 @@
             "energy_cost": 0,
             "id": 312,
             "name": "CANCEL_QUEUEADDON",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -1063,6 +1085,7 @@
             "energy_cost": 0,
             "id": 313,
             "name": "CANCELSLOT_ADDON",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -1075,6 +1098,7 @@
             "energy_cost": 0,
             "id": 314,
             "name": "CANCEL_BUILDINPROGRESS",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -1087,6 +1111,7 @@
             "energy_cost": 0,
             "id": 315,
             "name": "HALT_BUILDING",
+            "remaps_to_ability_id": 3660,
             "target": "None"
         },
         {
@@ -1099,6 +1124,7 @@
             "energy_cost": 0,
             "id": 316,
             "name": "EFFECT_REPAIR_SCV",
+            "remaps_to_ability_id": 3685,
             "target": "Unit"
         },
         {
@@ -1332,6 +1358,7 @@
             "energy_cost": 0,
             "id": 348,
             "name": "HALT_TERRANBUILD",
+            "remaps_to_ability_id": 3660,
             "target": "None"
         },
         {
@@ -1344,6 +1371,7 @@
             "energy_cost": 0,
             "id": 380,
             "name": "EFFECT_STIM_MARINE",
+            "remaps_to_ability_id": 3675,
             "target": "None"
         },
         {
@@ -1356,6 +1384,7 @@
             "energy_cost": 0,
             "id": 382,
             "name": "BEHAVIOR_CLOAKON_GHOST",
+            "remaps_to_ability_id": 3676,
             "target": "None"
         },
         {
@@ -1368,6 +1397,7 @@
             "energy_cost": 0,
             "id": 383,
             "name": "BEHAVIOR_CLOAKOFF_GHOST",
+            "remaps_to_ability_id": 3677,
             "target": "None"
         },
         {
@@ -1426,6 +1456,7 @@
             "energy_cost": 0,
             "id": 392,
             "name": "BEHAVIOR_CLOAKON_BANSHEE",
+            "remaps_to_ability_id": 3676,
             "target": "None"
         },
         {
@@ -1438,6 +1469,7 @@
             "energy_cost": 0,
             "id": 393,
             "name": "BEHAVIOR_CLOAKOFF_BANSHEE",
+            "remaps_to_ability_id": 3677,
             "target": "None"
         },
         {
@@ -1450,6 +1482,7 @@
             "energy_cost": 0,
             "id": 394,
             "name": "LOAD_MEDIVAC",
+            "remaps_to_ability_id": 3668,
             "target": "Unit"
         },
         {
@@ -1462,6 +1495,7 @@
             "energy_cost": 0,
             "id": 396,
             "name": "UNLOADALLAT_MEDIVAC",
+            "remaps_to_ability_id": 3669,
             "target": "PointOrUnit"
         },
         {
@@ -1474,6 +1508,7 @@
             "energy_cost": 0,
             "id": 397,
             "name": "UNLOADUNIT_MEDIVAC",
+            "remaps_to_ability_id": 3796,
             "target": "None"
         },
         {
@@ -1544,6 +1579,7 @@
             "energy_cost": 0,
             "id": 407,
             "name": "LOAD_BUNKER",
+            "remaps_to_ability_id": 3668,
             "target": "Unit"
         },
         {
@@ -1556,6 +1592,7 @@
             "energy_cost": 0,
             "id": 408,
             "name": "UNLOADALL_BUNKER",
+            "remaps_to_ability_id": 3664,
             "target": "None"
         },
         {
@@ -1568,6 +1605,7 @@
             "energy_cost": 0,
             "id": 410,
             "name": "UNLOADUNIT_BUNKER",
+            "remaps_to_ability_id": 3796,
             "target": "None"
         },
         {
@@ -1580,6 +1618,7 @@
             "energy_cost": 0,
             "id": 413,
             "name": "UNLOADALL_COMMANDCENTER",
+            "remaps_to_ability_id": 3664,
             "target": "None"
         },
         {
@@ -1592,6 +1631,7 @@
             "energy_cost": 0,
             "id": 415,
             "name": "UNLOADUNIT_COMMANDCENTER",
+            "remaps_to_ability_id": 3796,
             "target": "None"
         },
         {
@@ -1604,6 +1644,7 @@
             "energy_cost": 0,
             "id": 416,
             "name": "LOADALL_COMMANDCENTER",
+            "remaps_to_ability_id": 3663,
             "target": "None"
         },
         {
@@ -1616,6 +1657,7 @@
             "energy_cost": 0,
             "id": 417,
             "name": "LIFT_COMMANDCENTER",
+            "remaps_to_ability_id": 3679,
             "target": {
                 "Morph": {
                     "produces": 36,
@@ -1633,6 +1675,7 @@
             "energy_cost": 0,
             "id": 419,
             "name": "LAND_COMMANDCENTER",
+            "remaps_to_ability_id": 3678,
             "target": {
                 "MorphPlace": {
                     "produces": 18,
@@ -1650,6 +1693,7 @@
             "energy_cost": 0,
             "id": 421,
             "name": "BUILD_TECHLAB_BARRACKS",
+            "remaps_to_ability_id": 3682,
             "target": {
                 "BuildInstant": {
                     "produces": 37
@@ -1666,6 +1710,7 @@
             "energy_cost": 0,
             "id": 422,
             "name": "BUILD_REACTOR_BARRACKS",
+            "remaps_to_ability_id": 3683,
             "target": {
                 "BuildInstant": {
                     "produces": 38
@@ -1682,6 +1727,7 @@
             "energy_cost": 0,
             "id": 451,
             "name": "CANCEL_BARRACKSADDON",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -1694,6 +1740,7 @@
             "energy_cost": 0,
             "id": 452,
             "name": "LIFT_BARRACKS",
+            "remaps_to_ability_id": 3679,
             "target": {
                 "Morph": {
                     "produces": 46,
@@ -1711,6 +1758,7 @@
             "energy_cost": 0,
             "id": 454,
             "name": "BUILD_TECHLAB_FACTORY",
+            "remaps_to_ability_id": 3682,
             "target": {
                 "BuildInstant": {
                     "produces": 39
@@ -1727,6 +1775,7 @@
             "energy_cost": 0,
             "id": 455,
             "name": "BUILD_REACTOR_FACTORY",
+            "remaps_to_ability_id": 3683,
             "target": {
                 "BuildInstant": {
                     "produces": 40
@@ -1743,6 +1792,7 @@
             "energy_cost": 0,
             "id": 484,
             "name": "CANCEL_FACTORYADDON",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -1755,6 +1805,7 @@
             "energy_cost": 0,
             "id": 485,
             "name": "LIFT_FACTORY",
+            "remaps_to_ability_id": 3679,
             "target": {
                 "Morph": {
                     "produces": 43,
@@ -1772,6 +1823,7 @@
             "energy_cost": 0,
             "id": 487,
             "name": "BUILD_TECHLAB_STARPORT",
+            "remaps_to_ability_id": 3682,
             "target": {
                 "BuildInstant": {
                     "produces": 41
@@ -1788,6 +1840,7 @@
             "energy_cost": 0,
             "id": 488,
             "name": "BUILD_REACTOR_STARPORT",
+            "remaps_to_ability_id": 3683,
             "target": {
                 "BuildInstant": {
                     "produces": 42
@@ -1804,6 +1857,7 @@
             "energy_cost": 0,
             "id": 517,
             "name": "CANCEL_STARPORTADDON",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -1816,6 +1870,7 @@
             "energy_cost": 0,
             "id": 518,
             "name": "LIFT_STARPORT",
+            "remaps_to_ability_id": 3679,
             "target": {
                 "Morph": {
                     "produces": 44,
@@ -1833,6 +1888,7 @@
             "energy_cost": 0,
             "id": 520,
             "name": "LAND_FACTORY",
+            "remaps_to_ability_id": 3678,
             "target": {
                 "MorphPlace": {
                     "produces": 27,
@@ -1850,6 +1906,7 @@
             "energy_cost": 0,
             "id": 522,
             "name": "LAND_STARPORT",
+            "remaps_to_ability_id": 3678,
             "target": {
                 "MorphPlace": {
                     "produces": 28,
@@ -1884,6 +1941,7 @@
             "energy_cost": 0,
             "id": 554,
             "name": "LAND_BARRACKS",
+            "remaps_to_ability_id": 3678,
             "target": {
                 "MorphPlace": {
                     "produces": 21,
@@ -2241,6 +2299,7 @@
             "energy_cost": 0,
             "id": 652,
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL1",
+            "remaps_to_ability_id": 3698,
             "target": {
                 "Research": {
                     "upgrade": 7,
@@ -2258,6 +2317,7 @@
             "energy_cost": 0,
             "id": 653,
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL2",
+            "remaps_to_ability_id": 3698,
             "target": {
                 "Research": {
                     "upgrade": 8,
@@ -2275,6 +2335,7 @@
             "energy_cost": 0,
             "id": 654,
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYWEAPONSLEVEL3",
+            "remaps_to_ability_id": 3698,
             "target": {
                 "Research": {
                     "upgrade": 9,
@@ -2309,6 +2370,7 @@
             "energy_cost": 0,
             "id": 656,
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL1",
+            "remaps_to_ability_id": 3697,
             "target": {
                 "Research": {
                     "upgrade": 11,
@@ -2326,6 +2388,7 @@
             "energy_cost": 0,
             "id": 657,
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL2",
+            "remaps_to_ability_id": 3697,
             "target": {
                 "Research": {
                     "upgrade": 12,
@@ -2343,6 +2406,7 @@
             "energy_cost": 0,
             "id": 658,
             "name": "ENGINEERINGBAYRESEARCH_TERRANINFANTRYARMORLEVEL3",
+            "remaps_to_ability_id": 3697,
             "target": {
                 "Research": {
                     "upgrade": 13,
@@ -2744,40 +2808,6 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 821,
-            "name": "GHOSTACADEMYRESEARCH_RESEARCHGHOSTENERGYUPGRADE",
-            "target": {
-                "Research": {
-                    "upgrade": 26,
-                    "upgrade_name": "GHOSTMOEBIUSREACTOR"
-                }
-            }
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 822,
-            "name": "GHOSTACADEMYRESEARCH_RESEARCHENHANCEDSHOCKWAVES",
-            "target": {
-                "Research": {
-                    "upgrade": 297,
-                    "upgrade_name": "ENHANCEDSHOCKWAVES"
-                }
-            }
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
             "id": 852,
             "name": "ARMORYRESEARCH_TERRANVEHICLEPLATINGLEVEL1",
             "target": {
@@ -2831,6 +2861,7 @@
             "energy_cost": 0,
             "id": 855,
             "name": "ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL1",
+            "remaps_to_ability_id": 3701,
             "target": {
                 "Research": {
                     "upgrade": 30,
@@ -2848,6 +2879,7 @@
             "energy_cost": 0,
             "id": 856,
             "name": "ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL2",
+            "remaps_to_ability_id": 3701,
             "target": {
                 "Research": {
                     "upgrade": 31,
@@ -2865,6 +2897,7 @@
             "energy_cost": 0,
             "id": 857,
             "name": "ARMORYRESEARCH_TERRANVEHICLEWEAPONSLEVEL3",
+            "remaps_to_ability_id": 3701,
             "target": {
                 "Research": {
                     "upgrade": 32,
@@ -2933,6 +2966,7 @@
             "energy_cost": 0,
             "id": 861,
             "name": "ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL1",
+            "remaps_to_ability_id": 3699,
             "target": {
                 "Research": {
                     "upgrade": 36,
@@ -2950,6 +2984,7 @@
             "energy_cost": 0,
             "id": 862,
             "name": "ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL2",
+            "remaps_to_ability_id": 3699,
             "target": {
                 "Research": {
                     "upgrade": 37,
@@ -2967,6 +3002,7 @@
             "energy_cost": 0,
             "id": 863,
             "name": "ARMORYRESEARCH_TERRANSHIPWEAPONSLEVEL3",
+            "remaps_to_ability_id": 3699,
             "target": {
                 "Research": {
                     "upgrade": 38,
@@ -2984,6 +3020,7 @@
             "energy_cost": 0,
             "id": 864,
             "name": "ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL1",
+            "remaps_to_ability_id": 3700,
             "target": {
                 "Research": {
                     "upgrade": 116,
@@ -3001,6 +3038,7 @@
             "energy_cost": 0,
             "id": 865,
             "name": "ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL2",
+            "remaps_to_ability_id": 3700,
             "target": {
                 "Research": {
                     "upgrade": 117,
@@ -3018,6 +3056,7 @@
             "energy_cost": 0,
             "id": 866,
             "name": "ARMORYRESEARCH_TERRANVEHICLEANDSHIPPLATINGLEVEL3",
+            "remaps_to_ability_id": 3700,
             "target": {
                 "Research": {
                     "upgrade": 118,
@@ -3290,6 +3329,7 @@
             "energy_cost": 0,
             "id": 910,
             "name": "PROTOSSBUILD_CANCEL",
+            "remaps_to_ability_id": 3660,
             "target": "None"
         },
         {
@@ -3302,6 +3342,7 @@
             "energy_cost": 0,
             "id": 911,
             "name": "LOAD_WARPPRISM",
+            "remaps_to_ability_id": 3668,
             "target": "Unit"
         },
         {
@@ -3314,6 +3355,7 @@
             "energy_cost": 0,
             "id": 912,
             "name": "UNLOADALL_WARPPRISM",
+            "remaps_to_ability_id": 3664,
             "target": "None"
         },
         {
@@ -3326,6 +3368,7 @@
             "energy_cost": 0,
             "id": 913,
             "name": "UNLOADALLAT_WARPPRISM",
+            "remaps_to_ability_id": 3669,
             "target": "PointOrUnit"
         },
         {
@@ -3338,6 +3381,7 @@
             "energy_cost": 0,
             "id": 914,
             "name": "UNLOADUNIT_WARPPRISM",
+            "remaps_to_ability_id": 3796,
             "target": "None"
         },
         {
@@ -3651,6 +3695,7 @@
             "energy_cost": 0,
             "id": 1038,
             "name": "CANCEL_HANGARQUEUE5",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -3663,6 +3708,7 @@
             "energy_cost": 0,
             "id": 1039,
             "name": "CANCELSLOT_HANGARQUEUE5",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -3675,6 +3721,7 @@
             "energy_cost": 0,
             "id": 1040,
             "name": "BROODLORDQUEUE2_CANCEL",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -3687,6 +3734,7 @@
             "energy_cost": 0,
             "id": 1041,
             "name": "BROODLORDQUEUE2_CANCELSLOT",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -3711,6 +3759,7 @@
             "energy_cost": 0,
             "id": 1062,
             "name": "FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL1",
+            "remaps_to_ability_id": 3695,
             "target": {
                 "Research": {
                     "upgrade": 39,
@@ -3728,6 +3777,7 @@
             "energy_cost": 0,
             "id": 1063,
             "name": "FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL2",
+            "remaps_to_ability_id": 3695,
             "target": {
                 "Research": {
                     "upgrade": 40,
@@ -3745,6 +3795,7 @@
             "energy_cost": 0,
             "id": 1064,
             "name": "FORGERESEARCH_PROTOSSGROUNDWEAPONSLEVEL3",
+            "remaps_to_ability_id": 3695,
             "target": {
                 "Research": {
                     "upgrade": 41,
@@ -3762,6 +3813,7 @@
             "energy_cost": 0,
             "id": 1065,
             "name": "FORGERESEARCH_PROTOSSGROUNDARMORLEVEL1",
+            "remaps_to_ability_id": 3694,
             "target": {
                 "Research": {
                     "upgrade": 42,
@@ -3779,6 +3831,7 @@
             "energy_cost": 0,
             "id": 1066,
             "name": "FORGERESEARCH_PROTOSSGROUNDARMORLEVEL2",
+            "remaps_to_ability_id": 3694,
             "target": {
                 "Research": {
                     "upgrade": 43,
@@ -3796,6 +3849,7 @@
             "energy_cost": 0,
             "id": 1067,
             "name": "FORGERESEARCH_PROTOSSGROUNDARMORLEVEL3",
+            "remaps_to_ability_id": 3694,
             "target": {
                 "Research": {
                     "upgrade": 44,
@@ -3813,6 +3867,7 @@
             "energy_cost": 0,
             "id": 1068,
             "name": "FORGERESEARCH_PROTOSSSHIELDSLEVEL1",
+            "remaps_to_ability_id": 3696,
             "target": {
                 "Research": {
                     "upgrade": 45,
@@ -3830,6 +3885,7 @@
             "energy_cost": 0,
             "id": 1069,
             "name": "FORGERESEARCH_PROTOSSSHIELDSLEVEL2",
+            "remaps_to_ability_id": 3696,
             "target": {
                 "Research": {
                     "upgrade": 46,
@@ -3847,6 +3903,7 @@
             "energy_cost": 0,
             "id": 1070,
             "name": "FORGERESEARCH_PROTOSSSHIELDSLEVEL3",
+            "remaps_to_ability_id": 3696,
             "target": {
                 "Research": {
                     "upgrade": 47,
@@ -4204,6 +4261,7 @@
             "energy_cost": 0,
             "id": 1182,
             "name": "ZERGBUILD_CANCEL",
+            "remaps_to_ability_id": 3660,
             "target": "None"
         },
         {
@@ -4216,6 +4274,7 @@
             "energy_cost": 0,
             "id": 1183,
             "name": "HARVEST_GATHER_DRONE",
+            "remaps_to_ability_id": 3666,
             "target": "Unit"
         },
         {
@@ -4228,6 +4287,7 @@
             "energy_cost": 0,
             "id": 1184,
             "name": "HARVEST_RETURN_DRONE",
+            "remaps_to_ability_id": 3667,
             "target": "None"
         },
         {
@@ -4240,6 +4300,7 @@
             "energy_cost": 0,
             "id": 1186,
             "name": "RESEARCH_ZERGMELEEWEAPONSLEVEL1",
+            "remaps_to_ability_id": 3705,
             "target": {
                 "Research": {
                     "upgrade": 53,
@@ -4257,6 +4318,7 @@
             "energy_cost": 0,
             "id": 1187,
             "name": "RESEARCH_ZERGMELEEWEAPONSLEVEL2",
+            "remaps_to_ability_id": 3705,
             "target": {
                 "Research": {
                     "upgrade": 54,
@@ -4274,6 +4336,7 @@
             "energy_cost": 0,
             "id": 1188,
             "name": "RESEARCH_ZERGMELEEWEAPONSLEVEL3",
+            "remaps_to_ability_id": 3705,
             "target": {
                 "Research": {
                     "upgrade": 55,
@@ -4291,6 +4354,7 @@
             "energy_cost": 0,
             "id": 1189,
             "name": "RESEARCH_ZERGGROUNDARMORLEVEL1",
+            "remaps_to_ability_id": 3704,
             "target": {
                 "Research": {
                     "upgrade": 56,
@@ -4308,6 +4372,7 @@
             "energy_cost": 0,
             "id": 1190,
             "name": "RESEARCH_ZERGGROUNDARMORLEVEL2",
+            "remaps_to_ability_id": 3704,
             "target": {
                 "Research": {
                     "upgrade": 57,
@@ -4325,6 +4390,7 @@
             "energy_cost": 0,
             "id": 1191,
             "name": "RESEARCH_ZERGGROUNDARMORLEVEL3",
+            "remaps_to_ability_id": 3704,
             "target": {
                 "Research": {
                     "upgrade": 58,
@@ -4342,6 +4408,7 @@
             "energy_cost": 0,
             "id": 1192,
             "name": "RESEARCH_ZERGMISSILEWEAPONSLEVEL1",
+            "remaps_to_ability_id": 3706,
             "target": {
                 "Research": {
                     "upgrade": 59,
@@ -4359,6 +4426,7 @@
             "energy_cost": 0,
             "id": 1193,
             "name": "RESEARCH_ZERGMISSILEWEAPONSLEVEL2",
+            "remaps_to_ability_id": 3706,
             "target": {
                 "Research": {
                     "upgrade": 60,
@@ -4376,6 +4444,7 @@
             "energy_cost": 0,
             "id": 1194,
             "name": "RESEARCH_ZERGMISSILEWEAPONSLEVEL3",
+            "remaps_to_ability_id": 3706,
             "target": {
                 "Research": {
                     "upgrade": 61,
@@ -4395,7 +4464,7 @@
             "name": "EVOLUTIONCHAMBERRESEARCH_EVOLVEPROPULSIVEPERISTALSIS",
             "target": {
                 "Research": {
-                    "upgrade": 302,
+                    "upgrade": 301,
                     "upgrade_name": "SECRETEDCOATING"
                 }
             }
@@ -4427,6 +4496,7 @@
             "energy_cost": 0,
             "id": 1217,
             "name": "CANCEL_MORPHLAIR",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -4456,6 +4526,7 @@
             "energy_cost": 0,
             "id": 1219,
             "name": "CANCEL_MORPHHIVE",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -4485,6 +4556,7 @@
             "energy_cost": 0,
             "id": 1221,
             "name": "CANCEL_MORPHGREATERSPIRE",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -4616,6 +4688,7 @@
             "energy_cost": 0,
             "id": 1312,
             "name": "RESEARCH_ZERGFLYERATTACKLEVEL1",
+            "remaps_to_ability_id": 3703,
             "target": {
                 "Research": {
                     "upgrade": 68,
@@ -4633,6 +4706,7 @@
             "energy_cost": 0,
             "id": 1313,
             "name": "RESEARCH_ZERGFLYERATTACKLEVEL2",
+            "remaps_to_ability_id": 3703,
             "target": {
                 "Research": {
                     "upgrade": 69,
@@ -4650,6 +4724,7 @@
             "energy_cost": 0,
             "id": 1314,
             "name": "RESEARCH_ZERGFLYERATTACKLEVEL3",
+            "remaps_to_ability_id": 3703,
             "target": {
                 "Research": {
                     "upgrade": 70,
@@ -4667,6 +4742,7 @@
             "energy_cost": 0,
             "id": 1315,
             "name": "RESEARCH_ZERGFLYERARMORLEVEL1",
+            "remaps_to_ability_id": 3702,
             "target": {
                 "Research": {
                     "upgrade": 71,
@@ -4684,6 +4760,7 @@
             "energy_cost": 0,
             "id": 1316,
             "name": "RESEARCH_ZERGFLYERARMORLEVEL2",
+            "remaps_to_ability_id": 3702,
             "target": {
                 "Research": {
                     "upgrade": 72,
@@ -4701,6 +4778,7 @@
             "energy_cost": 0,
             "id": 1317,
             "name": "RESEARCH_ZERGFLYERARMORLEVEL3",
+            "remaps_to_ability_id": 3702,
             "target": {
                 "Research": {
                     "upgrade": 73,
@@ -4922,6 +5000,7 @@
             "energy_cost": 0,
             "id": 1373,
             "name": "CANCEL_MORPHBROODLORD",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -4934,6 +5013,7 @@
             "energy_cost": 0,
             "id": 1374,
             "name": "BURROWDOWN_BANELING",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 115,
@@ -4951,6 +5031,7 @@
             "energy_cost": 0,
             "id": 1375,
             "name": "BURROWBANELINGDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -4963,6 +5044,7 @@
             "energy_cost": 0,
             "id": 1376,
             "name": "BURROWUP_BANELING",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 9,
@@ -4980,6 +5062,7 @@
             "energy_cost": 0,
             "id": 1378,
             "name": "BURROWDOWN_DRONE",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 116,
@@ -4997,6 +5080,7 @@
             "energy_cost": 0,
             "id": 1379,
             "name": "BURROWDRONEDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5009,6 +5093,7 @@
             "energy_cost": 0,
             "id": 1380,
             "name": "BURROWUP_DRONE",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 104,
@@ -5026,6 +5111,7 @@
             "energy_cost": 0,
             "id": 1382,
             "name": "BURROWDOWN_HYDRALISK",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 117,
@@ -5043,6 +5129,7 @@
             "energy_cost": 0,
             "id": 1383,
             "name": "BURROWHYDRALISKDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5055,6 +5142,7 @@
             "energy_cost": 0,
             "id": 1384,
             "name": "BURROWUP_HYDRALISK",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 107,
@@ -5072,6 +5160,7 @@
             "energy_cost": 0,
             "id": 1386,
             "name": "BURROWDOWN_ROACH",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 118,
@@ -5089,6 +5178,7 @@
             "energy_cost": 0,
             "id": 1387,
             "name": "BURROWROACHDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5101,6 +5191,7 @@
             "energy_cost": 0,
             "id": 1388,
             "name": "BURROWUP_ROACH",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 110,
@@ -5118,6 +5209,7 @@
             "energy_cost": 0,
             "id": 1390,
             "name": "BURROWDOWN_ZERGLING",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 119,
@@ -5135,6 +5227,7 @@
             "energy_cost": 0,
             "id": 1391,
             "name": "BURROWZERGLINGDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5147,6 +5240,7 @@
             "energy_cost": 0,
             "id": 1392,
             "name": "BURROWUP_ZERGLING",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 105,
@@ -5164,6 +5258,7 @@
             "energy_cost": 0,
             "id": 1394,
             "name": "BURROWDOWN_INFESTORTERRAN",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 120,
@@ -5181,6 +5276,7 @@
             "energy_cost": 0,
             "id": 1396,
             "name": "BURROWUP_INFESTORTERRAN",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 7,
@@ -5198,6 +5294,7 @@
             "energy_cost": 0,
             "id": 1406,
             "name": "LOAD_OVERLORD",
+            "remaps_to_ability_id": 3668,
             "target": "Unit"
         },
         {
@@ -5210,6 +5307,7 @@
             "energy_cost": 0,
             "id": 1408,
             "name": "UNLOADALLAT_OVERLORD",
+            "remaps_to_ability_id": 3669,
             "target": "PointOrUnit"
         },
         {
@@ -5222,6 +5320,7 @@
             "energy_cost": 0,
             "id": 1409,
             "name": "UNLOADUNIT_OVERLORD",
+            "remaps_to_ability_id": 3796,
             "target": "None"
         },
         {
@@ -5234,6 +5333,7 @@
             "energy_cost": 0,
             "id": 1411,
             "name": "MERGEABLE_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5246,6 +5346,7 @@
             "energy_cost": 0,
             "id": 1412,
             "name": "WARPABLE_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5360,6 +5461,7 @@
             "energy_cost": 0,
             "id": 1433,
             "name": "BURROWDOWN_QUEEN",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 125,
@@ -5377,6 +5479,7 @@
             "energy_cost": 0,
             "id": 1434,
             "name": "BURROWQUEENDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5389,6 +5492,7 @@
             "energy_cost": 0,
             "id": 1435,
             "name": "BURROWUP_QUEEN",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 126,
@@ -5406,6 +5510,7 @@
             "energy_cost": 0,
             "id": 1437,
             "name": "LOAD_NYDUSNETWORK",
+            "remaps_to_ability_id": 3668,
             "target": "Unit"
         },
         {
@@ -5418,6 +5523,7 @@
             "energy_cost": 0,
             "id": 1438,
             "name": "UNLOADALL_NYDASNETWORK",
+            "remaps_to_ability_id": 3664,
             "target": "None"
         },
         {
@@ -5430,6 +5536,7 @@
             "energy_cost": 0,
             "id": 1440,
             "name": "UNLOADUNIT_NYDASNETWORK",
+            "remaps_to_ability_id": 3796,
             "target": "None"
         },
         {
@@ -5442,6 +5549,7 @@
             "energy_cost": 0,
             "id": 1442,
             "name": "EFFECT_BLINK_STALKER",
+            "remaps_to_ability_id": 3687,
             "target": "Point"
         },
         {
@@ -5454,6 +5562,7 @@
             "energy_cost": 0,
             "id": 1444,
             "name": "BURROWDOWN_INFESTOR",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 127,
@@ -5471,6 +5580,7 @@
             "energy_cost": 0,
             "id": 1445,
             "name": "BURROWINFESTORDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5483,6 +5593,7 @@
             "energy_cost": 0,
             "id": 1446,
             "name": "BURROWUP_INFESTOR",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 111,
@@ -5517,6 +5628,7 @@
             "energy_cost": 0,
             "id": 1449,
             "name": "CANCEL_MORPHOVERSEER",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5546,6 +5658,7 @@
             "energy_cost": 0,
             "id": 1451,
             "name": "CANCEL_MORPHPLANETARYFORTRESS",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5611,7 +5724,7 @@
             "name": "INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD",
             "target": {
                 "Research": {
-                    "upgrade": 298,
+                    "upgrade": 297,
                     "upgrade_name": "MICROBIALSHROUD"
                 }
             }
@@ -5643,6 +5756,7 @@
             "energy_cost": 0,
             "id": 1512,
             "name": "BURROWDOWN_ULTRALISK",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 131,
@@ -5660,6 +5774,7 @@
             "energy_cost": 0,
             "id": 1514,
             "name": "BURROWUP_ULTRALISK",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 109,
@@ -5694,6 +5809,7 @@
             "energy_cost": 0,
             "id": 1517,
             "name": "CANCEL_MORPHORBITAL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5723,6 +5839,7 @@
             "energy_cost": 0,
             "id": 1519,
             "name": "UPGRADETOWARPGATE_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5752,6 +5869,7 @@
             "energy_cost": 0,
             "id": 1521,
             "name": "MORPHBACKTOGATEWAY_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5764,6 +5882,7 @@
             "energy_cost": 0,
             "id": 1522,
             "name": "LIFT_ORBITALCOMMAND",
+            "remaps_to_ability_id": 3679,
             "target": {
                 "Morph": {
                     "produces": 134,
@@ -5781,6 +5900,7 @@
             "energy_cost": 0,
             "id": 1524,
             "name": "LAND_ORBITALCOMMAND",
+            "remaps_to_ability_id": 3678,
             "target": {
                 "MorphPlace": {
                     "produces": 132,
@@ -5810,6 +5930,7 @@
             "energy_cost": 0,
             "id": 1527,
             "name": "FORCEFIELD_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5839,6 +5960,7 @@
             "energy_cost": 0,
             "id": 1529,
             "name": "PHASINGMODE_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5868,6 +5990,7 @@
             "energy_cost": 0,
             "id": 1531,
             "name": "TRANSPORTMODE_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -5931,6 +6054,7 @@
             "energy_cost": 0,
             "id": 1562,
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL1",
+            "remaps_to_ability_id": 3693,
             "target": {
                 "Research": {
                     "upgrade": 78,
@@ -5948,6 +6072,7 @@
             "energy_cost": 0,
             "id": 1563,
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL2",
+            "remaps_to_ability_id": 3693,
             "target": {
                 "Research": {
                     "upgrade": 79,
@@ -5965,6 +6090,7 @@
             "energy_cost": 0,
             "id": 1564,
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRWEAPONSLEVEL3",
+            "remaps_to_ability_id": 3693,
             "target": {
                 "Research": {
                     "upgrade": 80,
@@ -5982,6 +6108,7 @@
             "energy_cost": 0,
             "id": 1565,
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL1",
+            "remaps_to_ability_id": 3692,
             "target": {
                 "Research": {
                     "upgrade": 81,
@@ -5999,6 +6126,7 @@
             "energy_cost": 0,
             "id": 1566,
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL2",
+            "remaps_to_ability_id": 3692,
             "target": {
                 "Research": {
                     "upgrade": 82,
@@ -6016,6 +6144,7 @@
             "energy_cost": 0,
             "id": 1567,
             "name": "CYBERNETICSCORERESEARCH_PROTOSSAIRARMORLEVEL3",
+            "remaps_to_ability_id": 3692,
             "target": {
                 "Research": {
                     "upgrade": 83,
@@ -6120,7 +6249,7 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICSURGE",
             "target": {
                 "Research": {
-                    "upgrade": 299,
+                    "upgrade": 298,
                     "upgrade_name": "SUNDERINGIMPACT"
                 }
             }
@@ -6137,7 +6266,7 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHAMPLIFIEDSHIELDING",
             "target": {
                 "Research": {
-                    "upgrade": 300,
+                    "upgrade": 299,
                     "upgrade_name": "AMPLIFIEDSHIELDING"
                 }
             }
@@ -6154,7 +6283,7 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICAMPLIFIERS",
             "target": {
                 "Research": {
-                    "upgrade": 301,
+                    "upgrade": 300,
                     "upgrade_name": "PSIONICAMPLIFIERS"
                 }
             }
@@ -6181,6 +6310,7 @@
             "energy_cost": 0,
             "id": 1623,
             "name": "CANCEL_NUKE",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6233,6 +6363,7 @@
             "energy_cost": 0,
             "id": 1662,
             "name": "BURROWCREEPTUMORDOWN_BURROWDOWN",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 137,
@@ -6364,6 +6495,7 @@
             "energy_cost": 0,
             "id": 1682,
             "name": "ATTACK_REDIRECT",
+            "remaps_to_ability_id": 3674,
             "target": "PointOrUnit"
         },
         {
@@ -6376,6 +6508,7 @@
             "energy_cost": 0,
             "id": 1683,
             "name": "EFFECT_STIM_MARINE_REDIRECT",
+            "remaps_to_ability_id": 3675,
             "target": "None"
         },
         {
@@ -6388,6 +6521,7 @@
             "energy_cost": 0,
             "id": 1684,
             "name": "EFFECT_STIM_MARAUDER_REDIRECT",
+            "remaps_to_ability_id": 3675,
             "target": "None"
         },
         {
@@ -6400,6 +6534,7 @@
             "energy_cost": 0,
             "id": 1691,
             "name": "STOP_REDIRECT",
+            "remaps_to_ability_id": 3665,
             "target": "None"
         },
         {
@@ -6436,6 +6571,7 @@
             "energy_cost": 0,
             "id": 1694,
             "name": "BUILD_CREEPTUMOR_QUEEN",
+            "remaps_to_ability_id": 3691,
             "target": {
                 "Build": {
                     "produces": 138,
@@ -6453,6 +6589,7 @@
             "energy_cost": 0,
             "id": 1724,
             "name": "QUEENBUILD_CANCEL",
+            "remaps_to_ability_id": 3660,
             "target": "None"
         },
         {
@@ -6465,6 +6602,7 @@
             "energy_cost": 0,
             "id": 1725,
             "name": "SPINECRAWLERUPROOT_SPINECRAWLERUPROOT",
+            "remaps_to_ability_id": 3681,
             "target": {
                 "Morph": {
                     "produces": 139,
@@ -6482,6 +6620,7 @@
             "energy_cost": 0,
             "id": 1726,
             "name": "SPINECRAWLERUPROOT_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6494,6 +6633,7 @@
             "energy_cost": 0,
             "id": 1727,
             "name": "SPORECRAWLERUPROOT_SPORECRAWLERUPROOT",
+            "remaps_to_ability_id": 3681,
             "target": {
                 "Morph": {
                     "produces": 140,
@@ -6511,6 +6651,7 @@
             "energy_cost": 0,
             "id": 1728,
             "name": "SPORECRAWLERUPROOT_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6523,6 +6664,7 @@
             "energy_cost": 0,
             "id": 1729,
             "name": "SPINECRAWLERROOT_SPINECRAWLERROOT",
+            "remaps_to_ability_id": 3680,
             "target": {
                 "MorphPlace": {
                     "produces": 98,
@@ -6540,6 +6682,7 @@
             "energy_cost": 0,
             "id": 1730,
             "name": "CANCEL_SPINECRAWLERROOT",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6552,6 +6695,7 @@
             "energy_cost": 0,
             "id": 1731,
             "name": "SPORECRAWLERROOT_SPORECRAWLERROOT",
+            "remaps_to_ability_id": 3680,
             "target": {
                 "MorphPlace": {
                     "produces": 99,
@@ -6569,6 +6713,7 @@
             "energy_cost": 0,
             "id": 1732,
             "name": "CANCEL_SPORECRAWLERROOT",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6581,6 +6726,7 @@
             "energy_cost": 0,
             "id": 1733,
             "name": "BUILD_CREEPTUMOR_TUMOR",
+            "remaps_to_ability_id": 3691,
             "target": {
                 "Build": {
                     "produces": 87,
@@ -6598,6 +6744,7 @@
             "energy_cost": 0,
             "id": 1763,
             "name": "CANCEL_CREEPTUMOR",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6690,6 +6837,7 @@
             "energy_cost": 0,
             "id": 1798,
             "name": "BUILDNYDUSCANAL_CANCEL",
+            "remaps_to_ability_id": 3660,
             "target": "None"
         },
         {
@@ -6738,6 +6886,7 @@
             "energy_cost": 0,
             "id": 1831,
             "name": "CANCEL_QUEUEPASIVE",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -6750,6 +6899,7 @@
             "energy_cost": 0,
             "id": 1832,
             "name": "CANCELSLOT_QUEUEPASSIVE",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -6762,6 +6912,7 @@
             "energy_cost": 0,
             "id": 1833,
             "name": "CANCEL_QUEUEPASSIVECANCELTOSELECTION",
+            "remaps_to_ability_id": 3671,
             "target": "None"
         },
         {
@@ -6774,6 +6925,7 @@
             "energy_cost": 0,
             "id": 1834,
             "name": "CANCELSLOT_QUEUEPASSIVECANCELTOSELECTION",
+            "remaps_to_ability_id": 3672,
             "target": "None"
         },
         {
@@ -6815,6 +6967,7 @@
             "energy_cost": 0,
             "id": 1842,
             "name": "MORPHTOCOLLAPSIBLETERRANTOWERDEBRIS_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6827,6 +6980,7 @@
             "energy_cost": 0,
             "id": 1844,
             "name": "MORPHTOCOLLAPSIBLETERRANTOWERDEBRISRAMPLEFT_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6839,6 +6993,7 @@
             "energy_cost": 0,
             "id": 1846,
             "name": "MORPHTOCOLLAPSIBLETERRANTOWERDEBRISRAMPRIGHT_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6868,6 +7023,7 @@
             "energy_cost": 0,
             "id": 1848,
             "name": "CANCEL_MORPHMOTHERSHIP",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6904,6 +7060,7 @@
             "energy_cost": 0,
             "id": 1974,
             "name": "EFFECT_MASSRECALL_MOTHERSHIPCORE",
+            "remaps_to_ability_id": 3686,
             "target": "Unit"
         },
         {
@@ -6933,6 +7090,7 @@
             "energy_cost": 0,
             "id": 1997,
             "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRIS_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6962,6 +7120,7 @@
             "energy_cost": 0,
             "id": 2014,
             "name": "BURROWDOWN_SWARMHOST",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 493,
@@ -6979,6 +7138,7 @@
             "energy_cost": 0,
             "id": 2015,
             "name": "MORPHTOSWARMHOSTBURROWEDMP_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -6991,6 +7151,7 @@
             "energy_cost": 0,
             "id": 2016,
             "name": "BURROWUP_SWARMHOST",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 494,
@@ -7008,6 +7169,7 @@
             "energy_cost": 0,
             "id": 2048,
             "name": "ATTACKPROTOSSBUILDING_ATTACKBUILDING",
+            "remaps_to_ability_id": 3674,
             "target": "PointOrUnit"
         },
         {
@@ -7044,6 +7206,7 @@
             "energy_cost": 0,
             "id": 2057,
             "name": "STOP_BUILDING",
+            "remaps_to_ability_id": 3665,
             "target": "None"
         },
         {
@@ -7128,6 +7291,7 @@
             "energy_cost": 0,
             "id": 2080,
             "name": "TESTZERG_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7236,6 +7400,7 @@
             "energy_cost": 0,
             "id": 2095,
             "name": "BURROWDOWN_WIDOWMINE",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 500,
@@ -7253,6 +7418,7 @@
             "energy_cost": 0,
             "id": 2096,
             "name": "WIDOWMINEBURROW_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7265,6 +7431,7 @@
             "energy_cost": 0,
             "id": 2097,
             "name": "BURROWUP_WIDOWMINE",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 498,
@@ -7306,6 +7473,7 @@
             "energy_cost": 0,
             "id": 2108,
             "name": "BURROWDOWN_LURKER",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 503,
@@ -7323,6 +7491,7 @@
             "energy_cost": 0,
             "id": 2109,
             "name": "BURROWLURKERMPDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7335,6 +7504,7 @@
             "energy_cost": 0,
             "id": 2110,
             "name": "BURROWUP_LURKER",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 502,
@@ -7388,6 +7558,7 @@
             "energy_cost": 0,
             "id": 2153,
             "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPRIGHT_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7400,6 +7571,7 @@
             "energy_cost": 0,
             "id": 2155,
             "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPLEFT_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7561,6 +7733,7 @@
             "energy_cost": 0,
             "id": 2331,
             "name": "CANCEL_MORPHRAVAGER",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7590,6 +7763,7 @@
             "energy_cost": 0,
             "id": 2333,
             "name": "CANCEL_MORPHLURKER",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7614,6 +7788,7 @@
             "energy_cost": 0,
             "id": 2340,
             "name": "BURROWDOWN_RAVAGER",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 690,
@@ -7631,6 +7806,7 @@
             "energy_cost": 0,
             "id": 2341,
             "name": "BURROWRAVAGERDOWN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7643,6 +7819,7 @@
             "energy_cost": 0,
             "id": 2342,
             "name": "BURROWUP_RAVAGER",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 688,
@@ -7696,6 +7873,7 @@
             "energy_cost": 0,
             "id": 2354,
             "name": "CANCEL_LOCKON",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7737,6 +7915,7 @@
             "energy_cost": 0,
             "id": 2363,
             "name": "THORAPMODE_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7766,6 +7945,7 @@
             "energy_cost": 0,
             "id": 2365,
             "name": "CANCEL_MORPHTHOREXPLOSIVEMODE",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -7778,6 +7958,7 @@
             "energy_cost": 0,
             "id": 2370,
             "name": "LOAD_NYDUSWORM",
+            "remaps_to_ability_id": 3668,
             "target": "Unit"
         },
         {
@@ -7790,6 +7971,7 @@
             "energy_cost": 0,
             "id": 2371,
             "name": "UNLOADALL_NYDUSWORM",
+            "remaps_to_ability_id": 3664,
             "target": "None"
         },
         {
@@ -7973,6 +8155,7 @@
             "energy_cost": 0,
             "id": 2480,
             "name": "MORPHTOGUARDIANMP_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8002,6 +8185,7 @@
             "energy_cost": 0,
             "id": 2482,
             "name": "MORPHTODEVOURERMP_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8050,6 +8234,7 @@
             "energy_cost": 0,
             "id": 2489,
             "name": "DEFILERMPBURROW_BURROWDOWN",
+            "remaps_to_ability_id": 3661,
             "target": {
                 "Morph": {
                     "produces": 730,
@@ -8067,6 +8252,7 @@
             "energy_cost": 0,
             "id": 2490,
             "name": "DEFILERMPBURROW_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8079,6 +8265,7 @@
             "energy_cost": 0,
             "id": 2491,
             "name": "DEFILERMPUNBURROW_BURROWUP",
+            "remaps_to_ability_id": 3662,
             "target": {
                 "Morph": {
                     "produces": 731,
@@ -8149,6 +8336,7 @@
             "energy_cost": 0,
             "id": 2535,
             "name": "CANCEL_STASISTRAP",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8214,6 +8402,7 @@
             "energy_cost": 0,
             "id": 2550,
             "name": "BEHAVIOR_HOLDFIREON_LURKER",
+            "remaps_to_ability_id": 3688,
             "target": "None"
         },
         {
@@ -8226,6 +8415,7 @@
             "energy_cost": 0,
             "id": 2552,
             "name": "BEHAVIOR_HOLDFIREOFF_LURKER",
+            "remaps_to_ability_id": 3689,
             "target": "None"
         },
         {
@@ -8318,6 +8508,7 @@
             "energy_cost": 0,
             "id": 2594,
             "name": "CANCEL_ADEPTPHASESHIFT",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8330,6 +8521,7 @@
             "energy_cost": 0,
             "id": 2596,
             "name": "CANCEL_ADEPTSHADEPHASESHIFT",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8354,6 +8546,7 @@
             "energy_cost": 0,
             "id": 2601,
             "name": "MORPHTOCOLLAPSIBLEPURIFIERTOWERDEBRIS_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8366,6 +8559,7 @@
             "energy_cost": 0,
             "id": 2700,
             "name": "EFFECT_SHADOWSTRIDE",
+            "remaps_to_ability_id": 3687,
             "target": "Point"
         },
         {
@@ -8423,6 +8617,7 @@
             "energy_cost": 0,
             "id": 2709,
             "name": "CANCEL_MORPHOVERLORDTRANSPORT",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -8436,6 +8631,19 @@
             "id": 2714,
             "name": "EFFECT_GHOSTSNIPE",
             "target": "Unit"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 2715,
+            "name": "CHANNELSNIPE_CANCEL",
+            "remaps_to_ability_id": 3659,
+            "target": "None"
         },
         {
             "allow_autocast": false,
@@ -8927,6 +9135,7 @@
             "energy_cost": 0,
             "id": 3707,
             "name": "CANCEL_VOIDRAYPRISMATICALIGNMENT",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -9053,6 +9262,7 @@
             "energy_cost": 0,
             "id": 3751,
             "name": "EFFECT_REPAIR_REPAIRDRONE",
+            "remaps_to_ability_id": 3685,
             "target": "Unit"
         },
         {
@@ -9089,6 +9299,7 @@
             "energy_cost": 0,
             "id": 3757,
             "name": "EFFECT_MASSRECALL_NEXUS",
+            "remaps_to_ability_id": 3686,
             "target": "Point"
         },
         {
@@ -9113,6 +9324,7 @@
             "energy_cost": 0,
             "id": 3771,
             "name": "ATTACK_BATTLECRUISER",
+            "remaps_to_ability_id": 3674,
             "target": "PointOrUnit"
         },
         {
@@ -9149,6 +9361,7 @@
             "energy_cost": 0,
             "id": 3776,
             "name": "MOVE_BATTLECRUISER",
+            "remaps_to_ability_id": 3794,
             "target": "PointOrUnit"
         },
         {
@@ -9161,6 +9374,7 @@
             "energy_cost": 0,
             "id": 3777,
             "name": "PATROL_BATTLECRUISER",
+            "remaps_to_ability_id": 3795,
             "target": "PointOrUnit"
         },
         {
@@ -9173,6 +9387,7 @@
             "energy_cost": 0,
             "id": 3778,
             "name": "HOLDPOSITION_BATTLECRUISER",
+            "remaps_to_ability_id": 3793,
             "target": "None"
         },
         {
@@ -9209,6 +9424,7 @@
             "energy_cost": 0,
             "id": 3783,
             "name": "STOP_BATTLECRUISER",
+            "remaps_to_ability_id": 3665,
             "target": "None"
         },
         {
@@ -9329,6 +9545,7 @@
             "energy_cost": 0,
             "id": 3967,
             "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPLEFTGREEN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -9341,6 +9558,7 @@
             "energy_cost": 0,
             "id": 3970,
             "name": "MORPHTOCOLLAPSIBLEROCKTOWERDEBRISRAMPRIGHTGREEN_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         },
         {
@@ -9389,6 +9607,36 @@
             "energy_cost": 0,
             "id": 4112,
             "name": "SHIELDBATTERYRECHARGEEX5_STOP",
+            "remaps_to_ability_id": 3659,
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4119,
+            "name": "MORPHTOBANELING_BANELING",
+            "target": {
+                "Morph": {
+                    "produces": 9
+                }
+            }
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4120,
+            "name": "MORPHTOBANELING_CANCEL",
+            "remaps_to_ability_id": 3659,
             "target": "None"
         }
     ],
@@ -10562,9 +10810,6 @@
                     "ability": 820
                 },
                 {
-                    "ability": 822
-                },
-                {
                     "ability": 710,
                     "requirements": [
                         {
@@ -10896,7 +11141,7 @@
                 }
             ],
             "accepts_addon": false,
-            "armor": 1.0,
+            "armor": 0.0,
             "attributes": ["Armored", "Mechanical", "Structure"],
             "gas": 0,
             "id": 31,
@@ -10905,7 +11150,7 @@
             "is_structure": true,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 150.0,
+            "max_health": 100.0,
             "minerals": 100,
             "name": "AutoTurret",
             "needs_creep": false,
@@ -11385,9 +11630,6 @@
             "abilities": [
                 {
                     "ability": 790
-                },
-                {
-                    "ability": 793
                 },
                 {
                     "ability": 799
@@ -12383,7 +12625,7 @@
             "armor": 1.0,
             "attributes": ["Light", "Mechanical"],
             "detection_range": 11.0,
-            "gas": 200,
+            "gas": 150,
             "id": 56,
             "is_addon": false,
             "is_flying": true,
@@ -12405,7 +12647,7 @@
             "speed_creep_mul": 1.0,
             "start_energy": 50,
             "supply": 2.0,
-            "time": 960.0,
+            "time": 768.0,
             "weapons": []
         },
         {
@@ -13437,7 +13679,7 @@
             "radius": 0.375,
             "sight": 10.0,
             "size": 0,
-            "speed": 1.875,
+            "speed": 2.015625,
             "speed_creep_mul": 1.0,
             "start_energy": 50,
             "supply": 2.0,
@@ -13613,11 +13855,11 @@
             "radius": 0.5,
             "sight": 10.0,
             "size": 0,
-            "speed": 2.25,
+            "speed": 2.5,
             "speed_creep_mul": 1.0,
             "start_energy": 50,
             "supply": 2.0,
-            "time": 592.0,
+            "time": 512.0,
             "weapons": []
         },
         {
@@ -13894,7 +14136,7 @@
             "radius": 0.5,
             "sight": 11.0,
             "size": 0,
-            "speed": 1.875,
+            "speed": 2.015625,
             "speed_creep_mul": 1.0,
             "supply": 1.0,
             "time": 480.0,
@@ -14244,7 +14486,7 @@
             "needs_power": false,
             "race": "Zerg",
             "radius": 2.75,
-            "sight": 10.0,
+            "sight": 12.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -6.0,
@@ -14252,14 +14494,7 @@
             "weapons": []
         },
         {
-            "abilities": [
-                {
-                    "ability": 1733
-                },
-                {
-                    "ability": 1
-                }
-            ],
+            "abilities": [],
             "accepts_addon": false,
             "armor": 0.0,
             "attributes": ["Light", "Biological", "Structure"],
@@ -14278,7 +14513,7 @@
             "needs_power": false,
             "race": "Zerg",
             "radius": 1.0,
-            "sight": 11.0,
+            "sight": 10.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
@@ -14930,7 +15165,7 @@
             "normal_mode": 86,
             "race": "Zerg",
             "radius": 2.75,
-            "sight": 11.0,
+            "sight": 12.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -6.0,
@@ -15297,18 +15532,18 @@
                     "ability": 1
                 },
                 {
-                    "ability": 80,
-                    "requirements": [
-                        {
-                            "building": 96
-                        }
-                    ]
-                },
-                {
                     "ability": 1390,
                     "requirements": [
                         {
                             "upgrade": 64
+                        }
+                    ]
+                },
+                {
+                    "ability": 4119,
+                    "requirements": [
+                        {
+                            "building": 96
                         }
                     ]
                 }
@@ -15599,7 +15834,7 @@
             "needs_geyser": false,
             "needs_power": false,
             "race": "Zerg",
-            "radius": 1.0,
+            "radius": 0.875,
             "sight": 9.0,
             "size": 0,
             "speed": 2.953125,
@@ -15914,7 +16149,7 @@
             "radius": 1.0,
             "sight": 12.0,
             "size": 0,
-            "speed": 1.40625,
+            "speed": 1.6015625,
             "speed_creep_mul": 1.0,
             "supply": 4.0,
             "time": 541.34765625,
@@ -16525,7 +16760,7 @@
             "needs_power": false,
             "normal_mode": 109,
             "race": "Zerg",
-            "radius": 1.0,
+            "radius": 0.875,
             "sight": 5.0,
             "size": 0,
             "speed_creep_mul": 1.0,
@@ -16790,7 +17025,7 @@
             "normal_mode": 87,
             "race": "Zerg",
             "radius": 1.0,
-            "sight": 11.0,
+            "sight": 10.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
@@ -16825,7 +17060,7 @@
             "normal_mode": 87,
             "race": "Zerg",
             "radius": 1.0,
-            "sight": 11.0,
+            "sight": 10.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
@@ -18581,7 +18816,7 @@
             "speed": 2.75,
             "speed_creep_mul": 1.0,
             "supply": 3.0,
-            "time": 196.0,
+            "time": 272.0,
             "weapons": [
                 {
                     "attacks": 1,
@@ -18621,7 +18856,7 @@
             "accepts_addon": false,
             "armor": 0.0,
             "attributes": ["Armored", "Mechanical"],
-            "gas": 150,
+            "gas": 125,
             "id": 689,
             "is_addon": false,
             "is_flying": true,
@@ -19331,7 +19566,7 @@
             "accepts_addon": false,
             "armor": 0.0,
             "attributes": ["Armored", "Mechanical"],
-            "gas": 150,
+            "gas": 125,
             "id": 734,
             "is_addon": false,
             "is_flying": true,
@@ -20179,7 +20414,7 @@
             "sight": 9.0,
             "size": 0,
             "speed_creep_mul": 1.0,
-            "start_energy": 100,
+            "start_energy": 78,
             "supply": 0.0,
             "time": 640.0,
             "weapons": []
@@ -20638,15 +20873,6 @@
             "cost": {
                 "gas": 100,
                 "minerals": 100,
-                "time": 1280.0
-            },
-            "id": 26,
-            "name": "GhostMoebiusReactor"
-        },
-        {
-            "cost": {
-                "gas": 100,
-                "minerals": 100,
                 "time": 2560.0
             },
             "id": 27,
@@ -20755,7 +20981,7 @@
             "cost": {
                 "gas": 100,
                 "minerals": 100,
-                "time": 2880.0
+                "time": 2720.0
             },
             "id": 39,
             "name": "ProtossGroundWeaponsLevel1"
@@ -20764,7 +20990,7 @@
             "cost": {
                 "gas": 150,
                 "minerals": 150,
-                "time": 3440.0
+                "time": 3240.0
             },
             "id": 40,
             "name": "ProtossGroundWeaponsLevel2"
@@ -20773,7 +20999,7 @@
             "cost": {
                 "gas": 200,
                 "minerals": 200,
-                "time": 4000.0
+                "time": 3760.0
             },
             "id": 41,
             "name": "ProtossGroundWeaponsLevel3"
@@ -20782,7 +21008,7 @@
             "cost": {
                 "gas": 100,
                 "minerals": 100,
-                "time": 2880.0
+                "time": 2720.0
             },
             "id": 42,
             "name": "ProtossGroundArmorsLevel1"
@@ -20791,7 +21017,7 @@
             "cost": {
                 "gas": 150,
                 "minerals": 150,
-                "time": 3440.0
+                "time": 3240.0
             },
             "id": 43,
             "name": "ProtossGroundArmorsLevel2"
@@ -20800,7 +21026,7 @@
             "cost": {
                 "gas": 200,
                 "minerals": 200,
-                "time": 4000.0
+                "time": 3760.0
             },
             "id": 44,
             "name": "ProtossGroundArmorsLevel3"
@@ -20809,7 +21035,7 @@
             "cost": {
                 "gas": 150,
                 "minerals": 150,
-                "time": 2880.0
+                "time": 2720.0
             },
             "id": 45,
             "name": "ProtossShieldsLevel1"
@@ -20818,7 +21044,7 @@
             "cost": {
                 "gas": 225,
                 "minerals": 225,
-                "time": 3440.0
+                "time": 3240.0
             },
             "id": 46,
             "name": "ProtossShieldsLevel2"
@@ -20827,7 +21053,7 @@
             "cost": {
                 "gas": 300,
                 "minerals": 300,
-                "time": 4000.0
+                "time": 3760.0
             },
             "id": 47,
             "name": "ProtossShieldsLevel3"
@@ -21356,9 +21582,9 @@
         },
         {
             "cost": {
-                "gas": 150,
-                "minerals": 150,
-                "time": 2720.0
+                "gas": 125,
+                "minerals": 125,
+                "time": 2240.0
             },
             "id": 136,
             "name": "BansheeSpeed"
@@ -21487,15 +21713,6 @@
                 "time": 1760.0
             },
             "id": 297,
-            "name": "EnhancedShockwaves"
-        },
-        {
-            "cost": {
-                "gas": 150,
-                "minerals": 150,
-                "time": 1760.0
-            },
-            "id": 298,
             "name": "MicrobialShroud"
         },
         {
@@ -21504,7 +21721,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 299,
+            "id": 298,
             "name": "SunderingImpact"
         },
         {
@@ -21513,7 +21730,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 300,
+            "id": 299,
             "name": "AmplifiedShielding"
         },
         {
@@ -21522,7 +21739,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 301,
+            "id": 300,
             "name": "PsionicAmplifiers"
         },
         {
@@ -21531,7 +21748,7 @@
                 "minerals": 100,
                 "time": 1280.0
             },
-            "id": 302,
+            "id": 301,
             "name": "SecretedCoating"
         }
     ]

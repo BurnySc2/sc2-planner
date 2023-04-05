@@ -19,11 +19,11 @@ export default class Title extends Component {
                 <div>
                     <a
                         className={CLASSES.titleVersion}
-                        href="https://liquipedia.net/starcraft2/Patch_5.0.9"
+                        href="https://liquipedia.net/starcraft2/Patch_5.0.11"
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        For patch 5.0.9
+                        For patch 5.0.11
                     </a>
                 </div>
             </div>

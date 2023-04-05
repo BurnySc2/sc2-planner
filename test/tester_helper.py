@@ -64,7 +64,7 @@ def find_next_free_port(
             return port
         except OSError:
             port += 1
-    raise IOError('No free ports')
+    raise OSError('No free ports')
 
 
 def get_website_address(port: int) -> str:
@@ -108,7 +108,8 @@ def start_frontend_dev_server(
     # https://create-react-app.dev/docs/adding-custom-environment-variables
     env['REACT_APP_PROXY'] = f'http://{backend_proxy}'
     env['REACT_APP_WEBSOCKET'] = f'ws://{backend_proxy}'
-
+    env['NODE_OPTIONS'] = '--openssl-legacy-provider'
+    
     currently_running_node_processes = get_pid('node')
 
     # pylint: disable=R1732

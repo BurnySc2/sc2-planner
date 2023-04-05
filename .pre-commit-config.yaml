@@ -2,57 +2,57 @@
 repos:
 # Check yaml files like this one and github actions if they are valid
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.4.0
   hooks:
   - id: check-yaml
 
 # Autoformat yaml files
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
-  rev: v2.1.0
+  rev: v2.8.0
   hooks:
   - id: pretty-format-yaml
     args: [--autofix, --indent, '2']
 
 # Check github action workflow files
 - repo: https://github.com/sirosen/check-jsonschema
-  rev: 0.3.2
+  rev: 0.22.0
   hooks:
   - id: check-github-workflows
 
 # Check toml files like pyproject.toml if it is valid
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.4.0
   hooks:
   - id: check-toml
 
 # As the name says
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.4.0
   hooks:
   - id: double-quote-string-fixer
 
 # Convert simple things like set([]) to set()
 - repo: https://github.com/asottile/pyupgrade
-  rev: v2.26.0
+  rev: v3.3.1
   hooks:
   - id: pyupgrade
 
 # Remove unused imports
 - repo: https://github.com/hadialqattan/pycln
-  rev: v1.0.3
+  rev: v2.1.3
   hooks:
   - id: pycln
     args: [--config=pyproject.toml]
 
 # Convert relative to absolute imports
 - repo: https://github.com/MarcoGorelli/absolufy-imports
-  rev: v0.3.0
+  rev: v0.3.1
   hooks:
   - id: absolufy-imports
 
 # Sort imports
 - repo: https://github.com/pycqa/isort
-  rev: 5.5.4
+  rev: 5.12.0
   hooks:
   - id: isort
     files: \.(py)$
@@ -60,7 +60,7 @@ repos:
 
 # Add trailing commas - might be unwanted in some places
 - repo: https://github.com/asottile/add-trailing-comma
-  rev: v2.1.0
+  rev: v2.4.0
   hooks:
   - id: add-trailing-comma
 
@@ -76,7 +76,7 @@ repos:
     exclude: setup.py
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.4.0
   hooks:
   # Check if python files are vlaid
   - id: check-ast
@@ -85,7 +85,7 @@ repos:
   - id: debug-statements
 
 - repo: https://github.com/pre-commit/pygrep-hooks
-  rev: v1.9.0
+  rev: v1.10.0
   hooks:
   # Check for bad code
   - id: python-no-eval

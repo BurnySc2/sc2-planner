@@ -92,8 +92,8 @@ RESEARCHED_BY["ZergMeleeWeaponsLevel2"].requires = [
  */
 
 console.assert(
-    Object.keys(RESEARCHED_BY).length === 89,
-    `${Object.keys(RESEARCHED_BY).length} is not 89`
+    Object.keys(RESEARCHED_BY).length === 87,
+    `${Object.keys(RESEARCHED_BY).length} is not 87`
 )
 
 export default RESEARCHED_BY

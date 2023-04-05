@@ -4,8 +4,8 @@
     "private": true,
     "homepage": "./",
     "scripts": {
-        "start": "npm run tailwind:dev && cross-env BROWSER=none HTTPS=true react-scripts start",
-        "build": "npm run tailwind:prod && react-scripts build",
+        "start": "npm run tailwind:dev && cross-env BROWSER=none HTTPS=true NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+        "build": "npm run tailwind:prod && cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
         "tailwind:dev": "cross-env DEVELOPMENT=true tailwind build -i src/tailwind.css -o src/index.css",
         "tailwind:prod": "tailwind build -i src/tailwind.css -c tailwind.config.js -o src/index.css",
         "test": "react-scripts test --env=jsdom",
