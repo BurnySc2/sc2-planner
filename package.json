@@ -10,6 +10,7 @@
         "tailwind:prod": "tailwind build -i src/tailwind.css -c tailwind.config.js -o src/index.css",
         "test": "react-scripts test --env=jsdom",
         "testAll": "react-scripts test --env=jsdom --watchAll=false",
+        "teste2e": "playwright test",
         "update": "npx npm-check-updates -u && npm run prune",
         "prune": "rm package-lock.json -f && rm node_modules -rf && npm i",
         "format": "npx prettier --write \"src/**/*.{json,js,ts,tsx}\"",
@@ -42,6 +43,7 @@
         "typescript": "^4.4.3"
     },
     "devDependencies": {
+        "@playwright/test": "^1.32.2",
         "@testing-library/jest-dom": "^5.14.1",
         "@testing-library/react": "^12.1.1",
         "@testing-library/user-event": "^13.2.1",
@@ -52,7 +54,8 @@
         "eslint": "^7.32.0",
         "eslint-plugin-react": "^7.26.1",
         "npm-check-updates": "^11.8.5",
-        "prettier": "2.4.1"
+        "prettier": "2.4.1",
+        "serve": "^14.2.0"
     },
     "eslintConfig": {
         "extends": "react-app"
