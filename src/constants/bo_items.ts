@@ -56,7 +56,7 @@ const supplyUnitNameByRace = {
     },
 }
 
-console.assert(Object.keys(BO_ITEMS).length === 235, `${Object.keys(BO_ITEMS).length} is not 235`)
+console.assert(Object.keys(BO_ITEMS).length === 234, `${Object.keys(BO_ITEMS).length} is not 234`)
 
 console.assert(BO_ITEMS["Zergling"].name === "Zergling", `${BO_ITEMS["Zergling"].name}`)
 console.assert(BO_ITEMS["Zergling"].type === "unit", `${BO_ITEMS["Zergling"].type}`)

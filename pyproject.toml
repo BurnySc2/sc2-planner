@@ -5,17 +5,13 @@ description = ""
 authors = ["BurnySc2 <gamingburny@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.7 <3.11"
+python = ">=3.8 <3.11"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 yapf = "^0.31.0"
 pre-commit = "^2.15.0"
-seleniumbase = "^1.66.6"
-pytest = "^6.2.5"
-loguru = "^0.5.3"
-psutil = "^5.8.0"
 pylint = "^2.11.1"
-pytest-benchmark = "^3.4.1"
+toml = "^0.10.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

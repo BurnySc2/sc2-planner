@@ -153,7 +153,7 @@ class Unit {
 
             //init larva time for new hatch
             if (this.nextLarvaSpawn === -1) {
-                this.nextLarvaSpawn = gamelogic.frame + (larvaSpawnTime * 22.4)
+                this.nextLarvaSpawn = gamelogic.frame + larvaSpawnTime * 22.4
                 if (this.larvaCount == 0) {
                     this.larvaCount = 1
                 }
@@ -166,7 +166,7 @@ class Unit {
 
             if (this.nextLarvaSpawn <= gamelogic.frame) {
                 this.larvaCount += 1
-                this.nextLarvaSpawn = this.nextLarvaSpawn + (larvaSpawnTime * 22.4)
+                this.nextLarvaSpawn = this.nextLarvaSpawn + larvaSpawnTime * 22.4
             }
 
             // If has inject: spawn larva when frame has been reached

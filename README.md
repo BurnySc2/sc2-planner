@@ -32,9 +32,9 @@ With the arrow keys (left and right) you can navigate through the build order. H
 
 ## Requirements
 
-[Node 12 or newer](https://nodejs.org/en/download/) is required to create this static website.
+[Node 14 or newer](https://nodejs.org/en/download/) is required to create this static website.
 
-[Python 3.7 or newer](https://www.python.org/downloads/) is required to run pre-commit hooks and e2e tests.
+[Python 3.8 or newer](https://www.python.org/downloads/) is required to run pre-commit hooks.
 
 ## Setup
 
@@ -78,7 +78,7 @@ poetry run pre-commit run --all-files
 
 ## Update
 
-To update to the current patch, a freshly generated `data.json` from [SC2 Techtree](https://github.com/BurnySc2/sc2-techtree) is required and needs to be placed in `src/constants/data.json`. If a new unit, structure or upgrade was introduced, then its icon needs to be placed in the `src/icons/png` directory.
+To update to the current patch, a freshly generated `data.json` from [SC2 Techtree](https://github.com/BurnySc2/sc2-techtree) is required and needs to be placed in `src/constants/data.json`. If a new unit, structure or upgrade was introduced, then its icon needs to be placed in the `src/icons/png` directory. Console asserts might be printed in the browser console if the number of units or upgrades changed in a patch.
 
 # Copyright
 

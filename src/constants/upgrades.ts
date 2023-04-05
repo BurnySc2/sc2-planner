@@ -82,7 +82,7 @@ UPGRADES.forEach((item) => {
 // UPGRADES.zerg.sort(sortFn)
 
 // Should be enabled 89 upgrades
-console.assert(Object.keys(UPGRADES).length === 89, `${Object.keys(UPGRADES).length} is not 89`)
+console.assert(Object.keys(UPGRADES).length === 88, `${Object.keys(UPGRADES).length} is not 88`)
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the upgrade is available from an ability
 export { UPGRADES, UPGRADE_NAMES_BY_RACE }

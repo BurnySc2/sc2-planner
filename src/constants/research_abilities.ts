@@ -20,8 +20,8 @@ data.Ability.forEach((ability) => {
 // {524, 45}
 
 console.assert(
-    Object.keys(RESEARCH_ABILITIES).length === 120,
-    `${Object.keys(RESEARCH_ABILITIES).length} is not 120`
+    Object.keys(RESEARCH_ABILITIES).length === 118,
+    `${Object.keys(RESEARCH_ABILITIES).length} is not 118`
 )
 
 export default RESEARCH_ABILITIES
