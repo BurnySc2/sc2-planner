@@ -109,7 +109,7 @@ def start_frontend_dev_server(
     env['REACT_APP_PROXY'] = f'http://{backend_proxy}'
     env['REACT_APP_WEBSOCKET'] = f'ws://{backend_proxy}'
     env['NODE_OPTIONS'] = '--openssl-legacy-provider'
-    
+
     currently_running_node_processes = get_pid('node')
 
     # pylint: disable=R1732
