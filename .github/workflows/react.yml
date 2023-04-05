@@ -28,10 +28,6 @@ jobs:
       run: |
         npm install
 
-    - name: Run tests
-      run: |
-        npm run test
-
     - name: Run format
       run: |
         npm run format
@@ -40,12 +36,16 @@ jobs:
       run: |
         npm run eslint
 
+    - name: Run tests
+      run: |
+        npm run test
+
   test_e2e:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        node: ['12', '14', '16', '17']
+        node: ['14', '16']
     runs-on: ${{ matrix.os }}
 
     steps:
