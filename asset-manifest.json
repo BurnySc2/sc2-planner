@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "./static/css/main.013855e7.chunk.css",
-    "main.js": "./static/js/main.e41a11ce.chunk.js",
-    "main.js.map": "./static/js/main.e41a11ce.chunk.js.map",
+    "main.js": "./static/js/main.e8a810c0.chunk.js",
+    "main.js.map": "./static/js/main.e8a810c0.chunk.js.map",
     "runtime-main.js": "./static/js/runtime-main.d4ba9ca8.js",
     "runtime-main.js.map": "./static/js/runtime-main.d4ba9ca8.js.map",
-    "static/js/2.7de23cf0.chunk.js": "./static/js/2.7de23cf0.chunk.js",
-    "static/js/2.7de23cf0.chunk.js.map": "./static/js/2.7de23cf0.chunk.js.map",
+    "static/js/2.0d28a25d.chunk.js": "./static/js/2.0d28a25d.chunk.js",
+    "static/js/2.0d28a25d.chunk.js.map": "./static/js/2.0d28a25d.chunk.js.map",
     "index.html": "./index.html",
     "static/css/main.013855e7.chunk.css.map": "./static/css/main.013855e7.chunk.css.map",
-    "static/js/2.7de23cf0.chunk.js.LICENSE.txt": "./static/js/2.7de23cf0.chunk.js.LICENSE.txt",
+    "static/js/2.0d28a25d.chunk.js.LICENSE.txt": "./static/js/2.0d28a25d.chunk.js.LICENSE.txt",
     "static/media/README.md": "./static/media/README.9ac215a5.md",
     "static/media/btn-ability-spearofadun-chronosurge-cyberneticscore.png": "./static/media/btn-ability-spearofadun-chronosurge-cyberneticscore.f5621582.png",
     "static/media/btn-ability-spearofadun-chronosurge-darkshrine.png": "./static/media/btn-ability-spearofadun-chronosurge-darkshrine.26c4b8bd.png",
@@ -56,6 +56,7 @@
     "static/media/btn-upgrade-terran-highcapacityfueltanks.png": "./static/media/btn-upgrade-terran-highcapacityfueltanks.abeda40e.png",
     "static/media/btn-upgrade-terran-hyperflightrotors.png": "./static/media/btn-upgrade-terran-hyperflightrotors.60d20d52.png",
     "static/media/btn-upgrade-terran-infantryweaponslevel2.png": "./static/media/btn-upgrade-terran-infantryweaponslevel2.7ee00968.png",
+    "static/media/btn-upgrade-terran-interferencematrix.png": "./static/media/btn-upgrade-terran-interferencematrix.2c2a42ee.png",
     "static/media/btn-upgrade-zerg-adaptivetalons.png": "./static/media/btn-upgrade-zerg-adaptivetalons.6537e64d.png",
     "static/media/btn-upgrade-zerg-airattacks-level1.png": "./static/media/btn-upgrade-zerg-airattacks-level1.a18fb43f.png",
     "static/media/btn-upgrade-zerg-airattacks-level2.png": "./static/media/btn-upgrade-zerg-airattacks-level2.5c403956.png",
@@ -84,8 +85,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.d4ba9ca8.js",
-    "static/js/2.7de23cf0.chunk.js",
+    "static/js/2.0d28a25d.chunk.js",
     "static/css/main.013855e7.chunk.css",
-    "static/js/main.e41a11ce.chunk.js"
+    "static/js/main.e8a810c0.chunk.js"
   ]
 }
