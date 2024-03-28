@@ -372,7 +372,7 @@
             "allow_autocast": false,
             "allow_minimap": false,
             "buff": [],
-            "cast_range": 9.0,
+            "cast_range": 10.0,
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
@@ -9779,6 +9779,14 @@
                     ]
                 },
                 {
+                    "ability": 793,
+                    "requirements": [
+                        {
+                            "addon_to": 28
+                        }
+                    ]
+                },
+                {
                     "ability": 790,
                     "requirements": [
                         {
@@ -11136,7 +11144,7 @@
             "accepts_addon": false,
             "armor": 1.0,
             "attributes": ["Armored", "Mechanical", "Structure"],
-            "gas": 100,
+            "gas": 50,
             "id": 29,
             "is_addon": false,
             "is_flying": false,
@@ -12052,7 +12060,7 @@
                     "cooldown": 1.5,
                     "damage_per_hit": 5.0,
                     "damage_splash": 0,
-                    "range": 0.10009765625,
+                    "range": 0.199951171875,
                     "target_type": "Ground"
                 }
             ]
@@ -12951,7 +12959,7 @@
             "power_radius": 6.5,
             "race": "Protoss",
             "radius": 1.125,
-            "sight": 9.0,
+            "sight": 10.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -8.0,
@@ -14005,7 +14013,7 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Mechanical", "Psionic"],
+            "attributes": ["Mechanical", "Psionic"],
             "cargo_size": 2,
             "gas": 100,
             "id": 77,
@@ -14307,7 +14315,7 @@
             "is_townhall": false,
             "is_worker": false,
             "max_health": 40.0,
-            "max_shield": 20.0,
+            "max_shield": 30.0,
             "minerals": 25,
             "name": "Observer",
             "needs_creep": false,
@@ -14321,7 +14329,7 @@
             "speed_creep_mul": 1.0,
             "supply": 1.0,
             "tech_alias": [],
-            "time": 480.0,
+            "time": 400.0,
             "unit_alias": 0,
             "weapons": []
         },
@@ -14558,7 +14566,7 @@
                     "cooldown": 1.5,
                     "damage_per_hit": 5.0,
                     "damage_splash": 0,
-                    "range": 0.10009765625,
+                    "range": 0.199951171875,
                     "target_type": "Ground"
                 }
             ]
@@ -14685,7 +14693,14 @@
             "weapons": []
         },
         {
-            "abilities": [],
+            "abilities": [
+                {
+                    "ability": 1733
+                },
+                {
+                    "ability": 1
+                }
+            ],
             "accepts_addon": false,
             "armor": 0.0,
             "attributes": ["Light", "Biological", "Structure"],
@@ -15730,7 +15745,7 @@
                     "cooldown": 1.5,
                     "damage_per_hit": 5.0,
                     "damage_splash": 0,
-                    "range": 0.10009765625,
+                    "range": 0.199951171875,
                     "target_type": "Ground"
                 }
             ]
@@ -16842,7 +16857,7 @@
             "normal_mode": 111,
             "race": "Zerg",
             "radius": 0.625,
-            "sight": 10.0,
+            "sight": 8.0,
             "size": 0,
             "speed": 2.0,
             "speed_creep_mul": 1.0,
@@ -19388,7 +19403,7 @@
             "is_structure": false,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 110.0,
+            "max_health": 130.0,
             "minerals": 125,
             "name": "Cyclone",
             "needs_creep": false,
@@ -19413,7 +19428,7 @@
                             "damage": 3.0
                         }
                     ],
-                    "cooldown": 0.673828125,
+                    "cooldown": 0.81201171875,
                     "damage_per_hit": 11.0,
                     "damage_splash": 0,
                     "range": 6.0,
@@ -20724,11 +20739,11 @@
             "radius": 1.0,
             "sight": 11.0,
             "size": 0,
-            "speed": 0.78515625,
+            "speed": 0.9140625,
             "speed_creep_mul": 1.0,
             "supply": -8.0,
             "tech_alias": [106],
-            "time": 266.6796875,
+            "time": 336.015625,
             "unit_alias": 0,
             "weapons": []
         },
@@ -20755,7 +20770,7 @@
             "power_radius": 6.5,
             "race": "Protoss",
             "radius": 1.125,
-            "sight": 9.0,
+            "sight": 10.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -8.0,
@@ -20809,9 +20824,6 @@
         },
         {
             "abilities": [
-                {
-                    "ability": 4
-                },
                 {
                     "ability": 4111
                 },
@@ -20871,7 +20883,7 @@
             "is_townhall": false,
             "is_worker": false,
             "max_health": 40.0,
-            "max_shield": 20.0,
+            "max_shield": 30.0,
             "minerals": 25,
             "name": "ObserverSiegeMode",
             "needs_creep": false,
@@ -21163,8 +21175,8 @@
         },
         {
             "cost": {
-                "gas": 175,
-                "minerals": 175,
+                "gas": 150,
+                "minerals": 150,
                 "time": 3040.0
             },
             "id": 8,
@@ -21172,8 +21184,8 @@
         },
         {
             "cost": {
-                "gas": 250,
-                "minerals": 250,
+                "gas": 200,
+                "minerals": 200,
                 "time": 3520.0
             },
             "id": 9,
@@ -21199,8 +21211,8 @@
         },
         {
             "cost": {
-                "gas": 175,
-                "minerals": 175,
+                "gas": 150,
+                "minerals": 150,
                 "time": 3040.0
             },
             "id": 12,
@@ -21208,8 +21220,8 @@
         },
         {
             "cost": {
-                "gas": 250,
-                "minerals": 250,
+                "gas": 200,
+                "minerals": 200,
                 "time": 3520.0
             },
             "id": 13,
