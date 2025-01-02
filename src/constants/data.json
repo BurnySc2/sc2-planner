@@ -224,18 +224,6 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 32,
-            "name": "EFFECT_SALVAGE",
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
             "id": 36,
             "name": "BEHAVIOR_HOLDFIREON_GHOST",
             "remaps_to_ability_id": 3688,
@@ -2795,7 +2783,7 @@
             "name": "STARPORTTECHLABRESEARCH_RESEARCHRAVENINTERFERENCEMATRIX",
             "target": {
                 "Research": {
-                    "upgrade": 299,
+                    "upgrade": 300,
                     "upgrade_name": "INTERFERENCEMATRIX"
                 }
             }
@@ -4481,7 +4469,7 @@
             "name": "EVOLUTIONCHAMBERRESEARCH_EVOLVEPROPULSIVEPERISTALSIS",
             "target": {
                 "Research": {
-                    "upgrade": 303,
+                    "upgrade": 304,
                     "upgrade_name": "SECRETEDCOATING"
                 }
             }
@@ -4692,6 +4680,23 @@
                 "Research": {
                     "upgrade": 135,
                     "upgrade_name": "EVOLVEMUSCULARAUGMENTS"
+                }
+            }
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 1284,
+            "name": "HYDRALISKDENRESEARCH_RESEARCHFRENZY",
+            "target": {
+                "Research": {
+                    "upgrade": 298,
+                    "upgrade_name": "FRENZY"
                 }
             }
         },
@@ -5724,7 +5729,7 @@
             "name": "INFESTATIONPITRESEARCH_EVOLVEAMORPHOUSARMORCLOUD",
             "target": {
                 "Research": {
-                    "upgrade": 298,
+                    "upgrade": 299,
                     "upgrade_name": "MICROBIALSHROUD"
                 }
             }
@@ -6266,7 +6271,7 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICSURGE",
             "target": {
                 "Research": {
-                    "upgrade": 300,
+                    "upgrade": 301,
                     "upgrade_name": "SUNDERINGIMPACT"
                 }
             }
@@ -6283,7 +6288,7 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHAMPLIFIEDSHIELDING",
             "target": {
                 "Research": {
-                    "upgrade": 301,
+                    "upgrade": 302,
                     "upgrade_name": "AMPLIFIEDSHIELDING"
                 }
             }
@@ -6300,7 +6305,7 @@
             "name": "TWILIGHTCOUNCILRESEARCH_RESEARCHPSIONICAMPLIFIERS",
             "target": {
                 "Research": {
-                    "upgrade": 302,
+                    "upgrade": 303,
                     "upgrade_name": "PSIONICAMPLIFIERS"
                 }
             }
@@ -6328,18 +6333,6 @@
             "id": 1623,
             "name": "CANCEL_NUKE",
             "remaps_to_ability_id": 3659,
-            "target": "None"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
-            "cast_range": 0.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 1624,
-            "name": "SALVAGEBUNKERREFUND_SALVAGE",
             "target": "None"
         },
         {
@@ -7872,7 +7865,7 @@
             "allow_autocast": true,
             "allow_minimap": false,
             "buff": [],
-            "cast_range": 6.0,
+            "cast_range": 7.0,
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
@@ -9582,23 +9575,11 @@
             "allow_autocast": false,
             "allow_minimap": false,
             "buff": [],
-            "cast_range": 500.0,
-            "cooldown": 0,
-            "effect": [],
-            "energy_cost": 0,
-            "id": 4107,
-            "name": "BATTERYOVERCHARGE_BATTERYOVERCHARGE",
-            "target": "Unit"
-        },
-        {
-            "allow_autocast": false,
-            "allow_minimap": false,
-            "buff": [],
             "cast_range": 9.0,
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 4109,
+            "id": 4111,
             "name": "AMORPHOUSARMORCLOUD_AMORPHOUSARMORCLOUD",
             "target": "Point"
         },
@@ -9610,7 +9591,7 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 4111,
+            "id": 4113,
             "name": "SHIELDBATTERYRECHARGEEX5_SHIELDBATTERYRECHARGE",
             "target": "Unit"
         },
@@ -9622,7 +9603,7 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 4112,
+            "id": 4114,
             "name": "SHIELDBATTERYRECHARGEEX5_STOP",
             "remaps_to_ability_id": 3659,
             "target": "None"
@@ -9635,11 +9616,12 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 4119,
+            "id": 4121,
             "name": "MORPHTOBANELING_BANELING",
             "target": {
                 "Morph": {
-                    "produces": 9
+                    "produces": 0,
+                    "produces_name": "NOTAUNIT"
                 }
             }
         },
@@ -9651,7 +9633,7 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 4120,
+            "id": 4122,
             "name": "MORPHTOBANELING_CANCEL",
             "remaps_to_ability_id": 3659,
             "target": "None"
@@ -9664,9 +9646,45 @@
             "cooldown": 0,
             "effect": [],
             "energy_cost": 0,
-            "id": 4122,
+            "id": 4124,
             "name": "MOTHERSHIPCLOAK_ORACLECLOAKFIELD",
             "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 500.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4126,
+            "name": "ENERGYRECHARGE_ENERGYRECHARGE",
+            "target": "Unit"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.0,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4128,
+            "name": "SALVAGEEFFECT_SALVAGE",
+            "target": "None"
+        },
+        {
+            "allow_autocast": false,
+            "allow_minimap": false,
+            "buff": [],
+            "cast_range": 0.300048828125,
+            "cooldown": 0,
+            "effect": [],
+            "energy_cost": 0,
+            "id": 4132,
+            "name": "WORKERSTOPIDLEABILITYVESPENE_GATHER",
+            "target": "Unit"
         }
     ],
     "Unit": [
@@ -9693,7 +9711,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Massive"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Massive"
+            ],
             "cargo_size": 8,
             "gas": 200,
             "id": 4,
@@ -9702,8 +9724,8 @@
             "is_structure": false,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 200.0,
-            "max_shield": 150.0,
+            "max_health": 250.0,
+            "max_shield": 100.0,
             "minerals": 300,
             "name": "Colossus",
             "needs_creep": false,
@@ -9797,7 +9819,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 25,
             "id": 5,
             "is_addon": true,
@@ -9826,7 +9852,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 50,
             "id": 6,
             "is_addon": true,
@@ -9882,7 +9912,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 7,
             "is_addon": false,
@@ -9938,7 +9971,9 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 25,
             "id": 8,
             "is_addon": false,
@@ -10001,7 +10036,9 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 25,
             "id": 9,
@@ -10052,7 +10089,7 @@
                     "ability": 2244
                 },
                 {
-                    "ability": 4122
+                    "ability": 4124
                 },
                 {
                     "ability": 1
@@ -10060,34 +10097,40 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Mechanical", "Psionic", "Massive", "Heroic"],
-            "gas": 300,
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Psionic",
+                "Massive",
+                "Heroic"
+            ],
+            "gas": 400,
             "id": 10,
             "is_addon": false,
             "is_flying": true,
             "is_structure": false,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 250.0,
-            "max_shield": 250.0,
-            "minerals": 300,
+            "max_health": 350.0,
+            "max_shield": 350.0,
+            "minerals": 400,
             "name": "Mothership",
             "needs_creep": false,
             "needs_geyser": false,
             "needs_power": false,
             "race": "Protoss",
-            "radius": 1.25,
+            "radius": 1.375,
             "sight": 14.0,
             "size": 0,
             "speed": 2.015625,
             "speed_creep_mul": 1.0,
-            "supply": 6.0,
+            "supply": 8.0,
             "tech_alias": [],
             "time": 2000.0,
             "unit_alias": 0,
             "weapons": [
                 {
-                    "attacks": 6,
+                    "attacks": 4,
                     "bonuses": [],
                     "cooldown": 2.2099609375,
                     "damage_per_hit": 6.0,
@@ -10101,7 +10144,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical", "Structure"],
+            "attributes": [
+                "Light",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 11,
             "is_addon": false,
@@ -10151,7 +10198,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 12,
             "is_addon": false,
@@ -10200,7 +10250,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 13,
             "is_addon": false,
@@ -10261,7 +10314,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 14,
             "is_addon": false,
@@ -10321,7 +10377,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 15,
             "is_addon": false,
@@ -10381,7 +10440,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 16,
             "is_addon": false,
@@ -10441,7 +10503,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 17,
             "is_addon": false,
@@ -10514,7 +10579,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "cargo_capacity": 5,
             "gas": 0,
             "id": 18,
@@ -10548,7 +10617,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 19,
             "is_addon": false,
@@ -10577,7 +10650,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 20,
             "is_addon": false,
@@ -10645,7 +10722,11 @@
             ],
             "accepts_addon": true,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 21,
             "is_addon": false,
@@ -10731,7 +10812,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 22,
             "is_addon": false,
@@ -10770,7 +10855,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "detection_range": 11.0,
             "gas": 0,
             "id": 23,
@@ -10809,13 +10898,13 @@
         {
             "abilities": [
                 {
-                    "ability": 32
-                },
-                {
                     "ability": 195
                 },
                 {
                     "ability": 407
+                },
+                {
+                    "ability": 4128
                 },
                 {
                     "ability": 1
@@ -10823,7 +10912,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "cargo_capacity": 4,
             "gas": 0,
             "id": 24,
@@ -10850,11 +10943,19 @@
             "weapons": []
         },
         {
-            "abilities": [],
+            "abilities": [
+                {
+                    "ability": 4128
+                }
+            ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
-            "gas": 100,
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
+            "gas": 50,
             "id": 25,
             "is_addon": false,
             "is_flying": false,
@@ -10862,7 +10963,7 @@
             "is_townhall": false,
             "is_worker": false,
             "max_health": 200.0,
-            "minerals": 125,
+            "minerals": 100,
             "name": "SensorTower",
             "needs_creep": false,
             "needs_geyser": false,
@@ -10894,7 +10995,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 50,
             "id": 26,
             "is_addon": false,
@@ -10937,9 +11042,6 @@
                     "ability": 595
                 },
                 {
-                    "ability": 597
-                },
-                {
                     "ability": 614
                 },
                 {
@@ -10971,11 +11073,23 @@
                             "building": 29
                         }
                     ]
+                },
+                {
+                    "ability": 597,
+                    "requirements": [
+                        {
+                            "addon": 5
+                        }
+                    ]
                 }
             ],
             "accepts_addon": true,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 100,
             "id": 27,
             "is_addon": false,
@@ -11056,7 +11170,11 @@
             ],
             "accepts_addon": true,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 100,
             "id": 28,
             "is_addon": false,
@@ -11143,7 +11261,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 50,
             "id": 29,
             "is_addon": false,
@@ -11182,7 +11304,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 150,
             "id": 30,
             "is_addon": false,
@@ -11221,7 +11347,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 31,
             "is_addon": false,
@@ -11273,7 +11403,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "gas": 125,
             "id": 32,
             "is_addon": false,
@@ -11294,7 +11427,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 3.0,
-            "tech_alias": [33],
+            "tech_alias": [
+                33
+            ],
             "time": 68.66796875,
             "unit_alias": 33,
             "weapons": [
@@ -11340,7 +11475,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 4,
             "gas": 125,
             "id": 33,
@@ -11408,7 +11546,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 2,
             "gas": 75,
             "id": 34,
@@ -11431,7 +11572,9 @@
             "speed": 2.25,
             "speed_creep_mul": 1.0,
             "supply": 2.0,
-            "tech_alias": [1940],
+            "tech_alias": [
+                1940
+            ],
             "time": 41.44140625,
             "unit_alias": 35,
             "weapons": [
@@ -11477,7 +11620,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "gas": 75,
             "id": 35,
             "is_addon": false,
@@ -11498,7 +11644,9 @@
             "speed": 2.75,
             "speed_creep_mul": 1.0,
             "supply": 2.0,
-            "tech_alias": [1940],
+            "tech_alias": [
+                1940
+            ],
             "time": 672.0,
             "unit_alias": 0,
             "weapons": [
@@ -11544,7 +11692,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "cargo_capacity": 5,
             "gas": 0,
             "id": 36,
@@ -11567,7 +11719,9 @@
             "speed": 0.9375,
             "speed_creep_mul": 1.0,
             "supply": -15.0,
-            "tech_alias": [18],
+            "tech_alias": [
+                18
+            ],
             "time": 32.0,
             "unit_alias": 18,
             "weapons": []
@@ -11586,7 +11740,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 25,
             "id": 37,
             "is_addon": true,
@@ -11607,7 +11765,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [5],
+            "tech_alias": [
+                5
+            ],
             "time": 400.0,
             "unit_alias": 0,
             "weapons": []
@@ -11616,7 +11776,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 50,
             "id": 38,
             "is_addon": true,
@@ -11637,7 +11801,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [6],
+            "tech_alias": [
+                6
+            ],
             "time": 800.0,
             "unit_alias": 0,
             "weapons": []
@@ -11648,7 +11814,7 @@
                     "ability": 761
                 },
                 {
-                    "ability": 770
+                    "ability": 769
                 },
                 {
                     "ability": 764,
@@ -11669,7 +11835,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 25,
             "id": 39,
             "is_addon": true,
@@ -11690,7 +11860,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [5],
+            "tech_alias": [
+                5
+            ],
             "time": 400.0,
             "unit_alias": 0,
             "weapons": []
@@ -11699,7 +11871,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 50,
             "id": 40,
             "is_addon": true,
@@ -11720,7 +11896,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [6],
+            "tech_alias": [
+                6
+            ],
             "time": 800.0,
             "unit_alias": 0,
             "weapons": []
@@ -11739,7 +11917,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 25,
             "id": 41,
             "is_addon": true,
@@ -11760,7 +11942,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [5],
+            "tech_alias": [
+                5
+            ],
             "time": 400.0,
             "unit_alias": 0,
             "weapons": []
@@ -11769,7 +11953,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 50,
             "id": 42,
             "is_addon": true,
@@ -11790,7 +11978,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [6],
+            "tech_alias": [
+                6
+            ],
             "time": 800.0,
             "unit_alias": 0,
             "weapons": []
@@ -11824,7 +12014,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 100,
             "id": 43,
             "is_addon": false,
@@ -11846,7 +12040,9 @@
             "speed": 0.9375,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [27],
+            "tech_alias": [
+                27
+            ],
             "time": 32.0,
             "unit_alias": 27,
             "weapons": []
@@ -11880,7 +12076,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 100,
             "id": 44,
             "is_addon": false,
@@ -11902,7 +12102,9 @@
             "speed": 0.9375,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [28],
+            "tech_alias": [
+                28
+            ],
             "time": 32.0,
             "unit_alias": 28,
             "weapons": []
@@ -12028,7 +12230,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Biological",
+                "Mechanical"
+            ],
             "cargo_size": 1,
             "gas": 0,
             "id": 45,
@@ -12094,7 +12300,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 46,
             "is_addon": false,
@@ -12116,7 +12326,9 @@
             "speed": 0.9375,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [21],
+            "tech_alias": [
+                21
+            ],
             "time": 32.0,
             "unit_alias": 21,
             "weapons": []
@@ -12129,7 +12341,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 47,
             "is_addon": false,
@@ -12150,7 +12366,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -8.0,
-            "tech_alias": [19],
+            "tech_alias": [
+                19
+            ],
             "time": 20.80078125,
             "unit_alias": 19,
             "weapons": []
@@ -12186,7 +12404,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 1,
             "gas": 0,
             "id": 48,
@@ -12249,7 +12470,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 1,
             "gas": 50,
             "id": 49,
@@ -12326,7 +12550,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Biological", "Psionic"],
+            "attributes": [
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 125,
             "id": 50,
@@ -12349,7 +12576,7 @@
             "speed": 2.8125,
             "speed_creep_mul": 1.0,
             "start_energy": 75,
-            "supply": 2.0,
+            "supply": 3.0,
             "tech_alias": [],
             "time": 640.0,
             "unit_alias": 0,
@@ -12401,7 +12628,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 25,
             "id": 51,
@@ -12469,7 +12699,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Massive"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Massive"
+            ],
             "cargo_size": 8,
             "gas": 200,
             "id": 52,
@@ -12551,7 +12785,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "cargo_size": 2,
             "gas": 0,
             "id": 53,
@@ -12625,7 +12862,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_capacity": 8,
             "gas": 100,
             "id": 54,
@@ -12685,7 +12925,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "gas": 100,
             "id": 55,
             "is_addon": false,
@@ -12760,7 +13003,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "detection_range": 11.0,
             "gas": 150,
             "id": 56,
@@ -12823,7 +13069,11 @@
             ],
             "accepts_addon": false,
             "armor": 3.0,
-            "attributes": ["Armored", "Mechanical", "Massive"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Massive"
+            ],
             "gas": 300,
             "id": 57,
             "is_addon": false,
@@ -12887,13 +13137,13 @@
                     "ability": 1006
                 },
                 {
-                    "ability": 4107
-                },
-                {
                     "ability": 3755
                 },
                 {
                     "ability": 3757
+                },
+                {
+                    "ability": 4126
                 },
                 {
                     "ability": 1
@@ -12909,7 +13159,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 59,
             "is_addon": false,
@@ -12941,7 +13194,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 60,
             "is_addon": false,
@@ -12972,7 +13228,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 61,
             "is_addon": false,
@@ -13060,7 +13319,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 62,
             "is_addon": false,
@@ -13167,7 +13429,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 63,
             "is_addon": false,
@@ -13208,7 +13473,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 200,
             "id": 64,
             "is_addon": false,
@@ -13249,7 +13517,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 100,
             "id": 65,
             "is_addon": false,
@@ -13290,7 +13561,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "detection_range": 11.0,
             "gas": 0,
             "id": 66,
@@ -13364,7 +13638,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 150,
             "id": 67,
             "is_addon": false,
@@ -13399,7 +13676,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 200,
             "id": 68,
             "is_addon": false,
@@ -13434,7 +13714,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 150,
             "id": 69,
             "is_addon": false,
@@ -13475,7 +13758,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 150,
             "id": 70,
             "is_addon": false,
@@ -13538,7 +13824,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 100,
             "id": 71,
             "is_addon": false,
@@ -13623,7 +13912,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 72,
             "is_addon": false,
@@ -13681,7 +13973,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 0,
             "id": 73,
@@ -13750,7 +14045,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 2,
             "gas": 50,
             "id": 74,
@@ -13774,7 +14072,7 @@
             "speed_creep_mul": 1.0,
             "supply": 2.0,
             "tech_alias": [],
-            "time": 672.0,
+            "time": 608.0,
             "unit_alias": 0,
             "weapons": [
                 {
@@ -13833,7 +14131,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological", "Psionic"],
+            "attributes": [
+                "Light",
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 150,
             "id": 75,
@@ -13907,7 +14209,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Biological", "Psionic"],
+            "attributes": [
+                "Light",
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 125,
             "id": 76,
@@ -14013,7 +14319,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Mechanical", "Psionic"],
+            "attributes": [
+                "Mechanical",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 100,
             "id": 77,
@@ -14069,7 +14378,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "gas": 100,
             "id": 78,
             "is_addon": false,
@@ -14142,7 +14454,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Mechanical", "Massive"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Massive"
+            ],
             "gas": 250,
             "id": 79,
             "is_addon": false,
@@ -14195,7 +14511,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "gas": 150,
             "id": 80,
             "is_addon": false,
@@ -14251,7 +14570,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical", "Psionic"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Psionic"
+            ],
             "cargo_capacity": 8,
             "gas": 0,
             "id": 81,
@@ -14305,7 +14628,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "detection_range": 11.0,
             "gas": 75,
             "id": 82,
@@ -14356,7 +14682,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 4,
             "gas": 100,
             "id": 83,
@@ -14367,7 +14696,7 @@
             "is_worker": false,
             "max_health": 200.0,
             "max_shield": 100.0,
-            "minerals": 275,
+            "minerals": 250,
             "name": "Immortal",
             "needs_creep": false,
             "needs_geyser": false,
@@ -14391,7 +14720,7 @@
                             "damage": 30.0
                         }
                     ],
-                    "cooldown": 1.449951171875,
+                    "cooldown": 1.60009765625,
                     "damage_per_hit": 20.0,
                     "damage_splash": 0,
                     "range": 6.0,
@@ -14533,7 +14862,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "cargo_size": 1,
             "gas": 0,
             "id": 84,
@@ -14594,7 +14926,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "gas": 0,
             "id": 85,
             "is_addon": false,
@@ -14667,7 +15002,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 86,
             "is_addon": false,
@@ -14676,7 +15015,7 @@
             "is_townhall": true,
             "is_worker": false,
             "max_health": 1500.0,
-            "minerals": 350,
+            "minerals": 325,
             "name": "Hatchery",
             "needs_creep": false,
             "needs_geyser": false,
@@ -14693,17 +15032,14 @@
             "weapons": []
         },
         {
-            "abilities": [
-                {
-                    "ability": 1733
-                },
-                {
-                    "ability": 1
-                }
-            ],
+            "abilities": [],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological", "Structure"],
+            "attributes": [
+                "Light",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 87,
             "is_addon": false,
@@ -14732,7 +15068,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 88,
             "is_addon": false,
@@ -14773,7 +15113,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 89,
             "is_addon": false,
@@ -14878,7 +15222,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 90,
             "is_addon": false,
@@ -14910,11 +15258,23 @@
                 },
                 {
                     "ability": 1283
+                },
+                {
+                    "ability": 1284,
+                    "requirements": [
+                        {
+                            "building": 101
+                        }
+                    ]
                 }
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 100,
             "id": 91,
             "is_addon": false,
@@ -15002,7 +15362,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 200,
             "id": 92,
             "is_addon": false,
@@ -15038,7 +15402,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 200,
             "id": 93,
             "is_addon": false,
@@ -15071,7 +15439,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 100,
             "id": 94,
             "is_addon": false,
@@ -15116,7 +15488,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "cargo_capacity": 1020,
             "gas": 150,
             "id": 95,
@@ -15155,7 +15531,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 50,
             "id": 96,
             "is_addon": false,
@@ -15201,7 +15581,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 97,
             "is_addon": false,
@@ -15243,7 +15627,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 98,
             "is_addon": false,
@@ -15300,7 +15688,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "detection_range": 11.0,
             "gas": 0,
             "id": 99,
@@ -15309,7 +15701,7 @@
             "is_structure": true,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 400.0,
+            "max_health": 300.0,
             "minerals": 125,
             "name": "SporeCrawler",
             "needs_creep": true,
@@ -15330,11 +15722,11 @@
                     "bonuses": [
                         {
                             "against": "Biological",
-                            "damage": 15.0
+                            "damage": 10.0
                         }
                     ],
                     "cooldown": 0.86083984375,
-                    "damage_per_hit": 15.0,
+                    "damage_per_hit": 20.0,
                     "damage_splash": 0,
                     "range": 7.0,
                     "target_type": "Air"
@@ -15377,7 +15769,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 100,
             "id": 100,
             "is_addon": false,
@@ -15386,7 +15782,7 @@
             "is_townhall": true,
             "is_worker": false,
             "max_health": 2000.0,
-            "minerals": 500,
+            "minerals": 475,
             "name": "Lair",
             "needs_creep": false,
             "needs_geyser": false,
@@ -15398,7 +15794,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -6.0,
-            "tech_alias": [86],
+            "tech_alias": [
+                86
+            ],
             "time": 1280.0,
             "unit_alias": 0,
             "weapons": []
@@ -15431,7 +15829,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 250,
             "id": 101,
             "is_addon": false,
@@ -15440,7 +15842,7 @@
             "is_townhall": true,
             "is_worker": false,
             "max_health": 2500.0,
-            "minerals": 700,
+            "minerals": 675,
             "name": "Hive",
             "needs_creep": false,
             "needs_geyser": false,
@@ -15452,7 +15854,10 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -6.0,
-            "tech_alias": [86, 100],
+            "tech_alias": [
+                86,
+                100
+            ],
             "time": 1600.0,
             "unit_alias": 0,
             "weapons": []
@@ -15512,7 +15917,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 350,
             "id": 102,
             "is_addon": false,
@@ -15533,7 +15942,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [92],
+            "tech_alias": [
+                92
+            ],
             "time": 1600.0,
             "unit_alias": 0,
             "weapons": []
@@ -15549,7 +15960,9 @@
             ],
             "accepts_addon": false,
             "armor": 10.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 0,
             "id": 103,
             "is_addon": false,
@@ -15713,7 +16126,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 1,
             "gas": 0,
             "id": 104,
@@ -15779,7 +16195,7 @@
                     ]
                 },
                 {
-                    "ability": 4119,
+                    "ability": 4121,
                     "requirements": [
                         {
                             "building": 96
@@ -15789,7 +16205,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 1,
             "gas": 0,
             "id": 105,
@@ -15873,7 +16292,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "gas": 0,
             "id": 106,
             "is_addon": false,
@@ -15938,7 +16360,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 50,
             "id": 107,
@@ -15998,7 +16423,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 100,
             "id": 108,
             "is_addon": false,
@@ -16065,7 +16493,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Biological", "Massive"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Massive"
+            ],
             "cargo_size": 8,
             "gas": 200,
             "id": 109,
@@ -16081,7 +16513,7 @@
             "needs_geyser": false,
             "needs_power": false,
             "race": "Zerg",
-            "radius": 0.875,
+            "radius": 1.0,
             "sight": 9.0,
             "size": 0,
             "speed": 2.953125,
@@ -16141,7 +16573,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 25,
             "id": 110,
@@ -16199,7 +16634,7 @@
                     "ability": 74
                 },
                 {
-                    "ability": 4109
+                    "ability": 4111
                 },
                 {
                     "ability": 1
@@ -16231,7 +16666,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Biological", "Psionic"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 150,
             "id": 111,
@@ -16294,7 +16733,10 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "gas": 100,
             "id": 112,
             "is_addon": false,
@@ -16339,7 +16781,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Biological", "Massive"],
+            "attributes": [
+                "Biological",
+                "Massive"
+            ],
             "gas": 250,
             "id": 113,
             "is_addon": false,
@@ -16388,7 +16833,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Massive"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Massive"
+            ],
             "gas": 250,
             "id": 114,
             "is_addon": false,
@@ -16435,7 +16884,9 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 25,
             "id": 115,
             "is_addon": false,
@@ -16469,7 +16920,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 116,
             "is_addon": false,
@@ -16503,7 +16957,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 50,
             "id": 117,
             "is_addon": false,
@@ -16580,7 +17037,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "gas": 25,
             "id": 118,
             "is_addon": false,
@@ -16614,7 +17074,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 119,
             "is_addon": false,
@@ -16648,7 +17111,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 120,
             "is_addon": false,
@@ -16682,7 +17148,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Biological", "Psionic"],
+            "attributes": [
+                "Biological",
+                "Psionic"
+            ],
             "gas": 0,
             "id": 125,
             "is_addon": false,
@@ -16692,7 +17161,7 @@
             "is_worker": false,
             "max_energy": 200.0,
             "max_health": 175.0,
-            "minerals": 150,
+            "minerals": 175,
             "name": "QueenBurrowed",
             "needs_creep": false,
             "needs_geyser": false,
@@ -16705,7 +17174,9 @@
             "speed_creep_mul": 1.0,
             "start_energy": 60,
             "supply": 2.0,
-            "tech_alias": [126],
+            "tech_alias": [
+                126
+            ],
             "time": 15.33203125,
             "unit_alias": 126,
             "weapons": []
@@ -16753,7 +17224,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Biological", "Psionic"],
+            "attributes": [
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 0,
             "id": 126,
@@ -16764,7 +17238,7 @@
             "is_worker": false,
             "max_energy": 200.0,
             "max_health": 175.0,
-            "minerals": 150,
+            "minerals": 175,
             "name": "Queen",
             "needs_creep": false,
             "needs_geyser": false,
@@ -16838,7 +17312,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Biological", "Psionic"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 150,
             "id": 127,
@@ -16872,7 +17350,9 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 100,
             "id": 128,
             "is_addon": false,
@@ -16930,7 +17410,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "detection_range": 11.0,
             "gas": 50,
             "id": 129,
@@ -16954,7 +17437,9 @@
             "speed_creep_mul": 1.0,
             "start_energy": 50,
             "supply": -8.0,
-            "tech_alias": [106],
+            "tech_alias": [
+                106
+            ],
             "time": 266.6796875,
             "unit_alias": 0,
             "weapons": []
@@ -16981,8 +17466,12 @@
                 }
             ],
             "accepts_addon": false,
-            "armor": 3.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "armor": 2.0,
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "cargo_capacity": 5,
             "gas": 150,
             "id": 130,
@@ -17004,7 +17493,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -15.0,
-            "tech_alias": [18],
+            "tech_alias": [
+                18
+            ],
             "time": 800.0,
             "unit_alias": 0,
             "weapons": [
@@ -17027,7 +17518,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Biological", "Massive"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Massive"
+            ],
             "gas": 200,
             "id": 131,
             "is_addon": false,
@@ -17043,7 +17538,7 @@
             "needs_power": false,
             "normal_mode": 109,
             "race": "Zerg",
-            "radius": 0.875,
+            "radius": 1.0,
             "sight": 5.0,
             "size": 0,
             "speed_creep_mul": 1.0,
@@ -17079,7 +17574,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 132,
             "is_addon": false,
@@ -17102,7 +17601,9 @@
             "speed_creep_mul": 1.0,
             "start_energy": 50,
             "supply": -15.0,
-            "tech_alias": [18],
+            "tech_alias": [
+                18
+            ],
             "time": 560.0,
             "unit_alias": 0,
             "weapons": []
@@ -17161,7 +17662,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 133,
             "is_addon": false,
@@ -17184,7 +17688,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [62],
+            "tech_alias": [
+                62
+            ],
             "time": 160.0,
             "unit_alias": 0,
             "weapons": []
@@ -17212,7 +17718,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 134,
             "is_addon": false,
@@ -17236,7 +17746,9 @@
             "speed_creep_mul": 1.0,
             "start_energy": 50,
             "supply": -15.0,
-            "tech_alias": [18],
+            "tech_alias": [
+                18
+            ],
             "time": 32.0,
             "unit_alias": 132,
             "weapons": []
@@ -17258,7 +17770,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical", "Psionic"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Psionic"
+            ],
             "cargo_capacity": 8,
             "gas": 0,
             "id": 136,
@@ -17282,7 +17798,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 2.0,
-            "tech_alias": [81],
+            "tech_alias": [
+                81
+            ],
             "time": 24.0,
             "unit_alias": 81,
             "weapons": []
@@ -17301,7 +17819,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological", "Structure"],
+            "attributes": [
+                "Light",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 137,
             "is_addon": false,
@@ -17322,23 +17844,22 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [87],
+            "tech_alias": [
+                87
+            ],
             "time": 18.9609375,
             "unit_alias": 87,
             "weapons": []
         },
         {
-            "abilities": [
-                {
-                    "ability": 1733
-                },
-                {
-                    "ability": 1
-                }
-            ],
+            "abilities": [],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological", "Structure"],
+            "attributes": [
+                "Light",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 138,
             "is_addon": false,
@@ -17359,7 +17880,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 0.0,
-            "tech_alias": [87],
+            "tech_alias": [
+                87
+            ],
             "time": 240.0,
             "unit_alias": 87,
             "weapons": []
@@ -17390,7 +17913,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 139,
             "is_addon": false,
@@ -17443,7 +17970,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 140,
             "is_addon": false,
@@ -17451,7 +17982,7 @@
             "is_structure": true,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 400.0,
+            "max_health": 300.0,
             "minerals": 125,
             "name": "SporeCrawlerUprooted",
             "needs_creep": false,
@@ -17493,7 +18024,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Psionic", "Massive"],
+            "attributes": [
+                "Psionic",
+                "Massive"
+            ],
             "cargo_size": 4,
             "gas": 275,
             "id": 141,
@@ -17553,7 +18087,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "cargo_capacity": 1020,
             "gas": 75,
             "id": 142,
@@ -17615,7 +18153,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Biological", "Psionic"],
+            "attributes": [
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 125,
             "id": 145,
@@ -17639,7 +18180,7 @@
             "speed": 2.8125,
             "speed_creep_mul": 1.0,
             "start_energy": 75,
-            "supply": 2.0,
+            "supply": 3.0,
             "tech_alias": [],
             "time": 0.0,
             "unit_alias": 50,
@@ -17661,23 +18202,12 @@
             ]
         },
         {
-            "abilities": [
-                {
-                    "ability": 16
-                },
-                {
-                    "ability": 17
-                },
-                {
-                    "ability": 18
-                },
-                {
-                    "ability": 1
-                }
-            ],
+            "abilities": [],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 0,
             "id": 150,
             "is_addon": false,
@@ -17785,7 +18315,10 @@
             ],
             "accepts_addon": false,
             "armor": 10.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 151,
             "is_addon": false,
@@ -17840,7 +18373,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "gas": 0,
             "id": 268,
             "is_addon": false,
@@ -17889,7 +18425,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 289,
             "is_addon": false,
@@ -17951,7 +18490,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 25,
             "id": 311,
@@ -18054,7 +18596,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Biological",
+                "Mechanical"
+            ],
             "cargo_size": 4,
             "gas": 0,
             "id": 484,
@@ -18127,7 +18673,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Psionic"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Psionic"
+            ],
             "gas": 100,
             "id": 488,
             "is_addon": false,
@@ -18189,7 +18739,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 489,
             "is_addon": false,
@@ -18239,7 +18792,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 491,
             "is_addon": false,
@@ -18291,7 +18848,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 75,
             "id": 492,
             "is_addon": false,
@@ -18327,7 +18888,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "gas": 75,
             "id": 493,
             "is_addon": false,
@@ -18387,7 +18951,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "cargo_size": 4,
             "gas": 75,
             "id": 494,
@@ -18449,7 +19016,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical", "Psionic"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Psionic"
+            ],
             "gas": 150,
             "id": 495,
             "is_addon": false,
@@ -18501,7 +19072,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Mechanical", "Massive"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Massive"
+            ],
             "gas": 175,
             "id": 496,
             "is_addon": false,
@@ -18522,7 +19097,7 @@
             "size": 0,
             "speed": 2.25,
             "speed_creep_mul": 1.0,
-            "supply": 5.0,
+            "supply": 4.0,
             "tech_alias": [],
             "time": 960.0,
             "unit_alias": 0,
@@ -18538,7 +19113,7 @@
                     "cooldown": 3.300048828125,
                     "damage_per_hit": 30.0,
                     "damage_splash": 0,
-                    "range": 14.0,
+                    "range": 13.0,
                     "target_type": "Air"
                 },
                 {
@@ -18578,7 +19153,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 4,
             "gas": 75,
             "id": 497,
@@ -18641,7 +19219,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "cargo_size": 2,
             "gas": 25,
             "id": 498,
@@ -18703,7 +19284,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Psionic"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Psionic"
+            ],
             "gas": 200,
             "id": 499,
             "is_addon": false,
@@ -18745,7 +19330,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "gas": 25,
             "id": 500,
             "is_addon": false,
@@ -18766,7 +19354,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 2.0,
-            "tech_alias": [498],
+            "tech_alias": [
+                498
+            ],
             "time": 52.0,
             "unit_alias": 498,
             "weapons": []
@@ -18782,7 +19372,9 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 0,
             "id": 501,
             "is_addon": false,
@@ -18837,7 +19429,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "cargo_size": 4,
             "gas": 150,
             "id": 502,
@@ -18846,7 +19441,7 @@
             "is_structure": false,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 200.0,
+            "max_health": 190.0,
             "minerals": 150,
             "name": "LurkerMP",
             "needs_creep": false,
@@ -18854,7 +19449,7 @@
             "needs_power": false,
             "race": "Zerg",
             "radius": 0.9375,
-            "sight": 10.0,
+            "sight": 11.0,
             "size": 0,
             "speed": 2.953125,
             "speed_creep_mul": 1.0,
@@ -18884,7 +19479,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "gas": 150,
             "id": 503,
             "is_addon": false,
@@ -18892,7 +19490,7 @@
             "is_structure": false,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 200.0,
+            "max_health": 190.0,
             "minerals": 150,
             "name": "LurkerMPBurrowed",
             "needs_creep": false,
@@ -18901,7 +19499,7 @@
             "normal_mode": 502,
             "race": "Zerg",
             "radius": 0.75,
-            "sight": 10.0,
+            "sight": 11.0,
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 3.0,
@@ -18946,7 +19544,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 150,
             "id": 504,
             "is_addon": false,
@@ -18975,7 +19577,9 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Structure"],
+            "attributes": [
+                "Structure"
+            ],
             "gas": 0,
             "id": 569,
             "is_addon": false,
@@ -19098,7 +19702,9 @@
             ],
             "accepts_addon": false,
             "armor": 5.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 0,
             "id": 687,
             "is_addon": false,
@@ -19157,7 +19763,9 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "cargo_size": 4,
             "gas": 100,
             "id": 688,
@@ -19220,7 +19828,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "gas": 125,
             "id": 689,
             "is_addon": false,
@@ -19264,7 +19875,9 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 100,
             "id": 690,
             "is_addon": false,
@@ -19316,7 +19929,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Massive"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Massive"
+            ],
             "cargo_size": 8,
             "gas": 200,
             "id": 691,
@@ -19339,7 +19956,9 @@
             "speed": 1.875,
             "speed_creep_mul": 1.0,
             "supply": 6.0,
-            "tech_alias": [52],
+            "tech_alias": [
+                52
+            ],
             "time": 42.0,
             "unit_alias": 52,
             "weapons": [
@@ -19393,18 +20012,21 @@
                 }
             ],
             "accepts_addon": false,
-            "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "armor": 1.0,
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 4,
-            "gas": 50,
+            "gas": 100,
             "id": 692,
             "is_addon": false,
             "is_flying": false,
             "is_structure": false,
             "is_townhall": false,
             "is_worker": false,
-            "max_health": 130.0,
-            "minerals": 125,
+            "max_health": 120.0,
+            "minerals": 150,
             "name": "Cyclone",
             "needs_creep": false,
             "needs_geyser": false,
@@ -19413,25 +20035,20 @@
             "radius": 0.75,
             "sight": 11.0,
             "size": 0,
-            "speed": 2.8125,
+            "speed": 3.375,
             "speed_creep_mul": 1.0,
-            "supply": 2.0,
+            "supply": 3.0,
             "tech_alias": [],
             "time": 720.0,
             "unit_alias": 0,
             "weapons": [
                 {
                     "attacks": 1,
-                    "bonuses": [
-                        {
-                            "against": "Mechanical",
-                            "damage": 3.0
-                        }
-                    ],
-                    "cooldown": 0.81201171875,
-                    "damage_per_hit": 11.0,
+                    "bonuses": [],
+                    "cooldown": 1.0,
+                    "damage_per_hit": 18.0,
                     "damage_splash": 0,
-                    "range": 6.0,
+                    "range": 5.0,
                     "target_type": "Any"
                 }
             ]
@@ -19462,7 +20079,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 0,
             "id": 693,
             "is_addon": false,
@@ -19515,7 +20135,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 4,
             "gas": 150,
             "id": 694,
@@ -19557,7 +20180,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 4,
             "gas": 100,
             "id": 725,
@@ -19588,7 +20214,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Biological", "Massive"],
+            "attributes": [
+                "Biological",
+                "Massive"
+            ],
             "gas": 200,
             "id": 726,
             "is_addon": false,
@@ -19637,7 +20266,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Biological", "Massive"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Massive"
+            ],
             "gas": 200,
             "id": 727,
             "is_addon": false,
@@ -19677,7 +20310,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Biological", "Massive"],
+            "attributes": [
+                "Biological",
+                "Massive"
+            ],
             "gas": 200,
             "id": 728,
             "is_addon": false,
@@ -19726,7 +20362,11 @@
             ],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Armored", "Biological", "Massive"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Massive"
+            ],
             "gas": 150,
             "id": 729,
             "is_addon": false,
@@ -19770,7 +20410,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Biological", "Psionic"],
+            "attributes": [
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 150,
             "id": 730,
@@ -19838,7 +20481,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Biological", "Psionic"],
+            "attributes": [
+                "Biological",
+                "Psionic"
+            ],
             "cargo_size": 2,
             "gas": 150,
             "id": 731,
@@ -19871,7 +20517,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Structure"],
+            "attributes": [
+                "Light",
+                "Structure"
+            ],
             "gas": 0,
             "id": 732,
             "is_addon": false,
@@ -19920,7 +20569,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "cargo_size": 4,
             "gas": 0,
             "id": 733,
@@ -19965,7 +20617,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "gas": 125,
             "id": 734,
             "is_addon": false,
@@ -19986,7 +20641,9 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": 3.0,
-            "tech_alias": [689],
+            "tech_alias": [
+                689
+            ],
             "time": 64.66796875,
             "unit_alias": 689,
             "weapons": [
@@ -20059,7 +20716,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 0,
             "id": 801,
@@ -20139,7 +20799,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 100,
             "id": 820,
@@ -20200,7 +20863,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "cargo_size": 2,
             "gas": 100,
             "id": 838,
@@ -20260,7 +20926,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "cargo_size": 4,
             "gas": 300,
             "id": 840,
@@ -20314,7 +20983,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "gas": 100,
             "id": 855,
             "is_addon": false,
@@ -20374,7 +21046,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "gas": 125,
             "id": 856,
             "is_addon": false,
@@ -20454,7 +21129,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Mechanical"],
+            "attributes": [
+                "Armored",
+                "Mechanical"
+            ],
             "gas": 350,
             "id": 857,
             "is_addon": false,
@@ -20516,7 +21194,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Biological"],
+            "attributes": [
+                "Light",
+                "Biological"
+            ],
             "gas": 37,
             "id": 858,
             "is_addon": false,
@@ -20584,7 +21265,9 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 0,
             "id": 860,
             "is_addon": false,
@@ -20623,7 +21306,11 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 891,
             "is_addon": false,
@@ -20652,7 +21339,9 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 2.0,
-            "attributes": ["Biological"],
+            "attributes": [
+                "Biological"
+            ],
             "gas": 100,
             "id": 892,
             "is_addon": false,
@@ -20720,7 +21409,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "cargo_capacity": 8,
             "gas": 0,
             "id": 893,
@@ -20742,7 +21434,9 @@
             "speed": 0.9140625,
             "speed_creep_mul": 1.0,
             "supply": -8.0,
-            "tech_alias": [106],
+            "tech_alias": [
+                106
+            ],
             "time": 336.015625,
             "unit_alias": 0,
             "weapons": []
@@ -20751,7 +21445,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 894,
             "is_addon": false,
@@ -20774,7 +21471,10 @@
             "size": 0,
             "speed_creep_mul": 1.0,
             "supply": -8.0,
-            "tech_alias": [60, 60],
+            "tech_alias": [
+                60,
+                60
+            ],
             "time": 0.0,
             "unit_alias": 60,
             "weapons": []
@@ -20796,7 +21496,11 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical", "Structure"],
+            "attributes": [
+                "Light",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 895,
             "is_addon": false,
@@ -20825,7 +21529,7 @@
         {
             "abilities": [
                 {
-                    "ability": 4111
+                    "ability": 4113
                 },
                 {
                     "ability": 1
@@ -20833,7 +21537,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 1910,
             "is_addon": false,
@@ -20842,8 +21549,8 @@
             "is_townhall": false,
             "is_worker": false,
             "max_energy": 100.0,
-            "max_health": 150.0,
-            "max_shield": 150.0,
+            "max_health": 200.0,
+            "max_shield": 200.0,
             "minerals": 100,
             "name": "ShieldBattery",
             "needs_creep": false,
@@ -20873,7 +21580,10 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical"],
+            "attributes": [
+                "Light",
+                "Mechanical"
+            ],
             "detection_range": 13.75,
             "gas": 75,
             "id": 1911,
@@ -20921,7 +21631,10 @@
             ],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological"],
+            "attributes": [
+                "Armored",
+                "Biological"
+            ],
             "detection_range": 13.75,
             "gas": 50,
             "id": 1912,
@@ -20945,7 +21658,9 @@
             "speed_creep_mul": 1.0,
             "start_energy": 50,
             "supply": -8.0,
-            "tech_alias": [106],
+            "tech_alias": [
+                106
+            ],
             "time": 12.0,
             "unit_alias": 129,
             "weapons": []
@@ -20964,7 +21679,12 @@
             ],
             "accepts_addon": false,
             "armor": 0.0,
-            "attributes": ["Light", "Mechanical", "Structure", "Summoned"],
+            "attributes": [
+                "Light",
+                "Mechanical",
+                "Structure",
+                "Summoned"
+            ],
             "gas": 0,
             "id": 1913,
             "is_addon": false,
@@ -21024,7 +21744,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Mechanical", "Structure"],
+            "attributes": [
+                "Armored",
+                "Mechanical",
+                "Structure"
+            ],
             "gas": 0,
             "id": 1943,
             "is_addon": false,
@@ -21053,7 +21777,10 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Structure"],
+            "attributes": [
+                "Armored",
+                "Structure"
+            ],
             "gas": 0,
             "id": 1994,
             "is_addon": false,
@@ -21083,7 +21810,11 @@
             "abilities": [],
             "accepts_addon": false,
             "armor": 1.0,
-            "attributes": ["Armored", "Biological", "Structure"],
+            "attributes": [
+                "Armored",
+                "Biological",
+                "Structure"
+            ],
             "gas": 0,
             "id": 1995,
             "is_addon": false,
@@ -22165,11 +22896,20 @@
         },
         {
             "cost": {
+                "gas": 100,
+                "minerals": 100,
+                "time": 1440.0
+            },
+            "id": 298,
+            "name": "Frenzy"
+        },
+        {
+            "cost": {
                 "gas": 150,
                 "minerals": 150,
                 "time": 1760.0
             },
-            "id": 298,
+            "id": 299,
             "name": "MicrobialShroud"
         },
         {
@@ -22178,7 +22918,7 @@
                 "minerals": 50,
                 "time": 1280.0
             },
-            "id": 299,
+            "id": 300,
             "name": "InterferenceMatrix"
         },
         {
@@ -22187,7 +22927,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 300,
+            "id": 301,
             "name": "SunderingImpact"
         },
         {
@@ -22196,7 +22936,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 301,
+            "id": 302,
             "name": "AmplifiedShielding"
         },
         {
@@ -22205,7 +22945,7 @@
                 "minerals": 100,
                 "time": 2240.0
             },
-            "id": 302,
+            "id": 303,
             "name": "PsionicAmplifiers"
         },
         {
@@ -22214,7 +22954,7 @@
                 "minerals": 100,
                 "time": 1280.0
             },
-            "id": 303,
+            "id": 304,
             "name": "SecretedCoating"
         }
     ]

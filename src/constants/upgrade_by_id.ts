@@ -10,8 +10,8 @@ data.Upgrade.forEach((upgrade) => {
 })
 
 console.assert(
-    Object.keys(UPGRADES_BY_ID).length === 123,
-    `${Object.keys(UPGRADES_BY_ID).length} is not 123`
+    Object.keys(UPGRADES_BY_ID).length === 124,
+    `${Object.keys(UPGRADES_BY_ID).length} is not 124`
 )
 
 export default UPGRADES_BY_ID
