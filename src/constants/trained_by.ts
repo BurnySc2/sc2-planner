@@ -257,8 +257,8 @@ for (const itemName in TRAINED_BY) {
 }
  */
 console.assert(
-    Object.keys(TRAINED_BY).length === 116,
-    `${Object.keys(TRAINED_BY).length} is not 116`
+    Object.keys(TRAINED_BY).length === 115,
+    `${Object.keys(TRAINED_BY).length} is not 115`
 )
 
 console.assert(
