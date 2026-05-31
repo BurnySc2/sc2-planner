@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test_frontend:
+    timeout-minutes: 2
     strategy:
       fail-fast: false
       matrix:
@@ -45,6 +46,7 @@ jobs:
         npm run test
 
   test_e2e:
+    timeout-minutes: 2
     strategy:
       fail-fast: false
       matrix:
