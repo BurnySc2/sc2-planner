@@ -265,6 +265,7 @@ class OptimizeLogic {
                         }
                     } while (
                         (validatesConstraints && isBetter) ||
+                        // @ts-ignore is always number
                         initialWorkerCount + addedWorkerCount >=
                             this.optimizeSettings.maximizeWorkers
                     )

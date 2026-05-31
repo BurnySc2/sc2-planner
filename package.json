@@ -42,7 +42,7 @@
         "react-tooltip": "^4.2.21",
         "react-transition-group": "^4.4.2",
         "tailwindcss": "^2.2.16",
-        "typescript": "^4.4.3"
+        "typescript": "^6.0.3"
     },
     "devDependencies": {
         "@playwright/test": "^1.59.1",
