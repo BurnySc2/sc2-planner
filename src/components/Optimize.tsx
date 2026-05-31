@@ -1,18 +1,21 @@
 import { filter, remove, sortedIndexBy } from "lodash"
 import type React from "react"
-import { type ChangeEvent, Component } from "react"
+import type { ChangeEvent } from "react"
+import { Component } from "react"
 import ReactTooltip from "react-tooltip"
 
 import CLASSES from "../constants/classes"
 import type { IAllRaces, ISettingsElement, Log } from "../constants/interfaces"
 import type { GameLogic } from "../game_logic/gamelogic"
+import type {
+    Constraint,
+    ConstraintType,
+} from "../game_logic/optimize"
 import {
-    type Constraint,
-    type ConstraintType,
     getConstraintList,
     setConstraintList,
-    type TimeConstraint,
 } from "../game_logic/optimize"
+import type { TimeConstraint } from "../game_logic/optimize"
 
 interface MyProps {
     race: IAllRaces

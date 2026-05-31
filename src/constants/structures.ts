@@ -1,3 +1,4 @@
+// npx tsx src/constants/structures.ts
 import data from "./data.json"
 import { iconSortStructureFunction } from "./icon_order"
 import type { IDataUnit } from "./interfaces"
@@ -38,8 +39,9 @@ const ignoreStructure = new Set([
     "NydusCanal",
 ])
 
-const STRUCTURES: Array<IDataUnit> = data.Unit.filter((item) => {
-    return !ignoreStructure.has(item.name) && ENABLED_UNITS.has(item.id) && item.is_structure
+// @ts-expect-error
+const STRUCTURES: Array<IDataUnit> = Object.values(data.Units).filter((item) => {
+    return !ignoreStructure.has(item.name) && item.type === "structure"
 })
 
 const STRUCTURE_NAMES_BY_RACE: {
@@ -65,12 +67,12 @@ STRUCTURES.forEach((item) => {
 
 STRUCTURES.sort(iconSortStructureFunction)
 
-console.assert(STRUCTURES.length === 53, `${STRUCTURES.length} is not equal to 53`)
-console.assert(STRUCTURE_NAMES_BY_RACE.terran.size === 21, `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 21`)
+console.assert(STRUCTURES.length === 58, `${STRUCTURES.length} is not equal to 58`)
+console.assert(STRUCTURE_NAMES_BY_RACE.terran.size === 18, `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 18`)
 console.assert(
-    STRUCTURE_NAMES_BY_RACE.protoss.size === 15,
-    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 15`,
+    STRUCTURE_NAMES_BY_RACE.protoss.size === 16,
+    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 16`,
 )
-console.assert(STRUCTURE_NAMES_BY_RACE.zerg.size === 17, `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 17`)
+console.assert(STRUCTURE_NAMES_BY_RACE.zerg.size === 19, `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 19`)
 
 export { STRUCTURE_NAMES_BY_RACE, STRUCTURES }

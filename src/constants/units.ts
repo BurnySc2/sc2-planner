@@ -1,3 +1,4 @@
+// npx tsx src/constants/units.ts
 import data from "./data.json"
 import { iconSortUnitFunction } from "./icon_order"
 import type { IDataUnit } from "./interfaces"
@@ -48,8 +49,9 @@ const ignoreUnits = new Set([
     "OverseerSiegeMode",
 ])
 
-const UNITS: Array<IDataUnit> = data.Unit.filter((item) => {
-    return !ignoreUnits.has(item.name) && ENABLED_UNITS.has(item.id) && !item.is_structure
+// @ts-expect-error
+const UNITS: Array<IDataUnit> = Object.values(data.Units).filter((item) => {
+    return !ignoreUnits.has(item.name) && item.type === "unit"
 })
 
 UNITS.sort(iconSortUnitFunction)
@@ -76,9 +78,9 @@ UNITS.forEach((item) => {
 })
 
 // Should be 77 units in total
-console.assert(UNITS.length === 52, `${UNITS.length} is not equal to 52`)
-console.assert(UNIT_NAMES_BY_RACE.terran.size === 17, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 17`)
+console.assert(UNITS.length === 74, `${UNITS.length} is not equal to 74`)
+console.assert(UNIT_NAMES_BY_RACE.terran.size === 19, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 19`)
 console.assert(UNIT_NAMES_BY_RACE.protoss.size === 18, `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`)
-console.assert(UNIT_NAMES_BY_RACE.zerg.size === 17, `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 17`)
+console.assert(UNIT_NAMES_BY_RACE.zerg.size === 26, `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 26`)
 
 export { UNIT_NAMES_BY_RACE, UNITS }

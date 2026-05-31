@@ -1,5 +1,6 @@
 import type React from "react"
-import { type ChangeEvent, Component } from "react"
+import type { ChangeEvent } from "react"
+import { Component } from "react"
 import ReactTooltip from "react-tooltip"
 
 import CLASSES from "../constants/classes"

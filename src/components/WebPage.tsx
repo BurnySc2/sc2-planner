@@ -1,7 +1,8 @@
 import { cloneDeep, defaults, includes, isEqual, remove } from "lodash"
 import type React from "react"
 import { Component } from "react"
-import { type RouteComponentProps, withRouter } from "react-router-dom"
+import type { RouteComponentProps } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import CLASSES from "../constants/classes"
 import {
     createUrlParams,
@@ -21,7 +22,8 @@ import type {
 } from "../constants/interfaces"
 import type Event from "../game_logic/event"
 import { GameLogic } from "../game_logic/gamelogic"
-import { type ConstraintType, OptimizeLogic } from "../game_logic/optimize"
+import type { ConstraintType } from "../game_logic/optimize"
+import { OptimizeLogic } from "../game_logic/optimize"
 import ActionsSelection from "./ActionSelection"
 import BOArea from "./BOArea"
 import BuildOrder from "./BuildOrder"

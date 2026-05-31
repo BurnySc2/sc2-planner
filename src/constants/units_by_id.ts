@@ -1,12 +1,12 @@
 import data from "./data.json"
 
-import type { IDataUnit } from "./interfaces"
+import { IDataUnit } from "./interfaces"
 
 // Arrange data in a way that it can be accessed by name
 // {name: unit_or_upgrade_data}
-const UNITS_BY_NAME: { [name: string]: IDataUnit } = {}
+const UNITS_BY_ID: { [name: number]: IDataUnit } = {}
 Object.values(data.Units).forEach((unit) => {
-    UNITS_BY_NAME[unit.name] = unit
+    UNITS_BY_ID[unit.id] = unit
 })
 
-export default UNITS_BY_NAME
+export default UNITS_BY_ID
