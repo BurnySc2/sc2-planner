@@ -22,7 +22,7 @@ interface MyProps {
 }
 
 interface MyState {
-    tooltipText: JSX.Element | string
+    tooltipText: React.ReactElement | string
 }
 
 export default class ActionsSelection extends Component<MyProps, MyState> {
@@ -38,14 +38,14 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
     onMouseEnter = (
         _e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-        item: JSX.Element
+        item: React.ReactElement
     ): void => {
         this.setState({
             tooltipText: item,
         })
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const gameLogic: GameLogic = this.props.gamelogic
         // If the build order has more items than the gamelogic was able to parse (e.g. requirement not met of some item), then the insertIndex might be higher than max allowed, = bug
         const infoIndex = Math.min(this.props.insertIndex, gameLogic.unitsCountArray.length - 1)

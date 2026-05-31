@@ -11,7 +11,7 @@ interface MyProps {
 
 interface MyState {
     show: boolean
-    tooltipText: string | JSX.Element
+    tooltipText: string | React.ReactElement
 }
 
 export default class Settings extends Component<MyProps, MyState> {
@@ -44,13 +44,13 @@ export default class Settings extends Component<MyProps, MyState> {
         this.props.updateSettings(itemShortName, newValue)
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: JSX.Element): void => {
+    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: React.ReactElement): void => {
         this.setState({
             tooltipText: item,
         })
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
 

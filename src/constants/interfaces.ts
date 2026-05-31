@@ -1,3 +1,4 @@
+import React from "react"
 import { GameLogic } from "../game_logic/gamelogic"
 
 type IAllRaces = "zerg" | "terran" | "protoss"
@@ -120,7 +121,7 @@ interface Log {
     failure?: string
     undo?: Partial<WebPageState>
     hideCloseButton?: boolean
-    element?: JSX.Element
+    element?: React.ReactElement
     cancel?: () => void
     temporary?: boolean
 }

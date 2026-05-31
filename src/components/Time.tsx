@@ -10,7 +10,7 @@ interface MyProps {
 }
 
 export default class Time extends Component<MyProps> {
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const topTextCss = {
             top: "0%",
             left: "50%",

@@ -8,7 +8,7 @@ import { IButton } from "../constants/interfaces"
 interface MyProps {}
 
 interface MyState {
-    tooltipText: JSX.Element | string
+    tooltipText: React.ReactElement | string
 }
 export default class Footer extends Component<MyProps, MyState> {
     constructor(props: MyProps) {
@@ -90,14 +90,14 @@ export default class Footer extends Component<MyProps, MyState> {
         e:
             | React.MouseEvent<HTMLDivElement, MouseEvent>
             | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-        item: string | JSX.Element
+        item: string | React.ReactElement
     ): void => {
         this.setState({
             tooltipText: item,
         })
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const buttonNames: Array<IButton> = [
             "donate",
             "contribute",

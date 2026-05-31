@@ -21,7 +21,7 @@ export default class RaceSelection extends Component<MyProps> {
         this.props.onClick(e, race)
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const classString = `${CLASSES.raceIcon}`
 
         const allRaces: Array<IAllRaces> = ["protoss", "terran", "zerg"]

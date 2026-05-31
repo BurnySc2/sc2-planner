@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom"
 import WebPage from "./WebPage"
 
 export default class MyRouter extends Component {
-    render(): JSX.Element {
+    render(): React.ReactElement {
         return (
             <div>
                 <Router>

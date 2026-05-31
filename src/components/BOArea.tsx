@@ -47,7 +47,7 @@ export default class BOArea extends Component<MyProps, MyState> {
     quantityMaxes: { [resourceType: string]: number } = {}
     tooltipPrevQuantity: number | undefined
     prevTooltipResourceType: keyof IResourceHistory | undefined
-    tooltipContent: JSX.Element | undefined
+    tooltipContent: React.ReactElement | undefined
 
     /**
      * Receives even items from WebPage.js, then recalcuates the items below
@@ -160,7 +160,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         })
     }
 
-    getFillerElement(width: number, key: string): JSX.Element {
+    getFillerElement(width: number, key: string): React.ReactElement {
         if (width === 0) {
             return <React.Fragment key={key} />
         }
@@ -233,7 +233,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         }
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const widthFactor = +this.props.gamelogic.settings.htmlElementWidthFactor
 
         // Build vertical bars
@@ -274,7 +274,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             })
 
             const verticalBar = verticalCalc.map((row, index1) => {
-                const rowContent: Array<JSX.Element | string> = []
+                const rowContent: Array<React.ReactElement | string> = []
                 row.forEach((item, index2) => {
                     // No need to subtract border width because it is part of the html element
                     const myStyle = {
@@ -369,7 +369,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                       return res
                   }, [])
 
-                  const rowContent: Array<JSX.Element | string> = dimensions.map(
+                  const rowContent: Array<React.ReactElement | string> = dimensions.map(
                       ([width, roundedQuantity, startFrame], index1) => {
                           const height = Math.min(quantityMax, roundedQuantity)
                           const style = {

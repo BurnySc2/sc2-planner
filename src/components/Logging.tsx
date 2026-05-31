@@ -55,9 +55,9 @@ export default class Logging extends Component<MyProps, MyState> {
         this.onClose()
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const log = this.state.log
-        const messages: JSX.Element[] = []
+        const messages: React.ReactElement[] = []
         if (log) {
             if (log.undo !== undefined) {
                 const style = {

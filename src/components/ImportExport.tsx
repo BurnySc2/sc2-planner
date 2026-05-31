@@ -184,9 +184,9 @@ export default class ImportExport extends Component<MyProps> {
     //     return encodedSalt
     // }
 
-    formatListToHtmlLines(list: Array<string>): JSX.Element[] {
+    formatListToHtmlLines(list: Array<string>): React.ReactElement[] {
         // Converts a list of elements to a list where each element gets wrapped into a <div>
-        const htmlStuff: Array<JSX.Element> = []
+        const htmlStuff: Array<React.ReactElement> = []
         list.forEach((item, index) => {
             htmlStuff.push(<div key={`buildOrderItem${item}${index}`}>{item}</div>)
         })
@@ -205,7 +205,7 @@ export default class ImportExport extends Component<MyProps> {
         })
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const classes = CLASSES.dropDown
         const classesExportDropdown = this.state.export ? `visible ${classes}` : `hidden ${classes}`
         const classesImportDropdown = this.state.import ? `visible ${classes}` : `hidden ${classes}`

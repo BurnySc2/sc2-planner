@@ -8,7 +8,7 @@ interface MyProps {
 }
 
 export default class ErrorMessage extends Component<MyProps> {
-    render(): JSX.Element {
+    render(): React.ReactElement {
         return (
             <div>
                 <label className={CLASSES.errorLabel}>{this.props.gamelogic.errorMessage}</label>

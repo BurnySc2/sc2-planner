@@ -25,7 +25,7 @@ interface MyProps {
 
 interface MyState {
     show: boolean
-    tooltipText: string | JSX.Element
+    tooltipText: string | React.ReactElement
     constraintsChangeCount: number
 }
 
@@ -71,7 +71,7 @@ export class Optimize extends Component<MyProps, MyState> {
         this.props.updateOptimize(itemShortName, newValue)
     }
 
-    onMouseEnter = (_e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element): void => {
+    onMouseEnter = (_e: React.MouseEvent<HTMLElement, MouseEvent>, item: React.ReactElement): void => {
         this.setState({
             tooltipText: item,
         })
@@ -189,11 +189,11 @@ export class Optimize extends Component<MyProps, MyState> {
         }
     }
 
-    createInput(item: ISettingsElement, doesHaveConstraints: boolean): JSX.Element {
+    createInput(item: ISettingsElement, doesHaveConstraints: boolean): React.ReactElement {
         if (item.v === undefined) {
             return <></>
         }
-        let inputElement: JSX.Element
+        let inputElement: React.ReactElement
 
         const isTextarea = typeof item.v === "string"
         if (isTextarea) {
@@ -279,7 +279,7 @@ export class Optimize extends Component<MyProps, MyState> {
         )
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
         if (this.state.show) {
@@ -305,7 +305,7 @@ export class Optimize extends Component<MyProps, MyState> {
                 "flex flex-col",
                 index > 0 ? "border-t border-black pt-3" : "",
             ]
-            const applyButton: JSX.Element | undefined = item.apply ? (
+            const applyButton: React.ReactElement | undefined = item.apply ? (
                 <div
                     className={`${CLASSES.dropDownButton} m-2 p-2`}
                     onClick={(e) => this.onApply(e, item.variableName)}

@@ -84,7 +84,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         )
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         // Convert build order items to div elements
 
         // Hide element if no build order items are present
@@ -121,7 +121,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             return classes.join(" ")
         }
 
-        const buildOrderItems: JSX.Element[] = []
+        const buildOrderItems: React.ReactElement[] = []
         let separatorClass =
             this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
         buildOrderItems.push(

@@ -22,7 +22,7 @@ interface MyProps {
 interface MyState {
     show: boolean
     canStop: boolean
-    tooltipText: string | JSX.Element
+    tooltipText: string | React.ReactElement
     startAtSpeach: boolean
 }
 
@@ -96,7 +96,7 @@ export default class Read extends Component<MyProps, MyState> {
         })
     }
 
-    onMouseEnter = (_e: React.MouseEvent<HTMLElement, MouseEvent>, item: JSX.Element): void => {
+    onMouseEnter = (_e: React.MouseEvent<HTMLElement, MouseEvent>, item: React.ReactElement): void => {
         this.setState({
             tooltipText: item,
         })
@@ -272,7 +272,7 @@ export default class Read extends Component<MyProps, MyState> {
             }
         }
 
-        const shownInstructions: JSX.Element[][] = []
+        const shownInstructions: React.ReactElement[][] = []
         instructionList.forEach((instruction, i) => {
             const events = instruction.events
             const counts = countBy(events, "name")
@@ -298,7 +298,7 @@ export default class Read extends Component<MyProps, MyState> {
             this.speak(text, instruction.when, instruction.isLastMessage)
 
             // Prepare logs
-            const eventElements: JSX.Element[] = uniqItems.map((event, j) => {
+            const eventElements: React.ReactElement[] = uniqItems.map((event, j) => {
                 const count = counts[event.name]
                 const image = getImageOfItem(event)
                 const element = <img key={`read_icon_${i}_${j}`} src={image} alt={event.name} />
@@ -425,7 +425,7 @@ export default class Read extends Component<MyProps, MyState> {
         })
     }
 
-    render(): JSX.Element {
+    render(): React.ReactElement {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
         const stopVisibility = `${CLASSES.buttons} ${
