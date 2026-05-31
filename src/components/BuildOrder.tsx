@@ -5,7 +5,7 @@ import { includes } from "lodash"
 import { getImageOfItem } from "../constants/helper"
 import { GameLogic } from "../game_logic/gamelogic"
 import Event from "../game_logic/event"
-import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd"
+import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd"
 import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
 
 // A function to help us with reordering the result
