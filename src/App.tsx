@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+// @ts-ignore
 import "./index.css"
 
 import MyRouter from "./components/MyRouter"

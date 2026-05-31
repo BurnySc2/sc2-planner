@@ -39,7 +39,7 @@ export default class Footer extends Component<MyProps, MyState> {
             url: "",
             tooltip: (
                 <div>
-                    <div>Discord: BuRny#8752</div>
+                    <div>Discord: burnysc2</div>
                     <div>Twitter: https://twitter.com/Buuurny</div>
                     <div>Reddit: BurnySc2</div>
                 </div>
