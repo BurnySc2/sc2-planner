@@ -90,7 +90,7 @@ export default class Logging extends Component<MyProps, MyState> {
                 if (log[name] !== undefined) {
                     messages.push(
                         <div key={name} className={`ml-2 text-${color}-800`}>
-                            {icon} {log[name]}
+                            {`${icon} ${log[name]}`}
                         </div>
                     )
                 }
