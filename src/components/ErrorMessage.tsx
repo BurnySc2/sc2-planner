@@ -1,7 +1,8 @@
-import React, { Component } from "react"
+import type React from "react"
+import { Component } from "react"
 
 import CLASSES from "../constants/classes"
-import { GameLogic } from "../game_logic/gamelogic"
+import type { GameLogic } from "../game_logic/gamelogic"
 
 interface MyProps {
     gamelogic: GameLogic

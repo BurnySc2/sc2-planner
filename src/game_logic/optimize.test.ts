@@ -1,6 +1,6 @@
+import type { IBuildOrderElement } from "../constants/interfaces"
 import { GameLogic } from "./gamelogic"
 import { OptimizeLogic } from "./optimize"
-import { IBuildOrderElement } from "../constants/interfaces"
 
 test("Optimize workers", async () => {
     const bo: IBuildOrderElement[] = [
@@ -40,9 +40,7 @@ test("Optimize nexus chronos", async () => {
     logic.runUntilEnd()
 
     const optimize = new OptimizeLogic(logic.race, [], [], () => null)
-    const [state, _log] = await optimize.optimizeBuildOrder(logic, logic.bo, [
-        "maximizeNexusChronos",
-    ])
+    const [state, _log] = await optimize.optimizeBuildOrder(logic, logic.bo, ["maximizeNexusChronos"])
 
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)

@@ -1,136 +1,117 @@
-import { CREATION_ABILITIES, MORPH_ABILITIES } from "./creation_abilities"
-import UNITS_BY_ID from "./units_by_id"
-import UPGRADE_BY_ID from "./upgrade_by_id"
-import { ITrainedBy } from "./interfaces"
-import { sortBy, uniq, without, pull } from "lodash"
-
+import { pull, sortBy, uniq, without } from "lodash"
 import data from "./data.json"
+import type { ITrainedBy } from "./interfaces"
 
 const TRAINED_BY: ITrainedBy = {}
 
-data.Unit.forEach((trainingUnit) => {
-    trainingUnit.abilities.forEach(
-        // TODO Fix me
-        // @ts-ignore
-        (ability: {
-            ability: number
-            requirements: Array<{
-                upgrade: number
-                building: number
-                addon: number
-            }>
-        }) => {
-            const resultingUnitId = CREATION_ABILITIES[ability.ability]
-            const resultingUnit = UNITS_BY_ID[resultingUnitId]
-            // Check if ability id maps to a train / build command
-            if (resultingUnit !== undefined) {
-                let requiredStructureId = null
-                let requiredUpgradeId = null
-                let requiresUnits = null
-                const requires = []
-                let requiresTechlab = false
-                let morphCostMinerals = 0
-                let morphCostGas = 0
-                let morphCostSupply = 0
-                const isMorph = MORPH_ABILITIES.has(ability.ability)
-                if (isMorph) {
-                    const morphes: { [resultingUnit: string]: string[] } = {
-                        Baneling: ["Zergling"],
-                        Ravager: ["Roach"],
-                        Overseer: ["Overlord"],
-                        LurkerMP: ["Hydralisk"],
-                        BroodLord: ["Corruptor"],
-                        Archon: ["HighTemplar", "DarkTemplar"],
-                    }
-                    requiresUnits = morphes[resultingUnit.name]
-                    morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
-                    morphCostGas = resultingUnit.gas - trainingUnit.gas
-                    morphCostSupply = resultingUnit.supply - trainingUnit.supply
-                    if (morphes[resultingUnit.name]) {
-                        requires.push(...morphes[resultingUnit.name])
-                    }
-                }
-                const isFreeMorph =
-                    resultingUnit.minerals === trainingUnit.minerals &&
-                    resultingUnit.gas === trainingUnit.gas &&
-                    resultingUnit.is_structure === trainingUnit.is_structure
-                // Ignore free morphs, e.g. hellbat to hellion is a free morph but adds the armory requirement for hellion
-                if (isFreeMorph) {
-                    return
-                }
-                const consumesUnit =
-                    resultingUnit.race === "Zerg" &&
-                    resultingUnit.is_structure &&
-                    !trainingUnit.is_structure
-                if (consumesUnit) {
-                    morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
-                    morphCostGas = resultingUnit.gas - trainingUnit.gas
-                    morphCostSupply = resultingUnit.supply
-                }
-                if (Array.isArray(ability.requirements)) {
-                    for (const requirement of ability.requirements) {
-                        if (requirement.upgrade) {
-                            requiredUpgradeId = requirement.upgrade
-                        }
-                        if (requirement.building) {
-                            requiredStructureId = requirement.building
-                        }
-                        if (requirement.addon) {
-                            requiresTechlab = true
-                        }
-                    }
-                }
-
-                const requiredStructure =
-                    requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
-                if (requiredStructure) {
-                    requires.push(requiredStructure)
-                }
-                const requiredUpgrade =
-                    requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
-                if (requiredUpgrade) {
-                    requires.push(requiredUpgrade)
-                }
-
-                if (requiresTechlab) {
-                    requires.push(trainingUnit.name + "TechLab")
-                } else {
-                    requires.push(trainingUnit.name)
-                }
-
-                // If it doesnt exist: create
-                if (TRAINED_BY[resultingUnit.name] === undefined) {
-                    TRAINED_BY[resultingUnit.name] = {
-                        trainedBy: new Set([trainingUnit.name]),
-                        requiresTechlab,
-                        requiresUnits,
-                        requires: [requires],
-                        isMorph,
-                        morphCostMinerals,
-                        morphCostGas,
-                        morphCostSupply,
-                        consumesUnit,
-                        requiredStructure: null,
-                        requiredUpgrade: null,
-                    }
-                } else {
-                    // Entry already exists, add training unit to object of 'trainedBy' and update requirement
-                    TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
-                    TRAINED_BY[resultingUnit.name].requires[0].push(...requires)
-                }
-                TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name]
-                    .requiredStructure
-                    ? requiredStructure
-                    : TRAINED_BY[resultingUnit.name].requiredStructure
-
-                TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[resultingUnit.name]
-                    .requiredUpgrade
-                    ? requiredUpgrade
-                    : TRAINED_BY[resultingUnit.name].requiredUpgrade
+function insertEntry(unit_info: data.Units[string]) {
+    const resultingUnit = UNITS_BY_ID[resultingUnitId]
+    // Check if ability id maps to a train / build command
+    if (resultingUnit !== undefined) {
+        let requiredStructureId = null
+        let requiredUpgradeId = null
+        let requiresUnits = null
+        const requires = []
+        let requiresTechlab = false
+        let morphCostMinerals = 0
+        let morphCostGas = 0
+        let morphCostSupply = 0
+        const isMorph = MORPH_ABILITIES.has(ability.ability)
+        if (isMorph) {
+            const morphes: { [resultingUnit: string]: string[] } = {
+                Baneling: ["Zergling"],
+                Ravager: ["Roach"],
+                Overseer: ["Overlord"],
+                LurkerMP: ["Hydralisk"],
+                BroodLord: ["Corruptor"],
+                Archon: ["HighTemplar", "DarkTemplar"],
+            }
+            requiresUnits = morphes[resultingUnit.name]
+            morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
+            morphCostGas = resultingUnit.gas - trainingUnit.gas
+            morphCostSupply = resultingUnit.supply - trainingUnit.supply
+            if (morphes[resultingUnit.name]) {
+                requires.push(...morphes[resultingUnit.name])
             }
         }
-    )
-})
+        const isFreeMorph =
+            resultingUnit.minerals === trainingUnit.minerals &&
+            resultingUnit.gas === trainingUnit.gas &&
+            resultingUnit.is_structure === trainingUnit.is_structure
+        // Ignore free morphs, e.g. hellbat to hellion is a free morph but adds the armory requirement for hellion
+        if (isFreeMorph) {
+            return
+        }
+        const consumesUnit = resultingUnit.race === "Zerg" && resultingUnit.is_structure && !trainingUnit.is_structure
+        if (consumesUnit) {
+            morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
+            morphCostGas = resultingUnit.gas - trainingUnit.gas
+            morphCostSupply = resultingUnit.supply
+        }
+        if (Array.isArray(ability.requirements)) {
+            for (const requirement of ability.requirements) {
+                if (requirement.upgrade) {
+                    requiredUpgradeId = requirement.upgrade
+                }
+                if (requirement.building) {
+                    requiredStructureId = requirement.building
+                }
+                if (requirement.addon) {
+                    requiresTechlab = true
+                }
+            }
+        }
+
+        const requiredStructure = requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
+        if (requiredStructure) {
+            requires.push(requiredStructure)
+        }
+        const requiredUpgrade = requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
+        if (requiredUpgrade) {
+            requires.push(requiredUpgrade)
+        }
+
+        if (requiresTechlab) {
+            requires.push(trainingUnit.name + "TechLab")
+        } else {
+            requires.push(trainingUnit.name)
+        }
+
+        // If it doesnt exist: create
+        if (TRAINED_BY[resultingUnit.name] === undefined) {
+            TRAINED_BY[resultingUnit.name] = {
+                trainedBy: new Set([trainingUnit.name]),
+                requiresTechlab,
+                requiresUnits,
+                requires: [requires],
+                isMorph,
+                morphCostMinerals,
+                morphCostGas,
+                morphCostSupply,
+                consumesUnit,
+                requiredStructure: null,
+                requiredUpgrade: null,
+            }
+        } else {
+            // Entry already exists, add training unit to object of 'trainedBy' and update requirement
+            TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
+            TRAINED_BY[resultingUnit.name].requires[0].push(...requires)
+        }
+        TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name].requiredStructure
+            ? requiredStructure
+            : TRAINED_BY[resultingUnit.name].requiredStructure
+
+        TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[resultingUnit.name].requiredUpgrade
+            ? requiredUpgrade
+            : TRAINED_BY[resultingUnit.name].requiredUpgrade
+    }
+}
+
+for (const [unit_name, unit_info] of Object.entries(data.Units)) {
+    unit_info.morphsto?.forEach((u) => {
+        console.log(u)
+    })
+}
 
 // Hardcoded fixes
 for (const itemName in TRAINED_BY) {
@@ -239,8 +220,8 @@ for (const itemName in TRAINED_BY) {
     trainInfo.requires = trainInfo.requires.map((requires) =>
         sortBy(
             without(uniq(requires), "Larva", "OverlordTransport"), // Hardcoded fix to remove requirements impossible to match from the bo
-            (name) => -requirementPriority.indexOf(name)
-        )
+            (name) => -requirementPriority.indexOf(name),
+        ),
     )
 }
 
@@ -256,14 +237,11 @@ for (const itemName in TRAINED_BY) {
     consumesUnit: false
 }
  */
-console.assert(
-    Object.keys(TRAINED_BY).length === 115,
-    `${Object.keys(TRAINED_BY).length} is not 115`
-)
+console.assert(Object.keys(TRAINED_BY).length === 115, `${Object.keys(TRAINED_BY).length} is not 115`)
 
 console.assert(
     TRAINED_BY["Zergling"].requiredStructure === "SpawningPool",
-    `${TRAINED_BY["Zergling"].requiredStructure}`
+    `${TRAINED_BY["Zergling"].requiredStructure}`,
 )
 
 export default TRAINED_BY

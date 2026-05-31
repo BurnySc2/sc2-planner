@@ -1,14 +1,13 @@
-import ENABLED_UPGRADES from "./enabled_upgrades"
 import data from "./data.json"
-import { IDataUpgrade, IAllRaces } from "./interfaces"
 import { iconSortUpgradeFunction } from "./icon_order"
+import type { IAllRaces, IDataUpgrade } from "./interfaces"
 
 // Maps ability id to upgrade id
 const ABILITY_TO_UPGRADES: { [name: number]: number } = {}
 
 data.Ability.forEach(
     // TODO Fix me
-    // @ts-ignore
+    // @ts-expect-error
     (ability: { ability: number; id: number; target: { Research: { upgrade: number } } }) => {
         const target = ability.target
         if (typeof target !== "string") {
@@ -17,7 +16,7 @@ data.Ability.forEach(
                 ABILITY_TO_UPGRADES[ability.id] = research.upgrade
             }
         }
-    }
+    },
 )
 
 // Maps upgrade_id to upgrade_data
@@ -84,4 +83,4 @@ UPGRADES.forEach((item) => {
 console.assert(Object.keys(UPGRADES).length === 89, `${Object.keys(UPGRADES).length} is not 89`)
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the upgrade is available from an ability
-export { UPGRADES, UPGRADE_NAMES_BY_RACE }
+export { UPGRADE_NAMES_BY_RACE, UPGRADES }

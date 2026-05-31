@@ -1,23 +1,16 @@
-import UNITS_BY_NAME from "../constants/units_by_name"
-import TRAINED_BY from "../constants/trained_by"
-import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
-import RESEARCHED_BY from "../constants/researched_by"
+import { cloneDeep, find, minBy, remove } from "lodash"
 import { BO_ITEMS, supplyUnitNameByRace } from "../constants/bo_items"
-import { incomeMinerals, incomeVespene } from "./income"
-
-import { cloneDeep, minBy, find, remove } from "lodash"
-import Unit from "./unit"
+import { defaultOptimizeSettings, defaultSettings } from "../constants/helper"
+import type { IAllRaces, IBuildOrderElement, ICost, IResourceHistory, ISettingsElement } from "../constants/interfaces"
+import RESEARCHED_BY from "../constants/researched_by"
+import TRAINED_BY from "../constants/trained_by"
+import UNITS_BY_NAME from "../constants/units_by_name"
+import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
 import Event from "./event"
-import Task from "./task"
 import executeAction from "./execute_action"
-import { defaultSettings, defaultOptimizeSettings } from "../constants/helper"
-import {
-    IBuildOrderElement,
-    ISettingsElement,
-    ICost,
-    IAllRaces,
-    IResourceHistory,
-} from "../constants/interfaces"
+import { incomeMinerals, incomeVespene } from "./income"
+import Task from "./task"
+import Unit from "./unit"
 
 /** Logic of this file:
 Each frame
@@ -80,7 +73,7 @@ class GameLogic {
         race: IAllRaces = "terran",
         bo: Array<IBuildOrderElement> = [],
         customSettings: Array<ISettingsElement> = [],
-        customOptimizeSettings: Array<ISettingsElement> = []
+        customOptimizeSettings: Array<ISettingsElement> = [],
     ) {
         this.race = race
         this.bo = bo
@@ -266,11 +259,7 @@ class GameLogic {
         for (let i = 0; i < 12; i++) {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
-            const workerStartDelayTask = new Task(
-                22.4 * +this.settings.workerStartDelay,
-                this.frame,
-                this.supplyUsed
-            )
+            const workerStartDelayTask = new Task(22.4 * +this.settings.workerStartDelay, this.frame, this.supplyUsed)
             workerStartDelayTask.addMineralWorker = true
             unit.addTask(this, workerStartDelayTask)
             this.units.add(unit)
@@ -626,10 +615,7 @@ class GameLogic {
             }
 
             // If target is an addon but building structure already has addon: skip
-            if (
-                (unit.name.includes("TechLab") || unit.name.includes("Reactor")) &&
-                trainerUnit.hasAddon()
-            ) {
+            if ((unit.name.includes("TechLab") || unit.name.includes("Reactor")) && trainerUnit.hasAddon()) {
                 this.errorMessage = `Could not find structure without addon to build '${unit.name}'.`
                 continue
             }
@@ -637,8 +623,7 @@ class GameLogic {
             // Loop over all idle units and check if they match unit type
 
             const trainerCanTrainThisUnit =
-                trainInfo.trainedBy.has(trainerUnit.name) &&
-                (!trainInfo.requiresTechlab || trainerUnit.hasTechlab)
+                trainInfo.trainedBy.has(trainerUnit.name) && (!trainInfo.requiresTechlab || trainerUnit.hasTechlab)
             const trainerCanTrainThroughReactor =
                 trainInfo.trainedBy.has(trainerUnit.name) &&
                 !trainInfo.requiresTechlab &&
@@ -657,11 +642,7 @@ class GameLogic {
                 }
             }
 
-            if (
-                !trainerCanTrainThisUnit &&
-                !trainerCanTrainThroughReactor &&
-                !trainerCanTrainThroughLarva
-            ) {
+            if (!trainerCanTrainThisUnit && !trainerCanTrainThroughReactor && !trainerCanTrainThroughLarva) {
                 this.errorMessage = `Could not find unit to produce '${unit.name}'.`
                 if (trainInfo.consumesUnit) {
                     if (unit.type === "structure") {
@@ -703,7 +684,7 @@ class GameLogic {
                 const workerMovingToConstructionSite = new Task(
                     +this.settings.workerBuildDelay * 22.4,
                     this.frame,
-                    this.supplyUsed
+                    this.supplyUsed,
                 )
                 trainerUnit.addTask(this, workerMovingToConstructionSite)
                 buildStartDelay = +this.settings.workerBuildDelay * 22.4
@@ -715,12 +696,7 @@ class GameLogic {
 
             const taskId = this.getEventId()
             // Create the new task
-            const newTask = new Task(
-                buildTime,
-                this.frame + buildStartDelay,
-                this.supplyUsed,
-                taskId
-            )
+            const newTask = new Task(buildTime, this.frame + buildStartDelay, this.supplyUsed, taskId)
             newTask.morphToUnit = morphCondition || trainInfo.consumesUnit ? unit.name : null
             if (newTask.morphToUnit === null) {
                 if (unit.type === "worker") {
@@ -739,23 +715,13 @@ class GameLogic {
                 // Add the warpgate recover time which can be sped up through chrono
                 trainerUnit.addTask(
                     this,
-                    new Task(
-                        this.warpgateRecoverTime(unit.name),
-                        this.frame,
-                        this.supplyUsed,
-                        taskId
-                    ),
+                    new Task(this.warpgateRecoverTime(unit.name), this.frame, this.supplyUsed, taskId),
                     trainerCanTrainThroughReactor,
-                    trainerCanTrainThroughLarva
+                    trainerCanTrainThroughLarva,
                 )
             } else {
                 // Add normal task to unit, add to reactor if unit has reactor, add to larva if unit has larva
-                trainerUnit.addTask(
-                    this,
-                    newTask,
-                    trainerCanTrainThroughReactor,
-                    trainerCanTrainThroughLarva
-                )
+                trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
             }
 
             // Create the builder return task
@@ -764,7 +730,7 @@ class GameLogic {
                 const workerReturnToMinerals = new Task(
                     +this.settings.workerReturnDelay * 22.4,
                     this.frame,
-                    this.supplyUsed
+                    this.supplyUsed,
                 )
                 workerReturnToMinerals.addMineralWorker = true
                 trainerUnit.addTask(this, workerReturnToMinerals)
@@ -812,10 +778,7 @@ class GameLogic {
                     break
                 }
             }
-            if (
-                !requiredStructureMet &&
-                !this.addRequirements(upgrade.name, researchInfo.requires)
-            ) {
+            if (!requiredStructureMet && !this.addRequirements(upgrade.name, researchInfo.requires)) {
                 return false
             }
         }
@@ -849,13 +812,10 @@ class GameLogic {
         // The unit/structure that is training the target unit or structure
 
         for (const researcherStructure of this.idleUnits) {
-            const structureCanResearchUpgrade = researchInfo.researchedBy.has(
-                researcherStructure.name
-            )
+            const structureCanResearchUpgrade = researchInfo.researchedBy.has(researcherStructure.name)
 
             const canBeResearchedByAddon =
-                researcherStructure.hasTechlab &&
-                researchInfo.researchedBy.has(`${researcherStructure.name}TechLab`)
+                researcherStructure.hasTechlab && researchInfo.researchedBy.has(`${researcherStructure.name}TechLab`)
 
             if (!structureCanResearchUpgrade && !canBeResearchedByAddon) {
                 continue
@@ -923,13 +883,11 @@ class GameLogic {
 
     setCostErrorMessage(cost: ICost, unitName: string): void {
         if (cost.supply > this.supplyLeft) {
-            this.errorMessage = `Missing ${Math.ceil(
-                cost.supply - this.supplyLeft
-            )} supply to produce '${unitName}'.`
+            this.errorMessage = `Missing ${Math.ceil(cost.supply - this.supplyLeft)} supply to produce '${unitName}'.`
             this.requirements = [supplyUnitNameByRace[this.race] as IBuildOrderElement]
         } else if (cost.vespene > this.vespene) {
             this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
-                cost.vespene - this.vespene
+                cost.vespene - this.vespene,
             )} vespene.`
             if (this.workersVespene === 0) {
                 this.requirements = [
@@ -941,7 +899,7 @@ class GameLogic {
             }
         } else if (cost.minerals > this.minerals) {
             this.errorMessage = `Unable to afford '${unitName}', missing ${Math.ceil(
-                cost.minerals - this.minerals
+                cost.minerals - this.minerals,
             )} minerals.`
         }
     }
@@ -1021,29 +979,26 @@ class GameLogic {
         let minerals =
             mineralIncomeCache[
                 // TODO Fix me: array[number] cannot be used as index type
-                // @ts-ignore
+                // @ts-expect-error
                 [this.workersMinerals, this.baseCount, this.muleCount]
             ]
         if (minerals === undefined) {
             minerals =
-                incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) /
-                +this.settings.incomeFactor
+                incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) / +this.settings.incomeFactor
             mineralIncomeCache[
                 // TODO Fix me: array[number] cannot be used as index type
-                // @ts-ignore
+                // @ts-expect-error
                 [this.workersMinerals, this.baseCount, this.muleCount]
             ] = minerals
         }
 
         // TODO Fix me: array[number] cannot be used as index type
-        // @ts-ignore
+        // @ts-expect-error
         let vespene = vespeneIncomeCache[[this.workersVespene, this.gasCount]]
         if (vespene === undefined) {
-            vespene =
-                incomeVespene(this.workersVespene, this.gasCount, this.baseCount) /
-                +this.settings.incomeFactor
+            vespene = incomeVespene(this.workersVespene, this.gasCount, this.baseCount) / +this.settings.incomeFactor
             // TODO Fix me: array[number] cannot be used as index type
-            // @ts-ignore
+            // @ts-expect-error
             vespeneIncomeCache[[this.workersVespene, this.gasCount]] = vespene
         }
         this.minerals += minerals
@@ -1087,15 +1042,12 @@ class GameLogic {
         return isMorphedFromAnotherUnit || isArchonMaterial || isSupplyProvider
     }
 
-    static simulatedBuildOrder(
-        prevGamelogic: GameLogic,
-        buildOrder: Array<IBuildOrderElement>
-    ): GameLogic {
+    static simulatedBuildOrder(prevGamelogic: GameLogic, buildOrder: Array<IBuildOrderElement>): GameLogic {
         const gamelogic = new GameLogic(
             prevGamelogic.race,
             buildOrder,
             prevGamelogic.customSettings,
-            prevGamelogic.customOptimizeSettings
+            prevGamelogic.customOptimizeSettings,
         )
         gamelogic.setStart()
         gamelogic.runUntilEnd()
@@ -1103,11 +1055,7 @@ class GameLogic {
         return gamelogic
     }
 
-    static addItemToBO(
-        prevGamelogic: GameLogic,
-        item: IBuildOrderElement,
-        insertIndex: number
-    ): [GameLogic, number] {
+    static addItemToBO(prevGamelogic: GameLogic, item: IBuildOrderElement, insertIndex: number): [GameLogic, number] {
         const bo = prevGamelogic.bo
         const initialBOLength = bo.length
 

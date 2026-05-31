@@ -1,4 +1,4 @@
-import { IDataUnit, IDataUpgrade } from "./interfaces"
+import type { IDataUnit, IDataUpgrade } from "./interfaces"
 
 const unitPriority: { [name: string]: number } = {
     // Protoss
@@ -250,4 +250,4 @@ const iconSortUpgradeFunction = (item1: IDataUpgrade, item2: IDataUpgrade): numb
     return 0
 }
 
-export { iconSortUnitFunction, iconSortStructureFunction, iconSortUpgradeFunction }
+export { iconSortStructureFunction, iconSortUnitFunction, iconSortUpgradeFunction }

@@ -1,7 +1,6 @@
-import ENABLED_UNITS from "./enabled_units"
 import data from "./data.json"
-import { IDataUnit } from "./interfaces"
 import { iconSortUnitFunction } from "./icon_order"
+import type { IDataUnit } from "./interfaces"
 
 /**
  * This file contains all enabled units
@@ -78,17 +77,8 @@ UNITS.forEach((item) => {
 
 // Should be 77 units in total
 console.assert(UNITS.length === 52, `${UNITS.length} is not equal to 52`)
-console.assert(
-    UNIT_NAMES_BY_RACE.terran.size === 17,
-    `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 17`
-)
-console.assert(
-    UNIT_NAMES_BY_RACE.protoss.size === 18,
-    `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`
-)
-console.assert(
-    UNIT_NAMES_BY_RACE.zerg.size === 17,
-    `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 17`
-)
+console.assert(UNIT_NAMES_BY_RACE.terran.size === 17, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 17`)
+console.assert(UNIT_NAMES_BY_RACE.protoss.size === 18, `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`)
+console.assert(UNIT_NAMES_BY_RACE.zerg.size === 17, `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 17`)
 
-export { UNITS, UNIT_NAMES_BY_RACE }
+export { UNIT_NAMES_BY_RACE, UNITS }

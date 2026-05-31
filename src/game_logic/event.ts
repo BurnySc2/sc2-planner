@@ -17,15 +17,7 @@ class Event {
      * @param {Number} id - The event id, should match the index of the build order element
      * @param {Number} supply - The supply the simulation was at, at 'event.start'
      */
-    constructor(
-        name: string,
-        imageSource: string,
-        type: string,
-        start: number,
-        end: number,
-        id = 0,
-        supply = -1
-    ) {
+    constructor(name: string, imageSource: string, type: string, start: number, end: number, id = 0, supply = -1) {
         this.name = name
         // Source path of image, not the image itself
         this.imageSource = imageSource

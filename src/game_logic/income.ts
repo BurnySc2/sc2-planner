@@ -71,8 +71,7 @@ const incomeVespenePerGeyser = (workers: number): number => {
     }
     const gas_per_trip = 4
     const seconds_per_trip_close_gas = [6.3, 2.9, 2.07]
-    const seconds_per_trip =
-        seconds_per_trip_close_gas[Math.min(seconds_per_trip_close_gas.length, workers) - 1]
+    const seconds_per_trip = seconds_per_trip_close_gas[Math.min(seconds_per_trip_close_gas.length, workers) - 1]
     return 1.4 * gas_per_trip * (1 / seconds_per_trip)
 }
 
@@ -88,9 +87,7 @@ const incomeVespene = (workers: number, geysers: number, baseCount: number): num
     const workersLeft = closeDistanceWorkers % closeGeysers
     const closeDistanceIncome =
         closeGeysers * incomeVespenePerGeyser(minWorkersPerGeyser) +
-        workersLeft *
-            (incomeVespenePerGeyser(minWorkersPerGeyser + 1) -
-                incomeVespenePerGeyser(minWorkersPerGeyser))
+        workersLeft * (incomeVespenePerGeyser(minWorkersPerGeyser + 1) - incomeVespenePerGeyser(minWorkersPerGeyser))
 
     let longDistanceIncome = 0
     workers -= closeDistanceWorkers
@@ -102,8 +99,7 @@ const incomeVespene = (workers: number, geysers: number, baseCount: number): num
             const longDistanceWorkers = Math.min(Math.floor(miningRatio * 3), workers)
             if (longDistanceWorkers > 0) {
                 workers -= longDistanceWorkers
-                longDistanceIncome +=
-                    (incomeVespenePerGeyser(3) * longDistanceWorkers) / 3 / miningRatio
+                longDistanceIncome += (incomeVespenePerGeyser(3) * longDistanceWorkers) / 3 / miningRatio
             }
         }
     }

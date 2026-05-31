@@ -1,15 +1,15 @@
-import React, { Component } from "react"
+import type React from "react"
+import { Component } from "react"
 import ReactTooltip from "react-tooltip"
-
-import RESOURCES from "../constants/resources"
-import { CUSTOMACTIONS } from "../constants/customactions"
 import CLASSES from "../constants/classes"
-import { UNITS, UNIT_NAMES_BY_RACE } from "../constants/units"
-import { STRUCTURES, STRUCTURE_NAMES_BY_RACE } from "../constants/structures"
-import { UPGRADES, UPGRADE_NAMES_BY_RACE } from "../constants/upgrades"
+import { CUSTOMACTIONS } from "../constants/customactions"
 import { getImageOfItem } from "../constants/helper"
+import type { IAllRaces, ICustomAction } from "../constants/interfaces"
+import RESOURCES from "../constants/resources"
+import { STRUCTURE_NAMES_BY_RACE, STRUCTURES } from "../constants/structures"
+import { UNIT_NAMES_BY_RACE, UNITS } from "../constants/units"
+import { UPGRADE_NAMES_BY_RACE, UPGRADES } from "../constants/upgrades"
 import { GameLogic } from "../game_logic/gamelogic"
-import { ICustomAction, IAllRaces } from "../constants/interfaces"
 
 interface MyProps {
     gamelogic: GameLogic
@@ -36,10 +36,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
         }
     }
 
-    onMouseEnter = (
-        _e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-        item: React.ReactElement
-    ): void => {
+    onMouseEnter = (_e: React.MouseEvent<HTMLButtonElement, MouseEvent>, item: React.ReactElement): void => {
         this.setState({
             tooltipText: item,
         })
@@ -60,16 +57,10 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             if (["Minerals", "Vespene"].includes(item.name)) {
                 return true
             }
-            if (
-                this.props.race === "zerg" &&
-                (item.name === "Larva" || item.name === "SupplyZerg")
-            ) {
+            if (this.props.race === "zerg" && (item.name === "Larva" || item.name === "SupplyZerg")) {
                 return true
             }
-            if (
-                this.props.race === "terran" &&
-                (item.name === "SupplyTerran" || item.name === "MULE")
-            ) {
+            if (this.props.race === "terran" && (item.name === "SupplyTerran" || item.name === "MULE")) {
                 return true
             }
             if (this.props.race === "protoss" && item.name === "SupplyProtoss") {
@@ -106,7 +97,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                     e,
                     <div className="flex flex-col">
                         <div>{item.name}</div>
-                    </div>
+                    </div>,
                 )
             }
             const value: number | undefined = unitsCount[item.internal_name]
@@ -149,7 +140,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                         <div>Vespene: {GameLogic.getCost(item.name).vespene}</div>
                         <div>Supply: {GameLogic.getCost(item.name).supply}</div>
                         <div>Train time: {Math.round(item.time / 22.4)}s</div>
-                    </div>
+                    </div>,
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "unit" })
@@ -187,7 +178,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                         <div>Minerals: {GameLogic.getCost(item.name).minerals}</div>
                         <div>Vespene: {GameLogic.getCost(item.name).vespene}</div>
                         <div>Build time: {Math.round(item.time / 22.4)}s</div>
-                    </div>
+                    </div>,
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "structure" })
@@ -224,15 +215,13 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                         <div>Minerals: {item.cost.minerals}</div>
                         <div>Vespene: {item.cost.gas}</div>
                         <div>Research time: {Math.round(item.cost.time / 22.4)}s</div>
-                    </div>
+                    </div>,
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "upgrade" })
             const value = unitsCount[item.name]
             const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
-            const upgradeDisabled = this.props.gamelogic.upgrades.has(item.name)
-                ? "filter grayscale"
-                : ""
+            const upgradeDisabled = this.props.gamelogic.upgrades.has(item.name) ? "filter grayscale" : ""
             return (
                 <button
                     id={item.name}

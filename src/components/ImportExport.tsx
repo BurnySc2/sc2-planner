@@ -1,13 +1,13 @@
-import React, { Component } from "react"
+import type React from "react"
+import { Component } from "react"
 import ReactTooltip from "react-tooltip"
-import { CONVERT_SECONDS_TO_TIME_STRING, createUrlParams } from "../constants/helper"
-
 import CLASSES from "../constants/classes"
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
+import { CONVERT_SECONDS_TO_TIME_STRING, createUrlParams } from "../constants/helper"
+import type { IAllRaces, IBuildOrderElement, ISettingsElement } from "../constants/interfaces"
 import UNITS_BY_NAME from "../constants/units_by_name"
 import UPGRADE_BY_NAME from "../constants/upgrade_by_name"
-import { GameLogic } from "../game_logic/gamelogic"
-import { IAllRaces, IBuildOrderElement, ISettingsElement } from "../constants/interfaces"
-import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
+import type { GameLogic } from "../game_logic/gamelogic"
 
 interface MyProps {
     gamelogic: GameLogic
@@ -17,7 +17,7 @@ interface MyProps {
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined,
         optimizeSettings: ISettingsElement[] | undefined,
-        pushHistory?: boolean
+        pushHistory?: boolean,
     ) => void
 }
 
@@ -72,7 +72,7 @@ export default class ImportExport extends Component<MyProps> {
                 },
                 () => {
                     console.log("fail")
-                }
+                },
             )
 
             this.setState({
@@ -108,7 +108,7 @@ export default class ImportExport extends Component<MyProps> {
             gamelogic.race,
             gamelogic.exportSettings(),
             gamelogic.exportOptimizeSettings(),
-            gamelogic.bo
+            gamelogic.bo,
         )
         return `https://burnysc2.github.io/sc2-planner/${newUrl}`
     }
@@ -116,7 +116,7 @@ export default class ImportExport extends Component<MyProps> {
     generateHumanInstructions(
         templateString = "$time $supply $action",
         includeWorkers = this.state.humanReadableIncludeWorkers,
-        includeActions = this.state.humanReadableIncludeActions
+        includeActions = this.state.humanReadableIncludeActions,
     ): string[] {
         // Returns a human readable build order instruction
         const gamelogic = this.props.gamelogic
@@ -167,8 +167,8 @@ export default class ImportExport extends Component<MyProps> {
                     item.type === "action"
                         ? -1
                         : item.type === "upgrade"
-                        ? UPGRADE_BY_NAME[item.name].id
-                        : UNITS_BY_NAME[item.name].id,
+                          ? UPGRADE_BY_NAME[item.name].id
+                          : UNITS_BY_NAME[item.name].id,
                 type: item.type,
                 supply: item.supply,
                 time: CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4),
@@ -196,11 +196,11 @@ export default class ImportExport extends Component<MyProps> {
     updateTemplateStringTooltip(
         templateString = this.state.templateString,
         workers = this.state.humanReadableIncludeWorkers,
-        actions = this.state.humanReadableIncludeActions
+        actions = this.state.humanReadableIncludeActions,
     ): void {
         this.setState({
             templateStringTooltip: this.formatListToHtmlLines(
-                this.generateHumanInstructions(templateString, workers, actions)
+                this.generateHumanInstructions(templateString, workers, actions),
             ),
         })
     }
@@ -227,7 +227,7 @@ export default class ImportExport extends Component<MyProps> {
                                 this.setState({
                                     templateString: e.target.value,
                                     templateStringTooltip: this.formatListToHtmlLines(
-                                        this.generateHumanInstructions(e.target.value)
+                                        this.generateHumanInstructions(e.target.value),
                                     ),
                                 })
                             }}
@@ -252,11 +252,7 @@ export default class ImportExport extends Component<MyProps> {
                             defaultChecked={this.state.humanReadableIncludeActions}
                             type="checkbox"
                             onChange={(e) => {
-                                this.updateTemplateStringTooltip(
-                                    undefined,
-                                    undefined,
-                                    e.target.checked
-                                )
+                                this.updateTemplateStringTooltip(undefined, undefined, e.target.checked)
                                 this.setState({
                                     humanReadableIncludeActions: e.target.checked,
                                 })
@@ -264,7 +260,7 @@ export default class ImportExport extends Component<MyProps> {
                         />
 
                         <label>Actions</label>
-                    </div>
+                    </div>,
                 )
             }
             return (

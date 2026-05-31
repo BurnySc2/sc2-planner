@@ -1,7 +1,7 @@
-import { IBuildOrderElement } from "./interfaces"
 import { CUSTOMACTIONS } from "./customactions"
-import { UNITS } from "./units"
+import type { IBuildOrderElement } from "./interfaces"
 import { STRUCTURES } from "./structures"
+import { UNITS } from "./units"
 import { UPGRADES } from "./upgrades"
 
 const BO_ITEMS: { [name: string]: IBuildOrderElement } = {}
@@ -60,4 +60,5 @@ console.assert(Object.keys(BO_ITEMS).length === 235, `${Object.keys(BO_ITEMS).le
 
 console.assert(BO_ITEMS["Zergling"].name === "Zergling", `${BO_ITEMS["Zergling"].name}`)
 console.assert(BO_ITEMS["Zergling"].type === "unit", `${BO_ITEMS["Zergling"].type}`)
-export { BO_ITEMS, workerNameByRace, gasBuildingByRace, supplyUnitNameByRace }
+
+export { BO_ITEMS, gasBuildingByRace, supplyUnitNameByRace, workerNameByRace }

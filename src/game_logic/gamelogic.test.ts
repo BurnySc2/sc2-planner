@@ -1,5 +1,5 @@
+import type { IBuildOrderElement } from "../constants/interfaces"
 import { GameLogic } from "./gamelogic"
-import { IBuildOrderElement } from "../constants/interfaces"
 
 test("Get the train time of SCV", () => {
     const logic = new GameLogic("terran")
@@ -328,11 +328,7 @@ test("Test if able lift Barracks from reactor and let factory attach to it", () 
 
 test("Add Battlecruiser with required tech", () => {
     const prevLogic = new GameLogic("terran", [])
-    const [logic, insertedItems] = GameLogic.addItemToBO(
-        prevLogic,
-        { name: "Battlecruiser", type: "unit" },
-        0
-    )
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Battlecruiser", type: "unit" }, 0)
 
     expect(insertedItems).toBe(9)
     expect(logic.units.size).toBe(20)
@@ -342,11 +338,7 @@ test("Add Battlecruiser with required tech", () => {
 
 test("Add BroodLord with required tech", () => {
     const prevLogic = new GameLogic("zerg", [])
-    const [logic, insertedItems] = GameLogic.addItemToBO(
-        prevLogic,
-        { name: "BroodLord", type: "unit" },
-        0
-    )
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "BroodLord", type: "unit" }, 0)
 
     expect(insertedItems).toBe(10)
     expect(logic.units.size).toBe(15)
@@ -359,7 +351,7 @@ test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
     const [logic, insertedItems] = GameLogic.addItemToBO(
         prevLogic,
         { name: "ZergFlyerWeaponsLevel3", type: "upgrade" },
-        0
+        0,
     )
 
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel1")).toBe(true)
@@ -376,7 +368,7 @@ test("Add two Archons with required tech", () => {
     let [logic, insertedItems] = GameLogic.addItemToBO(
         prevLogic,
         { name: "morph_archon_from_ht_ht", type: "action" },
-        0
+        0,
     )
 
     expect(insertedItems).toBe(11)
@@ -386,7 +378,7 @@ test("Add two Archons with required tech", () => {
     ;[logic, insertedItems] = GameLogic.addItemToBO(
         logic,
         { name: "morph_archon_from_ht_ht", type: "action" },
-        insertedItems
+        insertedItems,
     )
 
     expect(insertedItems).toBe(3)

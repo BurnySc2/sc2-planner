@@ -1,5 +1,6 @@
-import React, { Component } from "react"
-// @ts-ignore
+import type React from "react"
+import { Component } from "react"
+// @ts-expect-error
 import "./index.css"
 
 import MyRouter from "./components/MyRouter"

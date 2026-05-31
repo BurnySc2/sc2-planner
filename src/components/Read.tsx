@@ -1,11 +1,11 @@
-import React, { Component } from "react"
+import { countBy, find, last, uniqBy } from "lodash"
+import type React from "react"
+import { Component } from "react"
 import ReactTooltip from "react-tooltip"
-import { find, countBy, uniqBy, last } from "lodash"
-
-import { getImageOfItem } from "../constants/helper"
 import CLASSES from "../constants/classes"
-import { GameLogic, Event } from "../game_logic/gamelogic"
-import { Log } from "../constants/interfaces"
+import { getImageOfItem } from "../constants/helper"
+import type { Log } from "../constants/interfaces"
+import type { Event, GameLogic } from "../game_logic/gamelogic"
 
 interface Instruction {
     events: Event[]
@@ -32,7 +32,7 @@ export default class Read extends Component<MyProps, MyState> {
     lineHandlers: NodeJS.Timeout[]
     startTime: number
     listeningToSpeach: boolean
-    // @ts-ignore
+    // @ts-expect-error
     recognition: SpeechRecognition | undefined
     ingameTime = 0
     /**
@@ -57,7 +57,7 @@ export default class Read extends Component<MyProps, MyState> {
         const grammar = `#JSGF V1.0; grammar colors; public <color> = ${wordList.join(" | ")} ;`
         // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         const anyWindow = window as any
-        // @ts-ignore
+        // @ts-expect-error
         let speechRecognitionList: SpeechGrammarList | undefined
         for (const prefix of ["", "webkit", "moz", "ms", "o"]) {
             const speechRecognition = anyWindow[`${prefix}SpeechRecognition`]
@@ -169,7 +169,7 @@ export default class Read extends Component<MyProps, MyState> {
         this.recognition.start()
         this.listeningToSpeach = true
 
-        // @ts-ignore
+        // @ts-expect-error
         this.recognition.onresult = (event: { results: { transcript }[][] }) => {
             const voice = event.results[0][0].transcript
             let startTime = startAt
@@ -291,7 +291,7 @@ export default class Read extends Component<MyProps, MyState> {
             if (instruction.isLastMessage) {
                 text += ` Then the build order ends at ${this.secondsToTimestamp(
                     Math.floor(boEndTime / 22.4),
-                    "seconds"
+                    "seconds",
                 )}`
             }
 
@@ -313,9 +313,7 @@ export default class Read extends Component<MyProps, MyState> {
             const elements = (
                 <div key={`instruc_${i}`} className={CLASSES.readInstruction}>
                     <div className={CLASSES.readIconGroup}>{eventElements}</div>
-                    <div className={CLASSES.readTime}>
-                        {this.secondsToTimestamp(instruction.ingameWhen)}
-                    </div>
+                    <div className={CLASSES.readTime}>{this.secondsToTimestamp(instruction.ingameWhen)}</div>
                 </div>
             )
             for (
@@ -334,43 +332,33 @@ export default class Read extends Component<MyProps, MyState> {
         this.ingameTime = startAt
         for (let ingameTime = startAt; shownInstructions[ingameTime]; ingameTime++) {
             this.lineHandlers.push(
-                setTimeout(() => {
-                    this.ingameTime = ingameTime
-                    this.props.log({
-                        element: (
-                            <div key="instructions" className={CLASSES.readContainer}>
-                                <div className={CLASSES.readCurrentTime}>
-                                    {this.secondsToTimestamp(ingameTime)}
+                setTimeout(
+                    () => {
+                        this.ingameTime = ingameTime
+                        this.props.log({
+                            element: (
+                                <div key="instructions" className={CLASSES.readContainer}>
+                                    <div className={CLASSES.readCurrentTime}>{this.secondsToTimestamp(ingameTime)}</div>
+                                    <div className={CLASSES.readInstructionList}>{shownInstructions[ingameTime]}</div>
                                 </div>
-                                <div className={CLASSES.readInstructionList}>
-                                    {shownInstructions[ingameTime]}
-                                </div>
-                            </div>
-                        ),
-                        hideCloseButton: true,
-                    })
-                }, (ingameTime - startAt) * 1000)
+                            ),
+                            hideCloseButton: true,
+                        })
+                    },
+                    (ingameTime - startAt) * 1000,
+                ),
             )
         }
-        this.lineHandlers.push(
-            setTimeout(() => this.props.log(), (shownInstructions.length - startAt + 7) * 1000)
-        )
+        this.lineHandlers.push(setTimeout(() => this.props.log(), (shownInstructions.length - startAt + 7) * 1000))
     }
 
     secondsToTimestamp(time: number, secondsText = "s"): string {
         const minutes = Math.floor(time / 60)
         const seconds = time % 60
-        return minutes >= 1
-            ? `${minutes}:${seconds > 9 ? "" : "0"}${seconds}`
-            : `${seconds}${secondsText}`
+        return minutes >= 1 ? `${minutes}:${seconds > 9 ? "" : "0"}${seconds}` : `${seconds}${secondsText}`
     }
 
-    speak(
-        events: string,
-        when = 0,
-        isLastMessage = false,
-        language = "Google UK English Female"
-    ): void {
+    speak(events: string, when = 0, isLastMessage = false, language = "Google UK English Female"): void {
         if (this.synth.speaking) {
             this.stop()
         }
@@ -394,7 +382,7 @@ export default class Read extends Component<MyProps, MyState> {
                         })
                     }
                 }
-            }, when)
+            }, when),
         )
     }
 
@@ -428,14 +416,11 @@ export default class Read extends Component<MyProps, MyState> {
     render(): React.ReactElement {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
-        const stopVisibility = `${CLASSES.buttons} ${
-            this.state.canStop ? "visible" : "hidden"
-        } cursor-pointer`
+        const stopVisibility = `${CLASSES.buttons} ${this.state.canStop ? "visible" : "hidden"} cursor-pointer`
 
-        const mouseEnterFunc =
-            (tooltip: string) => (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-                this.onMouseEnter(e, <div>{tooltip}</div>)
-            }
+        const mouseEnterFunc = (tooltip: string) => (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+            this.onMouseEnter(e, <div>{tooltip}</div>)
+        }
 
         const speachStart = !this.recognition ? (
             ""
@@ -447,9 +432,7 @@ export default class Read extends Component<MyProps, MyState> {
                         className={CLASSES.dropDownLabel}
                         data-tip
                         data-for="readTooltip"
-                        onMouseEnter={mouseEnterFunc(
-                            "Start reading the BO right when you say 'Go' in your microphone"
-                        )}
+                        onMouseEnter={mouseEnterFunc("Start reading the BO right when you say 'Go' in your microphone")}
                     >
                         Start reading when you say &quot;Go&quot;
                         <br />
@@ -470,11 +453,7 @@ export default class Read extends Component<MyProps, MyState> {
         )
 
         const readButton = (
-            <div
-                className={CLASSES.buttons}
-                onMouseEnter={this.showSettings}
-                onMouseLeave={this.hideSettings}
-            >
+            <div className={CLASSES.buttons} onMouseEnter={this.showSettings} onMouseLeave={this.hideSettings}>
                 Read BO&nbsp;&nbsp;▷
                 <div className={classesDropdown}>
                     <div key="readStartTime" className={CLASSES.dropDownContainer}>
@@ -484,7 +463,7 @@ export default class Read extends Component<MyProps, MyState> {
                                 data-tip
                                 data-for="readTooltip"
                                 onMouseEnter={mouseEnterFunc(
-                                    "Time at which the speaker should start describing the bo"
+                                    "Time at which the speaker should start describing the bo",
                                 )}
                             >
                                 Time at which to start
@@ -503,10 +482,7 @@ export default class Read extends Component<MyProps, MyState> {
                     </div>
                     {speachStart}
                     <div className={CLASSES.dropDownContainer}>
-                        <div
-                            className={CLASSES.dropDownWideButton}
-                            onClick={(_e) => this.startReading(this.startTime)}
-                        >
+                        <div className={CLASSES.dropDownWideButton} onClick={(_e) => this.startReading(this.startTime)}>
                             <span className={CLASSES.centeredButton}>Read (Beta)</span>
                         </div>
                     </div>

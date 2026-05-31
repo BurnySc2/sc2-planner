@@ -1,11 +1,12 @@
-import React, { Component } from "react"
+import type React from "react"
+import { Component } from "react"
 import ReactTooltip from "react-tooltip"
 
 import CLASSES from "../constants/classes"
-import { IButton } from "../constants/interfaces"
+import type { IButton } from "../constants/interfaces"
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface MyProps {}
+type MyProps = {}
 
 interface MyState {
     tooltipText: React.ReactElement | string
@@ -54,14 +55,11 @@ export default class Footer extends Component<MyProps, MyState> {
                     <div>Nothing to remove it</div>
                     <div>Ctrl, to remove it and all future occurences</div>
                     <div>Shift, to move it earlier without delaying any other item</div>
-                    <div>
-                        Shift + Ctrl, to move it as early as possible without delaying the end of
-                        the BO
-                    </div>
+                    <div>Shift + Ctrl, to move it as early as possible without delaying the end of the BO</div>
                     <div>Shift + Alt, to move it earlier where it shortens the BO the most</div>
                     <div>
-                        These shortcuts can be used from where you can add new items! It will add
-                        them then try to prepone them.
+                        These shortcuts can be used from where you can add new items! It will add them then try to
+                        prepone them.
                     </div>
                 </div>
             ),
@@ -76,10 +74,9 @@ export default class Footer extends Component<MyProps, MyState> {
                         http://blizzard.com/company/about/legal-faq.html.
                     </div>
                     <div>
-                        ©Blizzard Entertainment, Inc. All rights reserved. Wings of Liberty, Heart
-                        of the Swarm, Legacy of the Void, StarCraft, Brood War, Battle.net, and
-                        Blizzard Entertainment are trademarks or registered trademarks of Blizzard
-                        Entertainment, Inc. in the U.S. and/or other countries.
+                        ©Blizzard Entertainment, Inc. All rights reserved. Wings of Liberty, Heart of the Swarm, Legacy
+                        of the Void, StarCraft, Brood War, Battle.net, and Blizzard Entertainment are trademarks or
+                        registered trademarks of Blizzard Entertainment, Inc. in the U.S. and/or other countries.
                     </div>
                 </div>
             ),
@@ -87,10 +84,8 @@ export default class Footer extends Component<MyProps, MyState> {
     }
 
     onMouseEnter = (
-        e:
-            | React.MouseEvent<HTMLDivElement, MouseEvent>
-            | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-        item: string | React.ReactElement
+        e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        item: string | React.ReactElement,
     ): void => {
         this.setState({
             tooltipText: item,
@@ -98,20 +93,11 @@ export default class Footer extends Component<MyProps, MyState> {
     }
 
     render(): React.ReactElement {
-        const buttonNames: Array<IButton> = [
-            "donate",
-            "contribute",
-            "report_bugs",
-            "contact",
-            "shortcuts",
-            "legal",
-        ]
+        const buttonNames: Array<IButton> = ["donate", "contribute", "report_bugs", "contact", "shortcuts", "legal"]
         const buttons = buttonNames.map((myKey, _index) => {
             const item = this.redirect[myKey]
             const mouseEnterFunc = (
-                e:
-                    | React.MouseEvent<HTMLDivElement, MouseEvent>
-                    | React.MouseEvent<HTMLAnchorElement, MouseEvent>
+                e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
             ) => {
                 this.onMouseEnter(e, item.tooltip)
             }

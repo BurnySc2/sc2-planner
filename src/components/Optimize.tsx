@@ -1,17 +1,18 @@
-import React, { Component, ChangeEvent } from "react"
-import ReactTooltip from "react-tooltip"
 import { filter, remove, sortedIndexBy } from "lodash"
+import type React from "react"
+import { type ChangeEvent, Component } from "react"
+import ReactTooltip from "react-tooltip"
 
 import CLASSES from "../constants/classes"
-import { ISettingsElement, Log, IAllRaces } from "../constants/interfaces"
+import type { IAllRaces, ISettingsElement, Log } from "../constants/interfaces"
+import type { GameLogic } from "../game_logic/gamelogic"
 import {
-    Constraint,
-    TimeConstraint,
-    ConstraintType,
+    type Constraint,
+    type ConstraintType,
     getConstraintList,
     setConstraintList,
+    type TimeConstraint,
 } from "../game_logic/optimize"
-import { GameLogic } from "../game_logic/gamelogic"
 
 interface MyProps {
     race: IAllRaces
@@ -79,16 +80,13 @@ export class Optimize extends Component<MyProps, MyState> {
 
     onApply = async (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        optimizationName: string | number
+        optimizationName: string | number,
     ): Promise<void> => {
         const log = await this.props.applyOpitimization([`${optimizationName}`])
         this.props.log(log)
     }
 
-    mouseEnterFunc = (
-        e: React.MouseEvent<HTMLElement, MouseEvent>,
-        tooltip: string | number
-    ): void => {
+    mouseEnterFunc = (e: React.MouseEvent<HTMLElement, MouseEvent>, tooltip: string | number): void => {
         this.onMouseEnter(e, <div>{tooltip}</div>)
     }
 
@@ -116,11 +114,7 @@ export class Optimize extends Component<MyProps, MyState> {
             const toRemoveList: Constraint[] = []
             let foundName = false
             for (const constraint of list) {
-                if (
-                    constraint.type === "time" &&
-                    constraint.name === name &&
-                    constraint.pos === pos
-                ) {
+                if (constraint.type === "time" && constraint.name === name && constraint.pos === pos) {
                     if (action === "after" || action === "at") {
                         foundName = true
                         if (constraint.after !== endTime) {
@@ -162,7 +156,7 @@ export class Optimize extends Component<MyProps, MyState> {
                 const whereToInsert = sortedIndexBy(
                     list,
                     newConstraint,
-                    (constraint) => `${constraint.name}#${constraint.pos}`
+                    (constraint) => `${constraint.name}#${constraint.pos}`,
                 )
                 list.splice(whereToInsert, 0, newConstraint)
             }
@@ -249,11 +243,7 @@ export class Optimize extends Component<MyProps, MyState> {
         return (
             <div
                 key={item.n}
-                className={
-                    isTextarea
-                        ? CLASSES.dropDownSubContainerMultiline
-                        : CLASSES.dropDownSubContainer
-                }
+                className={isTextarea ? CLASSES.dropDownSubContainerMultiline : CLASSES.dropDownSubContainer}
             >
                 <div
                     className={CLASSES.dropDownLabelMultiline}
@@ -289,22 +279,16 @@ export class Optimize extends Component<MyProps, MyState> {
             this.props.optimizeSettings,
             (setting: ISettingsElement) =>
                 !/Option[0-9]+/.test(`${setting.variableName}`) &&
-                (setting.races === undefined || `${setting.races}`.indexOf(this.props.race) >= 0)
+                (setting.races === undefined || `${setting.races}`.indexOf(this.props.race) >= 0),
         )
         const doesHaveConstraints = getConstraintList(optionlessSettings).length > 0
 
         const settingsElements = optionlessSettings.map((item, index) => {
             const addiItems = filter(this.props.optimizeSettings, (setting) =>
-                new RegExp(`^${item.variableName}Option[0-9]+$`).test(`${setting.variableName}`)
+                new RegExp(`^${item.variableName}Option[0-9]+$`).test(`${setting.variableName}`),
             )
-            const additionalField = addiItems.map((item) =>
-                this.createInput(item, doesHaveConstraints)
-            )
-            const classes = [
-                CLASSES.dropDownContainer,
-                "flex flex-col",
-                index > 0 ? "border-t border-black pt-3" : "",
-            ]
+            const additionalField = addiItems.map((item) => this.createInput(item, doesHaveConstraints))
+            const classes = [CLASSES.dropDownContainer, "flex flex-col", index > 0 ? "border-t border-black pt-3" : ""]
             const applyButton: React.ReactElement | undefined = item.apply ? (
                 <div
                     className={`${CLASSES.dropDownButton} m-2 p-2`}
@@ -328,11 +312,7 @@ export class Optimize extends Component<MyProps, MyState> {
         // TODO Add apply button because onChange doesnt work reliably (laggy behavior)
 
         const settingsButton = (
-            <div
-                className={CLASSES.buttons}
-                onMouseEnter={this.showSettings}
-                onMouseLeave={this.hideSettings}
-            >
+            <div className={CLASSES.buttons} onMouseEnter={this.showSettings} onMouseLeave={this.hideSettings}>
                 Optimize
                 <div className={classesDropdown}>{settingsElements}</div>
             </div>

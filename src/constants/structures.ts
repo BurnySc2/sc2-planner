@@ -1,7 +1,6 @@
-import ENABLED_UNITS from "./enabled_units"
 import data from "./data.json"
-import { IDataUnit } from "./interfaces"
 import { iconSortStructureFunction } from "./icon_order"
+import type { IDataUnit } from "./interfaces"
 
 /**
  * This file contains all enabled structures
@@ -67,17 +66,11 @@ STRUCTURES.forEach((item) => {
 STRUCTURES.sort(iconSortStructureFunction)
 
 console.assert(STRUCTURES.length === 53, `${STRUCTURES.length} is not equal to 53`)
-console.assert(
-    STRUCTURE_NAMES_BY_RACE.terran.size === 21,
-    `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 21`
-)
+console.assert(STRUCTURE_NAMES_BY_RACE.terran.size === 21, `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 21`)
 console.assert(
     STRUCTURE_NAMES_BY_RACE.protoss.size === 15,
-    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 15`
+    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 15`,
 )
-console.assert(
-    STRUCTURE_NAMES_BY_RACE.zerg.size === 17,
-    `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 17`
-)
+console.assert(STRUCTURE_NAMES_BY_RACE.zerg.size === 17, `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 17`)
 
-export { STRUCTURES, STRUCTURE_NAMES_BY_RACE }
+export { STRUCTURE_NAMES_BY_RACE, STRUCTURES }

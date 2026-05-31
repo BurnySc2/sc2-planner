@@ -1,12 +1,12 @@
-import React, { Component } from "react"
-import CLASSES from "../constants/classes"
-
+import { DragDropContext, Draggable, Droppable, type DropResult } from "@hello-pangea/dnd"
 import { includes } from "lodash"
+import type React from "react"
+import { Component } from "react"
+import CLASSES from "../constants/classes"
 import { getImageOfItem } from "../constants/helper"
-import { GameLogic } from "../game_logic/gamelogic"
-import Event from "../game_logic/event"
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd"
-import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
+import type { IAllRaces, IBuildOrderElement, ISettingsElement } from "../constants/interfaces"
+import type Event from "../game_logic/event"
+import type { GameLogic } from "../game_logic/gamelogic"
 
 // A function to help us with reordering the result
 // https://www.npmjs.com/package/react-beautiful-dnd
@@ -30,7 +30,7 @@ interface MyProps {
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined,
-        optimizeSettings: ISettingsElement[] | undefined
+        optimizeSettings: ISettingsElement[] | undefined,
     ) => void
     changeHoverIndex: (index: number) => void
     changeHighlight: (item?: Event) => void
@@ -71,7 +71,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         const items: Array<IBuildOrderElement> = reorder(
             this.props.gamelogic.bo,
             result.source.index,
-            result.destination.index
+            result.destination.index,
         )
 
         this.props.rerunBuildOrder(items)
@@ -80,7 +80,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             this.props.gamelogic.race,
             items,
             this.props.gamelogic.exportSettings(),
-            this.props.gamelogic.exportOptimizeSettings()
+            this.props.gamelogic.exportOptimizeSettings(),
         )
     }
 
@@ -122,8 +122,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         }
 
         const buildOrderItems: React.ReactElement[] = []
-        let separatorClass =
-            this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
+        let separatorClass = this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
         buildOrderItems.push(
             <div
                 id={"separator_0"}
@@ -132,7 +131,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                 onClick={(_e) => {
                     this.props.changeInsertIndex(0)
                 }}
-            />
+            />,
         )
 
         this.props.gamelogic.bo.forEach((item, index) => {
@@ -154,13 +153,11 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                             {buildOrder[index]}
                         </div>
                     )}
-                </Draggable>
+                </Draggable>,
             )
 
             separatorClass =
-                this.props.insertIndex === index + 1
-                    ? CLASSES.boItemSeparatorSelected
-                    : CLASSES.boItemSeparator
+                this.props.insertIndex === index + 1 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
             buildOrderItems.push(
                 <div
                     id={`separator_${index + 1}`}
@@ -169,7 +166,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                     onClick={(_e) => {
                         this.props.changeInsertIndex(index + 1)
                     }}
-                />
+                />,
             )
         })
 
@@ -179,10 +176,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                     <Droppable droppableId="droppable" direction="horizontal">
                         {(provided, _snapshot) => (
                             <div
-                                className={
-                                    (this.props.multilineBuildOrder ? "flex-wrap flex-row" : "") +
-                                    " flex"
-                                }
+                                className={(this.props.multilineBuildOrder ? "flex-wrap flex-row" : "") + " flex"}
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >

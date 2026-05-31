@@ -1,8 +1,8 @@
 import UNITS_BY_NAME from "../constants/units_by_name"
 
 import Event from "./event"
-import Task from "./task"
-import { GameLogic } from "./gamelogic"
+import type { GameLogic } from "./gamelogic"
+import type Task from "./task"
 
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
@@ -87,9 +87,7 @@ class Unit {
      */
     isIdle(): boolean {
         return (
-            (this.tasks.length === 0 ||
-                this.larvaCount > 0 ||
-                (this.hasAddon() && this.addonTasks.length === 0)) &&
+            (this.tasks.length === 0 || this.larvaCount > 0 || (this.hasAddon() && this.addonTasks.length === 0)) &&
             !this.isFlying &&
             (!workerTypes.has(this.name) || (!this.isMiningGas && !this.isScouting))
         )
@@ -210,8 +208,8 @@ class Unit {
                         task.startFrame,
                         gamelogic.frame,
                         task.id,
-                        task.startSupply
-                    )
+                        task.startSupply,
+                    ),
                 )
             }
             // Spawn unit
@@ -232,8 +230,8 @@ class Unit {
                         task.startFrame,
                         gamelogic.frame,
                         task.id,
-                        task.startSupply
-                    )
+                        task.startSupply,
+                    ),
                 )
                 unitData = UNITS_BY_NAME[task.newUnit]
                 // Overlord finishes, overlord will have -8 supply
@@ -279,8 +277,8 @@ class Unit {
                         task.startFrame,
                         gamelogic.frame,
                         task.id,
-                        task.startSupply
-                    )
+                        task.startSupply,
+                    ),
                 )
             }
             // Mark upgrade as researched
@@ -298,8 +296,8 @@ class Unit {
                         task.startFrame,
                         gamelogic.frame,
                         task.id,
-                        task.startSupply
-                    )
+                        task.startSupply,
+                    ),
                 )
             }
             // Morph to unit
@@ -311,10 +309,7 @@ class Unit {
                 if (!["WarpGate", "Gateway"].includes(task.morphToUnit)) {
                     // Drone morphing to hatch or extractor
                     unitData = UNITS_BY_NAME[task.morphToUnit]
-                    if (
-                        unitData.is_townhall &&
-                        !["OrbitalCommand", "PlanetaryFortress"].includes(this.name)
-                    ) {
+                    if (unitData.is_townhall && !["OrbitalCommand", "PlanetaryFortress"].includes(this.name)) {
                         gamelogic.baseCount += 1
                     }
 
@@ -330,8 +325,8 @@ class Unit {
                                 task.startFrame,
                                 gamelogic.frame,
                                 task.id,
-                                task.startSupply
-                            )
+                                task.startSupply,
+                            ),
                         )
                     }
                 }

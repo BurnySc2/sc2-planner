@@ -1,6 +1,7 @@
-import React, { Component } from "react"
+import type React from "react"
+import { Component } from "react"
 import CLASSES from "../constants/classes"
-import { Log } from "../constants/interfaces"
+import type { Log } from "../constants/interfaces"
 
 interface MyProps {
     onLog: (callback: (log?: Log) => void) => void
@@ -68,14 +69,9 @@ export default class Logging extends Component<MyProps, MyState> {
                     cursor: "pointer",
                 }
                 messages.push(
-                    <button
-                        key="undo"
-                        style={style}
-                        className={CLASSES.linkButton}
-                        onClick={this.onUndo}
-                    >
+                    <button key="undo" style={style} className={CLASSES.linkButton} onClick={this.onUndo}>
                         undo (ctrl+z)
-                    </button>
+                    </button>,
                 )
             }
             const types: { name: keyof Log; color: string; icon: string }[] = [
@@ -91,7 +87,7 @@ export default class Logging extends Component<MyProps, MyState> {
                     messages.push(
                         <div key={name} className={`ml-2 text-${color}-800`}>
                             {`${icon} ${log[name]}`}
-                        </div>
+                        </div>,
                     )
                 }
             })
@@ -107,25 +103,16 @@ export default class Logging extends Component<MyProps, MyState> {
                     cursor: "pointer",
                 }
                 messages.push(
-                    <button
-                        key="cancel"
-                        style={style}
-                        className={CLASSES.linkButton}
-                        onClick={this.onCancel}
-                    >
+                    <button key="cancel" style={style} className={CLASSES.linkButton} onClick={this.onCancel}>
                         cancel
-                    </button>
+                    </button>,
                 )
             }
             if (!log.hideCloseButton) {
                 messages.push(
-                    <div
-                        key="closeButton"
-                        className={CLASSES.tinyButtons + " ml-2"}
-                        onClick={() => this.onClose()}
-                    >
+                    <div key="closeButton" className={CLASSES.tinyButtons + " ml-2"} onClick={() => this.onClose()}>
                         ✖
-                    </div>
+                    </div>,
                 )
             }
         }

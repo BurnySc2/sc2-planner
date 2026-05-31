@@ -1,8 +1,9 @@
-import React, { Component, ChangeEvent } from "react"
+import type React from "react"
+import { type ChangeEvent, Component } from "react"
 import ReactTooltip from "react-tooltip"
 
 import CLASSES from "../constants/classes"
-import { ISettingsElement } from "../constants/interfaces"
+import type { ISettingsElement } from "../constants/interfaces"
 
 interface MyProps {
     settings: Array<ISettingsElement>
@@ -87,11 +88,7 @@ export default class Settings extends Component<MyProps, MyState> {
         // TODO Add apply button because onChange doesnt work reliably (laggy behavior)
 
         const settingsButton = (
-            <div
-                className={CLASSES.buttons}
-                onMouseEnter={this.showSettings}
-                onMouseLeave={this.hideSettings}
-            >
+            <div className={CLASSES.buttons} onMouseEnter={this.showSettings} onMouseLeave={this.hideSettings}>
                 Settings
                 <div className={classesDropdown}>{settingsElements}</div>
             </div>
