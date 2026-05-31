@@ -34,8 +34,6 @@ With the arrow keys (left and right) you can navigate through the build order. H
 
 [Node 14 or newer](https://nodejs.org/en/download/) is required to create this static website.
 
-[Python 3.8 or newer](https://www.python.org/downloads/) is required to run pre-commit hooks.
-
 ## Setup
 
 ```
@@ -53,7 +51,7 @@ poetry run pre-commit install
 
 ### End-to-end test
 
-`poetry run pytest test/test_e2e.py`
+`npm run teste2e`
 
 ### Develop
 To start dev server:
@@ -66,15 +64,6 @@ Then go to [localhost:3000](http://localhost:3000)
 To deploy in `/build` directory:
 
 `npm run build`
-
-### Pre-commit hooks
-
-To run pre-commit hooks manually, run
-
-```
-poetry run pre-commit install
-poetry run pre-commit run --all-files
-```
 
 ## Update
 
