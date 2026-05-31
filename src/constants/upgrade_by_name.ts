@@ -1,6 +1,6 @@
 import data from "./data.json"
 
-import { IDataUpgrade } from "./interfaces"
+import type { IDataUpgrade } from "./interfaces"
 
 // Arrange data in a way that it can be accessed by name
 // {name: unit_or_upgrade_data}
