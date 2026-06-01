@@ -2,6 +2,7 @@
 import data from "./data.json"
 import { iconSortStructureFunction } from "./icon_order"
 import type { IDataUnit } from "./interfaces"
+import { convertUnit, type IRawUnit } from "./converters"
 
 /**
  * This file contains all enabled structures
@@ -42,10 +43,11 @@ const ignoreStructure = new Set([
     "ExtractorRich",
 ])
 
-// @ts-expect-error
-const STRUCTURES: Array<IDataUnit> = Object.values(data.Units).filter((item) => {
-    return !ignoreStructure.has(item.name) && item.type === "structure"
-})
+const STRUCTURES: Array<IDataUnit> = (Object.values(data.Units) as IRawUnit[])
+    .filter((item) => {
+        return !ignoreStructure.has(item.name) && item.type === "structure"
+    })
+    .map((item) => convertUnit(item))
 
 const STRUCTURE_NAMES_BY_RACE: {
     protoss: Set<string>

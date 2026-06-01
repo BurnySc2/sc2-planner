@@ -2,26 +2,29 @@
 import data from "./data.json"
 import { iconSortUpgradeFunction } from "./icon_order"
 import type { IDataUpgrade } from "./interfaces"
+import { convertUpgrade, type IRawUnit, type IRawUpgrade } from "./converters"
 
 // Contains all race specific upgrades
 const UPGRADES: Array<IDataUpgrade> = []
 
-Object.values(data.Units).forEach((unit) => {
-    // @ts-expect-error
+// Mapping from raw Race short codes to IAllRaces
+const RACE_MAP: Record<string, "terran" | "protoss" | "zerg"> = {
+    Terr: "terran",
+    Prot: "protoss",
+    Zerg: "zerg",
+}
+
+;(Object.values(data.Units) as IRawUnit[]).forEach((unit) => {
     unit.researches?.forEach((upgradeName: string) => {
-        // @ts-expect-error
-        const upgradeInfo = data.Upgrades[upgradeName]
-        UPGRADES.push({
-            name: upgradeName,
-            id: upgradeInfo.id,
-            cost: {
-                minerals: upgradeInfo.minerals ?? 0,
-                gas: upgradeInfo.gas ?? 0,
-                time: upgradeInfo.time ?? 0,
-            },
-            // @ts-expect-error
-            race: unit.Race,
-        })
+        const rawUpgrade = (data.Upgrades as unknown as Record<string, IRawUpgrade>)[upgradeName]
+        if (rawUpgrade) {
+            const converted = convertUpgrade(rawUpgrade)
+            // Override race from the parent unit's Race field
+            if (unit.Race && RACE_MAP[unit.Race]) {
+                converted.race = RACE_MAP[unit.Race]
+            }
+            UPGRADES.push(converted)
+        }
     })
 })
 UPGRADES.sort(iconSortUpgradeFunction)

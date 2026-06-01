@@ -2,6 +2,7 @@
 import data from "./data.json"
 import { iconSortUnitFunction } from "./icon_order"
 import type { IDataUnit } from "./interfaces"
+import { convertUnit, type IRawUnit } from "./converters"
 
 /**
  * This file contains all enabled units
@@ -60,10 +61,11 @@ const ignoreUnits = new Set([
     "ZerglingBurrowed",
 ])
 
-// @ts-expect-error
-const UNITS: Array<IDataUnit> = Object.values(data.Units).filter((item) => {
-    return !ignoreUnits.has(item.name) && item.type === "unit"
-})
+const UNITS: Array<IDataUnit> = (Object.values(data.Units) as IRawUnit[])
+    .filter((item) => {
+        return !ignoreUnits.has(item.name) && item.type === "unit"
+    })
+    .map((item) => convertUnit(item))
 
 UNITS.sort(iconSortUnitFunction)
 

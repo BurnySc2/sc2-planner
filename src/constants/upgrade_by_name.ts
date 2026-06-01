@@ -1,13 +1,13 @@
 import data from "./data.json"
 
+import { convertUpgrade, type IRawUpgrade } from "./converters"
 import type { IDataUpgrade } from "./interfaces"
 
 // Arrange data in a way that it can be accessed by name
-// {name: unit_or_upgrade_data}
+// {name: upgrade_data}
 const UPGRADES_BY_NAME: { [name: string]: IDataUpgrade } = {}
-Object.values(data.Upgrades).forEach((upgrade) => {
-    // @ts-expect-error
-    UPGRADES_BY_NAME[upgrade.name] = upgrade
+;(Object.values(data.Upgrades) as IRawUpgrade[]).forEach((upgrade) => {
+    UPGRADES_BY_NAME[upgrade.name] = convertUpgrade(upgrade)
 })
 
 export default UPGRADES_BY_NAME
