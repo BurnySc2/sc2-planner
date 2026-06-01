@@ -179,6 +179,15 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
 for (const itemName in TRAINED_BY) {
     const trainInfo = TRAINED_BY[itemName]
 
+    // Hardcoded fix for when Gateway is required and WarpGate would work
+    if (trainInfo.requires[0].indexOf("Gateway") >= 0) {
+        const nonGatewayRequires: string[] = without(trainInfo.requires[0], "Gateway", "WarpGate")
+        trainInfo.requires = [
+            [...nonGatewayRequires, "Gateway"],
+            ["WarpGate", ...nonGatewayRequires],
+        ]
+    }
+
     // Hardcoded fix: also add WarpGate to trainedBy for all Gateway-produced units
     // (WarpGate is excluded from STRUCTURES via ignoreStructure so its produces array is never processed)
     if (trainInfo.trainedBy.has("Gateway")) {
