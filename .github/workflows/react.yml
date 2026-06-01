@@ -33,9 +33,9 @@ jobs:
       run: |
         npm run format
 
-    - name: Run eslint
+    - name: Run lint
       run: |
-        npm run eslint
+        npm run lint
 
     - name: Run typecheck
       run: |

@@ -838,6 +838,14 @@ class GameLogic {
             this.vespene -= cost.vespene
             return true
         }
+
+        // No idle structure found to research this upgrade
+        // Set error + requirements so addItemToBO's filling loop can auto-insert the needed structure
+        this.errorMessage = `Could not find ${[...researchInfo.researchedBy].join(" or ")} to research '${upgrade.name}'.`
+        for (const researcherName of researchInfo.researchedBy) {
+            this.requirements.push(BO_ITEMS[researcherName])
+        }
+
         return false
     }
 

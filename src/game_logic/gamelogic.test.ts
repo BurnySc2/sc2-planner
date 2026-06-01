@@ -390,9 +390,23 @@ test("Add ProtossGroundWeaponsLevel1 with required tech", () => {
         0,
     )
 
-    expect(insertedItems).toBe(4)
-    expect(logic.units.size).toBe(15)
-    expect(logic.eventLog.length).toBe(4)
-    expect(logic.supplyCap).toBe(15)
+    expect(insertedItems).toBe(5)    // Pylon, Forge, Assimilator, 3worker_to_gas, PGW1
+    expect(logic.units.size).toBe(16)  // Nexus(1) + 12 Probes + Pylon + Forge + Assimilator = 16
+    expect(logic.eventLog.length).toBe(5)
+    expect(logic.supplyCap).toBe(23)   // Nexus(15) + Pylon(8) = 23
     expect(logic.upgrades.has("ProtossGroundWeaponsLevel1")).toBe(true)
+})
+
+test("Add Gateway with required tech", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "Gateway", type: "structure" },
+        0,
+    )
+
+    expect(insertedItems).toBe(2)    // Pylon, Gateway
+    expect(logic.units.size).toBe(15)  // Nexus(1) + 12 Probes + Pylon + Gateway = 15
+    expect(logic.eventLog.length).toBe(2)
+    expect(logic.supplyCap).toBe(23)   // Nexus(15) + Pylon(8) = 23
 })
