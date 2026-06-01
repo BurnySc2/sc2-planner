@@ -181,7 +181,7 @@ const upgradePriority: { [name: string]: number } = {
     MedivacIncreaseSpeedBoost: 54,
     LiberatorAGRangeUpgrade: 52,
     CycloneLockOnDamageUpgrade: 22,
-    SmartServos: 34,
+    TransformationServos: 34,
     EnhancedShockwaves: 36,
     HurricaneThrusters: 31,
     InterferenceMatrix: 42,
