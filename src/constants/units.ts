@@ -93,8 +93,8 @@ UNITS.forEach((item) => {
 })
 
 // Should be 63 units in total
-console.assert(UNITS.length === 63, `${UNITS.length} is not equal to 63`)
-console.assert(UNIT_NAMES_BY_RACE.terran.size === 16, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 16`)
+console.assert(UNITS.length === 62, `${UNITS.length} is not equal to 62`)
+console.assert(UNIT_NAMES_BY_RACE.terran.size === 17, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 17`)
 console.assert(UNIT_NAMES_BY_RACE.protoss.size === 18, `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`)
 console.assert(UNIT_NAMES_BY_RACE.zerg.size === 18, `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 18`)
 

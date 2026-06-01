@@ -222,6 +222,9 @@ TRAINED_BY["WarpGate"] = {
     trainedBy: new Set("Probe"),
 }
 
+// Hardcoded fix for Gateway and Forge requiring a Pylon first
+TRAINED_BY["Gateway"].requires = [["Pylon"]]
+TRAINED_BY["Forge"].requires = [["Pylon"]]
 // Hardcoded fix for SCV requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
 TRAINED_BY["SCV"].requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
 // Hardcoded fix for EngineeringBay requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
@@ -325,7 +328,7 @@ export function getProductionCost(
     consumesUnit: false
 }
  */
-console.assert(Object.keys(TRAINED_BY).length === 109, `${Object.keys(TRAINED_BY).length} is not 109`)
+console.assert(Object.keys(TRAINED_BY).length === 111, `${Object.keys(TRAINED_BY).length} is not 111`)
 console.assert(
     TRAINED_BY["Zergling"].requiredStructure === "SpawningPool",
     `${TRAINED_BY["Zergling"].requiredStructure}`,

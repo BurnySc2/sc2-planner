@@ -366,10 +366,10 @@ test("Add two Archons with required tech", () => {
         0,
     )
 
-    expect(insertedItems).toBe(10)
-    expect(logic.units.size).toBe(20)
-    expect(logic.eventLog.length).toBe(10)
-    expect(logic.supplyCap).toBe(23)
+    expect(insertedItems).toBe(11)
+    expect(logic.units.size).toBe(21)
+    expect(logic.eventLog.length).toBe(11)
+    expect(logic.supplyCap).toBe(31)
     ;[logic, insertedItems] = GameLogic.addItemToBO(
         logic,
         { name: "morph_archon_from_ht_ht", type: "action" },
@@ -377,9 +377,9 @@ test("Add two Archons with required tech", () => {
     )
 
     expect(insertedItems).toBe(3)
-    expect(logic.units.size).toBe(21)
-    expect(logic.eventLog.length).toBe(13)
-    expect(logic.supplyCap).toBe(23)
+    expect(logic.units.size).toBe(22)
+    expect(logic.eventLog.length).toBe(14)
+    expect(logic.supplyCap).toBe(31)
 })
 
 test("Add ProtossGroundWeaponsLevel1 with required tech", () => {
