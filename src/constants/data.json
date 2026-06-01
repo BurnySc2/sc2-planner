@@ -136,7 +136,9 @@
         "Time": "12"
       },
       "id": 1767,
-      "name": "ArchonWarp"
+      "morphsto": "Archon",
+      "name": "ArchonWarp",
+      "race": "Protoss"
     },
     "ArmoryResearch": {
       "EditorCategories": "Race:Terran,AbilityorEffectType:Structures",
@@ -4254,6 +4256,12 @@
       "time": 100,
       "upgrade": "ReaperSpeed"
     },
+    "Mergeable": {
+      "Cancelable": 0,
+      "EditorCategories": "Race:Protoss,AbilityorEffectType:Units",
+      "id": 1411,
+      "name": "Mergeable"
+    },
     "MorphBackToGateway": {
       "Alert": "TransformationComplete",
       "CmdButtonArray": [
@@ -5111,7 +5119,7 @@
       "name": "MorphToLurker",
       "race": "",
       "requires": [
-        "LurkerDen"
+        "LurkerDenMP"
       ]
     },
     "MorphToMothership": {
@@ -5348,7 +5356,7 @@
       "name": "MorphToRavager",
       "race": "Zerg",
       "requires": [
-        "BanelingNest2"
+        "RoachWarren"
       ]
     },
     "MorphToSwarmHostBurrowedMP": {
@@ -10192,6 +10200,154 @@
       "time": 42,
       "type": "unit"
     },
+    "Archon": {
+      "AbilArray": [
+        {
+          "Link": "Mergeable"
+        },
+        {
+          "Link": "ProgressRally"
+        },
+        {
+          "Link": "attack"
+        },
+        {
+          "Link": "move"
+        },
+        {
+          "Link": "stop"
+        }
+      ],
+      "Acceleration": 1000,
+      "AttackTargetPriority": 20,
+      "Attributes": [
+        {
+          "Massive": 1
+        },
+        {
+          "Massive": 1
+        },
+        {
+          "Psionic": 1
+        }
+      ],
+      "BehaviorArray": {
+        "Link": "MassiveVoidRayVulnerability",
+        "removed": "1"
+      },
+      "CardLayouts": {
+        "LayoutButtons": [
+          {
+            "AbilCmd": "ProgressRally,Rally1",
+            "Column": "4",
+            "Face": "Rally",
+            "Row": "2",
+            "Type": "AbilCmd"
+          },
+          {
+            "AbilCmd": "attack,Execute",
+            "Column": "4",
+            "Face": "Attack",
+            "Row": "0",
+            "Type": "AbilCmd"
+          },
+          {
+            "AbilCmd": "move,HoldPos",
+            "Column": "2",
+            "Face": "MoveHoldPosition",
+            "Row": "0",
+            "Type": "AbilCmd"
+          },
+          {
+            "AbilCmd": "move,Move",
+            "Column": "0",
+            "Face": "Move",
+            "Row": "0",
+            "Type": "AbilCmd"
+          },
+          {
+            "AbilCmd": "move,Patrol",
+            "Column": "3",
+            "Face": "MovePatrol",
+            "Row": "0",
+            "Type": "AbilCmd"
+          },
+          {
+            "AbilCmd": "stop,Stop",
+            "Column": "1",
+            "Face": "Stop",
+            "Row": "0",
+            "Type": "AbilCmd"
+          }
+        ]
+      },
+      "CargoSize": 4,
+      "Collide": {
+        "ForceField": 0,
+        "Ground": 1,
+        "Locust": 1,
+        "Small": 1
+      },
+      "CostCategory": "Army",
+      "CostResource": {
+        "Minerals": 100,
+        "Vespene": 300
+      },
+      "DamageDealtXP": 1,
+      "DamageTakenXP": 1,
+      "DeathRevealRadius": 3,
+      "EditorCategories": "ObjectType:Unit,ObjectFamily:Melee",
+      "FlagArray": {
+        "ArmySelect": 1,
+        "PreventDestroy": 1,
+        "UseLineOfSight": 1
+      },
+      "Food": -4,
+      "GlossaryCategory": "Unit/Category/ProtossUnits",
+      "GlossaryPriority": 90,
+      "GlossaryStrongArray": {
+        "index": "Marine"
+      },
+      "GlossaryWeakArray": {
+        "1": "Hydralisk",
+        "2": "Immortal",
+        "value": "Thor"
+      },
+      "HotkeyCategory": "Unit/Category/ProtossUnits",
+      "InnerRadius": 0.5625,
+      "KillXP": 80,
+      "LateralAcceleration": 46,
+      "LifeArmorName": "Unit/LifeArmorName/ProtossArmor",
+      "LifeMax": 10,
+      "LifeStart": 10,
+      "MinimapRadius": 1,
+      "Mob": "Multiplayer",
+      "PlaneArray": {
+        "Ground": 1
+      },
+      "Race": "Prot",
+      "Radius": 1,
+      "ScoreKill": 450,
+      "ScoreResult": "BuildOrder",
+      "SeparationRadius": 0.75,
+      "ShieldArmorName": "Unit/ShieldArmorName/ProtossPlasmaShields",
+      "ShieldRegenDelay": 10,
+      "ShieldRegenRate": 2,
+      "ShieldsMax": 350,
+      "ShieldsStart": 350,
+      "Sight": 9,
+      "Speed": 2.8125,
+      "StationaryTurningRate": 999.8437,
+      "SubgroupPriority": 45,
+      "TurningRate": 999.8437,
+      "WeaponArray": {
+        "Link": "PsionicShockwave"
+      },
+      "id": 141,
+      "name": "Archon",
+      "race": "Protoss",
+      "type": "unit"
+    },
     "Armory": {
       "AbilArray": [
         {
@@ -14329,6 +14485,9 @@
         "Link": "WarpBlades"
       },
       "id": 76,
+      "morphsto": [
+        "Archon"
+      ],
       "name": "DarkTemplar",
       "race": "Protoss",
       "requires": [
@@ -18697,10 +18856,13 @@
         "Link": "HighTemplarWeapon"
       },
       "id": 75,
+      "morphsto": [
+        "Archon"
+      ],
       "name": "HighTemplar",
       "race": "Protoss",
       "requires": [
-        "TemplarArchives"
+        "TemplarArchive"
       ],
       "time": 55,
       "type": "unit"
@@ -20886,7 +21048,11 @@
         "LurkerRange"
       ],
       "time": 80,
-      "type": "structure"
+      "type": "structure",
+      "unlocks": [
+        "LurkerMP",
+        "LurkerMPEgg"
+      ]
     },
     "LurkerMP": {
       "AbilArray": [
@@ -21042,7 +21208,7 @@
       "name": "LurkerMP",
       "race": "Zerg",
       "requires": [
-        "LurkerDen",
+        "LurkerDenMP",
         "UseLurkerAspectMP"
       ],
       "time": 33,
@@ -21154,7 +21320,7 @@
       "name": "LurkerMPEgg",
       "race": "Zerg",
       "requires": [
-        "LurkerDen",
+        "LurkerDenMP",
         "UseLurkerAspectMP"
       ],
       "type": "unit"
@@ -25196,7 +25362,7 @@
       "name": "Ravager",
       "race": "Zerg",
       "requires": [
-        "BanelingNest2"
+        "RoachWarren"
       ],
       "time": 12,
       "type": "unit"
@@ -25276,7 +25442,7 @@
       "name": "RavagerCocoon",
       "race": "Zerg",
       "requires": [
-        "BanelingNest2"
+        "RoachWarren"
       ],
       "type": "unit"
     },
@@ -26256,7 +26422,12 @@
         "TunnelingClaws"
       ],
       "time": 55,
-      "type": "structure"
+      "type": "structure",
+      "unlocks": [
+        "Ravager",
+        "RavagerCocoon",
+        "Roach"
+      ]
     },
     "RoboticsBay": {
       "AbilArray": [
@@ -30074,7 +30245,10 @@
         "PsiStormTech"
       ],
       "time": 50,
-      "type": "structure"
+      "type": "structure",
+      "unlocks": [
+        "HighTemplar"
+      ]
     },
     "Thor": {
       "AbilArray": [

@@ -215,6 +215,7 @@ const upgradePriority: { [name: string]: number } = {
     MicrobialShroud: 42,
     EvolveGroovedSpines: 50,
     EvolveMuscularAugments: 51,
+    Frenzy: 52,
     DiggingClaws: 55,
     LurkerRange: 56,
     ChitinousPlating: 60,

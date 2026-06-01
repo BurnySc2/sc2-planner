@@ -24,7 +24,8 @@ const RACE_MAP: Record<string, "terran" | "protoss" | "zerg"> = {
             if (unit.Race && RACE_MAP[unit.Race]) {
                 converted.race = RACE_MAP[unit.Race]
             }
-            UPGRADES.push(converted)
+            if (!UPGRADES.some((u) => u.name === upgradeName)){
+            UPGRADES.push(converted)}
         }
     })
 })
