@@ -158,7 +158,10 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                             onKeyDown={(e) => {
                                 if (e.key === "Enter" || e.key === " ") {
                                     this.props.removeClick(
-                                        e as React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>,
+                                        e as unknown as React.MouseEvent<
+                                            HTMLDivElement | HTMLButtonElement,
+                                            MouseEvent
+                                        >,
                                         index,
                                     )
                                 }

@@ -7,7 +7,7 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "maxSize": 2097152
+        "maxSize": 100000
     },
     "formatter": {
         "indentStyle": "space",

@@ -179,7 +179,7 @@ export class Optimize extends Component<MyProps, MyState> {
         }
     }
 
-    createInput(item: ISettingsElement, doesHaveConstraints: boolean): React.ReactElement {
+    createInput(item: ISettingsElement, doesHaveConstraints: boolean): React.ReactElement | null {
         if (item.v === undefined) {
             return null
         }
