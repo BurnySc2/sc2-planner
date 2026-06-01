@@ -410,3 +410,56 @@ test("Add Gateway with required tech", () => {
     expect(logic.eventLog.length).toBe(2)
     expect(logic.supplyCap).toBe(23)   // Nexus(15) + Pylon(8) = 23
 })
+
+test("Add Zealot with required tech", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "Zealot", type: "unit" },
+        0,
+    )
+
+    expect(insertedItems).toBe(3)    // Pylon, Gateway, Zealot
+    expect(logic.units.size).toBe(16)  // Nexus(1) + 12 Probes + Pylon + Gateway + Zealot
+    expect(logic.eventLog.length).toBe(3)  // Pylon built, Gateway built, Zealot trained
+    expect(logic.supplyCap).toBe(23)   // Nexus(15) + Pylon(8) = 23
+})
+
+test("Add Zealot via WarpGate path", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    let [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "convert_gateway_to_warpgate", type: "action" },
+        0,
+    )
+
+    expect(insertedItems).toBe(7)    // Pylon, Gateway, CyberneticsCore, WarpGateResearch, convert
+    expect(logic.units.size).toBe(17)  // Nexus(1) + 12 Probes + Pylon + WarpGate + CyberneticsCore
+    expect(logic.eventLog.length).toBe(7)  // Pylon, Gateway, CyberneticsCore, WarpGateResearch (no event for morph)
+    expect(logic.supplyCap).toBe(23)
+    expect(logic.upgrades.has("WarpGateResearch")).toBe(true)
+
+    ;[logic, insertedItems] = GameLogic.addItemToBO(
+        logic,
+        { name: "Zealot", type: "unit" },
+        insertedItems,
+    )
+
+    expect(insertedItems).toBe(1)    // Just Zealot (WarpGate already exists)
+    expect(logic.units.size).toBe(18)  // +1 Zealot
+    expect(logic.eventLog.length).toBe(8)  // +1 Zealot train event
+    expect(logic.supplyCap).toBe(23)
+
+    // Verify Zealot was produced by WarpGate, not Gateway
+    let zealotCount = 0
+    let warpgateCount = 0
+    let gatewayCount = 0
+    logic.units.forEach((unit) => {
+        if (unit.name === "Zealot"){ zealotCount++}
+        if (unit.name === "WarpGate") {warpgateCount++}
+        if (unit.name === "Gateway"){ gatewayCount++}
+    })
+    expect(zealotCount).toBe(1)
+    expect(warpgateCount).toBe(1)
+    expect(gatewayCount).toBe(0)       // Gateway was morphed to WarpGate
+})

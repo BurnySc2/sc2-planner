@@ -1,7 +1,7 @@
 import { isEqual, pick } from "lodash"
 // @ts-expect-error
 import lzbase62 from "lzbase62"
-import { CUSTOMACTIONS_BY_ID } from "./customactions"
+import { CUSTOMACTIONS_BY_ID, CUSTOMACTIONS_BY_NAME } from "./customactions"
 import type { IBuildOrderElement, ISettingsElement, Log } from "./interfaces"
 import UNITS_BY_ID from "./units_by_id"
 import UNITS_BY_NAME from "./units_by_name"
@@ -11,7 +11,6 @@ import UPGRADES_BY_NAME from "./upgrade_by_name"
 const jsonpack = require("jsonpack")
 const pako = require("pako")
 
-const { CUSTOMACTIONS_BY_NAME } = require("./customactions")
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 

@@ -5,7 +5,7 @@ import type { GameLogic } from "./gamelogic"
 import Task from "./task"
 import Unit from "./unit"
 
-const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 

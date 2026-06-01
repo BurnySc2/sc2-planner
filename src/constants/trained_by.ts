@@ -1,3 +1,4 @@
+// npx tsx src/constants/trained_by.ts
 import { pull, sortBy, uniq, without } from "lodash"
 import data from "./data.json"
 import type { ITrainedBy } from "./interfaces"
@@ -178,13 +179,10 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
 for (const itemName in TRAINED_BY) {
     const trainInfo = TRAINED_BY[itemName]
 
-    // Hardcoded fix for when Gateway is required and WarpGate would work
-    if (trainInfo.requires[0].indexOf("Gateway") >= 0) {
-        const nonGatewayRequires: string[] = without(trainInfo.requires[0], "Gateway", "WarpGate")
-        trainInfo.requires = [
-            [...nonGatewayRequires, "Gateway"],
-            ["WarpGate", ...nonGatewayRequires],
-        ]
+    // Hardcoded fix: also add WarpGate to trainedBy for all Gateway-produced units
+    // (WarpGate is excluded from STRUCTURES via ignoreStructure so its produces array is never processed)
+    if (trainInfo.trainedBy.has("Gateway")) {
+        trainInfo.trainedBy.add("WarpGate")
     }
 
     // Hardcoded fix so allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
@@ -328,6 +326,7 @@ export function getProductionCost(
     consumesUnit: false
 }
  */
+
 console.assert(Object.keys(TRAINED_BY).length === 111, `${Object.keys(TRAINED_BY).length} is not 111`)
 console.assert(
     TRAINED_BY["Zergling"].requiredStructure === "SpawningPool",
