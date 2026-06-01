@@ -4,7 +4,6 @@ import data from "./data.json"
 import type { ITrainedBy } from "./interfaces"
 import { STRUCTURES } from "./structures"
 import { UNITS } from "./units"
-import UNITS_BY_NAME from "./units_by_name"
 
 const TRAINED_BY: ITrainedBy = {}
 
@@ -37,7 +36,7 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
             (r) => typeof r !== "string" || !r.startsWith("Attached"),
         )
         if (requiresTechlab) {
-            requires.push(unitName + "TechLab")
+            requires.push(`${unitName}TechLab`)
         } else {
             requires.push(unitName)
         }
@@ -87,7 +86,7 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
             (r) => typeof r !== "string" || !r.startsWith("Attached"),
         )
         if (requiresTechlab) {
-            requires.push(unitName + "TechLab")
+            requires.push(`${unitName}TechLab`)
         } else {
             requires.push(unitName)
         }
@@ -122,7 +121,7 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
         for (const resultingUnitName of morphTargets) {
             // @ts-expect-error
             const resultingUnit = data.Units[resultingUnitName]
-            if (!resultingUnit || !resultingUnit.CostResource) {
+            if (!resultingUnit?.CostResource) {
                 continue
             }
 
@@ -200,7 +199,7 @@ for (const itemName in TRAINED_BY) {
 
     // Hardcoded fix so allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
     for (const structureType of ["Barracks", "Factory", "Starport"]) {
-        pull(trainInfo.requires[0], structureType + "Flying")
+        pull(trainInfo.requires[0], `${structureType}Flying`)
         if (
             trainInfo.requires[0].indexOf(structureType) >= 0 &&
             itemName.indexOf("Reactor") < 0 &&
@@ -209,17 +208,17 @@ for (const itemName in TRAINED_BY) {
             const nonBarracksRequires: string[] = without(trainInfo.requires[0], structureType)
             trainInfo.requires = [
                 [...nonBarracksRequires, structureType],
-                [structureType + "Reactor", ...nonBarracksRequires],
-                [structureType + "TechLab", ...nonBarracksRequires],
+                [`${structureType}Reactor`, ...nonBarracksRequires],
+                [`${structureType}TechLab`, ...nonBarracksRequires],
             ]
         }
     }
 }
 
 // Hardcoded fix for Mothership requiring MothershipCore when it should be Nexus
-TRAINED_BY["Mothership"].requires = [["FleetBeacon", "Nexus"]]
+TRAINED_BY.Mothership.requires = [["FleetBeacon", "Nexus"]]
 // Hardcoded fix for WarpGate being Absent
-TRAINED_BY["WarpGate"] = {
+TRAINED_BY.WarpGate = {
     consumesUnit: false,
     isMorph: false,
     morphCostMinerals: 0,
@@ -234,59 +233,59 @@ TRAINED_BY["WarpGate"] = {
 }
 
 // Hardcoded fix for Gateway and Forge requiring a Pylon first
-TRAINED_BY["Gateway"].requires = [["Pylon"]]
-TRAINED_BY["Forge"].requires = [["Pylon"]]
+TRAINED_BY.Gateway.requires = [["Pylon"]]
+TRAINED_BY.Forge.requires = [["Pylon"]]
 // Hardcoded fix for SCV requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
-TRAINED_BY["SCV"].requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
+TRAINED_BY.SCV.requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
 // Hardcoded fix for EngineeringBay requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
-TRAINED_BY["EngineeringBay"].requires = [
+TRAINED_BY.EngineeringBay.requires = [
     ["CommandCenter", "SCV"],
     ["OrbitalCommand", "SCV"],
     ["PlanetaryFortress", "SCV"],
 ]
 
 // Hardcoded fix for Queen requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY["Queen"].requires = [
+TRAINED_BY.Queen.requires = [
     ["Hatchery", "SpawningPool"],
     ["Lair", "SpawningPool"],
     ["Hive", "SpawningPool"],
 ]
 // Hardcoded fix for SpawningPool requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY["SpawningPool"].requires = [
+TRAINED_BY.SpawningPool.requires = [
     ["Hatchery", "Drone"],
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for EvolutionChamber requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY["EvolutionChamber"].requires = [
+TRAINED_BY.EvolutionChamber.requires = [
     ["Hatchery", "Drone"],
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for LurkerDenMP
-TRAINED_BY["LurkerDenMP"].requires = [
+TRAINED_BY.LurkerDenMP.requires = [
     ["HydraliskDen", "Lair", "Drone"],
     ["HydraliskDen", "Hive", "Drone"],
 ]
 // Hardcoded fix for HydraliskDen
-TRAINED_BY["HydraliskDen"].requires = [
+TRAINED_BY.HydraliskDen.requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for Spire
-TRAINED_BY["Spire"].requires = [
+TRAINED_BY.Spire.requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for Spire
-TRAINED_BY["InfestationPit"].requires = [
+TRAINED_BY.InfestationPit.requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for Ravager requiring Hatchery instead of RoachWarren
-TRAINED_BY["Ravager"].requires = [["Roach", "RoachWarren"]]
+TRAINED_BY.Ravager.requires = [["Roach", "RoachWarren"]]
 // Hardcoded fix for when only GreaterSpire available
-TRAINED_BY["Corruptor"].requires = [["Spire"], ["GreaterSpire"]]
+TRAINED_BY.Corruptor.requires = [["Spire"], ["GreaterSpire"]]
 // Reorder requirements to optimize build duration
 const requirementPriority = ["Hive", "GreaterSpire", "Corruptor", "Lair"]
 for (const itemName in TRAINED_BY) {
@@ -341,9 +340,6 @@ export function getProductionCost(
  */
 
 console.assert(Object.keys(TRAINED_BY).length === 111, `${Object.keys(TRAINED_BY).length} is not 111`)
-console.assert(
-    TRAINED_BY["Zergling"].requiredStructure === "SpawningPool",
-    `${TRAINED_BY["Zergling"].requiredStructure}`,
-)
+console.assert(TRAINED_BY.Zergling.requiredStructure === "SpawningPool", `${TRAINED_BY.Zergling.requiredStructure}`)
 
 export default TRAINED_BY

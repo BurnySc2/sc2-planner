@@ -6,7 +6,8 @@
         "useIgnoreFile": true
     },
     "files": {
-        "ignoreUnknown": false
+        "ignoreUnknown": false,
+        "maxSize": 2097152
     },
     "formatter": {
         "indentStyle": "space",

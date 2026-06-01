@@ -562,7 +562,7 @@ class GameLogic {
         }
 
         const leastEffortError = minBy(errorList, "neededEffort")
-        if (leastEffortError && leastEffortError.neededEffort) {
+        if (leastEffortError?.neededEffort) {
             this.errorMessage = leastEffortError.message
             this.requirements.push(...leastEffortError.requirements)
             return false
@@ -764,7 +764,7 @@ class GameLogic {
 
         // Check if requirement is met
         const requiredStructure = researchInfo.requiredStructure
-        let requiredStructureMet = requiredStructure === null ? true : false
+        let requiredStructureMet = requiredStructure === null
         if (!requiredStructureMet) {
             for (const structure of this.units) {
                 if (structure.name === requiredStructure) {
@@ -777,7 +777,7 @@ class GameLogic {
             }
         }
         const requiredUpgrade = researchInfo.requiredUpgrade
-        let requiredUpgradeMet = requiredUpgrade === null ? true : false
+        let requiredUpgradeMet = requiredUpgrade === null
         if (requiredUpgrade && !requiredUpgradeMet) {
             if (this.upgrades.has(requiredUpgrade)) {
                 requiredUpgradeMet = true
@@ -1032,8 +1032,7 @@ class GameLogic {
 
     canRequirementBeDuplicated(requirementName: string, itemName: string): boolean {
         const itemInfo = TRAINED_BY[itemName]
-        const isMorphedFromAnotherUnit =
-            itemInfo && itemInfo.requiresUnits && itemInfo.requiresUnits.includes(requirementName)
+        const isMorphedFromAnotherUnit = itemInfo?.requiresUnits?.includes(requirementName)
         const isArchonMaterial =
             !itemInfo &&
             ((itemName === "morph_archon_from_ht_ht" && requirementName === "HighTemplar") ||

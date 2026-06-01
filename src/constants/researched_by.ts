@@ -43,19 +43,19 @@ for (const [_key, researcherUnit] of Object.entries(data.Units)) {
     )
 }
 
-RESEARCHED_BY["ZergFlyerWeaponsLevel1"].requires = [["Spire"], ["GreaterSpire"]]
-RESEARCHED_BY["ZergFlyerWeaponsLevel2"].requires = [
+RESEARCHED_BY.ZergFlyerWeaponsLevel1.requires = [["Spire"], ["GreaterSpire"]]
+RESEARCHED_BY.ZergFlyerWeaponsLevel2.requires = [
     ["Spire", "Lair"],
     ["Spire", "Hive"],
     ["GreaterSpire", "Lair"],
     ["GreaterSpire", "Hive"],
 ]
-RESEARCHED_BY["ZergFlyerWeaponsLevel3"].requires = [
+RESEARCHED_BY.ZergFlyerWeaponsLevel3.requires = [
     ["Spire", "Hive"],
     ["GreaterSpire", "Hive"],
 ]
 
-RESEARCHED_BY["ZergMeleeWeaponsLevel2"].requires = [
+RESEARCHED_BY.ZergMeleeWeaponsLevel2.requires = [
     ["ZergMeleeWeaponsLevel1", "Lair"],
     ["ZergMeleeWeaponsLevel1", "Hive"],
 ]

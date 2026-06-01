@@ -55,7 +55,7 @@ export default class Read extends Component<MyProps, MyState> {
         this.listeningToSpeach = false
         const wordList = ["go"]
         const grammar = `#JSGF V1.0; grammar colors; public <color> = ${wordList.join(" | ")} ;`
-        const anyWindow = window as any
+        const anyWindow = window as unknown as Record<string, (...args: unknown[]) => unknown>
         // @ts-expect-error
         let speechRecognitionList: SpeechGrammarList | undefined
         for (const prefix of ["", "webkit", "moz", "ms", "o"]) {

@@ -181,7 +181,7 @@ export class Optimize extends Component<MyProps, MyState> {
 
     createInput(item: ISettingsElement, doesHaveConstraints: boolean): React.ReactElement {
         if (item.v === undefined) {
-            return <></>
+            return null
         }
         let inputElement: React.ReactElement
 
@@ -233,7 +233,7 @@ export class Optimize extends Component<MyProps, MyState> {
                 />
             )
         } else {
-            return <></>
+            return null
         }
         //else
         return (
@@ -260,9 +260,7 @@ export class Optimize extends Component<MyProps, MyState> {
                             <br />
                             have to be matched when these items are removed!
                         </div>
-                    ) : (
-                        <></>
-                    )}
+                    ) : null}
                 </div>
                 {inputElement}
             </div>

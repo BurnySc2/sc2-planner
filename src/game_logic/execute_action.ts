@@ -792,7 +792,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
             gamelogic.errorMessage = `Could not find a '${structureName}' with Techlab to dettach from.`
             gamelogic.requirements = [
                 {
-                    name: structureName + "TechLab",
+                    name: `${structureName}TechLab`,
                     type: "structure",
                 },
             ]
@@ -800,7 +800,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
             gamelogic.errorMessage = `Could not find a '${structureName}' with Reactor to attach to addon.`
             gamelogic.requirements = [
                 {
-                    name: structureName + "Reactor",
+                    name: `${structureName}Reactor`,
                     type: "structure",
                 },
             ]

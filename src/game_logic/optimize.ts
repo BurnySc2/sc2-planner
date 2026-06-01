@@ -89,9 +89,9 @@ class OptimizeLogic {
     ): Promise<OptimizationReturn> {
         let ret: OptimizationReturn = [undefined, undefined]
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
-            const maximizeWorkersOption1 = !!currentGamelogic.optimizeSettings["maximizeWorkersOption1"]
-            const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings["maximizeWorkersOption2"]
-            const maximizeWorkersOption3 = !!currentGamelogic.optimizeSettings["maximizeWorkersOption3"]
+            const maximizeWorkersOption1 = !!currentGamelogic.optimizeSettings.maximizeWorkersOption1
+            const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings.maximizeWorkersOption2
+            const maximizeWorkersOption3 = !!currentGamelogic.optimizeSettings.maximizeWorkersOption3
             ret = await this.maximizeWorkers(
                 currentGamelogic,
                 buildOrder,
@@ -116,7 +116,7 @@ class OptimizeLogic {
                 buildOrder,
                 { name: "call_down_mule", type: "action" },
                 !!this.optimizeSettings.maximizeMULEs,
-                BO_ITEMS["OrbitalCommand"],
+                BO_ITEMS.OrbitalCommand,
             )
         }
 
@@ -126,7 +126,7 @@ class OptimizeLogic {
                 buildOrder,
                 { name: "inject", type: "action" },
                 !!this.optimizeSettings.maximizeInjects,
-                BO_ITEMS["Queen"],
+                BO_ITEMS.Queen,
             )
         }
 
@@ -384,7 +384,7 @@ class OptimizeLogic {
     async maximizeByReordering(
         initialGameLogic: GameLogic, // Requires to have been run until the end
     ): Promise<OptimizationReturn> {
-        const startTime = +new Date()
+        const startTime = Date.now()
         const bo = cloneDeep(initialGameLogic.bo)
         let bestGameLogic: GameLogic = initialGameLogic
         let improvedSinceStart = false
@@ -446,7 +446,7 @@ class OptimizeLogic {
         }
 
         if (improvedSinceStart) {
-            const calculationsTime = Math.round((+new Date() - startTime) / 1000)
+            const calculationsTime = Math.round((Date.now() - startTime) / 1000)
             return [
                 {
                     race: this.race,

@@ -58,7 +58,7 @@ const supplyUnitNameByRace = {
 
 console.assert(Object.keys(BO_ITEMS).length === 247, `${Object.keys(BO_ITEMS).length} is not 247`)
 
-console.assert(BO_ITEMS["Zergling"].name === "Zergling", `${BO_ITEMS["Zergling"].name}`)
-console.assert(BO_ITEMS["Zergling"].type === "unit", `${BO_ITEMS["Zergling"].type}`)
+console.assert(BO_ITEMS.Zergling.name === "Zergling", `${BO_ITEMS.Zergling.name}`)
+console.assert(BO_ITEMS.Zergling.type === "unit", `${BO_ITEMS.Zergling.type}`)
 
 export { BO_ITEMS, gasBuildingByRace, supplyUnitNameByRace, workerNameByRace }
