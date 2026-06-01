@@ -32,7 +32,7 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
             }
         }
 
-        const requires = [...(producedUnit.requires || [])]
+        const requires = [...(producedUnit.requires || [])].filter((r) => typeof r !== "string" || !r.startsWith("Attached"))
         if (requiresTechlab) {
             requires.push(unitName + "TechLab")
         } else {
@@ -80,7 +80,7 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
             }
         }
 
-        const requires = [...(builtUnit.requires || [])]
+        const requires = [...(builtUnit.requires || [])].filter((r) => typeof r !== "string" || !r.startsWith("Attached"))
         if (requiresTechlab) {
             requires.push(unitName + "TechLab")
         } else {
@@ -157,7 +157,7 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
                     trainedBy: new Set([unitName]),
                     requiresTechlab: false,
                     requiresUnits,
-                    requires: [[unitName]],
+                    requires: [[unitName, ...(resultingUnit.requires ?? [])]],
                     isMorph: true,
                     morphCostMinerals: minerals,
                     morphCostGas: vespene,

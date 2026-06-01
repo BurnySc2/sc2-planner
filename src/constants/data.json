@@ -10900,6 +10900,9 @@
       ],
       "name": "BanelingCocoon",
       "race": "Zerg",
+      "requires": [
+        "BanelingNest"
+      ],
       "type": "unit"
     },
     "BanelingNest": {
@@ -11022,7 +11025,8 @@
       "time": 60,
       "type": "structure",
       "unlocks": [
-        "Baneling"
+        "Baneling",
+        "BanelingCocoon"
       ]
     },
     "Banshee": {
@@ -11321,7 +11325,8 @@
       "unlocks": [
         "Bunker",
         "Factory",
-        "GhostAcademy"
+        "GhostAcademy",
+        "OrbitalCommand"
       ]
     },
     "BarracksFlying": {
@@ -12052,6 +12057,9 @@
       "id": 114,
       "name": "BroodLord",
       "race": "Zerg",
+      "requires": [
+        "GreaterSpire"
+      ],
       "time": 33.8332,
       "type": "unit"
     },
@@ -12176,6 +12184,9 @@
       ],
       "name": "BroodLordCocoon",
       "race": "Zerg",
+      "requires": [
+        "GreaterSpire"
+      ],
       "type": "unit"
     },
     "Bunker": {
@@ -14534,6 +14545,9 @@
       ],
       "name": "DevourerCocoonMP",
       "race": "Zerg",
+      "requires": [
+        "GreaterSpire"
+      ],
       "type": "unit"
     },
     "DevourerMP": {
@@ -14643,6 +14657,9 @@
       "id": 729,
       "name": "DevourerMP",
       "race": "Zerg",
+      "requires": [
+        "GreaterSpire"
+      ],
       "time": 40,
       "type": "unit"
     },
@@ -15491,6 +15508,7 @@
       "type": "structure",
       "unlocks": [
         "MissileTurret",
+        "PlanetaryFortress",
         "SensorTower"
       ]
     },
@@ -17729,6 +17747,9 @@
       "id": 102,
       "name": "GreaterSpire",
       "race": "Zerg",
+      "requires": [
+        "Hive"
+      ],
       "researches": [
         "ZergFlyerArmorsLevel1",
         "ZergFlyerArmorsLevel2",
@@ -17738,7 +17759,15 @@
         "ZergFlyerWeaponsLevel3"
       ],
       "time": 100,
-      "type": "structure"
+      "type": "structure",
+      "unlocks": [
+        "BroodLord",
+        "BroodLordCocoon",
+        "DevourerCocoonMP",
+        "DevourerMP",
+        "GuardianCocoonMP",
+        "GuardianMP"
+      ]
     },
     "GuardianCocoonMP": {
       "AbilArray": [
@@ -17846,6 +17875,9 @@
       ],
       "name": "GuardianCocoonMP",
       "race": "Zerg",
+      "requires": [
+        "GreaterSpire"
+      ],
       "type": "unit"
     },
     "GuardianMP": {
@@ -17944,6 +17976,9 @@
       "id": 727,
       "name": "GuardianMP",
       "race": "Zerg",
+      "requires": [
+        "GreaterSpire"
+      ],
       "time": 40,
       "type": "unit"
     },
@@ -18838,6 +18873,9 @@
         "Queen"
       ],
       "race": "Zerg",
+      "requires": [
+        "InfestationPit"
+      ],
       "researches": [
         "Burrow",
         "overlordspeed"
@@ -18845,6 +18883,7 @@
       "time": 100,
       "type": "structure",
       "unlocks": [
+        "GreaterSpire",
         "UltraliskCavern",
         "Viper"
       ]
@@ -19589,6 +19628,7 @@
       "time": 50,
       "type": "structure",
       "unlocks": [
+        "Hive",
         "Infestor",
         "SwarmHostMP"
       ]
@@ -20420,6 +20460,9 @@
         "Queen"
       ],
       "race": "Zerg",
+      "requires": [
+        "SpawningPool"
+      ],
       "researches": [
         "Burrow",
         "overlordspeed"
@@ -20430,7 +20473,9 @@
         "HydraliskDen",
         "InfestationPit",
         "NydusNetwork",
-        "Spire"
+        "OverlordTransport",
+        "Spire",
+        "TransportOverlordCocoon"
       ]
     },
     "Larva": {
@@ -20996,6 +21041,10 @@
       "id": 502,
       "name": "LurkerMP",
       "race": "Zerg",
+      "requires": [
+        "LurkerDen",
+        "UseLurkerAspectMP"
+      ],
       "time": 33,
       "type": "unit"
     },
@@ -21104,6 +21153,10 @@
       ],
       "name": "LurkerMPEgg",
       "race": "Zerg",
+      "requires": [
+        "LurkerDen",
+        "UseLurkerAspectMP"
+      ],
       "type": "unit"
     },
     "Marauder": {
@@ -22943,6 +22996,9 @@
         "SCV"
       ],
       "race": "Terran",
+      "requires": [
+        "Barracks"
+      ],
       "time": 35,
       "type": "structure"
     },
@@ -23295,6 +23351,9 @@
       ],
       "name": "OverlordCocoon",
       "race": "Zerg",
+      "requires": [
+        "UseOverseerMorph"
+      ],
       "type": "unit"
     },
     "OverlordTransport": {
@@ -23468,6 +23527,9 @@
       ],
       "name": "OverlordTransport",
       "race": "Zerg",
+      "requires": [
+        "Lair"
+      ],
       "time": 21,
       "type": "unit"
     },
@@ -23595,6 +23657,9 @@
       "id": 129,
       "name": "Overseer",
       "race": "Zerg",
+      "requires": [
+        "UseOverseerMorph"
+      ],
       "time": 16.6665,
       "type": "unit"
     },
@@ -24057,6 +24122,9 @@
         "SCV"
       ],
       "race": "Terran",
+      "requires": [
+        "EngineeringBay"
+      ],
       "time": 50,
       "type": "structure"
     },
@@ -25127,6 +25195,9 @@
       "id": 688,
       "name": "Ravager",
       "race": "Zerg",
+      "requires": [
+        "BanelingNest2"
+      ],
       "time": 12,
       "type": "unit"
     },
@@ -25204,6 +25275,9 @@
       ],
       "name": "RavagerCocoon",
       "race": "Zerg",
+      "requires": [
+        "BanelingNest2"
+      ],
       "type": "unit"
     },
     "Raven": {
@@ -27698,6 +27772,7 @@
       "unlocks": [
         "BanelingNest",
         "Digester",
+        "Lair",
         "Queen",
         "RoachWarren",
         "SpineCrawler",
@@ -30269,6 +30344,9 @@
       ],
       "name": "TransportOverlordCocoon",
       "race": "Zerg",
+      "requires": [
+        "Lair"
+      ],
       "type": "unit"
     },
     "TwilightCouncil": {
@@ -31548,6 +31626,9 @@
         "Zealot"
       ],
       "race": "Protoss",
+      "requires": [
+        "UseWarpGate"
+      ],
       "time": 10,
       "type": "structure"
     },
