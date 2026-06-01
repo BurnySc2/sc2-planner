@@ -55,7 +55,6 @@ export default class Read extends Component<MyProps, MyState> {
         this.listeningToSpeach = false
         const wordList = ["go"]
         const grammar = `#JSGF V1.0; grammar colors; public <color> = ${wordList.join(" | ")} ;`
-        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
         const anyWindow = window as any
         // @ts-expect-error
         let speechRecognitionList: SpeechGrammarList | undefined

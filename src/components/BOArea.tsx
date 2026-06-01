@@ -298,7 +298,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                             <div style={myStyle} className={this.getClass(barType, item.id)}>
                                 <img
                                     className={CLASSES.boElementIcon}
-                                    src={require("../icons/png/" + item.imageSource).default}
+                                    src={require(`../icons/png/${item.imageSource}`)}
                                     alt={itemName}
                                 />
                                 <div className={CLASSES.boElementText}>{itemName}</div>
@@ -360,7 +360,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                           const height = Math.min(quantityMax, roundedQuantity)
                           const style = {
                               width,
-                              borderTopWidth: resourceHeight - (height / quantityMax) * resourceHeight + "rem",
+                              borderTopWidth: `${resourceHeight - (height / quantityMax) * resourceHeight}rem`,
                               borderTopColor: "#7f9cf5",
                               backgroundColor:
                                   roundedQuantity > quantityMax ? "rgba(30%, 30%, 30%, 0.5)" : "rgba(0, 0, 0, 0)",
@@ -385,17 +385,17 @@ export default class BOArea extends Component<MyProps, MyState> {
                   )
 
                   const wideBarStyle = {
-                      backgroundImage: `url(${require(`../icons/${resourceType}.jpg`).default})`,
+                      backgroundImage: `url(${require(`../icons/${resourceType}.jpg`)})`,
                       backgroundSize: "contain",
                   }
                   const borderBarHeightStyle = {
-                      height: resourceHeight + "rem",
+                      height: `${resourceHeight}rem`,
                   }
                   return (
                       <div key={`row_${resourceType}`} className={CLASSES.boResourceBar}>
                           <img
                               className={CLASSES.boResourceIcon}
-                              src={require("../icons/" + icon).default}
+                              src={require(`../icons/${icon}`)}
                               alt={resourceName}
                           />
                           <div className={CLASSES.boResourceWideBar} style={wideBarStyle}>

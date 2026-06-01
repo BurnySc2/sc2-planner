@@ -6,6 +6,7 @@ import type { IDataUpgrade } from "./interfaces"
 // {name: unit_or_upgrade_data}
 const UPGRADES_BY_NAME: { [name: string]: IDataUpgrade } = {}
 Object.values(data.Upgrades).forEach((upgrade) => {
+    // @ts-expect-error
     UPGRADES_BY_NAME[upgrade.name] = upgrade
 })
 

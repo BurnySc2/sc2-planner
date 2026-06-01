@@ -152,7 +152,7 @@ class Unit {
             //init larva time for new hatch
             if (this.nextLarvaSpawn === -1) {
                 this.nextLarvaSpawn = gamelogic.frame + larvaSpawnTime * 22.4
-                if (this.larvaCount == 0) {
+                if (this.larvaCount === 0) {
                     this.larvaCount = 1
                 }
             }

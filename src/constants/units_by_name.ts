@@ -6,6 +6,7 @@ import type { IDataUnit } from "./interfaces"
 // {name: unit_or_upgrade_data}
 const UNITS_BY_NAME: { [name: string]: IDataUnit } = {}
 Object.values(data.Units).forEach((unit) => {
+    // @ts-expect-error
     UNITS_BY_NAME[unit.name] = unit
 })
 

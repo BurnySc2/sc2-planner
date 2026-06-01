@@ -4,9 +4,11 @@ import type { ITrainedBy } from "./interfaces"
 
 const TRAINED_BY: ITrainedBy = {}
 
-for (const [unit_name, unit_info] of Object.entries(data.Units)) {
+for (const [unit_name, unitInfo] of Object.entries(data.Units)) {
     // Handle produces
-    unit_info.produces?.forEach((producedUnitName) => {
+    // @ts-expect-error
+    unitInfo.produces?.forEach((producedUnitName) => {
+        // @ts-expect-error
         const producedUnit = data.Units[producedUnitName]
         if (!producedUnit) {
             return
@@ -28,6 +30,11 @@ for (const [unit_name, unit_info] of Object.entries(data.Units)) {
         } else {
             requires.push(unit_name)
         }
+        
+        // @ts-ignore
+        const morphCostMinerals = producedUnit.CostResource?.Minerals??0  
+        // @ts-ignore
+        const morphCostGas = producedUnit.CostResource?.Vespene  ??0
 
         if (TRAINED_BY[producedUnitName] === undefined) {
             TRAINED_BY[producedUnitName] = {
@@ -36,9 +43,9 @@ for (const [unit_name, unit_info] of Object.entries(data.Units)) {
                 requiresUnits: null,
                 requires: [requires],
                 isMorph: false,
-                morphCostMinerals: 0,
-                morphCostGas: 0,
-                morphCostSupply: 0,
+                morphCostMinerals,
+                morphCostGas,
+                morphCostSupply: producedUnit.Food ?? 0,
                 consumesUnit: false,
                 requiredStructure: (producedUnit.requires ?? []).length === 1 ? producedUnit.requires[0] : null,
                 requiredUpgrade: null,
@@ -49,16 +56,18 @@ for (const [unit_name, unit_info] of Object.entries(data.Units)) {
         }
     })
 
-    // Handle builds (add-ons)
-    unit_info.builds?.forEach((builtAddonName) => {
-        const builtAddon = data.Units[builtAddonName]
-        if (!builtAddon) {
+    // Handle builds (add-ons, structures)
+    // @ts-expect-error
+    unitInfo.builds?.forEach((builtUnitName) => {
+        // @ts-expect-error
+        const builtUnit = data.Units[builtUnitName]
+        if (!builtUnit) {
             return
         }
 
         let requiresTechlab = false
-        if (builtAddon.requires) {
-            for (const req of builtAddon.requires) {
+        if (builtUnit.requires) {
+            for (const req of builtUnit.requires) {
                 if (typeof req === "string" && req.includes("TechLab")) {
                     requiresTechlab = true
                     break
@@ -66,38 +75,48 @@ for (const [unit_name, unit_info] of Object.entries(data.Units)) {
             }
         }
 
-        const requires = [...(builtAddon.requires || [])]
+        const requires = [...(builtUnit.requires || [])]
         if (requiresTechlab) {
             requires.push(unit_name + "TechLab")
         } else {
             requires.push(unit_name)
         }
 
-        if (TRAINED_BY[builtAddonName] === undefined) {
-            TRAINED_BY[builtAddonName] = {
+        const consumesUnit = unit_name === "Drone"
+        
+        // @ts-ignore
+        const morphCostMinerals = consumesUnit ?  (builtUnit.CostResource?.Minerals ?? 0) - (unitInfo.CostResource?.Minerals ?? 0) :builtUnit.CostResource?.Minerals??0  
+        // @ts-ignore
+        const morphCostGas = consumesUnit ?  (builtUnit.CostResource?.Vespene ?? 0)- (unitInfo.CostResource?.Vespene ?? 0)  :builtUnit.CostResource?.Vespene  ??0
+
+        if (TRAINED_BY[builtUnitName] === undefined) {
+            TRAINED_BY[builtUnitName] = {
                 trainedBy: new Set([unit_name]),
                 requiresTechlab,
                 requiresUnits: null,
                 requires: [requires],
                 isMorph: false,
-                morphCostMinerals: 0,
-                morphCostGas: 0,
-                morphCostSupply: 0,
-                consumesUnit: false,
+                morphCostMinerals,
+                morphCostGas,
+                morphCostSupply: builtUnit.Food ?? 0,
+                consumesUnit,
                 requiredStructure: null,
                 requiredUpgrade: null,
             }
         } else {
-            TRAINED_BY[builtAddonName].trainedBy.add(unit_name)
-            TRAINED_BY[builtAddonName].requires[0].push(...requires)
+            TRAINED_BY[builtUnitName].trainedBy.add(unit_name)
+            TRAINED_BY[builtUnitName].requires[0].push(...requires)
         }
     })
 
     // Handle morphsto
-    if (unit_info.morphsto) {
-        const morphTargets = Array.isArray(unit_info.morphsto) ? unit_info.morphsto : [unit_info.morphsto]
+    // @ts-expect-error
+    if (unitInfo.morphsto) {
+        // @ts-expect-error
+        const morphTargets = Array.isArray(unitInfo.morphsto) ? unitInfo.morphsto : [unitInfo.morphsto]
 
         for (const resultingUnitName of morphTargets) {
+            // @ts-expect-error
             const resultingUnit = data.Units[resultingUnitName]
             if (!resultingUnit || !resultingUnit.CostResource) {
                 continue
@@ -105,26 +124,33 @@ for (const [unit_name, unit_info] of Object.entries(data.Units)) {
 
             const isFreeMorph =
                 !resultingUnit.CostResource ||
-                (unit_info.CostResource &&
-                    resultingUnit.CostResource.Minerals === unit_info.CostResource.Minerals &&
-                    resultingUnit.CostResource.Vespene === unit_info.CostResource.Vespene &&
-                    resultingUnit.type === unit_info.type)
+                // @ts-expect-error
+                (unitInfo.CostResource &&
+                    // @ts-expect-error
+                    resultingUnit.CostResource.Minerals === unitInfo.CostResource.Minerals &&
+                    // @ts-expect-error
+                    resultingUnit.CostResource.Vespene === unitInfo.CostResource.Vespene &&
+                    resultingUnit.type === unitInfo.type)
 
             if (isFreeMorph) {
                 continue
             }
 
             let morphCostMinerals =
-                (resultingUnit.CostResource?.Minerals ?? 0) - (unit_info.CostResource?.Minerals ?? 0)
-            let morphCostGas = (resultingUnit.CostResource?.Vespene ?? 0) - (unit_info.CostResource?.Vespene ?? 0)
-            let morphCostSupply = (resultingUnit.Food ?? 0) - (unit_info.Food ?? 0)
+                // @ts-expect-error
+                (resultingUnit.CostResource?.Minerals ?? 0) - (unitInfo.CostResource?.Minerals ?? 0)
+            // @ts-expect-error
+            let morphCostGas = (resultingUnit.CostResource?.Vespene ?? 0) - (unitInfo.CostResource?.Vespene ?? 0)
+            // @ts-expect-error
+            let morphCostSupply = (resultingUnit.Food ?? 0) - (unitInfo.Food ?? 0)
             let consumesUnit = false
 
-            if (resultingUnit.type !== "structure" && unit_info.type !== "structure") {
+            if (resultingUnit.type !== "structure" && unitInfo.type !== "structure") {
                 consumesUnit = true
                 morphCostMinerals = resultingUnit.CostResource.Minerals
                 morphCostGas = resultingUnit.CostResource.Vespene
-                morphCostSupply = resultingUnit.Food
+                // @ts-ignore
+                morphCostSupply = -(resultingUnit.Food ?? 0) 
             }
 
             const morphes: { [key: string]: string[] } = {

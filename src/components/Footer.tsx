@@ -5,7 +5,6 @@ import ReactTooltip from "react-tooltip"
 import CLASSES from "../constants/classes"
 import type { IButton } from "../constants/interfaces"
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 type MyProps = {}
 
 interface MyState {

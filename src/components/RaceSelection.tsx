@@ -29,7 +29,7 @@ export default class RaceSelection extends Component<MyProps> {
             const item: { name: string; path: string } = RACES[race]
             return (
                 <button id={race} key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
-                    <img src={require("../icons/png/" + item.path).default} alt={item.name} />
+                    <img src={require(`../icons/png/${item.path}`)} alt={item.name} />
                 </button>
             )
         })

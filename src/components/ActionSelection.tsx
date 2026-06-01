@@ -72,7 +72,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             // Instead of getting the status when the last element finished, get the state after the last build order index was started
             let value: number | string = ""
             if (item.name.includes("Supply")) {
-                value = `${unitsCount["supplyused"]}/${unitsCount["supplycap"]}`
+                value = `${unitsCount.supplyused}/${unitsCount.supplycap}`
             } else if (["Larva", "MULE"].includes(item.name)) {
                 value = unitsCount[item.name]
             } else {
@@ -82,7 +82,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
 
             return (
                 <div key={item.name} className={this.classString}>
-                    <img src={require("../icons/png/" + item.path).default} alt={item.name} />
+                    <img src={require(`../icons/png/${item.path}`)} alt={item.name} />
                     <div className={CLASSES.actionIconText} style={actionIconTextStyle}>
                         {value}
                     </div>
@@ -139,7 +139,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                         <div>Minerals: {GameLogic.getCost(item.name).minerals}</div>
                         <div>Vespene: {GameLogic.getCost(item.name).vespene}</div>
                         <div>Supply: {GameLogic.getCost(item.name).supply}</div>
-                        <div>Train time: {Math.round(item.time / 22.4)}s</div>
+                        <div>Train time: {Math.round(item.time / 1.4)}s</div>
                     </div>,
                 )
             }
@@ -177,7 +177,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                         <div>{item.name}</div>
                         <div>Minerals: {GameLogic.getCost(item.name).minerals}</div>
                         <div>Vespene: {GameLogic.getCost(item.name).vespene}</div>
-                        <div>Build time: {Math.round(item.time / 22.4)}s</div>
+                        <div>Build time: {Math.round(item.time / 1.4)}s</div>
                     </div>,
                 )
             }
@@ -214,7 +214,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                         <div>{item.name}</div>
                         <div>Minerals: {item.cost.minerals}</div>
                         <div>Vespene: {item.cost.gas}</div>
-                        <div>Research time: {Math.round(item.cost.time / 22.4)}s</div>
+                        <div>Research time: {Math.round(item.cost.time / 1.4)}s</div>
                     </div>,
                 )
             }

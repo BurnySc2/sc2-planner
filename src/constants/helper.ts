@@ -1,6 +1,5 @@
-// @ts-expect-error
-
 import { isEqual, pick } from "lodash"
+// @ts-expect-error
 import lzbase62 from "lzbase62"
 import { CUSTOMACTIONS_BY_ID } from "./customactions"
 import type { IBuildOrderElement, ISettingsElement, Log } from "./interfaces"
@@ -35,11 +34,11 @@ const getImageOfItem = (item: { name: string; type: string }): string => {
     let image = ""
     try {
         if (item.type === "upgrade") {
-            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`).default
+            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
         } else if (item.type === "action") {
-            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`).default
+            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
         } else {
-            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`).default
+            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
         }
     } catch {
         console.error(`Missing image for: ${item.name}`)
@@ -276,11 +275,13 @@ const encodeSettings = (
         return settingsDefaultValues[item.n] !== item.v
     })
     const jsonString = JSON.stringify(strippedObject)
+    // @ts-ignore
     const encoded = lzbase62.compress(jsonString)
     return encoded
 }
 
 const decodeSettings = (settingsEncoded: string): Array<ISettingsElement> => {
+    // @ts-ignore
     const decodedString = lzbase62.decompress(settingsEncoded)
     const jsonObj = JSON.parse(decodedString)
     return jsonObj
@@ -343,7 +344,7 @@ const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string =
     // Encoding with zlib
     const jsonString = JSON.stringify(compactArray)
     const compressed = pako.deflate(jsonString, { to: "string" })
-    const encoded = "002" + btoa(compressed)
+    const encoded = `002${btoa(compressed)}`
 
     return encoded
 }
@@ -492,7 +493,7 @@ export async function cancelableLog(logFunc: (line?: Log) => void, line: Log): P
     let cancel: () => void = () => {
         return undefined
     }
-    const cancellationPromise = new Promise<void>((resolve, reject) => {
+    const cancellationPromise = new Promise<void>((_resolve, reject) => {
         cancel = reject
     })
     line.cancel = cancel

@@ -7,7 +7,9 @@ import type { IDataUpgrade } from "./interfaces"
 const UPGRADES: Array<IDataUpgrade> = []
 
 Object.values(data.Units).forEach((unit) => {
+    // @ts-expect-error
     unit.researches?.forEach((upgradeName: string) => {
+        // @ts-expect-error
         const upgradeInfo = data.Upgrades[upgradeName]
         UPGRADES.push({
             name: upgradeName,
@@ -17,6 +19,7 @@ Object.values(data.Units).forEach((unit) => {
                 gas: upgradeInfo.gas ?? 0,
                 time: upgradeInfo.time ?? 0,
             },
+            // @ts-expect-error
             race: unit.Race,
         })
     })

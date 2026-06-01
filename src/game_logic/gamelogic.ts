@@ -301,13 +301,7 @@ class GameLogic {
 
         // Sort eventList by item.start, but perhaps the reverse is the desired behavior?
         this.eventLog.sort((a, b) => {
-            if (a.id < b.id) {
-                return -1
-            }
-            if (a.id > b.id) {
-                return 1
-            }
-            return 0
+            return a.id - b.id
         })
     }
 
@@ -926,7 +920,7 @@ class GameLogic {
         }
         // Fixes unit cost for morphing units and structures (e.g. Hatchery to Lair, Roach to Ravager, Drone to Hatchery)
         if (unitName in TRAINED_BY) {
-            const trained_by = TRAINED_BY[unitName]
+            const trained_by = TRAINED_BY[unitName]            
             if (trained_by.isMorph || trained_by.consumesUnit) {
                 return {
                     minerals: trained_by.morphCostMinerals,
@@ -935,11 +929,14 @@ class GameLogic {
                 }
             }
         }
-        console.assert(UNITS_BY_NAME[unitName], `${unitName}`)
+        console.assert(UNITS_BY_NAME[unitName], `${unitName}`)        
         return {
-            minerals: UNITS_BY_NAME[unitName].minerals,
-            vespene: UNITS_BY_NAME[unitName].gas,
-            supply: UNITS_BY_NAME[unitName].supply,
+            // @ts-ignore
+            minerals: UNITS_BY_NAME[unitName].CostResource?.Minerals ?? 0,
+            // @ts-ignore
+            vespene: UNITS_BY_NAME[unitName].CostResource?.Vespene ?? 0,
+            // @ts-ignore
+            supply: -(UNITS_BY_NAME[unitName].Food ?? 0),
         }
     }
 
@@ -950,10 +947,11 @@ class GameLogic {
         // Get build time of unit or structure, or research time of upgrade (in frames)
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
-            return UPGRADES_BY_NAME[unitName].cost.time
+            // @ts-ignore
+            return UPGRADES_BY_NAME[unitName].time * 16
         }
         console.assert(UNITS_BY_NAME[unitName], `${unitName}`)
-        return UNITS_BY_NAME[unitName].time
+        return UNITS_BY_NAME[unitName].time * 16
     }
 
     /**
