@@ -1,3 +1,4 @@
+// npx tsx src/constants/upgrade_by_name.ts
 import { convertUpgrade, type IRawUpgrade } from "./converters"
 import data from "./data.json"
 import type { IDataUpgrade } from "./interfaces"

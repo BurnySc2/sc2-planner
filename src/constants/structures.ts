@@ -73,12 +73,12 @@ STRUCTURES.forEach((item) => {
 
 STRUCTURES.sort(iconSortStructureFunction)
 
-console.assert(STRUCTURES.length === 58, `${STRUCTURES.length} is not equal to 58`)
+console.assert(STRUCTURES.length === 55, `${STRUCTURES.length} is not equal to 55`)
 console.assert(STRUCTURE_NAMES_BY_RACE.terran.size === 18, `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 18`)
 console.assert(
-    STRUCTURE_NAMES_BY_RACE.protoss.size === 16,
-    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 16`,
+    STRUCTURE_NAMES_BY_RACE.protoss.size === 15,
+    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 15`,
 )
-console.assert(STRUCTURE_NAMES_BY_RACE.zerg.size === 19, `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 19`)
+console.assert(STRUCTURE_NAMES_BY_RACE.zerg.size === 17, `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 17`)
 
 export { STRUCTURE_NAMES_BY_RACE, STRUCTURES }

@@ -206,7 +206,6 @@ test("Build OC and call down MULE", () => {
 })
 
 test("Test if able to create a gas unit (reaper)", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Barracks", type: "structure" },
@@ -222,7 +221,6 @@ test("Test if able to create a gas unit (reaper)", () => {
 })
 
 test("Test if able to research +1 from ebay", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -239,7 +237,6 @@ test("Test if able to research +1 from ebay", () => {
 })
 
 test("Test if able to research +2 from ebay after requirements are met", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -264,7 +261,6 @@ test("Test if able to research +2 from ebay after requirements are met", () => {
 })
 
 test("Test if able upgrade to PF", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -289,7 +285,6 @@ test("Test if able upgrade to PF", () => {
 })
 
 test("Test if able lift Barracks from reactor and let factory attach to it", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },

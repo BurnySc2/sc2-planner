@@ -944,8 +944,7 @@ class GameLogic {
         // Get build time of unit or structure, or research time of upgrade (in frames)
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
-            // @ts-expect-error
-            return UPGRADES_BY_NAME[unitName].time * 16
+            return UPGRADES_BY_NAME[unitName].cost.time * 16
         }
         console.assert(UNITS_BY_NAME[unitName], `${unitName}`)
         return UNITS_BY_NAME[unitName].time * 16
@@ -1081,7 +1080,7 @@ class GameLogic {
                     // Simulation is done already, the first time
                     gamelogic = GameLogic.simulatedBuildOrder(prevGamelogic, bo)
                 }
-                if (gamelogic.errorMessage && gamelogic.requirements) {
+                if (gamelogic.errorMessage && gamelogic.requirements?.length) {
                     fillingLoop++
                     const duplicatesToRemove: IBuildOrderElement[] = []
                     for (const req of gamelogic.requirements) {
@@ -1101,7 +1100,7 @@ class GameLogic {
                         remove(bo, (item) => item === duplicate) // Specificaly remove the later one
                     }
                 }
-            } while (gamelogic.errorMessage && gamelogic.requirements && fillingLoop < 25)
+            } while (gamelogic.errorMessage && gamelogic.requirements?.length && fillingLoop < 25)
         }
         const insertedItems = bo.length - initialBOLength
         return [gamelogic, insertedItems]

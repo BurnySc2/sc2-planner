@@ -29,6 +29,8 @@ const ignoreUnits = new Set([
     "VikingAssault",
     "WidowMineBurrowed",
     "ThorAP",
+    "GhostAlternate",
+    "GhostNova",
     // Zerg
     "BanelingBurrowed",
     "BanelingCocoon",
@@ -90,10 +92,10 @@ UNITS.forEach((item) => {
     }
 })
 
-// Should be 77 units in total
-console.assert(UNITS.length === 74, `${UNITS.length} is not equal to 74`)
-console.assert(UNIT_NAMES_BY_RACE.terran.size === 19, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 19`)
+// Should be 63 units in total
+console.assert(UNITS.length === 63, `${UNITS.length} is not equal to 63`)
+console.assert(UNIT_NAMES_BY_RACE.terran.size === 16, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 16`)
 console.assert(UNIT_NAMES_BY_RACE.protoss.size === 18, `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`)
-console.assert(UNIT_NAMES_BY_RACE.zerg.size === 26, `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 26`)
+console.assert(UNIT_NAMES_BY_RACE.zerg.size === 18, `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 18`)
 
 export { UNIT_NAMES_BY_RACE, UNITS }
