@@ -1,3 +1,4 @@
+import { IDataUnit } from "../constants/interfaces"
 import UNITS_BY_NAME from "../constants/units_by_name"
 
 import Event from "./event"
@@ -192,7 +193,7 @@ class Unit {
         }
         // Remove first task if completed
         if (task.isCompleted) {
-            let unitData
+            let unitData: IDataUnit
             // Spawn worker
             if (task.newWorker) {
                 const newUnit = new Unit(task.newWorker)

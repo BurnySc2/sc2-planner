@@ -229,7 +229,7 @@ const iconSortStructureFunction = (item1: IDataUnit, item2: IDataUnit): number =
     return (structurePriority[item1.name] ?? 0) - (structurePriority[item2.name] ?? 0)
 }
 const iconSortUpgradeFunction = (item1: IDataUpgrade, item2: IDataUpgrade): number => {
-    return (upgradePriority[item1.name] ??  0) - (upgradePriority[item2.name] ?? 0)
+    return (upgradePriority[item1.name] ?? 0) - (upgradePriority[item2.name] ?? 0)
 }
 
 export { iconSortStructureFunction, iconSortUnitFunction, iconSortUpgradeFunction }

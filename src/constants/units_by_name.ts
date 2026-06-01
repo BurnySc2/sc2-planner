@@ -1,6 +1,5 @@
-import data from "./data.json"
-
 import { convertUnit, type IRawUnit } from "./converters"
+import data from "./data.json"
 import type { IDataUnit } from "./interfaces"
 
 // Arrange data in a way that it can be accessed by name

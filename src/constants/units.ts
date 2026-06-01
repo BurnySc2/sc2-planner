@@ -1,8 +1,9 @@
 // npx tsx src/constants/units.ts
+
+import { convertUnit, type IRawUnit } from "./converters"
 import data from "./data.json"
 import { iconSortUnitFunction } from "./icon_order"
 import type { IDataUnit } from "./interfaces"
-import { convertUnit, type IRawUnit } from "./converters"
 
 /**
  * This file contains all enabled units
@@ -44,7 +45,6 @@ const ignoreUnits = new Set([
     "InfestorBurrowed",
     "InfestorTerran",
     "InfestorTerranBurrowed",
-    "Larva",
     "LocustMPFlying",
     "LurkerMPBurrowed",
     "LurkerMPEgg",

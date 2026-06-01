@@ -1,8 +1,9 @@
 // npx tsx src/constants/upgrades.ts
+
+import { convertUpgrade, type IRawUnit, type IRawUpgrade } from "./converters"
 import data from "./data.json"
 import { iconSortUpgradeFunction } from "./icon_order"
 import type { IDataUpgrade } from "./interfaces"
-import { convertUpgrade, type IRawUnit, type IRawUpgrade } from "./converters"
 
 // Contains all race specific upgrades
 const UPGRADES: Array<IDataUpgrade> = []

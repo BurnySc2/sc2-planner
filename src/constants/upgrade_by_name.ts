@@ -1,6 +1,5 @@
-import data from "./data.json"
-
 import { convertUpgrade, type IRawUpgrade } from "./converters"
+import data from "./data.json"
 import type { IDataUpgrade } from "./interfaces"
 
 // Arrange data in a way that it can be accessed by name

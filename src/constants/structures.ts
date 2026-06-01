@@ -1,8 +1,9 @@
 // npx tsx src/constants/structures.ts
+
+import { convertUnit, type IRawUnit } from "./converters"
 import data from "./data.json"
 import { iconSortStructureFunction } from "./icon_order"
 import type { IDataUnit } from "./interfaces"
-import { convertUnit, type IRawUnit } from "./converters"
 
 /**
  * This file contains all enabled structures

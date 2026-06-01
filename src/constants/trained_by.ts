@@ -1,10 +1,18 @@
 import { pull, sortBy, uniq, without } from "lodash"
 import data from "./data.json"
 import type { ITrainedBy } from "./interfaces"
+import { STRUCTURES } from "./structures"
+import { UNITS } from "./units"
+import UNITS_BY_NAME from "./units_by_name"
 
 const TRAINED_BY: ITrainedBy = {}
 
-for (const [unitName, unitInfo] of Object.entries(data.Units)) {
+for (const myUnit of [...UNITS, ...STRUCTURES]) {
+    const unitName = myUnit.name
+
+    // @ts-expect-error
+    const unitInfo = data.Units[unitName]
+
     // Handle produces
     // @ts-expect-error
     unitInfo.produces?.forEach((producedUnitName) => {
@@ -31,7 +39,7 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
             requires.push(unitName)
         }
 
-        const {minerals,vespene,food} = getProductionCost(unitName, producedUnitName, false)
+        const { minerals, vespene, food } = getProductionCost(unitName, producedUnitName, false)
 
         if (TRAINED_BY[producedUnitName] === undefined) {
             TRAINED_BY[producedUnitName] = {
@@ -79,10 +87,8 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
             requires.push(unitName)
         }
 
-        const consumesUnit = unitName === "Drone"    
-        // @ts-ignore
-        const {minerals,vespene,food} = getProductionCost(unitName, builtUnitName, consumesUnit)
-
+        const consumesUnit = unitName === "Drone"
+        const { minerals, vespene } = getProductionCost(unitName, builtUnitName, consumesUnit)
 
         if (TRAINED_BY[builtUnitName] === undefined) {
             TRAINED_BY[builtUnitName] = {
@@ -91,9 +97,9 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
                 requiresUnits: null,
                 requires: [requires],
                 isMorph: false,
-                morphCostMinerals:minerals,
-                morphCostGas:vespene,
-                morphCostSupply: food,
+                morphCostMinerals: minerals,
+                morphCostGas: vespene,
+                morphCostSupply: builtUnit.Food,
                 consumesUnit,
                 requiredStructure: null,
                 requiredUpgrade: null,
@@ -105,9 +111,7 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
     })
 
     // Handle morphsto
-    // @ts-expect-error
     if (unitInfo.morphsto) {
-        // @ts-expect-error
         const morphTargets = Array.isArray(unitInfo.morphsto) ? unitInfo.morphsto : [unitInfo.morphsto]
 
         for (const resultingUnitName of morphTargets) {
@@ -119,11 +123,8 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
 
             const isFreeMorph =
                 !resultingUnit.CostResource ||
-                // @ts-expect-error
                 (unitInfo.CostResource &&
-                    // @ts-expect-error
                     resultingUnit.CostResource.Minerals === unitInfo.CostResource.Minerals &&
-                    // @ts-expect-error
                     resultingUnit.CostResource.Vespene === unitInfo.CostResource.Vespene &&
                     resultingUnit.type === unitInfo.type)
 
@@ -131,14 +132,14 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
                 continue
             }
 
-            const {minerals,vespene,food} = getProductionCost(unitName, resultingUnitName, false)
+            const { minerals, vespene, food } = getProductionCost(unitName, resultingUnitName, true)
 
             // if (resultingUnit.type !== "structure" && unitInfo.type !== "structure") {
             //     consumesUnit = true
             //     morphCostMinerals = resultingUnit.CostResource.Minerals
             //     morphCostGas = resultingUnit.CostResource.Vespene
-            //     // @ts-ignore
-            //     morphCostSupply = -(resultingUnit.Food ?? 0) 
+            //     // @ts-expect-error
+            //     morphCostSupply = -(resultingUnit.Food ?? 0)
             // }
 
             const morphes: { [key: string]: string[] } = {
@@ -158,10 +159,10 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
                     requiresUnits,
                     requires: [[unitName]],
                     isMorph: true,
-                    morphCostMinerals:minerals,
-                    morphCostGas:vespene,
-                    morphCostSupply:food,
-                    consumesUnit:true,
+                    morphCostMinerals: minerals,
+                    morphCostGas: vespene,
+                    morphCostSupply: food,
+                    consumesUnit: true,
                     requiredStructure: (resultingUnit.requires ?? []).length === 1 ? resultingUnit.requires[0] : null,
                     requiredUpgrade: null,
                 }

@@ -615,9 +615,9 @@ class GameLogic {
             }
 
             // Loop over all idle units and check if they match unit type
-
+            
             const trainerCanTrainThisUnit =
-                trainInfo.trainedBy.has(trainerUnit.name) && (!trainInfo.requiresTechlab || trainerUnit.hasTechlab)
+            trainInfo.trainedBy.has(trainerUnit.name) && (!trainInfo.requiresTechlab || trainerUnit.hasTechlab)
             const trainerCanTrainThroughReactor =
                 trainInfo.trainedBy.has(trainerUnit.name) &&
                 !trainInfo.requiresTechlab &&
@@ -920,23 +920,20 @@ class GameLogic {
         }
         // Fixes unit cost for morphing units and structures (e.g. Hatchery to Lair, Roach to Ravager, Drone to Hatchery)
         if (unitName in TRAINED_BY) {
-            const trained_by = TRAINED_BY[unitName]            
+            const trained_by = TRAINED_BY[unitName]
             if (trained_by.isMorph || trained_by.consumesUnit) {
                 return {
                     minerals: trained_by.morphCostMinerals,
                     vespene: trained_by.morphCostGas,
-                    supply: -trained_by.morphCostSupply,
+                    supply: trained_by.morphCostSupply ? -trained_by.morphCostSupply : 0,
                 }
             }
         }
-        console.assert(UNITS_BY_NAME[unitName], `${unitName}`)                
+        console.assert(UNITS_BY_NAME[unitName], `${unitName}`)
         return {
-            // @ts-ignore
-            minerals: UNITS_BY_NAME[unitName].CostResource?.Minerals ?? 0,
-            // @ts-ignore
-            vespene: UNITS_BY_NAME[unitName].CostResource?.Vespene ?? 0,
-            // @ts-ignore
-            supply: -UNITS_BY_NAME[unitName].Food,
+            minerals: UNITS_BY_NAME[unitName].minerals,
+            vespene: UNITS_BY_NAME[unitName].gas,
+            supply: UNITS_BY_NAME[unitName].supply ?? 0,
         }
     }
 
@@ -947,7 +944,7 @@ class GameLogic {
         // Get build time of unit or structure, or research time of upgrade (in frames)
         if (isUpgrade) {
             console.assert(UPGRADES_BY_NAME[unitName], `${unitName}`)
-            // @ts-ignore
+            // @ts-expect-error
             return UPGRADES_BY_NAME[unitName].time * 16
         }
         console.assert(UNITS_BY_NAME[unitName], `${unitName}`)

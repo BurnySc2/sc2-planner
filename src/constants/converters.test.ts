@@ -1,5 +1,5 @@
-import { convertUnit, convertUpgrade } from "./converters"
 import type { IRawUnit, IRawUpgrade } from "./converters"
+import { convertUnit, convertUpgrade } from "./converters"
 
 describe("convertUnit", () => {
     test("converts a basic unit with all fields", () => {
