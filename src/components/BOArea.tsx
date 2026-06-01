@@ -12,7 +12,7 @@ interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
     highlightedIndexes: number[]
-    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
+    removeClick: (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>, index: number) => void
     changeHoverIndex: (index: number) => void
     changeHighlight: (item?: Event) => void
 }
@@ -285,10 +285,10 @@ export default class BOArea extends Component<MyProps, MyState> {
                         itemName = CUSTOMACTIONS_BY_NAME[item.name].name
                     }
                     rowContent.push(
-                        <div
+                        <button
                             id={`boarea_${item.name}_${index2}`}
                             key={`boArea${barType}${index1}${index2}${item.name}${item.id}`}
-                            className="flex flex-row"
+                            className={`flex flex-row ${CLASSES.buttonReset}`}
                             data-tip=""
                             data-for="boAreaTooltip"
                             onMouseEnter={(_e) => this.onMouseEnter(item)}
@@ -303,7 +303,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                                 />
                                 <div className={CLASSES.boElementText}>{itemName}</div>
                             </div>
-                        </div>,
+                        </button>,
                     )
                 })
                 return (
@@ -370,6 +370,8 @@ export default class BOArea extends Component<MyProps, MyState> {
                                   key={`boArea_${resourceType}_${index1}`}
                                   style={style}
                                   className={CLASSES.boResource}
+                                  role="button"
+                                  tabIndex={0}
                                   data-tip=""
                                   data-for="boAreaTooltip"
                                   onMouseEnter={(e) =>
@@ -434,14 +436,14 @@ export default class BOArea extends Component<MyProps, MyState> {
             })
         }
         // Generate HTML for time bar
-        const timeIntervalContent = timeBarCalc.map((item, index) => {
+        const timeIntervalContent = timeBarCalc.map((item, _index) => {
             const myStyle = {
                 width: `${this.timeInterval * +this.props.gamelogic.settings.htmlElementWidthFactor * 22.4}px`,
             }
             const timeString = CONVERT_SECONDS_TO_TIME_STRING(item.start)
             return (
                 <div
-                    key={`timeInterval_${item.start}_${index}`}
+                    key={`timeInterval_${item.start}`}
                     className={`${CLASSES.boTimeElement} ${CLASSES.typeColor.time} ${CLASSES.hoverColor.time}`}
                     style={myStyle}
                 >

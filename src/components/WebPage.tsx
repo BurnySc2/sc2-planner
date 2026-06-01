@@ -288,7 +288,7 @@ export default withRouter(
             return log
         }
 
-        raceSelectionClicked = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, race: IAllRaces) => {
+        raceSelectionClicked = (_e: React.MouseEvent<HTMLButtonElement, MouseEvent>, race: IAllRaces) => {
             // Set race in state after a race selection icon has been pressed
             const gamelogic = new GameLogic(race, [], this.state.settings, this.state.optimizeSettings)
             gamelogic.setStart()
@@ -351,7 +351,7 @@ export default withRouter(
             gamelogic = gamelogic || this.state.gamelogic
             index = index === -1 ? bo.length - 1 : index
             const deleted = bo.splice(index, 1)
-            let pushDistance
+            let pushDistance: number
             let bestTime = Number.MAX_VALUE
             let bestPushDistance = 0
             for (pushDistance = 1; pushDistance <= index; pushDistance++) {
@@ -502,7 +502,7 @@ export default withRouter(
             this.updateHistoryFromState()
         }
 
-        buildOrderClicked = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+        buildOrderClicked = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>, index: number) => {
             if (this.preponeEventHandler(e, index)) {
                 this.updateHistoryFromState()
             } else {
@@ -621,13 +621,13 @@ export default withRouter(
             window.removeEventListener("keydown", this.handleKeyDown)
         }
 
-        onMultiline = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        onMultiline = (_e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
             this.setState({
                 multilineBuildOrder: !this.state.multilineBuildOrder,
             })
         }
 
-        onMinimize = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        onMinimize = (_e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>) => {
             this.setState({
                 minimizedActionsSelection: !this.state.minimizedActionsSelection,
             })
@@ -683,29 +683,29 @@ export default withRouter(
 
                             <div className="absolute w-full h-0 text-right">
                                 <div className="w-6 inline-block">
-                                    <div
+                                    <button
                                         className={
                                             CLASSES.tinyButtons +
+                                            " " +
+                                            CLASSES.buttonReset +
                                             (this.state.multilineBuildOrder ? "" : " text-lg") +
                                             " ml-auto"
                                         }
                                         onClick={(e) => this.onMultiline(e)}
                                     >
                                         {this.state.multilineBuildOrder ? "―" : "≡"}
-                                    </div>
+                                    </button>
                                 </div>
 
                                 <div
-                                    className={
-                                        (this.state.minimizedActionsSelection ? "w-8" : "w-3/12") + " inline-block"
-                                    }
+                                    className={`${this.state.minimizedActionsSelection ? "w-8" : "w-3/12"} inline-block`}
                                 >
-                                    <div
-                                        className={CLASSES.tinyButtons + " ml-auto"}
+                                    <button
+                                        className={`${CLASSES.tinyButtons} ${CLASSES.buttonReset} ml-auto`}
                                         onClick={(e) => this.onMinimize(e)}
                                     >
                                         {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>

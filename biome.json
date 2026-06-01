@@ -26,6 +26,7 @@
             }
         }
     },
+    "css": {},
     "javascript": {
         "formatter": {
             "arrowParentheses": "always",
@@ -69,6 +70,29 @@
                     "correctness": {
                         "noUnusedVariables": "off",
                         "noUnusedImports": "off"
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["**/*.css"],
+            "linter": {
+                "rules": {
+                    "suspicious": {
+                        "noUnknownAtRules": "off"
+                    }
+                }
+            }
+        },
+        {
+            "includes": ["**/BOArea.tsx"],
+            "linter": {
+                "rules": {
+                    "suspicious": {
+                        "noArrayIndexKey": "off"
+                    },
+                    "a11y": {
+                        "useSemanticElements": "off"
                     }
                 }
             }

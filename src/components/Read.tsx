@@ -300,16 +300,19 @@ export default class Read extends Component<MyProps, MyState> {
             const eventElements: React.ReactElement[] = uniqItems.map((event, j) => {
                 const count = counts[event.name]
                 const image = getImageOfItem(event)
+                // biome-ignore lint/suspicious/noArrayIndexKey: Read instruction indices computed per render
                 const element = <img key={`read_icon_${i}_${j}`} src={image} alt={event.name} />
                 return count === 1 ? (
                     element
                 ) : (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Read instruction indices computed per render
                     <span key={`read_group_${i}_${j}`} className={CLASSES.readIcon}>
                         {element} ✖{count}
                     </span>
                 )
             })
             const elements = (
+                // biome-ignore lint/suspicious/noArrayIndexKey: Instruction index is natural key for sequential steps
                 <div key={`instruc_${i}`} className={CLASSES.readInstruction}>
                     <div className={CLASSES.readIconGroup}>{eventElements}</div>
                     <div className={CLASSES.readTime}>{this.secondsToTimestamp(instruction.ingameWhen)}</div>
@@ -452,12 +455,22 @@ export default class Read extends Component<MyProps, MyState> {
         )
 
         const readButton = (
-            <div className={CLASSES.buttons} onMouseEnter={this.showSettings} onMouseLeave={this.hideSettings}>
+            // biome-ignore lint/a11y/useSemanticElements: Dropdown container shows/hides on hover
+            <div
+                role="button"
+                tabIndex={0}
+                className={CLASSES.buttons}
+                onMouseEnter={this.showSettings}
+                onMouseLeave={this.hideSettings}
+            >
                 Read BO&nbsp;&nbsp;▷
                 <div className={classesDropdown}>
                     <div key="readStartTime" className={CLASSES.dropDownContainer}>
                         <div className={CLASSES.dropDownSubContainer}>
+                            {/* biome-ignore lint/a11y/useSemanticElements: Dropdown label triggers tooltip on hover */}
                             <div
+                                role="button"
+                                tabIndex={0}
                                 className={CLASSES.dropDownLabel}
                                 data-tip
                                 data-for="readTooltip"
@@ -481,17 +494,20 @@ export default class Read extends Component<MyProps, MyState> {
                     </div>
                     {speachStart}
                     <div className={CLASSES.dropDownContainer}>
-                        <div className={CLASSES.dropDownWideButton} onClick={(_e) => this.startReading(this.startTime)}>
+                        <button
+                            className={`${CLASSES.dropDownWideButton} ${CLASSES.buttonReset}`}
+                            onClick={(_e) => this.startReading(this.startTime)}
+                        >
                             <span className={CLASSES.centeredButton}>Read (Beta)</span>
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>
         )
         const stopButton = (
-            <div className={stopVisibility} onClick={(_e) => this.stopReading()}>
+            <button className={`${stopVisibility} ${CLASSES.buttonReset}`} onClick={(_e) => this.stopReading()}>
                 Stop □
-            </div>
+            </button>
         )
         return (
             <div className="flex">

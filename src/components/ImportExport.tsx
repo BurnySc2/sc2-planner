@@ -45,14 +45,14 @@ export default class ImportExport extends Component<MyProps> {
         this.updateTemplateStringTooltip()
     }
 
-    onMouseLeave = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string): void => {
+    onMouseLeave = (_e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>, name: string): void => {
         // On mouse exit: close the above
         this.setState({
             [name]: false,
         })
     }
 
-    onClickExport = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string): void => {
+    onClickExport = (_e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>, name: string): void => {
         // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard
         let clipBoardText = ""
         // TODO Create build order in the desired format
@@ -95,7 +95,7 @@ export default class ImportExport extends Component<MyProps> {
     //     })
     // }
 
-    onLeaveButton = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    onLeaveButton = (_e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>): void => {
         this.setState({
             tooltipText: "",
         })
@@ -188,6 +188,7 @@ export default class ImportExport extends Component<MyProps> {
         // Converts a list of elements to a list where each element gets wrapped into a <div>
         const htmlStuff: Array<React.ReactElement> = []
         list.forEach((item, index) => {
+            // biome-ignore lint/suspicious/noArrayIndexKey: Import list may contain duplicate string items
             htmlStuff.push(<div key={`buildOrderItem${item}${index}`}>{item}</div>)
         })
         return htmlStuff
@@ -236,6 +237,7 @@ export default class ImportExport extends Component<MyProps> {
                         />
 
                         <input
+                            id="workers-checkbox"
                             defaultChecked={this.state.humanReadableIncludeWorkers}
                             type="checkbox"
                             onChange={(e) => {
@@ -246,9 +248,10 @@ export default class ImportExport extends Component<MyProps> {
                             }}
                         />
 
-                        <label>Workers</label>
+                        <label htmlFor="workers-checkbox">Workers</label>
 
                         <input
+                            id="actions-checkbox"
                             defaultChecked={this.state.humanReadableIncludeActions}
                             type="checkbox"
                             onChange={(e) => {
@@ -259,7 +262,7 @@ export default class ImportExport extends Component<MyProps> {
                             }}
                         />
 
-                        <label>Actions</label>
+                        <label htmlFor="actions-checkbox">Actions</label>
                     </div>,
                 )
             }
@@ -270,13 +273,13 @@ export default class ImportExport extends Component<MyProps> {
                     data-for="importExportTooltip"
                     className={CLASSES.dropDownContainer}
                 >
-                    <div
+                    <button
                         onMouseLeave={this.onLeaveButton}
                         onClick={(e) => this.onClickExport(e, item)}
-                        className={CLASSES.dropDownButton}
+                        className={`${CLASSES.dropDownButton} ${CLASSES.buttonReset}`}
                     >
                         {item}
-                    </div>
+                    </button>
                     {otherIcons}
                 </div>
             )
@@ -286,12 +289,14 @@ export default class ImportExport extends Component<MyProps> {
             // "Paste SALT instructions"
         ].map((item) => {
             return (
+                // biome-ignore lint/a11y/useSemanticElements: Import dropdown container (no onClick yet)
                 <div
                     key={`${item}`}
+                    role="button"
+                    tabIndex={0}
                     data-tip={this.state.tooltipText}
                     data-for="importExportTooltip"
                     onMouseLeave={this.onLeaveButton}
-                    // onClick={(e) => this.onClickImport(e, item)}
                     className={CLASSES.dropDownContainer}
                 >
                     <div className={CLASSES.dropDownButton}>{item}</div>
@@ -300,7 +305,10 @@ export default class ImportExport extends Component<MyProps> {
         })
 
         const exportButton = (
+            // biome-ignore lint/a11y/useSemanticElements: Dropdown container
             <div
+                role="button"
+                tabIndex={0}
                 className={CLASSES.buttons}
                 onMouseEnter={(e) => this.onMouseEnter(e, "export")}
                 onMouseLeave={(e) => this.onMouseLeave(e, "export")}
@@ -312,7 +320,10 @@ export default class ImportExport extends Component<MyProps> {
 
         // eslint-disable-next-line
         const _importButton = (
+            // biome-ignore lint/a11y/useSemanticElements: Dropdown container
             <div
+                role="button"
+                tabIndex={0}
                 className={CLASSES.buttons}
                 onMouseEnter={(e) => this.onMouseEnter(e, "import")}
                 onMouseLeave={(e) => this.onMouseLeave(e, "import")}

@@ -41,7 +41,7 @@ export class Optimize extends Component<MyProps, MyState> {
         props.getOnAddConstraint(this.onAddConstraint.bind(this))
     }
 
-    showSettings = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>): void => {
+    showSettings = (_e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>): void => {
         this.setState({
             show: true,
         })
@@ -75,7 +75,7 @@ export class Optimize extends Component<MyProps, MyState> {
     }
 
     onApply = async (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        _e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>,
         optimizationName: string | number,
     ): Promise<void> => {
         const log = await this.props.applyOpitimization([`${optimizationName}`])
@@ -241,13 +241,17 @@ export class Optimize extends Component<MyProps, MyState> {
                 key={item.n}
                 className={isTextarea ? CLASSES.dropDownSubContainerMultiline : CLASSES.dropDownSubContainer}
             >
+                {/* biome-ignore lint/a11y/useSemanticElements: Dropdown label triggers tooltip on hover */}
                 <div
+                    role="button"
+                    tabIndex={0}
                     className={CLASSES.dropDownLabelMultiline}
                     data-tip
                     data-for="optimizeSettingsTooltip"
                     onMouseEnter={(e) => this.mouseEnterFunc(e, item.tooltip)}
                 >
                     {`${item.name}`.split("\n").map((item, key) => {
+                        // biome-ignore lint/suspicious/noArrayIndexKey: Split string lines are static, position is natural key
                         return <div key={key}>{item}</div>
                     })}
                     {item.removes && doesHaveConstraints && item.v === 1 ? (
@@ -286,18 +290,18 @@ export class Optimize extends Component<MyProps, MyState> {
             const additionalField = addiItems.map((item) => this.createInput(item, doesHaveConstraints))
             const classes = [CLASSES.dropDownContainer, "flex flex-col", index > 0 ? "border-t border-black pt-3" : ""]
             const applyButton: React.ReactElement | undefined = item.apply ? (
-                <div
-                    className={`${CLASSES.dropDownButton} m-2 p-2`}
+                <button
+                    className={`${CLASSES.dropDownButton} m-2 p-2 ${CLASSES.buttonReset}`}
                     onClick={(e) => this.onApply(e, item.variableName)}
                     onMouseEnter={(e) => this.mouseEnterFunc(e, item.tooltip)}
                     data-tip
                     data-for="optimizeSettingsTooltip"
                 >
                     {item.apply}
-                </div>
+                </button>
             ) : undefined
             return (
-                <div key={index} className={classes.join(" ")}>
+                <div key={item.n} className={classes.join(" ")}>
                     {this.createInput(item, doesHaveConstraints)}
                     {additionalField}
                     {applyButton}
@@ -308,7 +312,14 @@ export class Optimize extends Component<MyProps, MyState> {
         // TODO Add apply button because onChange doesnt work reliably (laggy behavior)
 
         const settingsButton = (
-            <div className={CLASSES.buttons} onMouseEnter={this.showSettings} onMouseLeave={this.hideSettings}>
+            // biome-ignore lint/a11y/useSemanticElements: Dropdown container shows/hides on hover
+            <div
+                role="button"
+                tabIndex={0}
+                className={CLASSES.buttons}
+                onMouseEnter={this.showSettings}
+                onMouseLeave={this.hideSettings}
+            >
                 Optimize
                 <div className={classesDropdown}>{settingsElements}</div>
             </div>

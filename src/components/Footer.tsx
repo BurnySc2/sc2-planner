@@ -5,6 +5,7 @@ import ReactTooltip from "react-tooltip"
 import CLASSES from "../constants/classes"
 import type { IButton } from "../constants/interfaces"
 
+// biome-ignore lint/complexity/noBannedTypes: Component has no props
 type MyProps = {}
 
 interface MyState {
@@ -83,7 +84,7 @@ export default class Footer extends Component<MyProps, MyState> {
     }
 
     onMouseEnter = (
-        e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+        _e: React.MouseEvent<HTMLDivElement, MouseEvent> | React.MouseEvent<HTMLAnchorElement, MouseEvent>,
         item: string | React.ReactElement,
     ): void => {
         this.setState({
@@ -102,8 +103,11 @@ export default class Footer extends Component<MyProps, MyState> {
             }
             if (item.url === "") {
                 return (
+                    /* biome-ignore lint/a11y/useSemanticElements: Tooltip trigger element, not a button */
                     <div
                         key={item.name}
+                        role="button"
+                        tabIndex={0}
                         data-tip
                         data-for="footerTooltip"
                         onMouseEnter={mouseEnterFunc}

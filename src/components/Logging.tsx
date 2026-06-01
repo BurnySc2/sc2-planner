@@ -110,9 +110,13 @@ export default class Logging extends Component<MyProps, MyState> {
             }
             if (!log.hideCloseButton) {
                 messages.push(
-                    <div key="closeButton" className={CLASSES.tinyButtons + " ml-2"} onClick={() => this.onClose()}>
+                    <button
+                        key="closeButton"
+                        className={`${CLASSES.tinyButtons} ml-2 ${CLASSES.buttonReset}`}
+                        onClick={() => this.onClose()}
+                    >
                         ✖
-                    </div>,
+                    </button>,
                 )
             }
         }

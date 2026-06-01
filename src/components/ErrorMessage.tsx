@@ -12,7 +12,7 @@ export default class ErrorMessage extends Component<MyProps> {
     render(): React.ReactElement {
         return (
             <div>
-                <label className={CLASSES.errorLabel}>{this.props.gamelogic.errorMessage}</label>
+                <span className={CLASSES.errorLabel}>{this.props.gamelogic.errorMessage}</span>
             </div>
         )
     }
