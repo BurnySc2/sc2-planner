@@ -555,7 +555,10 @@ class GameLogic {
             for (const requiredItem of requirementList) {
                 if (!itemPresence[requiredItem]) {
                     error.message = `Required ${requiredItem} for ${itemName} could not be found.`
-                    error.requirements.push(BO_ITEMS[requiredItem])
+                    const boItem = BO_ITEMS[requiredItem]
+                    if (boItem) {
+                        error.requirements.push(boItem)
+                    }
                     error.neededEffort += 1 / requirementList.length
                 }
             }

@@ -457,3 +457,13 @@ test("Add Zealot via WarpGate path", () => {
     expect(warpgateCount).toBe(1)
     expect(gatewayCount).toBe(0) // Gateway was morphed to WarpGate
 })
+
+test("Add LurkerMP with required tech", () => {
+    const prevLogic = new GameLogic("zerg", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "LurkerMP", type: "unit" }, 0)
+
+    expect(insertedItems).toBe(8)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(8)
+    expect(logic.supplyCap).toBe(14)
+})
