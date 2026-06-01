@@ -615,9 +615,9 @@ class GameLogic {
             }
 
             // Loop over all idle units and check if they match unit type
-            
+
             const trainerCanTrainThisUnit =
-            trainInfo.trainedBy.has(trainerUnit.name) && (!trainInfo.requiresTechlab || trainerUnit.hasTechlab)
+                trainInfo.trainedBy.has(trainerUnit.name) && (!trainInfo.requiresTechlab || trainerUnit.hasTechlab)
             const trainerCanTrainThroughReactor =
                 trainInfo.trainedBy.has(trainerUnit.name) &&
                 !trainInfo.requiresTechlab &&

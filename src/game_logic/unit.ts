@@ -1,4 +1,4 @@
-import { IDataUnit } from "../constants/interfaces"
+import type { IDataUnit } from "../constants/interfaces"
 import UNITS_BY_NAME from "../constants/units_by_name"
 
 import Event from "./event"

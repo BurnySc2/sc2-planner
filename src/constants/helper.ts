@@ -274,13 +274,13 @@ const encodeSettings = (
         return settingsDefaultValues[item.n] !== item.v
     })
     const jsonString = JSON.stringify(strippedObject)
-    // @ts-ignore
+    // @ts-expect-error
     const encoded = lzbase62.compress(jsonString)
     return encoded
 }
 
 const decodeSettings = (settingsEncoded: string): Array<ISettingsElement> => {
-    // @ts-ignore
+    // @ts-expect-error
     const decodedString = lzbase62.decompress(settingsEncoded)
     const jsonObj = JSON.parse(decodedString)
     return jsonObj

@@ -33,7 +33,9 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
             }
         }
 
-        const requires = [...(producedUnit.requires || [])].filter((r) => typeof r !== "string" || !r.startsWith("Attached"))
+        const requires = [...(producedUnit.requires || [])].filter(
+            (r) => typeof r !== "string" || !r.startsWith("Attached"),
+        )
         if (requiresTechlab) {
             requires.push(unitName + "TechLab")
         } else {
@@ -81,7 +83,9 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
             }
         }
 
-        const requires = [...(builtUnit.requires || [])].filter((r) => typeof r !== "string" || !r.startsWith("Attached"))
+        const requires = [...(builtUnit.requires || [])].filter(
+            (r) => typeof r !== "string" || !r.startsWith("Attached"),
+        )
         if (requiresTechlab) {
             requires.push(unitName + "TechLab")
         } else {

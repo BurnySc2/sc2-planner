@@ -128,7 +128,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             )
         })
 
-        const units = UNITS.filter(u => u.name !== "Larva").map((item, _index) => {
+        const units = UNITS.filter((u) => u.name !== "Larva").map((item, _index) => {
             // Update tooltip function
             const mouseEnterFunc = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                 this.onMouseEnter(

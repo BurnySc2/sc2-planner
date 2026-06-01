@@ -1,11 +1,10 @@
 import { gasBuildingByRace, workerNameByRace } from "../constants/bo_items"
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 import type { IBuildOrderElement } from "../constants/interfaces"
 import Event from "./event"
 import type { GameLogic } from "./gamelogic"
 import Task from "./task"
 import Unit from "./unit"
-
-import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 

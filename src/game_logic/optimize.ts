@@ -258,7 +258,7 @@ class OptimizeLogic {
                         }
                     } while (
                         (validatesConstraints && isBetter) ||
-                        // @ts-ignore is always number
+                        // @ts-expect-error is always number
                         initialWorkerCount + addedWorkerCount >= this.optimizeSettings.maximizeWorkers
                     )
                     resolve()

@@ -390,39 +390,31 @@ test("Add ProtossGroundWeaponsLevel1 with required tech", () => {
         0,
     )
 
-    expect(insertedItems).toBe(5)    // Pylon, Forge, Assimilator, 3worker_to_gas, PGW1
-    expect(logic.units.size).toBe(16)  // Nexus(1) + 12 Probes + Pylon + Forge + Assimilator = 16
+    expect(insertedItems).toBe(5) // Pylon, Forge, Assimilator, 3worker_to_gas, PGW1
+    expect(logic.units.size).toBe(16) // Nexus(1) + 12 Probes + Pylon + Forge + Assimilator = 16
     expect(logic.eventLog.length).toBe(5)
-    expect(logic.supplyCap).toBe(23)   // Nexus(15) + Pylon(8) = 23
+    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
     expect(logic.upgrades.has("ProtossGroundWeaponsLevel1")).toBe(true)
 })
 
 test("Add Gateway with required tech", () => {
     const prevLogic = new GameLogic("protoss", [])
-    const [logic, insertedItems] = GameLogic.addItemToBO(
-        prevLogic,
-        { name: "Gateway", type: "structure" },
-        0,
-    )
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Gateway", type: "structure" }, 0)
 
-    expect(insertedItems).toBe(2)    // Pylon, Gateway
-    expect(logic.units.size).toBe(15)  // Nexus(1) + 12 Probes + Pylon + Gateway = 15
+    expect(insertedItems).toBe(2) // Pylon, Gateway
+    expect(logic.units.size).toBe(15) // Nexus(1) + 12 Probes + Pylon + Gateway = 15
     expect(logic.eventLog.length).toBe(2)
-    expect(logic.supplyCap).toBe(23)   // Nexus(15) + Pylon(8) = 23
+    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
 })
 
 test("Add Zealot with required tech", () => {
     const prevLogic = new GameLogic("protoss", [])
-    const [logic, insertedItems] = GameLogic.addItemToBO(
-        prevLogic,
-        { name: "Zealot", type: "unit" },
-        0,
-    )
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Zealot", type: "unit" }, 0)
 
-    expect(insertedItems).toBe(3)    // Pylon, Gateway, Zealot
-    expect(logic.units.size).toBe(16)  // Nexus(1) + 12 Probes + Pylon + Gateway + Zealot
-    expect(logic.eventLog.length).toBe(3)  // Pylon built, Gateway built, Zealot trained
-    expect(logic.supplyCap).toBe(23)   // Nexus(15) + Pylon(8) = 23
+    expect(insertedItems).toBe(3) // Pylon, Gateway, Zealot
+    expect(logic.units.size).toBe(16) // Nexus(1) + 12 Probes + Pylon + Gateway + Zealot
+    expect(logic.eventLog.length).toBe(3) // Pylon built, Gateway built, Zealot trained
+    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
 })
 
 test("Add Zealot via WarpGate path", () => {
@@ -433,21 +425,17 @@ test("Add Zealot via WarpGate path", () => {
         0,
     )
 
-    expect(insertedItems).toBe(7)    // Pylon, Gateway, CyberneticsCore, WarpGateResearch, convert
-    expect(logic.units.size).toBe(17)  // Nexus(1) + 12 Probes + Pylon + WarpGate + CyberneticsCore
-    expect(logic.eventLog.length).toBe(7)  // Pylon, Gateway, CyberneticsCore, WarpGateResearch (no event for morph)
+    expect(insertedItems).toBe(7) // Pylon, Gateway, CyberneticsCore, WarpGateResearch, convert
+    expect(logic.units.size).toBe(17) // Nexus(1) + 12 Probes + Pylon + WarpGate + CyberneticsCore
+    expect(logic.eventLog.length).toBe(7) // Pylon, Gateway, CyberneticsCore, WarpGateResearch (no event for morph)
     expect(logic.supplyCap).toBe(23)
     expect(logic.upgrades.has("WarpGateResearch")).toBe(true)
 
-    ;[logic, insertedItems] = GameLogic.addItemToBO(
-        logic,
-        { name: "Zealot", type: "unit" },
-        insertedItems,
-    )
+    ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Zealot", type: "unit" }, insertedItems)
 
-    expect(insertedItems).toBe(1)    // Just Zealot (WarpGate already exists)
-    expect(logic.units.size).toBe(18)  // +1 Zealot
-    expect(logic.eventLog.length).toBe(8)  // +1 Zealot train event
+    expect(insertedItems).toBe(1) // Just Zealot (WarpGate already exists)
+    expect(logic.units.size).toBe(18) // +1 Zealot
+    expect(logic.eventLog.length).toBe(8) // +1 Zealot train event
     expect(logic.supplyCap).toBe(23)
 
     // Verify Zealot was produced by WarpGate, not Gateway
@@ -455,11 +443,17 @@ test("Add Zealot via WarpGate path", () => {
     let warpgateCount = 0
     let gatewayCount = 0
     logic.units.forEach((unit) => {
-        if (unit.name === "Zealot"){ zealotCount++}
-        if (unit.name === "WarpGate") {warpgateCount++}
-        if (unit.name === "Gateway"){ gatewayCount++}
+        if (unit.name === "Zealot") {
+            zealotCount++
+        }
+        if (unit.name === "WarpGate") {
+            warpgateCount++
+        }
+        if (unit.name === "Gateway") {
+            gatewayCount++
+        }
     })
     expect(zealotCount).toBe(1)
     expect(warpgateCount).toBe(1)
-    expect(gatewayCount).toBe(0)       // Gateway was morphed to WarpGate
+    expect(gatewayCount).toBe(0) // Gateway was morphed to WarpGate
 })
