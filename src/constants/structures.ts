@@ -21,6 +21,7 @@ const ignoreStructure = new Set([
     // Protoss
     "WarpGate",
     "OracleStasisTrap",
+    "AssimilatorRich",
     // Terran
     "SupplyDepotLowered",
     "CommandCenterFlying",
@@ -31,12 +32,14 @@ const ignoreStructure = new Set([
     "AutoTurret",
     "TechLab",
     "Reactor",
+    "RefineryRich",
     // Zerg
     "CreepTumor",
     "CreepTumorQueen",
     "SpineCrawlerUprooted",
     "SporeCrawlerUprooted",
     "NydusCanal",
+    "ExtractorRich",
 ])
 
 // @ts-expect-error

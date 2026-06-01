@@ -81,7 +81,7 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
 
         const consumesUnit = unitName === "Drone"    
         // @ts-ignore
-        const {minerals,vespene,_food} = getProductionCost(unitName, builtUnitName, consumesUnit)
+        const {minerals,vespene,food} = getProductionCost(unitName, builtUnitName, consumesUnit)
 
 
         if (TRAINED_BY[builtUnitName] === undefined) {
@@ -93,7 +93,7 @@ for (const [unitName, unitInfo] of Object.entries(data.Units)) {
                 isMorph: false,
                 morphCostMinerals:minerals,
                 morphCostGas:vespene,
-                morphCostSupply: 0,
+                morphCostSupply: food,
                 consumesUnit,
                 requiredStructure: null,
                 requiredUpgrade: null,

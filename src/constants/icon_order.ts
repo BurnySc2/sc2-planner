@@ -222,14 +222,14 @@ const upgradePriority: { [name: string]: number } = {
 }
 
 const iconSortUnitFunction = (item1: IDataUnit, item2: IDataUnit): number => {
-    return unitPriority[item1.name] - unitPriority[item2.name]
+    return (unitPriority[item1.name] ?? 0) - (unitPriority[item2.name] ?? 0)
 }
 
 const iconSortStructureFunction = (item1: IDataUnit, item2: IDataUnit): number => {
-    return structurePriority[item1.name] - structurePriority[item2.name]
+    return (structurePriority[item1.name] ?? 0) - (structurePriority[item2.name] ?? 0)
 }
 const iconSortUpgradeFunction = (item1: IDataUpgrade, item2: IDataUpgrade): number => {
-    return upgradePriority[item1.name] - upgradePriority[item2.name]
+    return (upgradePriority[item1.name] ??  0) - (upgradePriority[item2.name] ?? 0)
 }
 
 export { iconSortStructureFunction, iconSortUnitFunction, iconSortUpgradeFunction }

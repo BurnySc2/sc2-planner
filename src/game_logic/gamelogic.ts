@@ -925,18 +925,18 @@ class GameLogic {
                 return {
                     minerals: trained_by.morphCostMinerals,
                     vespene: trained_by.morphCostGas,
-                    supply: trained_by.morphCostSupply,
+                    supply: -trained_by.morphCostSupply,
                 }
             }
         }
-        console.assert(UNITS_BY_NAME[unitName], `${unitName}`)        
+        console.assert(UNITS_BY_NAME[unitName], `${unitName}`)                
         return {
             // @ts-ignore
             minerals: UNITS_BY_NAME[unitName].CostResource?.Minerals ?? 0,
             // @ts-ignore
             vespene: UNITS_BY_NAME[unitName].CostResource?.Vespene ?? 0,
             // @ts-ignore
-            supply: -(UNITS_BY_NAME[unitName].Food ?? 0),
+            supply: -UNITS_BY_NAME[unitName].Food,
         }
     }
 
