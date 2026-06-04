@@ -1,48 +1,33 @@
-import ENABLED_UPGRADES from "./enabled_upgrades"
+// npx tsx src/constants/upgrades.ts
+
+import { convertUpgrade, type IRawUnit, type IRawUpgrade } from "./converters"
 import data from "./data.json"
-import { IDataUpgrade, IAllRaces } from "./interfaces"
 import { iconSortUpgradeFunction } from "./icon_order"
-
-// Maps ability id to upgrade id
-const ABILITY_TO_UPGRADES: { [name: number]: number } = {}
-
-data.Ability.forEach(
-    // TODO Fix me
-    // @ts-ignore
-    (ability: { ability: number; id: number; target: { Research: { upgrade: number } } }) => {
-        const target = ability.target
-        if (typeof target !== "string") {
-            const research = target.Research
-            if (research) {
-                ABILITY_TO_UPGRADES[ability.id] = research.upgrade
-            }
-        }
-    }
-)
-
-// Maps upgrade_id to upgrade_data
-const upgrade_data: { [name: number]: IDataUpgrade } = {}
-
-data.Upgrade.forEach((upgrade) => {
-    upgrade_data[upgrade.id] = upgrade
-})
+import type { IDataUpgrade } from "./interfaces"
 
 // Contains all race specific upgrades
 const UPGRADES: Array<IDataUpgrade> = []
 
-// Store all upgrade ids
-const alreadyUsedIds = new Set()
+// Mapping from raw Race short codes to IAllRaces
+const RACE_MAP: Record<string, "terran" | "protoss" | "zerg"> = {
+    Terr: "terran",
+    Prot: "protoss",
+    Zerg: "zerg",
+}
 
-data.Unit.forEach((unit) => {
-    unit.abilities.forEach((ability, _index) => {
-        const upgrade_id = ABILITY_TO_UPGRADES[ability.ability]
-        if (ENABLED_UPGRADES.has(upgrade_id) && !alreadyUsedIds.has(upgrade_id)) {
-            alreadyUsedIds.add(upgrade_id)
-            const upgrade = upgrade_data[upgrade_id]
-            upgrade.race = unit.race.toLowerCase() as IAllRaces
-            UPGRADES.push(upgrade)
+;(Object.values(data.Units) as IRawUnit[]).forEach((unit) => {
+    unit.researches?.forEach((upgradeName: string) => {
+        const rawUpgrade = (data.Upgrades as unknown as Record<string, IRawUpgrade>)[upgradeName]
+        if (rawUpgrade) {
+            const converted = convertUpgrade(rawUpgrade)
+            // Override race from the parent unit's Race field
+            if (unit.Race && RACE_MAP[unit.Race]) {
+                converted.race = RACE_MAP[unit.Race]
+            }
+            if (!UPGRADES.some((u) => u.name === upgradeName)) {
+                UPGRADES.push(converted)
+            }
         }
-        return
     })
 })
 UPGRADES.sort(iconSortUpgradeFunction)
@@ -84,4 +69,4 @@ UPGRADES.forEach((item) => {
 console.assert(Object.keys(UPGRADES).length === 89, `${Object.keys(UPGRADES).length} is not 89`)
 
 // Returns object with keys as upgrade id and value is equal to 1 (int) if the upgrade is available from an ability
-export { UPGRADES, UPGRADE_NAMES_BY_RACE }
+export { UPGRADE_NAMES_BY_RACE, UPGRADES }

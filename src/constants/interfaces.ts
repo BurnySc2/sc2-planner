@@ -1,5 +1,5 @@
-import React from "react"
-import { GameLogic } from "../game_logic/gamelogic"
+import type React from "react"
+import type { GameLogic } from "../game_logic/gamelogic"
 
 type IAllRaces = "zerg" | "terran" | "protoss"
 
@@ -134,20 +134,20 @@ interface IResourceHistory {
 }
 
 export type {
-    IReplaceString,
     IAllRaces,
     IBarTypes,
-    IButton,
-    ISettingsElement,
     IBuildOrderElement,
+    IButton,
     ICost,
     ICustomAction,
+    IDataAbility,
     IDataUnit,
     IDataUpgrade,
-    IDataAbility,
+    IReplaceString,
     IResearchedBy,
-    ITrainedBy,
-    WebPageState,
-    Log,
     IResourceHistory,
+    ISettingsElement,
+    ITrainedBy,
+    Log,
+    WebPageState,
 }

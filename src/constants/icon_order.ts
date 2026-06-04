@@ -1,4 +1,4 @@
-import { IDataUnit, IDataUpgrade } from "./interfaces"
+import type { IDataUnit, IDataUpgrade } from "./interfaces"
 
 const unitPriority: { [name: string]: number } = {
     // Protoss
@@ -123,33 +123,33 @@ const structurePriority: { [name: string]: number } = {
 
 const upgradePriority: { [name: string]: number } = {
     // Protoss
-    ProtossGroundWeaponsLevel1: 2,
-    ProtossGroundWeaponsLevel2: 3,
-    ProtossGroundWeaponsLevel3: 4,
-    ProtossGroundArmorsLevel1: 5,
-    ProtossGroundArmorsLevel2: 6,
-    ProtossGroundArmorsLevel3: 7,
-    ProtossShieldsLevel1: 8,
-    ProtossShieldsLevel2: 9,
-    ProtossShieldsLevel3: 10,
-    ObserverGraviticBooster: 20,
-    GraviticDrive: 21,
-    ExtendedThermalLance: 22,
-    PsiStormTech: 23,
+    ProtossGroundWeaponsLevel1: 1,
+    ProtossGroundWeaponsLevel2: 2,
+    ProtossGroundWeaponsLevel3: 3,
+    ProtossGroundArmorsLevel1: 4,
+    ProtossGroundArmorsLevel2: 5,
+    ProtossGroundArmorsLevel3: 6,
+    ProtossShieldsLevel1: 7,
+    ProtossShieldsLevel2: 8,
+    ProtossShieldsLevel3: 9,
+    ObserverGraviticBooster: 21,
+    GraviticDrive: 22,
+    ExtendedThermalLance: 23,
+    PsiStormTech: 24,
     ProtossAirWeaponsLevel1: 11,
     ProtossAirWeaponsLevel2: 12,
     ProtossAirWeaponsLevel3: 13,
     ProtossAirArmorsLevel1: 14,
     ProtossAirArmorsLevel2: 15,
     ProtossAirArmorsLevel3: 16,
-    WarpGateResearch: 1,
-    Charge: 17,
-    BlinkTech: 18,
-    PhoenixRangeUpgrade: 24,
-    AdeptPiercingAttack: 19,
-    DarkTemplarBlinkUpgrade: 27,
-    VoidRaySpeedUpgrade: 25,
-    TempestGroundAttackUpgrade: 26,
+    WarpGateResearch: 10,
+    Charge: 18,
+    BlinkTech: 19,
+    PhoenixRangeUpgrade: 25,
+    AdeptPiercingAttack: 20,
+    DarkTemplarBlinkUpgrade: 28,
+    VoidRaySpeedUpgrade: 26,
+    TempestGroundAttackUpgrade: 27,
 
     // Terran
     HiSecAutoTracking: 60,
@@ -181,7 +181,7 @@ const upgradePriority: { [name: string]: number } = {
     MedivacIncreaseSpeedBoost: 54,
     LiberatorAGRangeUpgrade: 52,
     CycloneLockOnDamageUpgrade: 22,
-    SmartServos: 34,
+    TransformationServos: 34,
     EnhancedShockwaves: 36,
     HurricaneThrusters: 31,
     InterferenceMatrix: 42,
@@ -215,6 +215,7 @@ const upgradePriority: { [name: string]: number } = {
     MicrobialShroud: 42,
     EvolveGroovedSpines: 50,
     EvolveMuscularAugments: 51,
+    Frenzy: 52,
     DiggingClaws: 55,
     LurkerRange: 56,
     ChitinousPlating: 60,
@@ -222,32 +223,14 @@ const upgradePriority: { [name: string]: number } = {
 }
 
 const iconSortUnitFunction = (item1: IDataUnit, item2: IDataUnit): number => {
-    const result = unitPriority[item1.name] - unitPriority[item2.name]
-    if (result < 0) {
-        return -1
-    } else if (result > 0) {
-        return 1
-    }
-    return 0
+    return (unitPriority[item1.name] ?? 0) - (unitPriority[item2.name] ?? 0)
 }
 
 const iconSortStructureFunction = (item1: IDataUnit, item2: IDataUnit): number => {
-    const result = structurePriority[item1.name] - structurePriority[item2.name]
-    if (result < 0) {
-        return -1
-    } else if (result > 0) {
-        return 1
-    }
-    return 0
+    return (structurePriority[item1.name] ?? 0) - (structurePriority[item2.name] ?? 0)
 }
 const iconSortUpgradeFunction = (item1: IDataUpgrade, item2: IDataUpgrade): number => {
-    const result = upgradePriority[item1.name] - upgradePriority[item2.name]
-    if (result < 0) {
-        return -1
-    } else if (result > 0) {
-        return 1
-    }
-    return 0
+    return (upgradePriority[item1.name] ?? 0) - (upgradePriority[item2.name] ?? 0)
 }
 
-export { iconSortUnitFunction, iconSortStructureFunction, iconSortUpgradeFunction }
+export { iconSortStructureFunction, iconSortUnitFunction, iconSortUpgradeFunction }

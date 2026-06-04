@@ -1,5 +1,5 @@
-import { ICustomAction } from "./interfaces"
 import customactions from "./customactions.json"
+import type { ICustomAction } from "./interfaces"
 
 const CUSTOMACTIONS: Array<ICustomAction> = customactions
 
@@ -12,4 +12,5 @@ CUSTOMACTIONS.forEach((customAction) => {
     // Load image from path
     // customAction["image"] = require(`../icons/png/${customAction.path}`)
 })
-export { CUSTOMACTIONS, CUSTOMACTIONS_BY_NAME, CUSTOMACTIONS_BY_ID }
+
+export { CUSTOMACTIONS, CUSTOMACTIONS_BY_ID, CUSTOMACTIONS_BY_NAME }

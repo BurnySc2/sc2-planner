@@ -1,10 +1,10 @@
+import { gasBuildingByRace, workerNameByRace } from "../constants/bo_items"
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
+import type { IBuildOrderElement } from "../constants/interfaces"
 import Event from "./event"
-import Unit from "./unit"
+import type { GameLogic } from "./gamelogic"
 import Task from "./task"
-import { GameLogic } from "./gamelogic"
-import { IBuildOrderElement } from "../constants/interfaces"
-import { workerNameByRace, gasBuildingByRace } from "../constants/bo_items"
-const { CUSTOMACTIONS_BY_NAME } = require("../constants/customactions")
+import Unit from "./unit"
 
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
@@ -146,8 +146,8 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                     start,
                     start + action.duration * 22.4,
                     gamelogic.getEventId(),
-                    gamelogic.supplyUsed
-                )
+                    gamelogic.supplyUsed,
+                ),
             )
             return true
         }
@@ -167,8 +167,8 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                     start,
                     start + action.duration * 22.4,
                     gamelogic.getEventId(),
-                    gamelogic.supplyUsed
-                )
+                    gamelogic.supplyUsed,
+                ),
             )
             return true
         }
@@ -749,7 +749,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                     +gamelogic.settings.addonSwapDelay * 22.4,
                     gamelogic.frame,
                     gamelogic.supplyUsed,
-                    -1
+                    -1,
                 )
                 if (!attachReactor) {
                     task.addsTechlab = true
@@ -792,7 +792,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
             gamelogic.errorMessage = `Could not find a '${structureName}' with Techlab to dettach from.`
             gamelogic.requirements = [
                 {
-                    name: structureName + "TechLab",
+                    name: `${structureName}TechLab`,
                     type: "structure",
                 },
             ]
@@ -800,7 +800,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
             gamelogic.errorMessage = `Could not find a '${structureName}' with Reactor to attach to addon.`
             gamelogic.requirements = [
                 {
-                    name: structureName + "Reactor",
+                    name: `${structureName}Reactor`,
                     type: "structure",
                 },
             ]
@@ -816,7 +816,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                     +gamelogic.settings.addonSwapDelay * 22.4,
                     gamelogic.frame,
                     gamelogic.supplyUsed,
-                    -1
+                    -1,
                 )
                 task.isLanding = true
                 unit.addTask(gamelogic, task)
@@ -868,10 +868,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                 gamelogic.errorMessage = "Could not find an inject target."
                 for (const hatch of gamelogic.idleUnits) {
                     // Find zerg townhall without inject
-                    if (
-                        ["Hatchery", "Lair", "Hive"].includes(hatch.name) &&
-                        hatch.hasInjectUntilFrame === -1
-                    ) {
+                    if (["Hatchery", "Lair", "Hive"].includes(hatch.name) && hatch.hasInjectUntilFrame === -1) {
                         queen.energy -= 25
                         hatch.hasInjectUntilFrame = gamelogic.frame + 29 * 22.4
                         actionCompleted = true
@@ -915,8 +912,8 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                 gamelogic.frame,
                 gamelogic.frame + 22.4 * action.duration,
                 gamelogic.getEventId(),
-                gamelogic.supplyUsed
-            )
+                gamelogic.supplyUsed,
+            ),
         )
         return true
     }

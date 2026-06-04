@@ -1,12 +1,13 @@
-import React, { Component } from "react"
-import CLASSES from "../constants/classes"
-
+import type { DropResult } from "@hello-pangea/dnd"
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd"
 import { includes } from "lodash"
+import type React from "react"
+import { Component } from "react"
+import CLASSES from "../constants/classes"
 import { getImageOfItem } from "../constants/helper"
-import { GameLogic } from "../game_logic/gamelogic"
-import Event from "../game_logic/event"
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd"
-import { IBuildOrderElement, ISettingsElement, IAllRaces } from "../constants/interfaces"
+import type { IAllRaces, IBuildOrderElement, ISettingsElement } from "../constants/interfaces"
+import type Event from "../game_logic/event"
+import type { GameLogic } from "../game_logic/gamelogic"
 
 // A function to help us with reordering the result
 // https://www.npmjs.com/package/react-beautiful-dnd
@@ -24,13 +25,13 @@ interface MyProps {
     hoverIndex: number
     highlightedIndexes: number[]
     insertIndex: number
-    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
+    removeClick: (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>, index: number) => void
     rerunBuildOrder: (buildOrder: IBuildOrderElement[]) => void
     updateUrl: (
         race: IAllRaces | undefined,
         buildOrder: IBuildOrderElement[],
         settings: ISettingsElement[] | undefined,
-        optimizeSettings: ISettingsElement[] | undefined
+        optimizeSettings: ISettingsElement[] | undefined,
     ) => void
     changeHoverIndex: (index: number) => void
     changeHighlight: (item?: Event) => void
@@ -71,7 +72,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         const items: Array<IBuildOrderElement> = reorder(
             this.props.gamelogic.bo,
             result.source.index,
-            result.destination.index
+            result.destination.index,
         )
 
         this.props.rerunBuildOrder(items)
@@ -80,7 +81,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
             this.props.gamelogic.race,
             items,
             this.props.gamelogic.exportSettings(),
-            this.props.gamelogic.exportOptimizeSettings()
+            this.props.gamelogic.exportOptimizeSettings(),
         )
     }
 
@@ -94,6 +95,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
 
         const buildOrder = this.props.gamelogic.bo.map((item, index) => {
             const image = getImageOfItem(item)
+            // biome-ignore lint/suspicious/noArrayIndexKey: Build order may contain duplicate item names, index needed for unique keys
             return <img key={`${item.name}_${index}`} src={image} alt={item.name} />
         })
 
@@ -122,54 +124,67 @@ export default class BuildOrder extends Component<MyProps, MyState> {
         }
 
         const buildOrderItems: React.ReactElement[] = []
-        let separatorClass =
-            this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
+        let separatorClass = this.props.insertIndex === 0 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
         buildOrderItems.push(
-            <div
+            <button
                 id={"separator_0"}
                 key={"separator0"}
-                className={separatorClass}
+                className={`${separatorClass} ${CLASSES.buttonReset}`}
                 onClick={(_e) => {
                     this.props.changeInsertIndex(0)
                 }}
-            />
+            />,
         )
 
         this.props.gamelogic.bo.forEach((item, index) => {
             buildOrderItems.push(
+                // biome-ignore lint/suspicious/noArrayIndexKey: Required by DnD library for index-based reordering
                 <Draggable key={`${index}`} draggableId={`${index}`} index={index}>
                     {(provided, snapshot) => (
+                        // biome-ignore lint/a11y/useSemanticElements: Required by DnD library for drag-and-drop
                         <div
                             id={`bo_${item.name}_${index}`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                             className={getItemClass(snapshot.isDragging, index)}
+                            role="button"
+                            tabIndex={0}
                             onMouseEnter={(_e) => this.onMouseEnter(index)}
                             onMouseLeave={(_e) => this.onMouseLeave()}
                             onClick={(e) => {
                                 this.props.removeClick(e, index)
                             }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ") {
+                                    this.props.removeClick(
+                                        e as unknown as React.MouseEvent<
+                                            HTMLDivElement | HTMLButtonElement,
+                                            MouseEvent
+                                        >,
+                                        index,
+                                    )
+                                }
+                            }}
                         >
                             {buildOrder[index]}
                         </div>
                     )}
-                </Draggable>
+                </Draggable>,
             )
 
             separatorClass =
-                this.props.insertIndex === index + 1
-                    ? CLASSES.boItemSeparatorSelected
-                    : CLASSES.boItemSeparator
+                this.props.insertIndex === index + 1 ? CLASSES.boItemSeparatorSelected : CLASSES.boItemSeparator
             buildOrderItems.push(
-                <div
+                <button
                     id={`separator_${index + 1}`}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Separator position inherently index-based
                     key={`separator${index + 1}`}
-                    className={separatorClass}
+                    className={`${separatorClass} ${CLASSES.buttonReset}`}
                     onClick={(_e) => {
                         this.props.changeInsertIndex(index + 1)
                     }}
-                />
+                />,
             )
         })
 
@@ -179,10 +194,7 @@ export default class BuildOrder extends Component<MyProps, MyState> {
                     <Droppable droppableId="droppable" direction="horizontal">
                         {(provided, _snapshot) => (
                             <div
-                                className={
-                                    (this.props.multilineBuildOrder ? "flex-wrap flex-row" : "") +
-                                    " flex"
-                                }
+                                className={`${this.props.multilineBuildOrder ? "flex-wrap flex-row" : ""} flex`}
                                 ref={provided.innerRef}
                                 {...provided.droppableProps}
                             >

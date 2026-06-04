@@ -1,4 +1,5 @@
-import React, { Component } from "react"
+import type React from "react"
+import { Component } from "react"
 import { BrowserRouter as Router } from "react-router-dom"
 
 import WebPage from "./WebPage"

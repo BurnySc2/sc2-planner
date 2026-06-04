@@ -1,8 +1,8 @@
-import React, { Component } from "react"
-
-import RACES from "../icons/races"
+import type React from "react"
+import { Component } from "react"
 import CLASSES from "../constants/classes"
-import { IAllRaces } from "../constants/interfaces"
+import type { IAllRaces } from "../constants/interfaces"
+import RACES from "../icons/races"
 
 interface MyProps {
     onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, race: IAllRaces) => void
@@ -28,13 +28,8 @@ export default class RaceSelection extends Component<MyProps> {
         const races = allRaces.map((race, _index) => {
             const item: { name: string; path: string } = RACES[race]
             return (
-                <button
-                    id={race}
-                    key={item.name}
-                    className={classString}
-                    onClick={(e) => this.onClick(e, race)}
-                >
-                    <img src={require("../icons/png/" + item.path).default} alt={item.name} />
+                <button id={race} key={item.name} className={classString} onClick={(e) => this.onClick(e, race)}>
+                    <img src={require(`../icons/png/${item.path}`)} alt={item.name} />
                 </button>
             )
         })

@@ -1,20 +1,17 @@
-import { cloneDeep, isEqual, findIndex, find, filter } from "lodash"
-
-import { defaultOptimizeSettings, cancelableLog } from "../constants/helper"
-import {
-    IBuildOrderElement,
-    ISettingsElement,
-    IAllRaces,
-    WebPageState,
-    Log,
-} from "../constants/interfaces"
-import { CONVERT_SECONDS_TO_TIME_STRING, CONVERT_TIME_STRING_TO_SECONDS } from "../constants/helper"
-import { GameLogic } from "./gamelogic"
-import { BO_ITEMS, workerNameByRace, supplyUnitNameByRace } from "../constants/bo_items"
+import { cloneDeep, filter, find, findIndex, isEqual } from "lodash"
+import { BO_ITEMS, supplyUnitNameByRace, workerNameByRace } from "../constants/bo_items"
 import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
-import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
+import {
+    CONVERT_SECONDS_TO_TIME_STRING,
+    CONVERT_TIME_STRING_TO_SECONDS,
+    cancelableLog,
+    defaultOptimizeSettings,
+} from "../constants/helper"
+import type { IAllRaces, IBuildOrderElement, ISettingsElement, Log, WebPageState } from "../constants/interfaces"
 import UNITS_BY_NAME from "../constants/units_by_name"
-import Event from "../game_logic/event"
+import UPGRADES_BY_NAME from "../constants/upgrade_by_name"
+import type Event from "../game_logic/event"
+import { GameLogic } from "./gamelogic"
 
 export type OptimizationReturn = [Partial<WebPageState> | undefined, Log | undefined]
 
@@ -60,7 +57,7 @@ class OptimizeLogic {
         race: IAllRaces = "terran",
         customSettings: Array<ISettingsElement> = [],
         customOptimizeSettings: Array<ISettingsElement> = [],
-        log: (line?: Log) => void
+        log: (line?: Log) => void,
     ) {
         this.optimizeSettings = {}
         this.loadOptimizeSettings(defaultOptimizeSettings)
@@ -88,22 +85,19 @@ class OptimizeLogic {
     async optimizeBuildOrder(
         currentGamelogic: GameLogic, // Used for comparison with future optimizations
         buildOrder: Array<IBuildOrderElement>,
-        optimizationList: string[]
+        optimizationList: string[],
     ): Promise<OptimizationReturn> {
         let ret: OptimizationReturn = [undefined, undefined]
         if (optimizationList.indexOf("maximizeWorkers") >= 0) {
-            const maximizeWorkersOption1 =
-                !!currentGamelogic.optimizeSettings["maximizeWorkersOption1"]
-            const maximizeWorkersOption2 =
-                !!currentGamelogic.optimizeSettings["maximizeWorkersOption2"]
-            const maximizeWorkersOption3 =
-                !!currentGamelogic.optimizeSettings["maximizeWorkersOption3"]
+            const maximizeWorkersOption1 = !!currentGamelogic.optimizeSettings.maximizeWorkersOption1
+            const maximizeWorkersOption2 = !!currentGamelogic.optimizeSettings.maximizeWorkersOption2
+            const maximizeWorkersOption3 = !!currentGamelogic.optimizeSettings.maximizeWorkersOption3
             ret = await this.maximizeWorkers(
                 currentGamelogic,
                 buildOrder,
                 maximizeWorkersOption1,
                 maximizeWorkersOption2,
-                maximizeWorkersOption3
+                maximizeWorkersOption3,
             )
         }
 
@@ -112,7 +106,7 @@ class OptimizeLogic {
                 currentGamelogic,
                 buildOrder,
                 { name: "chronoboost_busy_nexus", type: "action" },
-                !!this.optimizeSettings.maximizeNexusChronos
+                !!this.optimizeSettings.maximizeNexusChronos,
             )
         }
 
@@ -122,7 +116,7 @@ class OptimizeLogic {
                 buildOrder,
                 { name: "call_down_mule", type: "action" },
                 !!this.optimizeSettings.maximizeMULEs,
-                BO_ITEMS["OrbitalCommand"]
+                BO_ITEMS.OrbitalCommand,
             )
         }
 
@@ -132,7 +126,7 @@ class OptimizeLogic {
                 buildOrder,
                 { name: "inject", type: "action" },
                 !!this.optimizeSettings.maximizeInjects,
-                BO_ITEMS["Queen"]
+                BO_ITEMS.Queen,
             )
         }
 
@@ -191,7 +185,7 @@ class OptimizeLogic {
         buildOrder: Array<IBuildOrderElement>,
         removeWorkersBefore: boolean,
         addNecessarySupply: boolean,
-        removeSupplyBefore: boolean
+        removeSupplyBefore: boolean,
     ): Promise<OptimizationReturn> {
         const currentFrameCount = currentGamelogic.frame
         const worker = BO_ITEMS[workerNameByRace[this.race]]
@@ -253,8 +247,7 @@ class OptimizeLogic {
                             if (addNecessarySupply) {
                                 ;[gamelogic, addedSupply] = this.addSupply(gamelogic)
                             }
-                            isBetter =
-                                gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
+                            isBetter = gamelogic.frame <= currentFrameCount && !gamelogic.errorMessage
                             if (isBetter) {
                                 bo = gamelogic.bo
                                 addedWorkerCount += 1
@@ -265,9 +258,7 @@ class OptimizeLogic {
                         }
                     } while (
                         (validatesConstraints && isBetter) ||
-                        // @ts-ignore is always number
-                        initialWorkerCount + addedWorkerCount >=
-                            this.optimizeSettings.maximizeWorkers
+                        initialWorkerCount + addedWorkerCount >= this.optimizeSettings.maximizeWorkers
                     )
                     resolve()
                 }),
@@ -289,9 +280,7 @@ class OptimizeLogic {
         const workerCountDiff = addedWorkerCount - initialBOWorkerCount
         const newWorkerCount =
             workerCountDiff !== 0 && initialBOWorkerCount > 1
-                ? ` (${Math.abs(workerCountDiff)} ${
-                      workerCountDiff < 0 ? "less" : "more"
-                  } than before}`
+                ? ` (${Math.abs(workerCountDiff)} ${workerCountDiff < 0 ? "less" : "more"} than before}`
                 : ""
         return [
             {
@@ -315,7 +304,7 @@ class OptimizeLogic {
         buildOrder: Array<IBuildOrderElement>,
         itemToAdd: IBuildOrderElement,
         removeBefore: boolean,
-        itemToStartAtt?: IBuildOrderElement
+        itemToStartAtt?: IBuildOrderElement,
     ): Promise<OptimizationReturn> {
         const currentFrameCount = currentGamelogic.frame
 
@@ -336,11 +325,7 @@ class OptimizeLogic {
                 },
             ]
         }
-        for (
-            let whereToAddInject = firstQueenPosition + 1;
-            whereToAddInject <= bo.length;
-            whereToAddInject++
-        ) {
+        for (let whereToAddInject = firstQueenPosition + 1; whereToAddInject <= bo.length; whereToAddInject++) {
             if (whereToAddInject < bo.length && bo[whereToAddInject].name === itemToAdd.name) {
                 continue
             }
@@ -397,9 +382,9 @@ class OptimizeLogic {
      * Reorder BO items as long as it makes it end sooner
      */
     async maximizeByReordering(
-        initialGameLogic: GameLogic // Requires to have been run until the end
+        initialGameLogic: GameLogic, // Requires to have been run until the end
     ): Promise<OptimizationReturn> {
-        const startTime = +new Date()
+        const startTime = Date.now()
         const bo = cloneDeep(initialGameLogic.bo)
         let bestGameLogic: GameLogic = initialGameLogic
         let improvedSinceStart = false
@@ -415,9 +400,7 @@ class OptimizeLogic {
                 const percent = Math.round((maxSwapPos / bo.length) * 100)
                 const cancellationPromise = (
                     await cancelableLog(this.log, {
-                        notice: `${percent}% of pass #${pass}${
-                            savedTime ? `; so far, ${savedTime}s faster` : ""
-                        }`,
+                        notice: `${percent}% of pass #${pass}${savedTime ? `; so far, ${savedTime}s faster` : ""}`,
                         temporary: true,
                     })
                 )()
@@ -427,11 +410,7 @@ class OptimizeLogic {
                     new Promise<void>((resolve) => {
                         const spreadingMax = bo.length - swapPos - 1
                         for (let spreading = 1; spreading <= spreadingMax; spreading++) {
-                            const boCodeToTest = this.swapChars(
-                                boCode,
-                                swapPos,
-                                swapPos + spreading
-                            )
+                            const boCodeToTest = this.swapChars(boCode, swapPos, swapPos + spreading)
                             if (boCodeToTest === boCode || boCodes[boCodeToTest]) {
                                 continue
                             }
@@ -443,8 +422,7 @@ class OptimizeLogic {
 
                             const gamelogic = this.simulateBo(boToTest)
                             const validatesConstraints = this.validatedConstraints(gamelogic)
-                            const isBetter =
-                                gamelogic.frame < bestGameLogic.frame && !gamelogic.errorMessage
+                            const isBetter = gamelogic.frame < bestGameLogic.frame && !gamelogic.errorMessage
                             if (validatesConstraints && isBetter) {
                                 this.swapBOItems(bo, swapPos, swapPos + spreading)
                                 bestGameLogic = gamelogic
@@ -468,7 +446,7 @@ class OptimizeLogic {
         }
 
         if (improvedSinceStart) {
-            const calculationsTime = Math.round((+new Date() - startTime) / 1000)
+            const calculationsTime = Math.round((Date.now() - startTime) / 1000)
             return [
                 {
                     race: this.race,
@@ -499,11 +477,7 @@ class OptimizeLogic {
     validatedConstraints(gamelogic: GameLogic): boolean {
         for (const constraint of this.constraintList) {
             if (constraint.type === "time") {
-                const eventLog: Event = this.getEventLogFromConstraint(
-                    gamelogic,
-                    constraint.name,
-                    constraint.pos
-                )
+                const eventLog: Event = this.getEventLogFromConstraint(gamelogic, constraint.name, constraint.pos)
                 if (eventLog) {
                     //Consider constraint as valid if item is not in the BO anymore
                     const endTime = Math.floor((eventLog.end || eventLog.start) / 22.4)
@@ -512,23 +486,15 @@ class OptimizeLogic {
                     }
                 }
             } else if (constraint.type === "order") {
-                const eventLog: Event = this.getEventLogFromConstraint(
-                    gamelogic,
-                    constraint.name,
-                    constraint.pos
-                )
+                const eventLog: Event = this.getEventLogFromConstraint(gamelogic, constraint.name, constraint.pos)
                 const eventLogPos: number = gamelogic.eventLog.indexOf(eventLog)
                 const followingEventLog: Event = this.getEventLogFromConstraint(
                     gamelogic,
                     constraint.followingName,
-                    constraint.followingPos
+                    constraint.followingPos,
                 )
                 const followingEventLogPos: number = gamelogic.eventLog.indexOf(followingEventLog)
-                if (
-                    eventLogPos >= 0 &&
-                    followingEventLogPos >= 0 &&
-                    eventLogPos > followingEventLogPos
-                ) {
+                if (eventLogPos >= 0 && followingEventLogPos >= 0 && eventLogPos > followingEventLogPos) {
                     return false
                 }
             }
@@ -558,12 +524,7 @@ class OptimizeLogic {
     }
 
     simulateBo(boToTest: IBuildOrderElement[]): GameLogic {
-        const gamelogic = new GameLogic(
-            this.race,
-            boToTest,
-            this.customSettings,
-            this.customOptimizeSettings
-        )
+        const gamelogic = new GameLogic(this.race, boToTest, this.customSettings, this.customOptimizeSettings)
         gamelogic.setStart()
         gamelogic.runUntilEnd()
         return gamelogic
@@ -624,16 +585,12 @@ export function setConstraintList(list: Constraint[]): string {
                 }`
             }
             const afterStr =
-                constraint.after === -Infinity
-                    ? ""
-                    : `${CONVERT_SECONDS_TO_TIME_STRING(constraint.after)}<=`
+                constraint.after === -Infinity ? "" : `${CONVERT_SECONDS_TO_TIME_STRING(constraint.after)}<=`
             const beforeStr =
-                constraint.before === Infinity
-                    ? ""
-                    : `<=${CONVERT_SECONDS_TO_TIME_STRING(constraint.before)}`
+                constraint.before === Infinity ? "" : `<=${CONVERT_SECONDS_TO_TIME_STRING(constraint.before)}`
             const nameStr = afterStr || beforeStr ? `${constraint.name}#${constraint.pos + 1}` : ""
             return `${afterStr}${nameStr}${beforeStr}`
-        })
+        }),
     )
     return constraintList.join("\n")
 }

@@ -1,7 +1,9 @@
-import ENABLED_UNITS from "./enabled_units"
+// npx tsx src/constants/structures.ts
+
+import { convertUnit, type IRawUnit } from "./converters"
 import data from "./data.json"
-import { IDataUnit } from "./interfaces"
 import { iconSortStructureFunction } from "./icon_order"
+import type { IDataUnit } from "./interfaces"
 
 /**
  * This file contains all enabled structures
@@ -21,6 +23,7 @@ const ignoreStructure = new Set([
     // Protoss
     "WarpGate",
     "OracleStasisTrap",
+    "AssimilatorRich",
     // Terran
     "SupplyDepotLowered",
     "CommandCenterFlying",
@@ -31,17 +34,21 @@ const ignoreStructure = new Set([
     "AutoTurret",
     "TechLab",
     "Reactor",
+    "RefineryRich",
     // Zerg
     "CreepTumor",
     "CreepTumorQueen",
     "SpineCrawlerUprooted",
     "SporeCrawlerUprooted",
     "NydusCanal",
+    "ExtractorRich",
 ])
 
-const STRUCTURES: Array<IDataUnit> = data.Unit.filter((item) => {
-    return !ignoreStructure.has(item.name) && ENABLED_UNITS.has(item.id) && item.is_structure
-})
+const STRUCTURES: Array<IDataUnit> = (Object.values(data.Units) as IRawUnit[])
+    .filter((item) => {
+        return !ignoreStructure.has(item.name) && item.type === "structure"
+    })
+    .map((item) => convertUnit(item))
 
 const STRUCTURE_NAMES_BY_RACE: {
     protoss: Set<string>
@@ -66,18 +73,12 @@ STRUCTURES.forEach((item) => {
 
 STRUCTURES.sort(iconSortStructureFunction)
 
-console.assert(STRUCTURES.length === 53, `${STRUCTURES.length} is not equal to 53`)
-console.assert(
-    STRUCTURE_NAMES_BY_RACE.terran.size === 21,
-    `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 21`
-)
+console.assert(STRUCTURES.length === 55, `${STRUCTURES.length} is not equal to 55`)
+console.assert(STRUCTURE_NAMES_BY_RACE.terran.size === 21, `${STRUCTURE_NAMES_BY_RACE.terran.size} is not equal to 21`)
 console.assert(
     STRUCTURE_NAMES_BY_RACE.protoss.size === 15,
-    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 15`
+    `${STRUCTURE_NAMES_BY_RACE.protoss.size} is not equal to 15`,
 )
-console.assert(
-    STRUCTURE_NAMES_BY_RACE.zerg.size === 17,
-    `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 17`
-)
+console.assert(STRUCTURE_NAMES_BY_RACE.zerg.size === 17, `${STRUCTURE_NAMES_BY_RACE.zerg.size} is not equal to 17`)
 
-export { STRUCTURES, STRUCTURE_NAMES_BY_RACE }
+export { STRUCTURE_NAMES_BY_RACE, STRUCTURES }

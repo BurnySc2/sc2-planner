@@ -1,18 +1,18 @@
-import React, { Component } from "react"
-import CLASSES from "../constants/classes"
 import { includes } from "lodash"
-import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
-import { GameLogic } from "../game_logic/gamelogic"
-import Event from "../game_logic/event"
-import { IBarTypes, IResourceHistory } from "../constants/interfaces"
-import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
+import React, { Component } from "react"
 import ReactTooltip from "react-tooltip"
+import CLASSES from "../constants/classes"
+import { CUSTOMACTIONS_BY_NAME } from "../constants/customactions"
+import { CONVERT_SECONDS_TO_TIME_STRING } from "../constants/helper"
+import type { IBarTypes, IResourceHistory } from "../constants/interfaces"
+import type Event from "../game_logic/event"
+import type { GameLogic } from "../game_logic/gamelogic"
 
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
     highlightedIndexes: number[]
-    removeClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => void
+    removeClick: (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement, MouseEvent>, index: number) => void
     changeHoverIndex: (index: number) => void
     changeHighlight: (item?: Event) => void
 }
@@ -70,8 +70,7 @@ export default class BOArea extends Component<MyProps, MyState> {
     onMouseEnter(item: Event): void {
         this.props.changeHoverIndex(item.id)
         const startTime = CONVERT_SECONDS_TO_TIME_STRING(item.start / 22.4)
-        const endTime =
-            item.type === "action" ? "" : CONVERT_SECONDS_TO_TIME_STRING(item.end / 22.4)
+        const endTime = item.type === "action" ? "" : CONVERT_SECONDS_TO_TIME_STRING(item.end / 22.4)
         // const itemName = item.type === "action" ? CUSTOMACTIONS_BY_NAME[item.name].name : item.name
 
         const finishText = endTime === "" ? "" : `Finish: ${endTime}`
@@ -108,7 +107,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
         resourceType: keyof IResourceHistory,
         resourceName: string,
-        startFrame: number
+        startFrame: number,
     ): void {
         this.setResourceConstants()
         this.tooltipPrevQuantity = undefined
@@ -125,7 +124,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
         resourceType: keyof IResourceHistory,
         resourceName: string,
-        startFrame: number
+        startFrame: number,
     ): void {
         const widthFactor = +this.props.gamelogic.settings.htmlElementWidthFactor
         const currentTargetRect = event.currentTarget.getBoundingClientRect()
@@ -133,13 +132,9 @@ export default class BOArea extends Component<MyProps, MyState> {
         const frame = Math.floor(startFrame + eventOffsetX / widthFactor)
         const history = this.props.gamelogic.resourceHistory[resourceType]
         const quantityRounding: number = this.quantityRoundings[resourceType]
-        const roundedQuantity =
-            Math.floor(Math.round(history[frame]) / quantityRounding) * quantityRounding
+        const roundedQuantity = Math.floor(Math.round(history[frame]) / quantityRounding) * quantityRounding
 
-        if (
-            roundedQuantity !== this.tooltipPrevQuantity ||
-            resourceType !== this.prevTooltipResourceType
-        ) {
+        if (roundedQuantity !== this.tooltipPrevQuantity || resourceType !== this.prevTooltipResourceType) {
             this.tooltipPrevQuantity = roundedQuantity
             this.prevTooltipResourceType = resourceType
             this.tooltipContent = (
@@ -176,7 +171,7 @@ export default class BOArea extends Component<MyProps, MyState> {
             classes.push(`${CLASSES.boElementContainer} ${CLASSES.hoverColor[barType]}`)
         } else {
             classes.push(
-                `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`
+                `${CLASSES.boElementContainer} ${CLASSES.typeColor[barType]} hover:${CLASSES.hoverColor[barType]}`,
             )
         }
 
@@ -240,13 +235,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         const barBgClasses: { [name: string]: string } = {}
         const barClasses: { [name: string]: string } = {}
 
-        const verticalBarNames: Array<IBarTypes> = [
-            "worker",
-            "action",
-            "unit",
-            "structure",
-            "upgrade",
-        ]
+        const verticalBarNames: Array<IBarTypes> = ["worker", "action", "unit", "structure", "upgrade"]
 
         const verticalBarsContent = verticalBarNames.map((barType) => {
             const bgColor: string = CLASSES.bgColor[barType]
@@ -283,10 +272,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                     if (index2 > 0) {
                         const key = `filler_${index1}_${index2}`
                         const prevElementEnd = row[index2 - 1].end
-                        const fillerElement = this.getFillerElement(
-                            item.start - prevElementEnd,
-                            key
-                        )
+                        const fillerElement = this.getFillerElement(item.start - prevElementEnd, key)
                         rowContent.push(fillerElement)
                     } else if (item.start > 0) {
                         const key = `filler${index1}${index2}`
@@ -299,10 +285,10 @@ export default class BOArea extends Component<MyProps, MyState> {
                         itemName = CUSTOMACTIONS_BY_NAME[item.name].name
                     }
                     rowContent.push(
-                        <div
+                        <button
                             id={`boarea_${item.name}_${index2}`}
                             key={`boArea${barType}${index1}${index2}${item.name}${item.id}`}
-                            className="flex flex-row"
+                            className={`flex flex-row ${CLASSES.buttonReset}`}
                             data-tip=""
                             data-for="boAreaTooltip"
                             onMouseEnter={(_e) => this.onMouseEnter(item)}
@@ -312,12 +298,12 @@ export default class BOArea extends Component<MyProps, MyState> {
                             <div style={myStyle} className={this.getClass(barType, item.id)}>
                                 <img
                                     className={CLASSES.boElementIcon}
-                                    src={require("../icons/png/" + item.imageSource).default}
+                                    src={require(`../icons/png/${item.imageSource}`)}
                                     alt={itemName}
                                 />
                                 <div className={CLASSES.boElementText}>{itemName}</div>
                             </div>
-                        </div>
+                        </button>,
                     )
                 })
                 return (
@@ -355,81 +341,67 @@ export default class BOArea extends Component<MyProps, MyState> {
                   const quantityMax: number = this.quantityMaxes[resourceType]
 
                   // Concatenate same height quantities to add less DOM elements
-                  const dimensions: [number, number, number][] = history.reduce<
-                      [number, number, number][]
-                  >((res, quantity: number, frame: number) => {
-                      const previousDimension = res[res.length - 1]
-                      const roundedHistogramQuantity =
-                          Math.floor(quantity / histogramRounding) * histogramRounding
-                      if (!previousDimension || previousDimension[1] !== roundedHistogramQuantity) {
-                          res.push([widthFactor, roundedHistogramQuantity, frame])
-                      } else {
-                          previousDimension[0] += widthFactor
-                      }
-                      return res
-                  }, [])
+                  const dimensions: [number, number, number][] = history.reduce<[number, number, number][]>(
+                      (res, quantity: number, frame: number) => {
+                          const previousDimension = res[res.length - 1]
+                          const roundedHistogramQuantity = Math.floor(quantity / histogramRounding) * histogramRounding
+                          if (!previousDimension || previousDimension[1] !== roundedHistogramQuantity) {
+                              res.push([widthFactor, roundedHistogramQuantity, frame])
+                          } else {
+                              previousDimension[0] += widthFactor
+                          }
+                          return res
+                      },
+                      [],
+                  )
 
                   const rowContent: Array<React.ReactElement | string> = dimensions.map(
                       ([width, roundedQuantity, startFrame], index1) => {
                           const height = Math.min(quantityMax, roundedQuantity)
                           const style = {
                               width,
-                              borderTopWidth:
-                                  resourceHeight - (height / quantityMax) * resourceHeight + "rem",
+                              borderTopWidth: `${resourceHeight - (height / quantityMax) * resourceHeight}rem`,
                               borderTopColor: "#7f9cf5",
                               backgroundColor:
-                                  roundedQuantity > quantityMax
-                                      ? "rgba(30%, 30%, 30%, 0.5)"
-                                      : "rgba(0, 0, 0, 0)",
+                                  roundedQuantity > quantityMax ? "rgba(30%, 30%, 30%, 0.5)" : "rgba(0, 0, 0, 0)",
                           }
                           return (
                               <div
                                   key={`boArea_${resourceType}_${index1}`}
                                   style={style}
                                   className={CLASSES.boResource}
+                                  role="button"
+                                  tabIndex={0}
                                   data-tip=""
                                   data-for="boAreaTooltip"
                                   onMouseEnter={(e) =>
-                                      this.showResourceTooltip(
-                                          e,
-                                          resourceType,
-                                          resourceName,
-                                          startFrame
-                                      )
+                                      this.showResourceTooltip(e, resourceType, resourceName, startFrame)
                                   }
                                   onMouseMove={(e) =>
-                                      this.updateResourceTooltip(
-                                          e,
-                                          resourceType,
-                                          resourceName,
-                                          startFrame
-                                      )
+                                      this.updateResourceTooltip(e, resourceType, resourceName, startFrame)
                                   }
                                   onMouseLeave={(_e) => this.hideResourceTooltip()}
                               />
                           )
-                      }
+                      },
                   )
 
                   const wideBarStyle = {
-                      backgroundImage: `url(${require(`../icons/${resourceType}.jpg`).default})`,
+                      backgroundImage: `url(${require(`../icons/${resourceType}.jpg`)})`,
                       backgroundSize: "contain",
                   }
                   const borderBarHeightStyle = {
-                      height: resourceHeight + "rem",
+                      height: `${resourceHeight}rem`,
                   }
                   return (
                       <div key={`row_${resourceType}`} className={CLASSES.boResourceBar}>
                           <img
                               className={CLASSES.boResourceIcon}
-                              src={require("../icons/" + icon).default}
+                              src={require(`../icons/${icon}`)}
                               alt={resourceName}
                           />
                           <div className={CLASSES.boResourceWideBar} style={wideBarStyle}>
-                              <div
-                                  className={CLASSES.boResourceBorderBar}
-                                  style={borderBarHeightStyle}
-                              >
+                              <div className={CLASSES.boResourceBorderBar} style={borderBarHeightStyle}>
                                   {rowContent}
                               </div>
                           </div>
@@ -464,16 +436,14 @@ export default class BOArea extends Component<MyProps, MyState> {
             })
         }
         // Generate HTML for time bar
-        const timeIntervalContent = timeBarCalc.map((item, index) => {
+        const timeIntervalContent = timeBarCalc.map((item, _index) => {
             const myStyle = {
-                width: `${
-                    this.timeInterval * +this.props.gamelogic.settings.htmlElementWidthFactor * 22.4
-                }px`,
+                width: `${this.timeInterval * +this.props.gamelogic.settings.htmlElementWidthFactor * 22.4}px`,
             }
             const timeString = CONVERT_SECONDS_TO_TIME_STRING(item.start)
             return (
                 <div
-                    key={`timeInterval_${item.start}_${index}`}
+                    key={`timeInterval_${item.start}`}
                     className={`${CLASSES.boTimeElement} ${CLASSES.typeColor.time} ${CLASSES.hoverColor.time}`}
                     style={myStyle}
                 >
@@ -493,11 +463,7 @@ export default class BOArea extends Component<MyProps, MyState> {
         }
         return (
             <div className={`${CLASSES.boArea}`}>
-                <ReactTooltip
-                    place="bottom"
-                    id="boAreaTooltip"
-                    getContent={() => this.tooltipContent}
-                />
+                <ReactTooltip place="bottom" id="boAreaTooltip" getContent={() => this.tooltipContent} />
                 {resourceContent}
                 {timeBarContent}
                 {verticalBarsContent}

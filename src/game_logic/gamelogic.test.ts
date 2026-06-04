@@ -1,5 +1,5 @@
+import type { IBuildOrderElement } from "../constants/interfaces"
 import { GameLogic } from "./gamelogic"
-import { IBuildOrderElement } from "../constants/interfaces"
 
 test("Get the train time of SCV", () => {
     const logic = new GameLogic("terran")
@@ -206,7 +206,6 @@ test("Build OC and call down MULE", () => {
 })
 
 test("Test if able to create a gas unit (reaper)", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Barracks", type: "structure" },
@@ -222,7 +221,6 @@ test("Test if able to create a gas unit (reaper)", () => {
 })
 
 test("Test if able to research +1 from ebay", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -239,7 +237,6 @@ test("Test if able to research +1 from ebay", () => {
 })
 
 test("Test if able to research +2 from ebay after requirements are met", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -264,7 +261,6 @@ test("Test if able to research +2 from ebay after requirements are met", () => {
 })
 
 test("Test if able upgrade to PF", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -289,7 +285,6 @@ test("Test if able upgrade to PF", () => {
 })
 
 test("Test if able lift Barracks from reactor and let factory attach to it", () => {
-    // Morph CC to OC, then call down a mule
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
@@ -328,11 +323,7 @@ test("Test if able lift Barracks from reactor and let factory attach to it", () 
 
 test("Add Battlecruiser with required tech", () => {
     const prevLogic = new GameLogic("terran", [])
-    const [logic, insertedItems] = GameLogic.addItemToBO(
-        prevLogic,
-        { name: "Battlecruiser", type: "unit" },
-        0
-    )
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Battlecruiser", type: "unit" }, 0)
 
     expect(insertedItems).toBe(9)
     expect(logic.units.size).toBe(20)
@@ -342,11 +333,7 @@ test("Add Battlecruiser with required tech", () => {
 
 test("Add BroodLord with required tech", () => {
     const prevLogic = new GameLogic("zerg", [])
-    const [logic, insertedItems] = GameLogic.addItemToBO(
-        prevLogic,
-        { name: "BroodLord", type: "unit" },
-        0
-    )
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "BroodLord", type: "unit" }, 0)
 
     expect(insertedItems).toBe(10)
     expect(logic.units.size).toBe(15)
@@ -359,7 +346,7 @@ test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
     const [logic, insertedItems] = GameLogic.addItemToBO(
         prevLogic,
         { name: "ZergFlyerWeaponsLevel3", type: "upgrade" },
-        0
+        0,
     )
 
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel1")).toBe(true)
@@ -376,7 +363,7 @@ test("Add two Archons with required tech", () => {
     let [logic, insertedItems] = GameLogic.addItemToBO(
         prevLogic,
         { name: "morph_archon_from_ht_ht", type: "action" },
-        0
+        0,
     )
 
     expect(insertedItems).toBe(11)
@@ -386,11 +373,97 @@ test("Add two Archons with required tech", () => {
     ;[logic, insertedItems] = GameLogic.addItemToBO(
         logic,
         { name: "morph_archon_from_ht_ht", type: "action" },
-        insertedItems
+        insertedItems,
     )
 
     expect(insertedItems).toBe(3)
     expect(logic.units.size).toBe(22)
     expect(logic.eventLog.length).toBe(14)
     expect(logic.supplyCap).toBe(31)
+})
+
+test("Add ProtossGroundWeaponsLevel1 with required tech", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "ProtossGroundWeaponsLevel1", type: "upgrade" },
+        0,
+    )
+
+    expect(insertedItems).toBe(5) // Pylon, Forge, Assimilator, 3worker_to_gas, PGW1
+    expect(logic.units.size).toBe(16) // Nexus(1) + 12 Probes + Pylon + Forge + Assimilator = 16
+    expect(logic.eventLog.length).toBe(5)
+    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
+    expect(logic.upgrades.has("ProtossGroundWeaponsLevel1")).toBe(true)
+})
+
+test("Add Gateway with required tech", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Gateway", type: "structure" }, 0)
+
+    expect(insertedItems).toBe(2) // Pylon, Gateway
+    expect(logic.units.size).toBe(15) // Nexus(1) + 12 Probes + Pylon + Gateway = 15
+    expect(logic.eventLog.length).toBe(2)
+    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
+})
+
+test("Add Zealot with required tech", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Zealot", type: "unit" }, 0)
+
+    expect(insertedItems).toBe(3) // Pylon, Gateway, Zealot
+    expect(logic.units.size).toBe(16) // Nexus(1) + 12 Probes + Pylon + Gateway + Zealot
+    expect(logic.eventLog.length).toBe(3) // Pylon built, Gateway built, Zealot trained
+    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
+})
+
+test("Add Zealot via WarpGate path", () => {
+    const prevLogic = new GameLogic("protoss", [])
+    let [logic, insertedItems] = GameLogic.addItemToBO(
+        prevLogic,
+        { name: "convert_gateway_to_warpgate", type: "action" },
+        0,
+    )
+
+    expect(insertedItems).toBe(7) // Pylon, Gateway, CyberneticsCore, WarpGateResearch, convert
+    expect(logic.units.size).toBe(17) // Nexus(1) + 12 Probes + Pylon + WarpGate + CyberneticsCore
+    expect(logic.eventLog.length).toBe(7) // Pylon, Gateway, CyberneticsCore, WarpGateResearch (no event for morph)
+    expect(logic.supplyCap).toBe(23)
+    expect(logic.upgrades.has("WarpGateResearch")).toBe(true)
+
+    ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Zealot", type: "unit" }, insertedItems)
+
+    expect(insertedItems).toBe(1) // Just Zealot (WarpGate already exists)
+    expect(logic.units.size).toBe(18) // +1 Zealot
+    expect(logic.eventLog.length).toBe(8) // +1 Zealot train event
+    expect(logic.supplyCap).toBe(23)
+
+    // Verify Zealot was produced by WarpGate, not Gateway
+    let zealotCount = 0
+    let warpgateCount = 0
+    let gatewayCount = 0
+    logic.units.forEach((unit) => {
+        if (unit.name === "Zealot") {
+            zealotCount++
+        }
+        if (unit.name === "WarpGate") {
+            warpgateCount++
+        }
+        if (unit.name === "Gateway") {
+            gatewayCount++
+        }
+    })
+    expect(zealotCount).toBe(1)
+    expect(warpgateCount).toBe(1)
+    expect(gatewayCount).toBe(0) // Gateway was morphed to WarpGate
+})
+
+test("Add LurkerMP with required tech", () => {
+    const prevLogic = new GameLogic("zerg", [])
+    const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "LurkerMP", type: "unit" }, 0)
+
+    expect(insertedItems).toBe(8)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(8)
+    expect(logic.supplyCap).toBe(14)
 })

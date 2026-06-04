@@ -1,7 +1,9 @@
-import ENABLED_UNITS from "./enabled_units"
+// npx tsx src/constants/units.ts
+
+import { convertUnit, type IRawUnit } from "./converters"
 import data from "./data.json"
-import { IDataUnit } from "./interfaces"
 import { iconSortUnitFunction } from "./icon_order"
+import type { IDataUnit } from "./interfaces"
 
 /**
  * This file contains all enabled units
@@ -27,31 +29,45 @@ const ignoreUnits = new Set([
     "VikingAssault",
     "WidowMineBurrowed",
     "ThorAP",
+    "GhostAlternate",
+    "GhostNova",
     // Zerg
-    "InfestorTerran",
-    "Changeling",
     "BanelingBurrowed",
-    "HydraliskBurrowed",
-    "DroneBurrowed",
-    "RoachBurrowed",
-    "ZerglingBurrowed",
-    "InfestorTerranBurrowed",
-    "QueenBurrowed",
-    "InfestorBurrowed",
-    "UltraliskBurrowed",
-    "SwarmHostBurrowedMP",
-    "LurkerMPBurrowed",
-    "RavagerBurrowed",
-    "LocustMPFlying",
-    "DefilerMPBurrowed",
+    "BanelingCocoon",
+    "BroodLordCocoon",
+    "Changeling",
     "DefilerMP",
+    "DefilerMPBurrowed",
+    "DevourerCocoonMP",
+    "DevourerMP",
+    "DroneBurrowed",
+    "GuardianCocoonMP",
+    "GuardianMP",
+    "HydraliskBurrowed",
+    "InfestorBurrowed",
+    "InfestorTerran",
+    "InfestorTerranBurrowed",
+    "LocustMPFlying",
+    "LurkerMPBurrowed",
+    "LurkerMPEgg",
+    "OverlordCocoon",
     "OverlordTransport",
+    "TransportOverlordCocoon",
     "OverseerSiegeMode",
+    "QueenBurrowed",
+    "RavagerBurrowed",
+    "RavagerCocoon",
+    "RoachBurrowed",
+    "SwarmHostBurrowedMP",
+    "UltraliskBurrowed",
+    "ZerglingBurrowed",
 ])
 
-const UNITS: Array<IDataUnit> = data.Unit.filter((item) => {
-    return !ignoreUnits.has(item.name) && ENABLED_UNITS.has(item.id) && !item.is_structure
-})
+const UNITS: Array<IDataUnit> = (Object.values(data.Units) as IRawUnit[])
+    .filter((item) => {
+        return !ignoreUnits.has(item.name) && item.type === "unit"
+    })
+    .map((item) => convertUnit(item))
 
 UNITS.sort(iconSortUnitFunction)
 
@@ -76,19 +92,10 @@ UNITS.forEach((item) => {
     }
 })
 
-// Should be 77 units in total
-console.assert(UNITS.length === 52, `${UNITS.length} is not equal to 52`)
-console.assert(
-    UNIT_NAMES_BY_RACE.terran.size === 17,
-    `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 17`
-)
-console.assert(
-    UNIT_NAMES_BY_RACE.protoss.size === 18,
-    `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`
-)
-console.assert(
-    UNIT_NAMES_BY_RACE.zerg.size === 17,
-    `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 17`
-)
+// Should be 63 units in total
+console.assert(UNITS.length === 62, `${UNITS.length} is not equal to 62`)
+console.assert(UNIT_NAMES_BY_RACE.terran.size === 17, `${UNIT_NAMES_BY_RACE.terran.size} is not equal to 17`)
+console.assert(UNIT_NAMES_BY_RACE.protoss.size === 18, `${UNIT_NAMES_BY_RACE.protoss.size} is not equal to 18`)
+console.assert(UNIT_NAMES_BY_RACE.zerg.size === 18, `${UNIT_NAMES_BY_RACE.zerg.size} is not equal to 18`)
 
-export { UNITS, UNIT_NAMES_BY_RACE }
+export { UNIT_NAMES_BY_RACE, UNITS }

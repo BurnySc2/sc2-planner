@@ -1,136 +1,182 @@
-import { CREATION_ABILITIES, MORPH_ABILITIES } from "./creation_abilities"
-import UNITS_BY_ID from "./units_by_id"
-import UPGRADE_BY_ID from "./upgrade_by_id"
-import { ITrainedBy } from "./interfaces"
-import { sortBy, uniq, without, pull } from "lodash"
-
+// npx tsx src/constants/trained_by.ts
+import { pull, sortBy, uniq, without } from "lodash"
 import data from "./data.json"
+import type { ITrainedBy } from "./interfaces"
+import { STRUCTURES } from "./structures"
+import { UNITS } from "./units"
 
 const TRAINED_BY: ITrainedBy = {}
 
-data.Unit.forEach((trainingUnit) => {
-    trainingUnit.abilities.forEach(
-        // TODO Fix me
-        // @ts-ignore
-        (ability: {
-            ability: number
-            requirements: Array<{
-                upgrade: number
-                building: number
-                addon: number
-            }>
-        }) => {
-            const resultingUnitId = CREATION_ABILITIES[ability.ability]
-            const resultingUnit = UNITS_BY_ID[resultingUnitId]
-            // Check if ability id maps to a train / build command
-            if (resultingUnit !== undefined) {
-                let requiredStructureId = null
-                let requiredUpgradeId = null
-                let requiresUnits = null
-                const requires = []
-                let requiresTechlab = false
-                let morphCostMinerals = 0
-                let morphCostGas = 0
-                let morphCostSupply = 0
-                const isMorph = MORPH_ABILITIES.has(ability.ability)
-                if (isMorph) {
-                    const morphes: { [resultingUnit: string]: string[] } = {
-                        Baneling: ["Zergling"],
-                        Ravager: ["Roach"],
-                        Overseer: ["Overlord"],
-                        LurkerMP: ["Hydralisk"],
-                        BroodLord: ["Corruptor"],
-                        Archon: ["HighTemplar", "DarkTemplar"],
-                    }
-                    requiresUnits = morphes[resultingUnit.name]
-                    morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
-                    morphCostGas = resultingUnit.gas - trainingUnit.gas
-                    morphCostSupply = resultingUnit.supply - trainingUnit.supply
-                    if (morphes[resultingUnit.name]) {
-                        requires.push(...morphes[resultingUnit.name])
-                    }
-                }
-                const isFreeMorph =
-                    resultingUnit.minerals === trainingUnit.minerals &&
-                    resultingUnit.gas === trainingUnit.gas &&
-                    resultingUnit.is_structure === trainingUnit.is_structure
-                // Ignore free morphs, e.g. hellbat to hellion is a free morph but adds the armory requirement for hellion
-                if (isFreeMorph) {
-                    return
-                }
-                const consumesUnit =
-                    resultingUnit.race === "Zerg" &&
-                    resultingUnit.is_structure &&
-                    !trainingUnit.is_structure
-                if (consumesUnit) {
-                    morphCostMinerals = resultingUnit.minerals - trainingUnit.minerals
-                    morphCostGas = resultingUnit.gas - trainingUnit.gas
-                    morphCostSupply = resultingUnit.supply
-                }
-                if (Array.isArray(ability.requirements)) {
-                    for (const requirement of ability.requirements) {
-                        if (requirement.upgrade) {
-                            requiredUpgradeId = requirement.upgrade
-                        }
-                        if (requirement.building) {
-                            requiredStructureId = requirement.building
-                        }
-                        if (requirement.addon) {
-                            requiresTechlab = true
-                        }
-                    }
-                }
+for (const myUnit of [...UNITS, ...STRUCTURES]) {
+    const unitName = myUnit.name
 
-                const requiredStructure =
-                    requiredStructureId !== null ? UNITS_BY_ID[requiredStructureId].name : null
-                if (requiredStructure) {
-                    requires.push(requiredStructure)
-                }
-                const requiredUpgrade =
-                    requiredUpgradeId !== null ? UPGRADE_BY_ID[requiredUpgradeId].name : null
-                if (requiredUpgrade) {
-                    requires.push(requiredUpgrade)
-                }
+    // @ts-expect-error
+    const unitInfo = data.Units[unitName]
 
-                if (requiresTechlab) {
-                    requires.push(trainingUnit.name + "TechLab")
-                } else {
-                    requires.push(trainingUnit.name)
-                }
+    // Handle produces
+    // @ts-expect-error
+    unitInfo.produces?.forEach((producedUnitName) => {
+        // @ts-expect-error
+        const producedUnit = data.Units[producedUnitName]
+        if (!producedUnit) {
+            return
+        }
 
-                // If it doesnt exist: create
-                if (TRAINED_BY[resultingUnit.name] === undefined) {
-                    TRAINED_BY[resultingUnit.name] = {
-                        trainedBy: new Set([trainingUnit.name]),
-                        requiresTechlab,
-                        requiresUnits,
-                        requires: [requires],
-                        isMorph,
-                        morphCostMinerals,
-                        morphCostGas,
-                        morphCostSupply,
-                        consumesUnit,
-                        requiredStructure: null,
-                        requiredUpgrade: null,
-                    }
-                } else {
-                    // Entry already exists, add training unit to object of 'trainedBy' and update requirement
-                    TRAINED_BY[resultingUnit.name].trainedBy.add(trainingUnit.name)
-                    TRAINED_BY[resultingUnit.name].requires[0].push(...requires)
+        let requiresTechlab = false
+        if (producedUnit.requires) {
+            for (const req of producedUnit.requires) {
+                if (typeof req === "string" && req.includes("TechLab")) {
+                    requiresTechlab = true
+                    break
                 }
-                TRAINED_BY[resultingUnit.name].requiredStructure = !TRAINED_BY[resultingUnit.name]
-                    .requiredStructure
-                    ? requiredStructure
-                    : TRAINED_BY[resultingUnit.name].requiredStructure
-
-                TRAINED_BY[resultingUnit.name].requiredUpgrade = !TRAINED_BY[resultingUnit.name]
-                    .requiredUpgrade
-                    ? requiredUpgrade
-                    : TRAINED_BY[resultingUnit.name].requiredUpgrade
             }
         }
-    )
-})
+
+        const requires = [...(producedUnit.requires || [])].filter(
+            (r) => typeof r !== "string" || !r.startsWith("Attached"),
+        )
+        if (requiresTechlab) {
+            requires.push(`${unitName}TechLab`)
+        } else {
+            requires.push(unitName)
+        }
+
+        const { minerals, vespene, food } = getProductionCost(unitName, producedUnitName, false)
+
+        if (TRAINED_BY[producedUnitName] === undefined) {
+            TRAINED_BY[producedUnitName] = {
+                trainedBy: new Set([unitName]),
+                requiresTechlab,
+                requiresUnits: null,
+                requires: [requires],
+                isMorph: false,
+                morphCostMinerals: minerals,
+                morphCostGas: vespene,
+                morphCostSupply: food,
+                consumesUnit: false,
+                requiredStructure: (producedUnit.requires ?? []).length === 1 ? producedUnit.requires[0] : null,
+                requiredUpgrade: null,
+            }
+        } else {
+            TRAINED_BY[producedUnitName].trainedBy.add(unitName)
+            TRAINED_BY[producedUnitName].requires[0].push(...requires)
+        }
+    })
+
+    // Handle builds (add-ons, structures)
+    // @ts-expect-error
+    unitInfo.builds?.forEach((builtUnitName) => {
+        // @ts-expect-error
+        const builtUnit = data.Units[builtUnitName]
+        if (!builtUnit) {
+            return
+        }
+
+        let requiresTechlab = false
+        if (builtUnit.requires) {
+            for (const req of builtUnit.requires) {
+                if (typeof req === "string" && req.includes("TechLab")) {
+                    requiresTechlab = true
+                    break
+                }
+            }
+        }
+
+        const requires = [...(builtUnit.requires || [])].filter(
+            (r) => typeof r !== "string" || !r.startsWith("Attached"),
+        )
+        if (requiresTechlab) {
+            requires.push(`${unitName}TechLab`)
+        } else {
+            requires.push(unitName)
+        }
+
+        const consumesUnit = unitName === "Drone"
+        const { minerals, vespene } = getProductionCost(unitName, builtUnitName, consumesUnit)
+
+        if (TRAINED_BY[builtUnitName] === undefined) {
+            TRAINED_BY[builtUnitName] = {
+                trainedBy: new Set([unitName]),
+                requiresTechlab,
+                requiresUnits: null,
+                requires: [requires],
+                isMorph: false,
+                morphCostMinerals: minerals,
+                morphCostGas: vespene,
+                morphCostSupply: builtUnit.Food,
+                consumesUnit,
+                requiredStructure: null,
+                requiredUpgrade: null,
+            }
+        } else {
+            TRAINED_BY[builtUnitName].trainedBy.add(unitName)
+            TRAINED_BY[builtUnitName].requires[0].push(...requires)
+        }
+    })
+
+    // Handle morphsto
+    if (unitInfo.morphsto) {
+        const morphTargets = Array.isArray(unitInfo.morphsto) ? unitInfo.morphsto : [unitInfo.morphsto]
+
+        for (const resultingUnitName of morphTargets) {
+            // @ts-expect-error
+            const resultingUnit = data.Units[resultingUnitName]
+            if (!resultingUnit?.CostResource) {
+                continue
+            }
+
+            const isFreeMorph =
+                !resultingUnit.CostResource ||
+                (unitInfo.CostResource &&
+                    resultingUnit.CostResource.Minerals === unitInfo.CostResource.Minerals &&
+                    resultingUnit.CostResource.Vespene === unitInfo.CostResource.Vespene &&
+                    resultingUnit.type === unitInfo.type)
+
+            if (isFreeMorph) {
+                continue
+            }
+
+            const { minerals, vespene, food } = getProductionCost(unitName, resultingUnitName, true)
+
+            // if (resultingUnit.type !== "structure" && unitInfo.type !== "structure") {
+            //     consumesUnit = true
+            //     morphCostMinerals = resultingUnit.CostResource.Minerals
+            //     morphCostGas = resultingUnit.CostResource.Vespene
+            //     // @ts-expect-error
+            //     morphCostSupply = -(resultingUnit.Food ?? 0)
+            // }
+
+            const morphes: { [key: string]: string[] } = {
+                Baneling: ["Zergling"],
+                Ravager: ["Roach"],
+                Overseer: ["Overlord"],
+                LurkerMP: ["Hydralisk"],
+                BroodLord: ["Corruptor"],
+                Archon: ["HighTemplar", "DarkTemplar"],
+            }
+            const requiresUnits = morphes[resultingUnitName]
+
+            if (TRAINED_BY[resultingUnitName] === undefined) {
+                TRAINED_BY[resultingUnitName] = {
+                    trainedBy: new Set([unitName]),
+                    requiresTechlab: false,
+                    requiresUnits,
+                    requires: [[unitName, ...(resultingUnit.requires ?? [])]],
+                    isMorph: true,
+                    morphCostMinerals: minerals,
+                    morphCostGas: vespene,
+                    morphCostSupply: food,
+                    consumesUnit: true,
+                    requiredStructure: (resultingUnit.requires ?? []).length === 1 ? resultingUnit.requires[0] : null,
+                    requiredUpgrade: null,
+                }
+            } else {
+                TRAINED_BY[resultingUnitName].trainedBy.add(unitName)
+                TRAINED_BY[resultingUnitName].requires[0].push(unitName)
+            }
+        }
+    }
+}
 
 // Hardcoded fixes
 for (const itemName in TRAINED_BY) {
@@ -145,9 +191,15 @@ for (const itemName in TRAINED_BY) {
         ]
     }
 
+    // Hardcoded fix: also add WarpGate to trainedBy for all Gateway-produced units
+    // (WarpGate is excluded from STRUCTURES via ignoreStructure so its produces array is never processed)
+    if (trainInfo.trainedBy.has("Gateway")) {
+        trainInfo.trainedBy.add("WarpGate")
+    }
+
     // Hardcoded fix so allow units produced by Barracks (same for Factory and Starport) to be produced by BarracksReactor and BarracksTechLab
     for (const structureType of ["Barracks", "Factory", "Starport"]) {
-        pull(trainInfo.requires[0], structureType + "Flying")
+        pull(trainInfo.requires[0], `${structureType}Flying`)
         if (
             trainInfo.requires[0].indexOf(structureType) >= 0 &&
             itemName.indexOf("Reactor") < 0 &&
@@ -156,17 +208,17 @@ for (const itemName in TRAINED_BY) {
             const nonBarracksRequires: string[] = without(trainInfo.requires[0], structureType)
             trainInfo.requires = [
                 [...nonBarracksRequires, structureType],
-                [structureType + "Reactor", ...nonBarracksRequires],
-                [structureType + "TechLab", ...nonBarracksRequires],
+                [`${structureType}Reactor`, ...nonBarracksRequires],
+                [`${structureType}TechLab`, ...nonBarracksRequires],
             ]
         }
     }
 }
 
 // Hardcoded fix for Mothership requiring MothershipCore when it should be Nexus
-TRAINED_BY["Mothership"].requires = [["FleetBeacon", "Nexus"]]
+TRAINED_BY.Mothership.requires = [["FleetBeacon", "Nexus"]]
 // Hardcoded fix for WarpGate being Absent
-TRAINED_BY["WarpGate"] = {
+TRAINED_BY.WarpGate = {
     consumesUnit: false,
     isMorph: false,
     morphCostMinerals: 0,
@@ -180,57 +232,60 @@ TRAINED_BY["WarpGate"] = {
     trainedBy: new Set("Probe"),
 }
 
+// Hardcoded fix for Gateway and Forge requiring a Pylon first
+TRAINED_BY.Gateway.requires = [["Pylon"]]
+TRAINED_BY.Forge.requires = [["Pylon"]]
 // Hardcoded fix for SCV requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
-TRAINED_BY["SCV"].requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
+TRAINED_BY.SCV.requires = [["CommandCenter"], ["PlanetaryFortress"], ["OrbitalCommand"]]
 // Hardcoded fix for EngineeringBay requiring CommandCenter when OrbitalCommand and PlanetaryFortress could work as well
-TRAINED_BY["EngineeringBay"].requires = [
+TRAINED_BY.EngineeringBay.requires = [
     ["CommandCenter", "SCV"],
     ["OrbitalCommand", "SCV"],
     ["PlanetaryFortress", "SCV"],
 ]
 
 // Hardcoded fix for Queen requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY["Queen"].requires = [
+TRAINED_BY.Queen.requires = [
     ["Hatchery", "SpawningPool"],
     ["Lair", "SpawningPool"],
     ["Hive", "SpawningPool"],
 ]
 // Hardcoded fix for SpawningPool requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY["SpawningPool"].requires = [
+TRAINED_BY.SpawningPool.requires = [
     ["Hatchery", "Drone"],
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for EvolutionChamber requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY["EvolutionChamber"].requires = [
+TRAINED_BY.EvolutionChamber.requires = [
     ["Hatchery", "Drone"],
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for LurkerDenMP
-TRAINED_BY["LurkerDenMP"].requires = [
+TRAINED_BY.LurkerDenMP.requires = [
     ["HydraliskDen", "Lair", "Drone"],
     ["HydraliskDen", "Hive", "Drone"],
 ]
 // Hardcoded fix for HydraliskDen
-TRAINED_BY["HydraliskDen"].requires = [
+TRAINED_BY.HydraliskDen.requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for Spire
-TRAINED_BY["Spire"].requires = [
+TRAINED_BY.Spire.requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for Spire
-TRAINED_BY["InfestationPit"].requires = [
+TRAINED_BY.InfestationPit.requires = [
     ["Lair", "Drone"],
     ["Hive", "Drone"],
 ]
 // Hardcoded fix for Ravager requiring Hatchery instead of RoachWarren
-TRAINED_BY["Ravager"].requires = [["Roach", "RoachWarren"]]
+TRAINED_BY.Ravager.requires = [["Roach", "RoachWarren"]]
 // Hardcoded fix for when only GreaterSpire available
-TRAINED_BY["Corruptor"].requires = [["Spire"], ["GreaterSpire"]]
+TRAINED_BY.Corruptor.requires = [["Spire"], ["GreaterSpire"]]
 // Reorder requirements to optimize build duration
 const requirementPriority = ["Hive", "GreaterSpire", "Corruptor", "Lair"]
 for (const itemName in TRAINED_BY) {
@@ -239,9 +294,36 @@ for (const itemName in TRAINED_BY) {
     trainInfo.requires = trainInfo.requires.map((requires) =>
         sortBy(
             without(uniq(requires), "Larva", "OverlordTransport"), // Hardcoded fix to remove requirements impossible to match from the bo
-            (name) => -requirementPriority.indexOf(name)
-        )
+            (name) => -requirementPriority.indexOf(name),
+        ),
     )
+}
+
+export function getProductionCost(
+    producerUnitName: string,
+    resultingUnitName: string,
+    isMorph: boolean,
+): { minerals: number; vespene: number; food: number } {
+    // @ts-expect-error
+    const producerUnit = data.Units[producerUnitName]
+    // @ts-expect-error
+    const resultingUnit = data.Units[resultingUnitName]
+
+    const resultingMinerals = resultingUnit?.CostResource?.Minerals ?? 0
+    const resultingVespene = resultingUnit?.CostResource?.Vespene ?? 0
+    const resultingFood = resultingUnit?.Food ?? 0
+
+    if (isMorph) {
+        const producerMinerals = producerUnit?.CostResource?.Minerals ?? 0
+        const producerVespene = producerUnit?.CostResource?.Vespene ?? 0
+        const producerFood = producerUnit?.Food ?? 0
+        return {
+            minerals: resultingMinerals - producerMinerals,
+            vespene: resultingVespene - producerVespene,
+            food: resultingFood - producerFood,
+        }
+    }
+    return { minerals: resultingMinerals, vespene: resultingVespene, food: resultingFood }
 }
 
 /**
@@ -256,14 +338,8 @@ for (const itemName in TRAINED_BY) {
     consumesUnit: false
 }
  */
-console.assert(
-    Object.keys(TRAINED_BY).length === 115,
-    `${Object.keys(TRAINED_BY).length} is not 115`
-)
 
-console.assert(
-    TRAINED_BY["Zergling"].requiredStructure === "SpawningPool",
-    `${TRAINED_BY["Zergling"].requiredStructure}`
-)
+console.assert(Object.keys(TRAINED_BY).length === 111, `${Object.keys(TRAINED_BY).length} is not 111`)
+console.assert(TRAINED_BY.Zergling.requiredStructure === "SpawningPool", `${TRAINED_BY.Zergling.requiredStructure}`)
 
 export default TRAINED_BY

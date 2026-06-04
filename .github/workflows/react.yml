@@ -33,9 +33,9 @@ jobs:
       run: |
         npm run format
 
-    - name: Run eslint
+    - name: Run lint
       run: |
-        npm run eslint
+        npm run lint
 
     - name: Run typecheck
       run: |
@@ -46,7 +46,7 @@ jobs:
         npm run test
 
   test_e2e:
-    timeout-minutes: 2
+    timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:

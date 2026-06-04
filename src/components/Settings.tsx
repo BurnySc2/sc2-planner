@@ -1,8 +1,10 @@
-import React, { Component, ChangeEvent } from "react"
+import type React from "react"
+import type { ChangeEvent } from "react"
+import { Component } from "react"
 import ReactTooltip from "react-tooltip"
 
 import CLASSES from "../constants/classes"
-import { ISettingsElement } from "../constants/interfaces"
+import type { ISettingsElement } from "../constants/interfaces"
 
 interface MyProps {
     settings: Array<ISettingsElement>
@@ -44,7 +46,7 @@ export default class Settings extends Component<MyProps, MyState> {
         this.props.updateSettings(itemShortName, newValue)
     }
 
-    onMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: React.ReactElement): void => {
+    onMouseEnter = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: React.ReactElement): void => {
         this.setState({
             tooltipText: item,
         })
@@ -54,13 +56,16 @@ export default class Settings extends Component<MyProps, MyState> {
         const classes = CLASSES.dropDown
         const classesDropdown = this.state.show ? `visible ${classes}` : `hidden ${classes}`
 
-        const settingsElements = this.props.settings.map((item, index) => {
+        const settingsElements = this.props.settings.map((item, _index) => {
             const mouseEnterFunc = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
                 this.onMouseEnter(e, <div>{item.tooltip}</div>)
             }
             return (
-                <div key={index} className={CLASSES.dropDownContainer}>
+                <div key={item.n} className={CLASSES.dropDownContainer}>
+                    {/* biome-ignore lint/a11y/useSemanticElements: Dropdown label triggers tooltip on hover, not a button */}
                     <div
+                        role="button"
+                        tabIndex={0}
                         className={CLASSES.dropDownLabel}
                         data-tip
                         data-for="settingsTooltip"
@@ -87,7 +92,10 @@ export default class Settings extends Component<MyProps, MyState> {
         // TODO Add apply button because onChange doesnt work reliably (laggy behavior)
 
         const settingsButton = (
+            /* biome-ignore lint/a11y/useSemanticElements: Dropdown container shows/hides on hover, not a button */
             <div
+                role="button"
+                tabIndex={0}
                 className={CLASSES.buttons}
                 onMouseEnter={this.showSettings}
                 onMouseLeave={this.hideSettings}

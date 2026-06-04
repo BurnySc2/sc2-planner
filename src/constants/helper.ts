@@ -1,18 +1,16 @@
-// @ts-ignore
-import lzbase62 from "lzbase62"
 import { isEqual, pick } from "lodash"
-
-import { ISettingsElement, IBuildOrderElement, Log } from "./interfaces"
-import UNITS_BY_NAME from "./units_by_name"
-import UPGRADES_BY_NAME from "./upgrade_by_name"
-import UPGRADES_BY_ID from "./upgrade_by_id"
-import { CUSTOMACTIONS_BY_ID } from "./customactions"
+// @ts-expect-error
+import lzbase62 from "lzbase62"
+import { CUSTOMACTIONS_BY_ID, CUSTOMACTIONS_BY_NAME } from "./customactions"
+import type { IBuildOrderElement, ISettingsElement, Log } from "./interfaces"
 import UNITS_BY_ID from "./units_by_id"
+import UNITS_BY_NAME from "./units_by_name"
+import UPGRADES_BY_ID from "./upgrade_by_id"
+import UPGRADES_BY_NAME from "./upgrade_by_name"
 
 const jsonpack = require("jsonpack")
 const pako = require("pako")
 
-const { CUSTOMACTIONS_BY_NAME } = require("./customactions")
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
 
@@ -35,11 +33,11 @@ const getImageOfItem = (item: { name: string; type: string }): string => {
     let image = ""
     try {
         if (item.type === "upgrade") {
-            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`).default
+            image = require(`../icons/png/${UPGRADE_ICONS[item.name.toUpperCase()]}`)
         } else if (item.type === "action") {
-            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`).default
+            image = require(`../icons/png/${CUSTOMACTIONS_BY_NAME[item.name].imageSource}`)
         } else {
-            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`).default
+            image = require(`../icons/png/${UNIT_ICONS[item.name.toUpperCase()]}`)
         }
     } catch {
         console.error(`Missing image for: ${item.name}`)
@@ -52,8 +50,7 @@ const defaultSettings: Array<ISettingsElement> = [
         // Pretty name displayed in gui
         name: "Worker start delay",
         // Tooltip popup that shows some information text
-        tooltip:
-            "How many seconds delay there is before the workers start mining minerals at game start.",
+        tooltip: "How many seconds delay there is before the workers start mining minerals at game start.",
         // Internal long variable name used by gamelogic.js
         variableName: "workerStartDelay",
         // Short name for base64 string
@@ -69,8 +66,7 @@ const defaultSettings: Array<ISettingsElement> = [
     },
     {
         name: "Worker build delay",
-        tooltip:
-            "Time for workers before they arrive at the target build location to start construction.",
+        tooltip: "Time for workers before they arrive at the target build location to start construction.",
         variableName: "workerBuildDelay",
         n: "wbd",
         v: 1,
@@ -252,8 +248,7 @@ const defaultOptimizeSettings: Array<ISettingsElement> = [
     },
 
     {
-        tooltip:
-            "Tries all possible swaps, and does it in multiple passes as long as it's more optimizing.",
+        tooltip: "Tries all possible swaps, and does it in multiple passes as long as it's more optimizing.",
         variableName: "improveByReordering",
         n: "ibr",
         v: 0,
@@ -268,7 +263,7 @@ defaultOptimizeSettings.forEach((item) => {
 
 const encodeSettings = (
     settingsObject: Array<ISettingsElement>,
-    settingsDefaultValues: { [name: string]: number | string }
+    settingsDefaultValues: { [name: string]: number | string },
 ): string => {
     // Strip away unwanted values
     let strippedObject = settingsObject.map((item) => {
@@ -346,7 +341,7 @@ const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string =
     // Encoding with zlib
     const jsonString = JSON.stringify(compactArray)
     const compressed = pako.deflate(jsonString, { to: "string" })
-    const encoded = "002" + btoa(compressed)
+    const encoded = `002${btoa(compressed)}`
 
     return encoded
 }
@@ -415,7 +410,7 @@ const createUrlParams = (
     race: string | undefined,
     settings: Array<ISettingsElement> | undefined,
     optimizeSettings: Array<ISettingsElement> | undefined,
-    buildOrder: Array<IBuildOrderElement> = []
+    buildOrder: Array<IBuildOrderElement> = [],
 ): string => {
     let newUrl = "?"
     if (!race) {
@@ -491,14 +486,11 @@ const createUrlParams = (
  * Returns a promise that rejects when the log is cancelled, so it can raise an exception
  * Returned promise has to be wrapped in a function otherwise it's auto-resolved
  */
-export async function cancelableLog(
-    logFunc: (line?: Log) => void,
-    line: Log
-): Promise<() => Promise<void>> {
+export async function cancelableLog(logFunc: (line?: Log) => void, line: Log): Promise<() => Promise<void>> {
     let cancel: () => void = () => {
         return undefined
     }
-    const cancellationPromise = new Promise<void>((resolve, reject) => {
+    const cancellationPromise = new Promise<void>((_resolve, reject) => {
         cancel = reject
     })
     line.cancel = cancel
@@ -509,17 +501,17 @@ export async function cancelableLog(
 }
 
 export {
-    defaultSettings,
-    defaultOptimizeSettings,
     CONVERT_SECONDS_TO_TIME_STRING,
     CONVERT_TIME_STRING_TO_SECONDS,
-    getImageOfItem,
-    encodeSettings,
-    decodeSettings,
-    decodeOptimizeSettings,
-    encodeBuildOrder,
-    decodeBuildOrder,
     createUrlParams,
+    decodeBuildOrder,
+    decodeOptimizeSettings,
+    decodeSettings,
+    defaultOptimizeSettings,
+    defaultSettings,
+    encodeBuildOrder,
+    encodeSettings,
+    getImageOfItem,
     // encodeSALT,
     // decodeSALT,
 }
