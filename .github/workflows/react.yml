@@ -46,12 +46,13 @@ jobs:
         npm run test
 
   test_e2e:
-    timeout-minutes: 10
+    timeout-minutes: 5
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        node: ['24', '25', '26']
+        # Seems to hang on node 24 and 26 https://github.com/microsoft/playwright/issues/40724
+        node: ['25']
     runs-on: ${{ matrix.os }}
 
     steps:
