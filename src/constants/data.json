@@ -17260,8 +17260,8 @@
       "name": "Ghost",
       "race": "Terran",
       "requires": [
-        "AttachedBarrTechLab",
-        "ShadowOps"
+        "AttachedTechLab",
+        "GhostAcademy"
       ],
       "time": 40,
       "type": "unit"
@@ -17407,7 +17407,10 @@
         "PersonalCloaking"
       ],
       "time": 40,
-      "type": "structure"
+      "type": "structure",
+      "unlocks": [
+        "Ghost"
+      ]
     },
     "GhostAlternate": {
       "AIEvalFactor": 1.2,
