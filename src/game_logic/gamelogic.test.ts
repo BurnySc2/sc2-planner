@@ -467,3 +467,55 @@ test("Add LurkerMP with required tech", () => {
     expect(logic.eventLog.length).toBe(8)
     expect(logic.supplyCap).toBe(14)
 })
+
+test("Add GreaterSpire, UltraliskCavern, and Corruptor with required tech", () => {
+    const prevLogic = new GameLogic("zerg", [])
+
+    // Add GreaterSpire (requires Spire -> Lair -> Hatchery + SpawningPool)
+    let [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "GreaterSpire", type: "structure" }, 0)
+
+    // Add UltraliskCavern (requires InfestationPit -> Lair)
+    ;[logic, insertedItems] = GameLogic.addItemToBO(
+        logic,
+        { name: "UltraliskCavern", type: "structure" },
+        insertedItems,
+    )
+
+    // Add Corruptor (requires Spire or GreaterSpire)
+    ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Corruptor", type: "unit" }, insertedItems)
+
+    expect(insertedItems).toBe(1)
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(1)
+    expect(logic.supplyCap).toBe(14)
+})
+
+test("Add Lair then Queen with required tech", () => {
+    const prevLogic = new GameLogic("zerg", [])
+
+    // Add Lair (requires Hatchery + SpawningPool)
+    let [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Lair", type: "structure" }, 0)
+
+    // Add Queen (requires Hatchery/Lair/Hive + SpawningPool)
+    ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Queen", type: "unit" }, insertedItems)
+
+    expect(insertedItems).toBe(1)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(5)
+    expect(logic.supplyCap).toBe(14)
+})
+
+test("Add Hive then Queen with required tech", () => {
+    const prevLogic = new GameLogic("zerg", [])
+
+    // Add Hive (requires Lair + InfestationPit)
+    let [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Hive", type: "structure" }, 0)
+
+    // Add Queen (requires Hatchery/Lair/Hive + SpawningPool)
+    ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Queen", type: "unit" }, insertedItems)
+
+    expect(insertedItems).toBe(1)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(7)
+    expect(logic.supplyCap).toBe(14)
+})

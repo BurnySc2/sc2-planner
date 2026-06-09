@@ -59,7 +59,6 @@ for (const myUnit of [...UNITS, ...STRUCTURES]) {
             }
         } else {
             TRAINED_BY[producedUnitName].trainedBy.add(unitName)
-            TRAINED_BY[producedUnitName].requires[0].push(...requires)
         }
     })
 
@@ -244,48 +243,51 @@ TRAINED_BY.EngineeringBay.requires = [
     ["PlanetaryFortress", "SCV"],
 ]
 
-// Hardcoded fix for Queen requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY.Queen.requires = [
-    ["Hatchery", "SpawningPool"],
-    ["Lair", "SpawningPool"],
-    ["Hive", "SpawningPool"],
-]
-// Hardcoded fix for SpawningPool requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY.SpawningPool.requires = [
-    ["Hatchery", "Drone"],
-    ["Lair", "Drone"],
-    ["Hive", "Drone"],
-]
-// Hardcoded fix for EvolutionChamber requiring Hatchery when Lair and Hive could work as well
-TRAINED_BY.EvolutionChamber.requires = [
-    ["Hatchery", "Drone"],
-    ["Lair", "Drone"],
-    ["Hive", "Drone"],
-]
-// Hardcoded fix for LurkerDenMP
-TRAINED_BY.LurkerDenMP.requires = [
-    ["HydraliskDen", "Lair", "Drone"],
-    ["HydraliskDen", "Hive", "Drone"],
-]
-// Hardcoded fix for HydraliskDen
-TRAINED_BY.HydraliskDen.requires = [
-    ["Lair", "Drone"],
-    ["Hive", "Drone"],
-]
-// Hardcoded fix for Spire
-TRAINED_BY.Spire.requires = [
-    ["Lair", "Drone"],
-    ["Hive", "Drone"],
-]
-// Hardcoded fix for Spire
-TRAINED_BY.InfestationPit.requires = [
-    ["Lair", "Drone"],
-    ["Hive", "Drone"],
-]
-// Hardcoded fix for Ravager requiring Hatchery instead of RoachWarren
-TRAINED_BY.Ravager.requires = [["Roach", "RoachWarren"]]
-// Hardcoded fix for when only GreaterSpire available
-TRAINED_BY.Corruptor.requires = [["Spire"], ["GreaterSpire"]]
+// Zerg town hall upgrade chain: Hatchery → Lair → Hive
+const zergTownHallChain = ["Hatchery", "Lair", "Hive"]
+
+// Generic expansion: loop through all items
+for (const itemName in TRAINED_BY) {
+    // Skip town halls themselves to avoid circular dependencies
+    if (itemName === "Lair" || itemName === "Hive") {
+        continue
+    }
+    // Skip NydusNetwork to preserve current behavior
+    if (itemName === "NydusNetwork") {
+        continue
+    }
+
+    const trainInfo = TRAINED_BY[itemName]
+    const newRequires: string[][] = []
+
+    for (const reqSet of trainInfo.requires) {
+        // Check for Hatchery → expand to Hatchery, Lair, Hive
+        if (reqSet.includes("Hatchery")) {
+            for (const hall of zergTownHallChain) {
+                newRequires.push(reqSet.map((r) => (r === "Hatchery" ? hall : r)))
+            }
+        }
+        // Check for Lair, expand to Lair, Hive
+        else if (reqSet.includes("Lair")) {
+            for (const hall of ["Lair", "Hive"]) {
+                newRequires.push(reqSet.map((r) => (r === "Lair" ? hall : r)))
+            }
+        }
+        // Check for Spire, expand to Spire, GreaterSpire
+        else if (reqSet.includes("Spire")) {
+            for (const structure of ["Spire", "GreaterSpire"]) {
+                newRequires.push(reqSet.map((r) => (r === "Spire" ? structure : r)))
+            }
+        }
+        // No town hall, keep as-is
+        else {
+            newRequires.push(reqSet)
+        }
+    }
+
+    trainInfo.requires = newRequires
+}
+
 // Reorder requirements to optimize build duration
 const requirementPriority = ["Hive", "GreaterSpire", "Corruptor", "Lair"]
 for (const itemName in TRAINED_BY) {
