@@ -1012,8 +1012,6 @@ class GameLogic {
         }
         this.minerals += minerals
         this.vespene += vespene
-        // this.minerals += incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) / 22.4
-        // this.vespene +=  incomeVespene(this.workersVespene, this.gasCount) / 22.4
     }
 
     canAfford(unit: IBuildOrderElement): boolean {

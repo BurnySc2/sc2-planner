@@ -901,6 +901,21 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
             }
         }
     }
+    if (action.internal_name === "cancel_extractor") {
+        gamelogic.errorMessage = "Could not find an Extractor currently in construction."
+        for (const drone of gamelogic.units) {
+            // Find drone currently morphing to extractor
+            if (drone.name === "Drone" && 0 < drone.tasks.length && drone.tasks[0].morphToUnit === "Extractor") {
+                drone.tasks = [] // empty task list
+                gamelogic.workersMinerals += 1
+                gamelogic.supplyUsed += 1
+                gamelogic.supplyLeft -= 1
+                gamelogic.minerals += 19 // 25 / 4
+                actionCompleted = true
+                break
+            }
+        }
+    }
 
     if (actionCompleted) {
         // Add event

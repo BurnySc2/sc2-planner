@@ -319,5 +319,13 @@
         "duration": 11,
         "race": "zerg",
         "id": 32
+    },
+    {
+        "internal_name": "cancel_extractor",
+        "name": "Extractor Trick",
+        "imageSource": "btn-building-zerg-extractor.png",
+        "duration": 22,
+        "race": "zerg",
+        "id": 33
     }
 ]

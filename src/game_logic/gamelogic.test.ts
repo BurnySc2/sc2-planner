@@ -537,3 +537,40 @@ test("Add Hive then ZergMissileWeaponsLevel3", () => {
     expect(logic.units.size).toBe(14)
     expect(logic.eventLog.length).toBe(10)
 })
+
+test("Failing: Add drone after extractor trick", () => {
+    const bo: IBuildOrderElement[] = [
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
+        { name: "Extractor", type: "structure" },
+        { name: "cancel_extractor", type: "action" },
+        { name: "Drone", type: "worker" },
+    ]
+    const logic = new GameLogic("zerg", bo)
+
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.supplyLeft).toBe(0)
+    expect(logic.supplyUsed).toBe(14)
+    expect(logic.units.size).toBe(16)
+    expect(logic.eventLog.length).toBe(3)
+    expect(logic.errorMessage).toBe("Missing 1 supply to produce 'Drone'.")
+})
+
+test("Add drone during extractor trick", () => {
+    const bo: IBuildOrderElement[] = [
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
+        { name: "Extractor", type: "structure" },
+        { name: "Drone", type: "worker" },
+        { name: "cancel_extractor", type: "action" },
+    ]
+    const logic = new GameLogic("zerg", bo)
+
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.supplyLeft).toBe(-1)
+    expect(logic.supplyUsed).toBe(15)
+    expect(logic.units.size).toBe(17)
+    expect(logic.eventLog.length).toBe(4)
+})
