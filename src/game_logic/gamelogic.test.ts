@@ -348,6 +348,7 @@ test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
         { name: "ZergFlyerWeaponsLevel3", type: "upgrade" },
         0,
     )
+    // This should not insert GreaterSpire as it is not required
 
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel1")).toBe(true)
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel2")).toBe(true)
@@ -430,7 +431,6 @@ test("Add Zealot via WarpGate path", () => {
     expect(logic.eventLog.length).toBe(7) // Pylon, Gateway, CyberneticsCore, WarpGateResearch (no event for morph)
     expect(logic.supplyCap).toBe(23)
     expect(logic.upgrades.has("WarpGateResearch")).toBe(true)
-
     ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Zealot", type: "unit" }, insertedItems)
 
     expect(insertedItems).toBe(1) // Just Zealot (WarpGate already exists)
@@ -468,7 +468,7 @@ test("Add LurkerMP with required tech", () => {
     expect(logic.supplyCap).toBe(14)
 })
 
-test("Add GreaterSpire, UltraliskCavern, and Corruptor with required tech", () => {
+test("Add GreaterSpire, UltraliskCavern, and Corruptor", () => {
     const prevLogic = new GameLogic("zerg", [])
 
     // Add GreaterSpire (requires Spire -> Lair -> Hatchery + SpawningPool)
@@ -481,7 +481,7 @@ test("Add GreaterSpire, UltraliskCavern, and Corruptor with required tech", () =
         insertedItems,
     )
 
-    // Add Corruptor (requires Spire or GreaterSpire)
+    // Add Corruptor (requires Spire or GreaterSpire), Greaterspire will be done before Corruptor is queued
     ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Corruptor", type: "unit" }, insertedItems)
 
     expect(insertedItems).toBe(1)
@@ -490,7 +490,7 @@ test("Add GreaterSpire, UltraliskCavern, and Corruptor with required tech", () =
     expect(logic.supplyCap).toBe(14)
 })
 
-test("Add Lair then Queen with required tech", () => {
+test("Add Lair then Queen", () => {
     const prevLogic = new GameLogic("zerg", [])
 
     // Add Lair (requires Hatchery + SpawningPool)
@@ -505,7 +505,7 @@ test("Add Lair then Queen with required tech", () => {
     expect(logic.supplyCap).toBe(14)
 })
 
-test("Add Hive then Queen with required tech", () => {
+test("Add Hive then Queen", () => {
     const prevLogic = new GameLogic("zerg", [])
 
     // Add Hive (requires Lair + InfestationPit)
@@ -518,4 +518,22 @@ test("Add Hive then Queen with required tech", () => {
     expect(logic.units.size).toBe(15)
     expect(logic.eventLog.length).toBe(7)
     expect(logic.supplyCap).toBe(14)
+})
+
+test("Add Hive then ZergMissileWeaponsLevel3", () => {
+    const prevLogic = new GameLogic("zerg", [])
+
+    // Add Hive (requires Lair + InfestationPit)
+    let [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Hive", type: "structure" }, 0)
+
+    // Add ZergMissileWeaponsLevel3 (requires Hive + Level1 + Level2)
+    ;[logic, insertedItems] = GameLogic.addItemToBO(
+        logic,
+        { name: "ZergMissileWeaponsLevel3", type: "upgrade" },
+        insertedItems,
+    )
+
+    // This test may fail because old systems required Lair for Level2. However, that Lair already has morphed to Hive
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(10)
 })

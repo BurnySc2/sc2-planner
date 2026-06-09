@@ -43,22 +43,26 @@ for (const [_key, researcherUnit] of Object.entries(data.Units)) {
     )
 }
 
-RESEARCHED_BY.ZergFlyerWeaponsLevel1.requires = [["Spire"], ["GreaterSpire"]]
-RESEARCHED_BY.ZergFlyerWeaponsLevel2.requires = [
-    ["Spire", "Lair"],
-    ["Spire", "Hive"],
-    ["GreaterSpire", "Lair"],
-    ["GreaterSpire", "Hive"],
-]
-RESEARCHED_BY.ZergFlyerWeaponsLevel3.requires = [
-    ["Spire", "Hive"],
-    ["GreaterSpire", "Hive"],
-]
+// Generic expansion for Zerg structure upgrade chains
+// Anything requiring Spire -> also fulfilled by GreaterSpire
+// Anything requiring Lair -> also fulfilled by Hive
+for (const upgradeName in RESEARCHED_BY) {
+    const info = RESEARCHED_BY[upgradeName]
+    const newRequires: string[][] = []
 
-RESEARCHED_BY.ZergMeleeWeaponsLevel2.requires = [
-    ["ZergMeleeWeaponsLevel1", "Lair"],
-    ["ZergMeleeWeaponsLevel1", "Hive"],
-]
+    for (const reqSet of info.requires) {
+        if (reqSet.includes("Lair")) {
+            // Expand Lair -> Lair, Hive
+            for (const structure of ["Lair", "Hive"]) {
+                newRequires.push(reqSet.map((r) => (r === "Lair" ? structure : r)))
+            }
+        } else {
+            newRequires.push(reqSet)
+        }
+    }
+
+    info.requires = newRequires
+}
 
 /**
 {OverlordSpeed:

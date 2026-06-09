@@ -846,6 +846,10 @@ class GameLogic {
         // Set error + requirements so addItemToBO's filling loop can auto-insert the needed structure
         this.errorMessage = `Could not find ${[...researchInfo.researchedBy].join(" or ")} to research '${upgrade.name}'.`
         for (const researcherName of researchInfo.researchedBy) {
+            // Hardcoded fix to not auto-insert GreaterSpire when researching zerg air upgrades
+            if (researcherName === "GreaterSpire") {
+                continue
+            }
             this.requirements.push(BO_ITEMS[researcherName])
         }
 
