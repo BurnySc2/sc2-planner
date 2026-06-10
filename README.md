@@ -32,15 +32,12 @@ With the arrow keys (left and right) you can navigate through the build order. H
 
 ## Requirements
 
-[Node 14 or newer](https://nodejs.org/en/download/) is required to create this static website.
+[Node 24 or newer](https://nodejs.org/en/download/) is required to create this static website.
 
 ## Setup
 
 ```
 npm install
-pip install poetry --user
-poetry install
-poetry run pre-commit install
 ```
 
 ## Deploy
@@ -56,7 +53,7 @@ poetry run pre-commit install
 ### Develop
 To start dev server:
 
-`npm run start`
+`npm start`
 
 Then go to [localhost:3000](http://localhost:3000)
 
@@ -79,7 +76,7 @@ Most image assets are owned by Blizzard and are used according to http://blizzar
 
 Prettify all .ts and .tsx files:
 
-`npm run format`
+`npm run lint:fix`
 
 # TODO
 
