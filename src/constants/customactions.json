@@ -67,7 +67,7 @@
     {
         "internal_name": "salvage_bunker",
         "name": "Salvage",
-        "imageSource": "btn-building-terran-bunker.png",
+        "imageSource": "btn-building-terran-bunker-salvage.png",
         "duration": 15,
         "race": "terran",
         "id": 40
@@ -323,7 +323,7 @@
     {
         "internal_name": "cancel_extractor",
         "name": "Extractor Trick",
-        "imageSource": "btn-building-zerg-extractor.png",
+        "imageSource": "btn-extractor-trick.png",
         "duration": 22,
         "race": "zerg",
         "id": 33
