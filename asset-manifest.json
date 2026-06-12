@@ -1,7 +1,8 @@
 {
   "files": {
     "main.css": "./static/css/main.3ed5a2f6.css",
-    "main.js": "./static/js/main.aa1e3759.js",
+    "main.js": "./static/js/main.799a58c8.js",
+    "static/media/money-symbol-png-icon-17.png": "./static/media/money-symbol-png-icon-17.4d6e03a33df11a003e6e.png",
     "static/media/btn-building-terran-factory-reactor.png": "./static/media/btn-building-terran-factory-reactor.109f17e2eebb05ddf8ec.png",
     "static/media/btn-building-terran-starport-techlab.png": "./static/media/btn-building-terran-starport-techlab.0b302e33d944715cc137.png",
     "static/media/btn-building-terran-factory-techlab.png": "./static/media/btn-building-terran-factory-techlab.68a0f412d9f5998c2306.png",
@@ -33,6 +34,7 @@
     "static/media/btn-ability-spearofadun-chronosurge-darkshrine.png": "./static/media/btn-ability-spearofadun-chronosurge-darkshrine.26c4b8bdb55882fb201b.png",
     "static/media/btn-ability-spearofadun-chronosurge-roboticsfacility.png": "./static/media/btn-ability-spearofadun-chronosurge-roboticsfacility.eaf7d82b81b20f5f0649.png",
     "static/media/btn-upgrade-terran-hyperflightrotors.png": "./static/media/btn-upgrade-terran-hyperflightrotors.60d20d524d559eec24bd.png",
+    "static/media/btn-extractor-trick.png": "./static/media/btn-extractor-trick.5dfd7ddc1951e2088cb6.png",
     "static/media/btn-upgrade-zerg-groundcarapace-level2.png": "./static/media/btn-upgrade-zerg-groundcarapace-level2.c402769aa04b11defef2.png",
     "static/media/btn-upgrade-terran-highcapacityfueltanks.png": "./static/media/btn-upgrade-terran-highcapacityfueltanks.abeda40e467613b802bb.png",
     "static/media/btn-upgrade-zerg-metabolicboost.png": "./static/media/btn-upgrade-zerg-metabolicboost.5e89e6f8fa373bccc080.png",
@@ -76,10 +78,10 @@
     "static/media/copy_contents.svg": "./static/media/copy_contents.086bb37d7578b7566446.svg",
     "index.html": "./index.html",
     "main.3ed5a2f6.css.map": "./static/css/main.3ed5a2f6.css.map",
-    "main.aa1e3759.js.map": "./static/js/main.aa1e3759.js.map"
+    "main.799a58c8.js.map": "./static/js/main.799a58c8.js.map"
   },
   "entrypoints": [
     "static/css/main.3ed5a2f6.css",
-    "static/js/main.aa1e3759.js"
+    "static/js/main.799a58c8.js"
   ]
 }
