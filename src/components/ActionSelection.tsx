@@ -3,7 +3,7 @@ import { Component } from "react"
 import ReactTooltip from "react-tooltip"
 import CLASSES from "../constants/classes"
 import { CUSTOMACTIONS } from "../constants/customactions"
-import { getImageOfItem } from "../constants/helper"
+import { formatCountWithProduction, getImageOfItem } from "../constants/helper"
 import type { IAllRaces, ICustomAction } from "../constants/interfaces"
 import RESOURCES from "../constants/resources"
 import { STRUCTURE_NAMES_BY_RACE, STRUCTURES } from "../constants/structures"
@@ -145,7 +145,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
             }
             const icon = getImageOfItem({ name: item.name, type: "unit" })
 
-            const value = unitsCount[item.name]
+            const value = formatCountWithProduction(unitsCount[item.name], unitsCount[`${item.name}_in_production`])
             const hidden = UNIT_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
                 <button
@@ -182,7 +182,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "structure" })
-            const value = unitsCount[item.name]
+            const value = formatCountWithProduction(unitsCount[item.name], unitsCount[`${item.name}_in_production`])
             const hidden = STRUCTURE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             return (
                 <button
@@ -219,7 +219,7 @@ export default class ActionsSelection extends Component<MyProps, MyState> {
                 )
             }
             const icon = getImageOfItem({ name: item.name, type: "upgrade" })
-            const value = unitsCount[item.name]
+            const value = formatCountWithProduction(unitsCount[item.name], unitsCount[`${item.name}_in_production`])
             const hidden = UPGRADE_NAMES_BY_RACE[this.props.race].has(item.name) ? "" : "hidden"
             const upgradeDisabled = this.props.gamelogic.upgrades.has(item.name) ? "filter grayscale" : ""
             return (

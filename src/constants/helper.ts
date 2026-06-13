@@ -444,6 +444,24 @@ const createUrlParams = (
     return newUrl
 }
 
+/**
+ * Formats a count with optional production count for display.
+ * @param count - The number of completed items (may be undefined/0)
+ * @param production - The number of items in production (may be undefined/0)
+ * @returns Formatted string: "", "12", "0+1", or "12+1"
+ */
+const formatCountWithProduction = (count?: number, production?: number): string => {
+    const c = count || 0
+    const p = production || 0
+    if (c === 0 && p === 0) {
+        return ""
+    }
+    if (p === 0) {
+        return `${c}`
+    }
+    return `${c}+${p}`
+}
+
 // const encodeSALT = (_buildOrder: Array<IBuildOrderElement>): string => {
 //     // TODO Encode salt build order
 //     return "Some salt build order encoded"
@@ -511,6 +529,7 @@ export {
     defaultSettings,
     encodeBuildOrder,
     encodeSettings,
+    formatCountWithProduction,
     getImageOfItem,
     // encodeSALT,
     // decodeSALT,

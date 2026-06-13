@@ -507,6 +507,35 @@ class GameLogic {
                 incrementUnitName("creep_tumor", amount)
             }
         })
+        // Count in-production items (tasks currently in progress)
+        this.units.forEach((unit) => {
+            const countProductionTask = (task: Task) => {
+                if (task.newWorker) {
+                    incrementUnitName(`${task.newWorker}_in_production`)
+                }
+                if (task.newUnit) {
+                    incrementUnitName(`${task.newUnit}_in_production`)
+                }
+                if (task.newStructure) {
+                    incrementUnitName(`${task.newStructure}_in_production`)
+                }
+                if (task.newUpgrade) {
+                    incrementUnitName(`${task.newUpgrade}_in_production`)
+                }
+                if (task.morphToUnit) {
+                    incrementUnitName(`${task.morphToUnit}_in_production`)
+                }
+            }
+            for (const task of unit.tasks) {
+                countProductionTask(task)
+            }
+            for (const task of unit.addonTasks) {
+                countProductionTask(task)
+            }
+            for (const task of unit.backgroundTask) {
+                countProductionTask(task)
+            }
+        })
         incrementUnitName("morph_archon_from_dt_dt", Math.floor(dtCount / 2))
         incrementUnitName("morph_archon_from_ht_ht", Math.floor(htCount / 2))
         incrementUnitName("morph_archon_from_ht_dt", Math.min(htCount, dtCount))

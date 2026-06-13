@@ -574,3 +574,43 @@ test("Add drone during extractor trick", () => {
     expect(logic.units.size).toBe(17)
     expect(logic.eventLog.length).toBe(4)
 })
+
+test("Production tracking: 3 SupplyDepots and 1 SCV", () => {
+    // Queue 3 SupplyDepots and 1 SCV in the build order
+    // Verify that at the snapshot after the SCV is queued:
+    //   - 1 Supply Depot is completed (the first one, which finished building)
+    //   - 2 Supply Depots are still in production (the 2nd and 3rd, still being built by workers)
+    //   - 1 SCV is in production (just queued at the CommandCenter)
+    const bo: IBuildOrderElement[] = [
+        { name: "SupplyDepot", type: "structure" },
+        { name: "SupplyDepot", type: "structure" },
+        { name: "SupplyDepot", type: "structure" },
+        { name: "SCV", type: "worker" },
+    ]
+    const logic = new GameLogic("terran", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+
+    // unitsCountArray has bo.length + 1 snapshots (index 0 = initial state from setStart)
+    // Indices 1-4 correspond to each BO item being processed
+    expect(logic.unitsCountArray.length).toBe(5)
+
+    // The snapshot at index 4 is taken when the SCV (4th item) is queued.
+    // By this time, the first SupplyDepot (build time = 30s * 16 = 480 frames)
+    // has completed because enough frames have elapsed while accumulating minerals
+    // for the subsequent depots (each costs 100 minerals).
+    expect(logic.unitsCountArray.length).toBeGreaterThan(0)
+    const snapshot = logic.unitsCountArray.at(-1)
+
+    expect(snapshot).not.toBeUndefined()
+    if (snapshot === undefined) {
+        return
+    }
+
+    // 1 Supply Depot completed (added as a unit, build task removed from worker)
+    expect(snapshot.SupplyDepot).toBe(1)
+    // 2 Supply Depots still in production (2nd and 3rd depots being built by workers)
+    expect(snapshot.SupplyDepot_in_production).toBe(2)
+    // 1 SCV in production (CommandCenter training the queued SCV)
+    expect(snapshot.SCV_in_production).toBe(1)
+})
