@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.3ed5a2f6.css",
-    "main.js": "./static/js/main.799a58c8.js",
+    "main.css": "./static/css/main.cf8d00bf.css",
+    "main.js": "./static/js/main.4e675c95.js",
     "static/media/money-symbol-png-icon-17.png": "./static/media/money-symbol-png-icon-17.4d6e03a33df11a003e6e.png",
     "static/media/btn-building-terran-factory-reactor.png": "./static/media/btn-building-terran-factory-reactor.109f17e2eebb05ddf8ec.png",
     "static/media/btn-building-terran-starport-techlab.png": "./static/media/btn-building-terran-starport-techlab.0b302e33d944715cc137.png",
@@ -77,11 +77,11 @@
     "static/media/README.md": "./static/media/README.9ac215a543ee34dc119c.md",
     "static/media/copy_contents.svg": "./static/media/copy_contents.086bb37d7578b7566446.svg",
     "index.html": "./index.html",
-    "main.3ed5a2f6.css.map": "./static/css/main.3ed5a2f6.css.map",
-    "main.799a58c8.js.map": "./static/js/main.799a58c8.js.map"
+    "main.cf8d00bf.css.map": "./static/css/main.cf8d00bf.css.map",
+    "main.4e675c95.js.map": "./static/js/main.4e675c95.js.map"
   },
   "entrypoints": [
-    "static/css/main.3ed5a2f6.css",
-    "static/js/main.799a58c8.js"
+    "static/css/main.cf8d00bf.css",
+    "static/js/main.4e675c95.js"
   ]
 }
