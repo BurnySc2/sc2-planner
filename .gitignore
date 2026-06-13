@@ -23,6 +23,3 @@ temp.txt
 # Pycharm
 .idea
 
-# Tailwindcss will be rebuilt using npm run start and npm run build command
-src/index.css
-

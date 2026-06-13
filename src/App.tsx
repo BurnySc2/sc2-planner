@@ -1,6 +1,5 @@
 import type React from "react"
 import { Component } from "react"
-import "./index.css"
 
 import MyRouter from "./components/MyRouter"
 

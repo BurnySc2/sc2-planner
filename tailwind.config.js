@@ -1,8 +1,6 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-    purge: {
-        content: ["./src/**/*.{ts,tsx}"],
-        enabled: process.env.DEVELOPMENT !== "true", // disable purge in dev
-    },
+    content: ["./src/**/*.{ts,tsx}"],
     // Fontsize and colors from tailwindcss v1
     theme: {
         fontSize: {
@@ -136,6 +134,5 @@ module.exports = {
             },
         },
     },
-    variants: {},
     plugins: [],
 }
