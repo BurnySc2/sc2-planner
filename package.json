@@ -6,6 +6,7 @@
     "scripts": {
         "start": "cross-env BROWSER=none HTTPS=true NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
         "build": "react-scripts build",
+        "serve": "serve -s build",
         "buildNode17": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
         "test": "react-scripts test --env=jsdom",
         "testAll": "react-scripts test --env=jsdom --watchAll=false",
