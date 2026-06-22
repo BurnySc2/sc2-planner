@@ -512,7 +512,21 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                 type: "upgrade",
             },
         ]
-        if (gamelogic.upgrades.has("WarpGateResearch")) {
+        if (gamelogic.minerals < 25) {
+            gamelogic.errorMessage = "25 minerals required"
+        } else if (gamelogic.vespene < 25) {
+            gamelogic.errorMessage = `Unable to afford convert gateway to warpgate, missing ${Math.ceil(
+                25 - gamelogic.vespene,
+            )} vespene.`
+            if (gamelogic.workersVespene === 0) {
+                gamelogic.requirements = [
+                    {
+                        name: "3worker_to_gas",
+                        type: "action",
+                    },
+                ]
+            }
+        } else if (gamelogic.upgrades.has("WarpGateResearch")) {
             gamelogic.errorMessage = "Could not find a gateway."
             for (const unit of gamelogic.idleUnits) {
                 if (unit.name === "Gateway" && !unit.isBusy()) {
@@ -520,6 +534,8 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                     task.morphToUnit = "WarpGate"
                     unit.addTask(gamelogic, task)
                     actionCompleted = true
+                    gamelogic.minerals -= 25
+                    gamelogic.vespene -= 25
                     break
                 }
             }
@@ -540,6 +556,8 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
                 task.morphToUnit = "Gateway"
                 unit.addTask(gamelogic, task)
                 actionCompleted = true
+                gamelogic.minerals += 25
+                gamelogic.vespene += 25
                 break
             }
         }
