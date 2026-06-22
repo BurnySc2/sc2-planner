@@ -19,9 +19,9 @@ test("Get the train cost of Depot", () => {
 })
 
 test("Get the train cost of Hatchery", () => {
-    expect(GameLogic.getCost("Hatchery").minerals).toBe(275)
+    expect(GameLogic.getCost("Hatchery").minerals).toBe(300)
     expect(GameLogic.getCost("Hatchery").vespene).toBe(0)
-    expect(GameLogic.getCost("Hatchery").supply).toBe(-6)
+    expect(GameLogic.getCost("Hatchery").supply).toBe(-4)
 })
 
 test("Get the train cost of Lair", () => {
