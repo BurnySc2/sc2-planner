@@ -341,11 +341,17 @@ test("Add BroodLord with required tech", () => {
 })
 
 test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
-    const prevLogic = new GameLogic("zerg", [])
+    const prevLogic = new GameLogic("zerg", [
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
+        { name: "Overlord", type: "unit" },
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
+    ])
     const [logic, insertedItems] = GameLogic.addItemToBO(
         prevLogic,
         { name: "ZergFlyerWeaponsLevel3", type: "upgrade" },
-        0,
+        prevLogic.bo.length,
     )
     // This should not insert GreaterSpire as it is not required
 
@@ -353,9 +359,9 @@ test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel2")).toBe(true)
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel3")).toBe(true)
     expect(insertedItems).toBe(10)
-    expect(logic.units.size).toBe(14)
-    expect(logic.eventLog.length).toBe(10)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(15)
+    expect(logic.supplyCap).toBe(20)
 })
 
 test("Add two Archons with required tech", () => {
