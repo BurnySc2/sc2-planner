@@ -19,9 +19,9 @@ test("Get the train cost of Depot", () => {
 })
 
 test("Get the train cost of Hatchery", () => {
-    expect(GameLogic.getCost("Hatchery").minerals).toBe(275)
+    expect(GameLogic.getCost("Hatchery").minerals).toBe(300)
     expect(GameLogic.getCost("Hatchery").vespene).toBe(0)
-    expect(GameLogic.getCost("Hatchery").supply).toBe(-6)
+    expect(GameLogic.getCost("Hatchery").supply).toBe(-4)
 })
 
 test("Get the train cost of Lair", () => {
@@ -48,7 +48,7 @@ test("Build an SCV", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(10)
     expect(logic.eventLog.length).toBe(1)
 })
 
@@ -61,7 +61,7 @@ test("Build two SCVs", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(15)
+    expect(logic.units.size).toBe(11)
     expect(logic.eventLog.length).toBe(2)
 })
 
@@ -71,7 +71,7 @@ test("Build depot", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(10)
     expect(logic.eventLog.length).toBe(1)
 })
 
@@ -83,24 +83,24 @@ test("Build SCV then depot", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(15)
-    expect(logic.supplyCap).toBe(23)
+    expect(logic.units.size).toBe(11)
+    expect(logic.supplyCap).toBe(21)
     expect(logic.eventLog.length).toBe(2)
 })
 
-test("Build 4 SCVs", () => {
+test("Build 6 SCVs", () => {
     // Test to see if supply block matters
     const bo: IBuildOrderElement[] = []
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 6; i++) {
         bo.push({ name: "SCV", type: "worker" })
     }
-    expect(bo.length).toBe(4)
+    expect(bo.length).toBe(6)
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    // Should be 17 but since we get supply blocked, only get up to 16 units max (15 workers + 1 cc)
-    expect(logic.units.size).toBe(16)
-    expect(logic.eventLog.length).toBe(3)
+    // Should be 14 but since we get supply blocked, only get up to 14 units max (13 workers + 1 cc)
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(5)
 })
 
 test("Build 3 SCVs then depot then one more SCV", () => {
@@ -115,9 +115,8 @@ test("Build 3 SCVs then depot then one more SCV", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    // Should be 17 but since we get supply blocked, only get up to 16 units max (15 workers + 1 cc)
-    expect(logic.supplyCap).toBe(23)
-    expect(logic.units.size).toBe(18)
+    expect(logic.supplyCap).toBe(21)
+    expect(logic.units.size).toBe(14)
     expect(logic.eventLog.length).toBe(5)
 })
 
@@ -128,7 +127,7 @@ test("Build commandcenter", () => {
     logic.settings.idleLimit = 50
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(10)
     expect(logic.eventLog.length).toBe(1)
 })
 
@@ -138,7 +137,7 @@ test("Build refinery", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(10)
     expect(logic.eventLog.length).toBe(1)
 })
 
@@ -172,9 +171,9 @@ test("Build 2 drones, 1 overlord, 4 drones", () => {
     const logic = new GameLogic("zerg", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(21)
+    expect(logic.units.size).toBe(17)
     expect(logic.eventLog.length).toBe(7)
-    expect(logic.supplyCap).toBe(22)
+    expect(logic.supplyCap).toBe(20)
 })
 
 test("Test spore requirements", () => {
@@ -185,9 +184,9 @@ test("Test spore requirements", () => {
     const logic = new GameLogic("zerg", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(10)
     expect(logic.eventLog.length).toBe(2)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.supplyCap).toBe(12)
 })
 
 test("Build OC and call down MULE", () => {
@@ -201,7 +200,7 @@ test("Build OC and call down MULE", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(16)
+    expect(logic.units.size).toBe(12)
     expect(logic.eventLog.length).toBe(4)
 })
 
@@ -216,7 +215,7 @@ test("Test if able to create a gas unit (reaper)", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(17)
+    expect(logic.units.size).toBe(13)
     expect(logic.eventLog.length).toBe(5)
 })
 
@@ -231,7 +230,7 @@ test("Test if able to research +1 from ebay", () => {
     const logic = new GameLogic("terran", bo)
     logic.setStart()
     logic.runUntilEnd()
-    expect(logic.units.size).toBe(16)
+    expect(logic.units.size).toBe(12)
     expect(logic.upgrades.has("TerranInfantryWeaponsLevel1")).toBe(true)
     expect(logic.eventLog.length).toBe(5)
 })
@@ -256,7 +255,7 @@ test("Test if able to research +2 from ebay after requirements are met", () => {
     logic.runUntilEnd()
     expect(logic.upgrades.has("TerranInfantryWeaponsLevel1")).toBe(true)
     expect(logic.upgrades.has("TerranInfantryWeaponsLevel2")).toBe(true)
-    expect(logic.units.size).toBe(21)
+    expect(logic.units.size).toBe(17)
     expect(logic.eventLog.length).toBe(12)
 })
 
@@ -280,7 +279,7 @@ test("Test if able upgrade to PF", () => {
         }
     })
     expect(pfCount).toBe(1)
-    expect(logic.units.size).toBe(17)
+    expect(logic.units.size).toBe(13)
     expect(logic.eventLog.length).toBe(7)
 })
 
@@ -317,7 +316,7 @@ test("Test if able lift Barracks from reactor and let factory attach to it", () 
     })
     expect(factoryReactorCount).toBe(1)
 
-    expect(logic.units.size).toBe(17)
+    expect(logic.units.size).toBe(13)
     expect(logic.eventLog.length).toBe(8)
 })
 
@@ -326,9 +325,9 @@ test("Add Battlecruiser with required tech", () => {
     const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Battlecruiser", type: "unit" }, 0)
 
     expect(insertedItems).toBe(9)
-    expect(logic.units.size).toBe(20)
+    expect(logic.units.size).toBe(16)
     expect(logic.eventLog.length).toBe(9)
-    expect(logic.supplyCap).toBe(23)
+    expect(logic.supplyCap).toBe(21)
 })
 
 test("Add BroodLord with required tech", () => {
@@ -336,17 +335,23 @@ test("Add BroodLord with required tech", () => {
     const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "BroodLord", type: "unit" }, 0)
 
     expect(insertedItems).toBe(10)
-    expect(logic.units.size).toBe(15)
-    expect(logic.eventLog.length).toBe(10)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.units.size).toBe(10)
+    expect(logic.eventLog.length).toBe(6)
+    expect(logic.supplyCap).toBe(12)
 })
 
 test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
-    const prevLogic = new GameLogic("zerg", [])
+    const prevLogic = new GameLogic("zerg", [
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
+        { name: "Overlord", type: "unit" },
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
+    ])
     const [logic, insertedItems] = GameLogic.addItemToBO(
         prevLogic,
         { name: "ZergFlyerWeaponsLevel3", type: "upgrade" },
-        0,
+        prevLogic.bo.length,
     )
     // This should not insert GreaterSpire as it is not required
 
@@ -354,9 +359,9 @@ test("Add ZergFlyerWeaponsLevel3 with required tech", () => {
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel2")).toBe(true)
     expect(logic.upgrades.has("ZergFlyerWeaponsLevel3")).toBe(true)
     expect(insertedItems).toBe(10)
-    expect(logic.units.size).toBe(14)
-    expect(logic.eventLog.length).toBe(10)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(15)
+    expect(logic.supplyCap).toBe(20)
 })
 
 test("Add two Archons with required tech", () => {
@@ -368,9 +373,9 @@ test("Add two Archons with required tech", () => {
     )
 
     expect(insertedItems).toBe(11)
-    expect(logic.units.size).toBe(21)
+    expect(logic.units.size).toBe(17)
     expect(logic.eventLog.length).toBe(11)
-    expect(logic.supplyCap).toBe(31)
+    expect(logic.supplyCap).toBe(29)
     ;[logic, insertedItems] = GameLogic.addItemToBO(
         logic,
         { name: "morph_archon_from_ht_ht", type: "action" },
@@ -378,9 +383,9 @@ test("Add two Archons with required tech", () => {
     )
 
     expect(insertedItems).toBe(3)
-    expect(logic.units.size).toBe(22)
+    expect(logic.units.size).toBe(18)
     expect(logic.eventLog.length).toBe(14)
-    expect(logic.supplyCap).toBe(31)
+    expect(logic.supplyCap).toBe(29)
 })
 
 test("Add ProtossGroundWeaponsLevel1 with required tech", () => {
@@ -392,9 +397,9 @@ test("Add ProtossGroundWeaponsLevel1 with required tech", () => {
     )
 
     expect(insertedItems).toBe(5) // Pylon, Forge, Assimilator, 3worker_to_gas, PGW1
-    expect(logic.units.size).toBe(16) // Nexus(1) + 12 Probes + Pylon + Forge + Assimilator = 16
+    expect(logic.units.size).toBe(12) // Nexus(1) + 8 Probes + Pylon + Forge + Assimilator = 12
     expect(logic.eventLog.length).toBe(5)
-    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
+    expect(logic.supplyCap).toBe(21) // Nexus(13) + Pylon(8) = 21
     expect(logic.upgrades.has("ProtossGroundWeaponsLevel1")).toBe(true)
 })
 
@@ -403,9 +408,9 @@ test("Add Gateway with required tech", () => {
     const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Gateway", type: "structure" }, 0)
 
     expect(insertedItems).toBe(2) // Pylon, Gateway
-    expect(logic.units.size).toBe(15) // Nexus(1) + 12 Probes + Pylon + Gateway = 15
+    expect(logic.units.size).toBe(11) // Nexus(1) + 8 Probes + Pylon + Gateway = 11
     expect(logic.eventLog.length).toBe(2)
-    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
+    expect(logic.supplyCap).toBe(21) // Nexus(13) + Pylon(8) = 21
 })
 
 test("Add Zealot with required tech", () => {
@@ -413,9 +418,9 @@ test("Add Zealot with required tech", () => {
     const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "Zealot", type: "unit" }, 0)
 
     expect(insertedItems).toBe(3) // Pylon, Gateway, Zealot
-    expect(logic.units.size).toBe(16) // Nexus(1) + 12 Probes + Pylon + Gateway + Zealot
+    expect(logic.units.size).toBe(12) // Nexus(1) + 8 Probes + Pylon + Gateway + Zealot
     expect(logic.eventLog.length).toBe(3) // Pylon built, Gateway built, Zealot trained
-    expect(logic.supplyCap).toBe(23) // Nexus(15) + Pylon(8) = 23
+    expect(logic.supplyCap).toBe(21) // Nexus(13) + Pylon(8) = 21
 })
 
 test("Add Zealot via WarpGate path", () => {
@@ -427,16 +432,16 @@ test("Add Zealot via WarpGate path", () => {
     )
 
     expect(insertedItems).toBe(7) // Pylon, Gateway, CyberneticsCore, WarpGateResearch, convert
-    expect(logic.units.size).toBe(17) // Nexus(1) + 12 Probes + Pylon + WarpGate + CyberneticsCore
+    expect(logic.units.size).toBe(13) // Nexus(1) + 8 Probes + Pylon + WarpGate + CyberneticsCore
     expect(logic.eventLog.length).toBe(7) // Pylon, Gateway, CyberneticsCore, WarpGateResearch (no event for morph)
-    expect(logic.supplyCap).toBe(23)
+    expect(logic.supplyCap).toBe(21)
     expect(logic.upgrades.has("WarpGateResearch")).toBe(true)
     ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Zealot", type: "unit" }, insertedItems)
 
     expect(insertedItems).toBe(1) // Just Zealot (WarpGate already exists)
-    expect(logic.units.size).toBe(18) // +1 Zealot
+    expect(logic.units.size).toBe(14) // +1 Zealot
     expect(logic.eventLog.length).toBe(8) // +1 Zealot train event
-    expect(logic.supplyCap).toBe(23)
+    expect(logic.supplyCap).toBe(21)
 
     // Verify Zealot was produced by WarpGate, not Gateway
     let zealotCount = 0
@@ -463,9 +468,9 @@ test("Add LurkerMP with required tech", () => {
     const [logic, insertedItems] = GameLogic.addItemToBO(prevLogic, { name: "LurkerMP", type: "unit" }, 0)
 
     expect(insertedItems).toBe(8)
-    expect(logic.units.size).toBe(15)
+    expect(logic.units.size).toBe(11)
     expect(logic.eventLog.length).toBe(8)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.supplyCap).toBe(12)
 })
 
 test("Add GreaterSpire, UltraliskCavern, and Corruptor", () => {
@@ -485,9 +490,9 @@ test("Add GreaterSpire, UltraliskCavern, and Corruptor", () => {
     ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Corruptor", type: "unit" }, insertedItems)
 
     expect(insertedItems).toBe(1)
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(10)
     expect(logic.eventLog.length).toBe(1)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.supplyCap).toBe(12)
 })
 
 test("Add Lair then Queen", () => {
@@ -500,9 +505,9 @@ test("Add Lair then Queen", () => {
     ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Queen", type: "unit" }, insertedItems)
 
     expect(insertedItems).toBe(1)
-    expect(logic.units.size).toBe(15)
+    expect(logic.units.size).toBe(11)
     expect(logic.eventLog.length).toBe(5)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.supplyCap).toBe(12)
 })
 
 test("Add Hive then Queen", () => {
@@ -515,9 +520,9 @@ test("Add Hive then Queen", () => {
     ;[logic, insertedItems] = GameLogic.addItemToBO(logic, { name: "Queen", type: "unit" }, insertedItems)
 
     expect(insertedItems).toBe(1)
-    expect(logic.units.size).toBe(15)
+    expect(logic.units.size).toBe(11)
     expect(logic.eventLog.length).toBe(7)
-    expect(logic.supplyCap).toBe(14)
+    expect(logic.supplyCap).toBe(12)
 })
 
 test("Add Hive then ZergMissileWeaponsLevel3", () => {
@@ -534,12 +539,14 @@ test("Add Hive then ZergMissileWeaponsLevel3", () => {
     )
 
     // This test may fail because old systems required Lair for Level2. However, that Lair already has morphed to Hive
-    expect(logic.units.size).toBe(14)
+    expect(logic.units.size).toBe(10)
     expect(logic.eventLog.length).toBe(10)
 })
 
 test("Failing: Add drone after extractor trick", () => {
     const bo: IBuildOrderElement[] = [
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
         { name: "Drone", type: "worker" },
         { name: "Drone", type: "worker" },
         { name: "Extractor", type: "structure" },
@@ -551,14 +558,16 @@ test("Failing: Add drone after extractor trick", () => {
     logic.setStart()
     logic.runUntilEnd()
     expect(logic.supplyLeft).toBe(0)
-    expect(logic.supplyUsed).toBe(14)
-    expect(logic.units.size).toBe(16)
-    expect(logic.eventLog.length).toBe(3)
+    expect(logic.supplyUsed).toBe(12)
+    expect(logic.units.size).toBe(14)
+    expect(logic.eventLog.length).toBe(5)
     expect(logic.errorMessage).toBe("Missing 1 supply to produce 'Drone'.")
 })
 
 test("Add drone during extractor trick", () => {
     const bo: IBuildOrderElement[] = [
+        { name: "Drone", type: "worker" },
+        { name: "Drone", type: "worker" },
         { name: "Drone", type: "worker" },
         { name: "Drone", type: "worker" },
         { name: "Extractor", type: "structure" },
@@ -570,9 +579,9 @@ test("Add drone during extractor trick", () => {
     logic.setStart()
     logic.runUntilEnd()
     expect(logic.supplyLeft).toBe(-1)
-    expect(logic.supplyUsed).toBe(15)
-    expect(logic.units.size).toBe(17)
-    expect(logic.eventLog.length).toBe(4)
+    expect(logic.supplyUsed).toBe(13)
+    expect(logic.units.size).toBe(15)
+    expect(logic.eventLog.length).toBe(6)
 })
 
 test("Production tracking: 3 SupplyDepots and 1 SCV", () => {
@@ -582,6 +591,8 @@ test("Production tracking: 3 SupplyDepots and 1 SCV", () => {
     //   - 2 Supply Depots are still in production (the 2nd and 3rd, still being built by workers)
     //   - 1 SCV is in production (just queued at the CommandCenter)
     const bo: IBuildOrderElement[] = [
+        { name: "SCV", type: "worker" },
+        { name: "SCV", type: "worker" },
         { name: "SupplyDepot", type: "structure" },
         { name: "SupplyDepot", type: "structure" },
         { name: "SupplyDepot", type: "structure" },
@@ -593,7 +604,7 @@ test("Production tracking: 3 SupplyDepots and 1 SCV", () => {
 
     // unitsCountArray has bo.length + 1 snapshots (index 0 = initial state from setStart)
     // Indices 1-4 correspond to each BO item being processed
-    expect(logic.unitsCountArray.length).toBe(5)
+    expect(logic.unitsCountArray.length).toBe(7)
 
     // The snapshot at index 4 is taken when the SCV (4th item) is queued.
     // By this time, the first SupplyDepot (build time = 30s * 16 = 480 frames)
