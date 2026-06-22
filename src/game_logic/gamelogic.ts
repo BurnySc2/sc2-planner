@@ -80,9 +80,9 @@ class GameLogic {
         this.boIndex = 0
         this.minerals = 50
         this.vespene = 0
-        this.supplyUsed = 12
-        this.supplyLeft = this.race === "zerg" ? 2 : 3
-        this.supplyCap = this.race === "zerg" ? 14 : 15
+        this.supplyUsed = 8
+        this.supplyLeft = this.race === "zerg" ? 4 : 5
+        this.supplyCap = this.race === "zerg" ? 12 : 13
         this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
         this.resourceHistory = {
             minerals: [this.minerals],
@@ -96,7 +96,7 @@ class GameLogic {
         this.idleUnits = new Set()
         // Units that have a task, a barracks with reactor that only trains one marine will be busy
         this.busyUnits = new Set()
-        this.workersMinerals = 12
+        this.workersMinerals = 8
         this.workersVespene = 0
         this.workersScouting = 0
         this.muleCount = 0
@@ -156,9 +156,9 @@ class GameLogic {
         this.boIndex = 0
         this.minerals = 50
         this.vespene = 0
-        this.supplyUsed = 12
-        this.supplyLeft = this.race === "zerg" ? 2 : 3
-        this.supplyCap = this.race === "zerg" ? 14 : 15
+        this.supplyUsed = 8
+        this.supplyLeft = this.race === "zerg" ? 4 : 5
+        this.supplyCap = this.race === "zerg" ? 12 : 13
         this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
         this.resourceHistory = {
             minerals: [this.minerals],
@@ -256,7 +256,7 @@ class GameLogic {
         }
         this.units.add(townhall)
         this.idleUnits.add(townhall)
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 8; i++) {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
             const workerStartDelayTask = new Task(22.4 * +this.settings.workerStartDelay, this.frame, this.supplyUsed)

@@ -147,8 +147,9 @@ class Unit {
         if (["Hatchery", "Lair", "Hive"].includes(this.name)) {
             // Larva naturally spawns every 15 seconds at normal speed
             // Faster speed is a 1.4 multiplier, so the spawn timer at faster is
-            // 15 / 1.4 = 10.71428571...
-            const larvaSpawnTime = 10.71428571
+            // Used to be: 15 / 1.4 = 10.71428571...
+            // Changed in 5.0.16: https://news.blizzard.com/en-us/article/24259080/starcraft-ii-5-0-16-patch-notes
+            const larvaSpawnTime = 9.5
 
             //init larva time for new hatch
             if (this.nextLarvaSpawn === -1) {
