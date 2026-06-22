@@ -738,7 +738,7 @@ class GameLogic {
                 // Training through gateway when warpgate is researched reduces train time
                 // TODO: According to patch notes: speeds up by 35% but the calculations don't match
                 newTask.totalFramesRequired = this.gatewayBuildTimeAfterWarpgateResearch(unit.name)
-                trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, true)
+                trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
             } else if (trainerUnit.name === "WarpGate") {
                 // Training through warpgate reduces train time to 4 seconds
                 newTask.totalFramesRequired = 3.6 * 22.4
