@@ -734,7 +734,12 @@ class GameLogic {
                 }
             }
 
-            if (trainerUnit.name === "WarpGate") {
+            if (trainerUnit.name === "Gateway" && this.upgrades.has("WarpGateResearch")) {
+                // Training through gateway when warpgate is researched reduces train time
+                // TODO: According to patch notes: speeds up by 35% but the calculations don't match
+                newTask.totalFramesRequired = this.gatewayBuildTimeAfterWarpgateResearch(unit.name)
+                trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, true)
+            } else if (trainerUnit.name === "WarpGate") {
                 // Training through warpgate reduces train time to 4 seconds
                 newTask.totalFramesRequired = 3.6 * 22.4
                 trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, true)
@@ -995,16 +1000,32 @@ class GameLogic {
     }
 
     /**
+     * Since patch 5.0.16 gateways build faster after warpgate has been researched
+     */
+    gatewayBuildTimeAfterWarpgateResearch(unitName: string): number {
+        const newBuildTime: { [name: string]: number } = {
+            // Values from https://news.blizzard.com/en-us/article/24259080/starcraft-ii-5-0-16-patch-notes
+            Zealot: 16 * 22.4,
+            Adept: 18 * 22.4,
+            Stalker: 18 * 22.4,
+            Sentry: 14 * 22.4,
+            DarkTemplar: 26 * 22.4,
+            HighTemplar: 26 * 22.4,
+        }
+        return newBuildTime[unitName]
+    }
+
+    /**
      * Recover time of warp gates when creating a specific unit, how long the warp gate will be on cooldown after warping in a specific unit
      */
     warpgateRecoverTime(unitName: string): number {
         const recoverTimes: { [name: string]: number } = {
-            Zealot: 20 * 22.4,
-            Adept: 20 * 22.4,
-            Stalker: 23 * 22.4,
-            Sentry: 23 * 22.4,
-            DarkTemplar: 32 * 22.4,
-            HighTemplar: 32 * 22.4,
+            Zealot: 22 * 22.4,
+            Adept: 22 * 22.4,
+            Stalker: 22 * 22.4,
+            Sentry: 22 * 22.4,
+            DarkTemplar: 35 * 22.4,
+            HighTemplar: 35 * 22.4,
         }
         return recoverTimes[unitName]
     }
