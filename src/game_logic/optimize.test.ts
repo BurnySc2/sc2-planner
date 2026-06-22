@@ -20,9 +20,9 @@ test("Optimize workers", async () => {
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)
     if (state?.gamelogic !== undefined) {
-        expect(state.gamelogic.units.size).toBe(25)
+        expect(state.gamelogic.units.size).toBe(21)
         expect(state.gamelogic.eventLog.length).toBe(15)
-        expect(state.gamelogic.supplyCap).toBe(22)
+        expect(state.gamelogic.supplyCap).toBe(20)
     }
 })
 
@@ -45,9 +45,9 @@ test("Optimize nexus chronos", async () => {
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)
     if (state?.gamelogic !== undefined) {
-        expect(state.gamelogic.units.size).toBe(19)
+        expect(state.gamelogic.units.size).toBe(15)
         expect(state.gamelogic.eventLog.length).toBe(8)
-        expect(state.gamelogic.supplyCap).toBe(23)
+        expect(state.gamelogic.supplyCap).toBe(21)
     }
 })
 
@@ -71,9 +71,9 @@ test("Optimize MULEs", async () => {
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)
     if (state?.gamelogic !== undefined) {
-        expect(state.gamelogic.units.size).toBe(19)
+        expect(state.gamelogic.units.size).toBe(15)
         expect(state.gamelogic.eventLog.length).toBe(9)
-        expect(state.gamelogic.supplyCap).toBe(23)
+        expect(state.gamelogic.supplyCap).toBe(21)
     }
 })
 
@@ -97,8 +97,8 @@ test("Optimize injects", async () => {
     expect(state !== undefined).toBe(true)
     expect(state?.gamelogic !== undefined).toBe(true)
     if (state?.gamelogic !== undefined) {
-        expect(state.gamelogic.units.size).toBe(16)
+        expect(state.gamelogic.units.size).toBe(12)
         expect(state.gamelogic.eventLog.length).toBe(13)
-        expect(state.gamelogic.supplyCap).toBe(20)
+        expect(state.gamelogic.supplyCap).toBe(18)
     }
 })
