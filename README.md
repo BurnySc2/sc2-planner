@@ -8,6 +8,12 @@ You can create build orders for [StarCraft 2 Legacy of the Void](https://starcra
 
 You can [find a live version here](https://burnysc2.github.io/sc2-planner)
 
+# Tutorial Video
+[![Watch the video](https://img.youtube.com/vi/3OcqNGoAdBs/hqdefault.jpg)](https://www.youtube.com/embed/3OcqNGoAdBs)
+
+[<img src="https://img.youtube.com/vi/3OcqNGoAdBs/hqdefault.jpg" width="600" height="300"
+/>](https://www.youtube.com/embed/3OcqNGoAdBs)
+
 ## Examples
 
 ### Terran
