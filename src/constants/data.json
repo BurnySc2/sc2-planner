@@ -14346,6 +14346,7 @@
       "time": 100,
       "type": "structure",
       "unlocks": [
+        "Archon",
         "DarkTemplar"
       ]
     },
@@ -20749,6 +20750,7 @@
         "InfestationPit",
         "NydusNetwork",
         "OverlordTransport",
+        "Overseer",
         "Spire",
         "TransportOverlordCocoon"
       ]
@@ -23944,6 +23946,9 @@
       "id": 129,
       "name": "Overseer",
       "race": "Zerg",
+      "requires": [
+        "Lair"
+      ],
       "time": 16.6665,
       "type": "unit"
     },
@@ -30374,6 +30379,7 @@
       "time": 50,
       "type": "structure",
       "unlocks": [
+        "Archon",
         "HighTemplar"
       ]
     },
