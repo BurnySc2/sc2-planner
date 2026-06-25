@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "./static/css/main.cf8d00bf.css",
-    "main.js": "./static/js/main.9e5afd23.js",
+    "main.js": "./static/js/main.32f358e7.js",
     "static/media/money-symbol-png-icon-17.png": "./static/media/money-symbol-png-icon-17.4d6e03a33df11a003e6e.png",
     "static/media/btn-building-terran-factory-reactor.png": "./static/media/btn-building-terran-factory-reactor.109f17e2eebb05ddf8ec.png",
     "static/media/btn-building-terran-starport-techlab.png": "./static/media/btn-building-terran-starport-techlab.0b302e33d944715cc137.png",
@@ -78,10 +78,10 @@
     "static/media/copy_contents.svg": "./static/media/copy_contents.086bb37d7578b7566446.svg",
     "index.html": "./index.html",
     "main.cf8d00bf.css.map": "./static/css/main.cf8d00bf.css.map",
-    "main.9e5afd23.js.map": "./static/js/main.9e5afd23.js.map"
+    "main.32f358e7.js.map": "./static/js/main.32f358e7.js.map"
   },
   "entrypoints": [
     "static/css/main.cf8d00bf.css",
-    "static/js/main.9e5afd23.js"
+    "static/js/main.32f358e7.js"
   ]
 }
