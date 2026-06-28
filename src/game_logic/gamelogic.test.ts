@@ -625,3 +625,12 @@ test("Production tracking: 3 SupplyDepots and 1 SCV", () => {
     // 1 SCV in production (CommandCenter training the queued SCV)
     expect(snapshot.SCV_in_production).toBe(1)
 })
+
+test("Build hatchery increases supply cap", () => {
+    // Zerg starts with supply cap of 12, building a Hatchery should increase it by 4 to 16
+    const bo: IBuildOrderElement[] = [{ name: "Hatchery", type: "structure" }]
+    const logic = new GameLogic("zerg", bo)
+    logic.setStart()
+    logic.runUntilEnd()
+    expect(logic.supplyCap).toBe(16)
+})

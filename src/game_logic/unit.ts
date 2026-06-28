@@ -333,7 +333,7 @@ class Unit {
                     }
                 }
                 if (task.morphToUnit === "Hatchery") {
-                    gamelogic.increaseMaxSupply(6)
+                    gamelogic.increaseMaxSupply(-UNITS_BY_NAME.Hatchery.supply)
                 }
             }
             // Attach addon

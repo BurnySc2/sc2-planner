@@ -99,6 +99,6 @@ test("Optimize injects", async () => {
     if (state?.gamelogic !== undefined) {
         expect(state.gamelogic.units.size).toBe(12)
         expect(state.gamelogic.eventLog.length).toBe(13)
-        expect(state.gamelogic.supplyCap).toBe(18)
+        expect(state.gamelogic.supplyCap).toBe(16)
     }
 })

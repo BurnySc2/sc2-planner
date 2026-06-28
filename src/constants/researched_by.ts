@@ -78,6 +78,6 @@ for (const upgradeName in RESEARCHED_BY) {
 }
  */
 
-console.assert(Object.keys(RESEARCHED_BY).length === 89, `${Object.keys(RESEARCHED_BY).length} is not 89`)
+console.assert(Object.keys(RESEARCHED_BY).length === 88, `${Object.keys(RESEARCHED_BY).length} is not 88`)
 
 export default RESEARCHED_BY
