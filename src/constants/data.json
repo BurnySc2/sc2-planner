@@ -739,7 +739,7 @@
           "Button": {
             "Requirements": ""
           },
-          "Time": "45",
+          "Time": "47.6",
           "Unit": "Reaper",
           "index": "Train2"
         },
@@ -2954,7 +2954,7 @@
               "ToSelection": 1
             }
           },
-          "Time": "42",
+          "Time": "45.51",
           "Unit": "Adept",
           "index": "Train7"
         },
@@ -2964,7 +2964,7 @@
               "ToSelection": 1
             }
           },
-          "Time": "60.66",
+          "Time": "56",
           "Unit": "DarkTemplar",
           "index": "Train5"
         },
@@ -2974,7 +2974,7 @@
               "ToSelection": 1
             }
           },
-          "Time": "60.66",
+          "Time": "56",
           "Unit": "HighTemplar",
           "index": "Train4"
         }
@@ -8681,7 +8681,7 @@
           },
           "Requirements": "HaveSpawningPool"
         },
-        "Effect": "",
+        "Effect": "MakeQueenFaceHatchery",
         "Time": "50",
         "Unit": "Queen",
         "index": "Train1"
@@ -9540,7 +9540,7 @@
       "MaxCargoCount": 8,
       "MaxCargoSize": 8,
       "Range": 5,
-      "SearchRadius": 5,
+      "SearchRadius": 5.875,
       "TargetFilters": "Visible;Ally,Neutral,Enemy,Buried,UnderConstruction,Dead,Hidden",
       "TotalCargoSpace": 8,
       "UnloadCargoEffect": "WarpPrismUnloadCargoSetEffect",
@@ -9584,7 +9584,9 @@
         "Smart": 1
       },
       "PrepEffect": "WidowMineTargetTintApplyBehavior",
-      "PrepTime": 1.5,
+      "PrepTime": {
+        "0": 1.19
+      },
       "Range": 5,
       "RangeSlop": 0,
       "TargetFilters": "Visible;Player,Ally,Neutral,Structure,Missile,Item,Stasis,Dead,Hidden,Invulnerable",
@@ -10215,7 +10217,7 @@
       "requires": [
         "CyberneticsCore"
       ],
-      "time": 42,
+      "time": 45.51,
       "type": "unit"
     },
     "Archon": {
@@ -14519,7 +14521,7 @@
       "requires": [
         "DarkShrine"
       ],
-      "time": 60.66,
+      "time": 56,
       "type": "unit"
     },
     "DebrisRampLeft": {
@@ -18416,8 +18418,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 325,
-      "ScoreMake": 275,
+      "ScoreKill": 350,
+      "ScoreMake": 300,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2,
       "Sight": 12,
@@ -18973,7 +18975,7 @@
       "requires": [
         "TemplarArchive"
       ],
-      "time": 60.66,
+      "time": 56,
       "type": "unit"
     },
     "Hive": {
@@ -19126,8 +19128,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 925,
-      "ScoreMake": 875,
+      "ScoreKill": 950,
+      "ScoreMake": 900,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2,
       "Sight": 12,
@@ -20715,8 +20717,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 575,
-      "ScoreMake": 525,
+      "ScoreKill": 600,
+      "ScoreMake": 550,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2,
       "Sight": 12,
@@ -22183,8 +22185,8 @@
       "LateralAcceleration": 2.0625,
       "LifeArmor": 2,
       "LifeArmorName": "Unit/LifeArmorName/ProtossBuildingPlating",
-      "LifeMax": 350,
-      "LifeStart": 350,
+      "LifeMax": 400,
+      "LifeStart": 400,
       "MinimapRadius": 1.375,
       "Mob": "Multiplayer",
       "Mover": "Fly",
@@ -22201,8 +22203,8 @@
       "ShieldArmorName": "Unit/ShieldArmorName/ProtossPlasmaShields",
       "ShieldRegenDelay": 10,
       "ShieldRegenRate": 2,
-      "ShieldsMax": 350,
-      "ShieldsStart": 350,
+      "ShieldsMax": 200,
+      "ShieldsStart": 200,
       "Sight": 14,
       "Speed": 1.6054,
       "SubgroupPriority": 96,
@@ -24749,22 +24751,13 @@
         "Link": "PowerSource"
       },
       "CardLayouts": {
-        "LayoutButtons": [
-          {
-            "AbilCmd": "BuildInProgress,Cancel",
-            "Column": "4",
-            "Face": "CancelBuilding",
-            "Row": "2",
-            "Type": "AbilCmd"
-          },
-          {
-            "Column": "0",
-            "Face": "ImprovedEnergy",
-            "Requirements": "NearWarpgateorNexus",
-            "Row": "2",
-            "Type": "Passive"
-          }
-        ]
+        "LayoutButtons": {
+          "AbilCmd": "BuildInProgress,Cancel",
+          "Column": "4",
+          "Face": "CancelBuilding",
+          "Row": "2",
+          "Type": "AbilCmd"
+        }
       },
       "Collide": {
         "Burrow": 1,
@@ -25147,8 +25140,8 @@
       "Race": "Zerg",
       "Radius": 0.875,
       "RankDisplay": "Always",
-      "ScoreKill": 150,
-      "ScoreMake": 150,
+      "ScoreKill": 175,
+      "ScoreMake": 175,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 0.875,
       "Sight": 9,
@@ -25880,7 +25873,7 @@
       "id": 49,
       "name": "Reaper",
       "race": "Terran",
-      "time": 45,
+      "time": 47.6,
       "type": "unit"
     },
     "Refinery": {
