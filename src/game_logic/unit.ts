@@ -149,7 +149,7 @@ class Unit {
             // Faster speed is a 1.4 multiplier, so the spawn timer at faster is
             // Used to be: 15 / 1.4 = 10.71428571...
             // Changed in 5.0.16: https://news.blizzard.com/en-us/article/24259080/starcraft-ii-5-0-16-patch-notes
-            const larvaSpawnTime = 9.5
+            const larvaSpawnTime = 9.9
 
             //init larva time for new hatch
             if (this.nextLarvaSpawn === -1) {
