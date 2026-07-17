@@ -1005,12 +1005,12 @@ class GameLogic {
     gatewayBuildTimeAfterWarpgateResearch(unitName: string): number {
         const newBuildTime: { [name: string]: number } = {
             // Values from https://news.blizzard.com/en-us/article/24259080/starcraft-ii-5-0-16-patch-notes
-            Zealot: 16 * 22.4,
-            Adept: 18 * 22.4,
-            Stalker: 18 * 22.4,
-            Sentry: 14 * 22.4,
-            DarkTemplar: 26 * 22.4,
-            HighTemplar: 26 * 22.4,
+            Zealot: 14 * 22.4,
+            Sentry: 12 * 22.4,
+            Stalker: 14 * 22.4,
+            Adept: 16 * 22.4,
+            DarkTemplar: 20 * 22.4,
+            HighTemplar: 20 * 22.4,
         }
         return newBuildTime[unitName]
     }

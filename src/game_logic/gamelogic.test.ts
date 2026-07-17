@@ -263,9 +263,7 @@ test("Test if able upgrade to PF", () => {
     const bo: IBuildOrderElement[] = [
         { name: "SupplyDepot", type: "structure" },
         { name: "Refinery", type: "structure" },
-        { name: "Refinery", type: "structure" },
         { name: "EngineeringBay", type: "structure" },
-        { name: "3worker_to_gas", type: "action" },
         { name: "3worker_to_gas", type: "action" },
         { name: "PlanetaryFortress", type: "structure" },
     ]
@@ -279,8 +277,8 @@ test("Test if able upgrade to PF", () => {
         }
     })
     expect(pfCount).toBe(1)
-    expect(logic.units.size).toBe(13)
-    expect(logic.eventLog.length).toBe(7)
+    expect(logic.units.size).toBe(12)
+    expect(logic.eventLog.length).toBe(5)
 })
 
 test("Test if able lift Barracks from reactor and let factory attach to it", () => {

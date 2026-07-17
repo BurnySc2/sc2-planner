@@ -530,7 +530,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
             gamelogic.errorMessage = "Could not find a gateway."
             for (const unit of gamelogic.idleUnits) {
                 if (unit.name === "Gateway" && !unit.isBusy()) {
-                    const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
+                    const task = new Task(4 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
                     task.morphToUnit = "WarpGate"
                     unit.addTask(gamelogic, task)
                     actionCompleted = true
@@ -552,7 +552,7 @@ const executeAction = (gamelogic: GameLogic, actionItem: IBuildOrderElement): bo
         ]
         for (const unit of gamelogic.idleUnits) {
             if (unit.name === "WarpGate") {
-                const task = new Task(7 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
+                const task = new Task(4 * 22.4, gamelogic.frame, gamelogic.supplyUsed, -1)
                 task.morphToUnit = "Gateway"
                 unit.addTask(gamelogic, task)
                 actionCompleted = true
