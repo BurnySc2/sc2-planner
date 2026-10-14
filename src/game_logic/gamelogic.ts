@@ -735,8 +735,7 @@ class GameLogic {
             }
 
             if (trainerUnit.name === "Gateway" && this.upgrades.has("WarpGateResearch")) {
-                // Training through gateway when warpgate is researched reduces train time
-                // TODO: According to patch notes: speeds up by 35% but the calculations don't match
+                // Patch 5.0.17 reverted the faster gateway build times, default build time applies
                 newTask.totalFramesRequired = this.gatewayBuildTimeAfterWarpgateResearch(unit.name)
                 trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
             } else if (trainerUnit.name === "WarpGate") {
@@ -1000,10 +999,10 @@ class GameLogic {
     }
 
     /**
-     * Since patch 5.0.16 gateways build faster after warpgate has been researched
+     * Patch 5.0.17 reverted the faster gateway build times, researching warpgate no longer speeds up training, helper kept for compat, returns default
      */
     gatewayBuildTimeAfterWarpgateResearch(unitName: string): number {
-        const newBuildTime: { [name: string]: number } = {
+        const _newBuildTime: { [name: string]: number } = {
             // Values from https://news.blizzard.com/en-us/article/24259080/starcraft-ii-5-0-16-patch-notes
             // Reverted in patch 5.0.17, hepler function kept
             Zealot: 27 * 22.4,
@@ -1013,7 +1012,7 @@ class GameLogic {
             DarkTemplar: 40 * 22.4,
             HighTemplar: 40 * 22.4,
         }
-        return newBuildTime[unitName]
+        return this.getTime(unitName)
     }
 
     /**
