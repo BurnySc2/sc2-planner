@@ -1005,12 +1005,13 @@ class GameLogic {
     gatewayBuildTimeAfterWarpgateResearch(unitName: string): number {
         const newBuildTime: { [name: string]: number } = {
             // Values from https://news.blizzard.com/en-us/article/24259080/starcraft-ii-5-0-16-patch-notes
-            Zealot: 14 * 22.4,
-            Sentry: 12 * 22.4,
-            Stalker: 14 * 22.4,
-            Adept: 16 * 22.4,
-            DarkTemplar: 20 * 22.4,
-            HighTemplar: 20 * 22.4,
+            // Reverted in patch 5.0.17, hepler function kept
+            Zealot: 27 * 22.4,
+            Sentry: 23 * 22.4,
+            Stalker: 27 * 22.4,
+            Adept: 30 * 22.4,
+            DarkTemplar: 40 * 22.4,
+            HighTemplar: 40 * 22.4,
         }
         return newBuildTime[unitName]
     }
@@ -1020,12 +1021,12 @@ class GameLogic {
      */
     warpgateRecoverTime(unitName: string): number {
         const recoverTimes: { [name: string]: number } = {
-            Zealot: 22 * 22.4,
-            Adept: 22 * 22.4,
-            Stalker: 22 * 22.4,
-            Sentry: 22 * 22.4,
-            DarkTemplar: 35 * 22.4,
-            HighTemplar: 35 * 22.4,
+            Zealot: 20 * 22.4,
+            Adept: 20 * 22.4,
+            Stalker: 23 * 22.4,
+            Sentry: 23 * 22.4,
+            DarkTemplar: 32 * 22.4,
+            HighTemplar: 32 * 22.4,
         }
         return recoverTimes[unitName]
     }
