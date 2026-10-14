@@ -87,6 +87,7 @@
       "CastOutroTime": 0.5,
       "CmdButtonArray": {
         "DefaultButtonFace": "AmorphousArmorcloud",
+        "Requirements": "UseAmorphousArmorcloud",
         "index": "Execute"
       },
       "Cost": {
@@ -103,7 +104,7 @@
         "AllowMovement": 1,
         "NoDeceleration": 1
       },
-      "Range": 12,
+      "Range": 9,
       "id": "AmorphousArmorcloud",
       "name": "AmorphousArmorcloud"
     },
@@ -739,7 +740,7 @@
           "Button": {
             "Requirements": ""
           },
-          "Time": "47.6",
+          "Time": "44.8",
           "Unit": "Reaper",
           "index": "Train2"
         },
@@ -1585,7 +1586,7 @@
       ],
       "Cost": {
         "Vital": {
-          "Energy": 75
+          "Energy": 50
         }
       },
       "EditorCategories": "Race:Terran,AbilityorEffectType:Units",
@@ -2955,7 +2956,7 @@
               "ToSelection": 1
             }
           },
-          "Time": "45.51",
+          "Time": "42",
           "Unit": "Adept",
           "index": "Train7"
         },
@@ -4356,21 +4357,21 @@
             "ShowInGlossary": 0,
             "ToSelection": 1
           },
-          "Requirements": "UseWarpGateHideFree",
+          "Requirements": "UseWarpGate",
           "State": "Restricted",
           "index": "Execute"
         }
       ],
       "Cost": {
         "Charge": {
-          "CountMax": 1,
-          "CountStart": 1,
-          "CountUse": 1,
-          "TimeUse": 5.6
+          "CountStart": "1",
+          "TimeUse": "5.6"
         }
       },
       "EditorCategories": "Race:Protoss,AbilityorEffectType:MorphsandBurrows",
       "Flags": {
+        "AutoCast": 1,
+        "AutoCastOn": 1,
         "BestUnit": 1,
         "Birth": 1,
         "DisableAbils": 1,
@@ -9448,13 +9449,20 @@
             "Requirements": "WarpgateNotDemorphing"
           },
           "Charge": {
-            "TimeStart": "32.8",
-            "TimeUse": "30.8"
+            "CountMax": 1,
+            "CountStart": 1,
+            "CountUse": 1,
+            "Flags": {
+              "EnableChargeTimeQueuing": 1
+            },
+            "Link": "WarpGateTrain",
+            "TimeStart": 30,
+            "TimeUse": 28
           },
           "Cooldown": {
             "TimeUse": "0"
           },
-          "Time": "5.6",
+          "Time": "16",
           "Unit": "Zealot",
           "index": "Train1"
         },
@@ -9465,12 +9473,19 @@
             }
           },
           "Charge": {
-            "TimeUse": "30.8"
+            "CountMax": 1,
+            "CountStart": 1,
+            "CountUse": 1,
+            "Flags": {
+              "EnableChargeTimeQueuing": 1
+            },
+            "Link": "WarpGateTrain",
+            "TimeUse": 28
           },
           "Cooldown": {
             "Link": "WarpGateTrain"
           },
-          "Time": "5.6",
+          "Time": "16",
           "Unit": "Adept",
           "index": "Train7"
         },
@@ -9481,12 +9496,12 @@
             }
           },
           "Charge": {
-            "TimeUse": "30.8"
+            "TimeUse": "32.2"
           },
           "Cooldown": {
             "TimeUse": "0"
           },
-          "Time": "5.6",
+          "Time": "16",
           "Unit": "Sentry",
           "index": "Train6"
         },
@@ -9497,12 +9512,12 @@
             }
           },
           "Charge": {
-            "TimeUse": "30.8"
+            "TimeUse": "32.2"
           },
           "Cooldown": {
             "TimeUse": "0"
           },
-          "Time": "5.6",
+          "Time": "16",
           "Unit": "Stalker",
           "index": "Train2"
         },
@@ -9513,12 +9528,12 @@
             }
           },
           "Charge": {
-            "TimeUse": "49"
+            "TimeUse": "44.8"
           },
           "Cooldown": {
             "TimeUse": "0"
           },
-          "Time": "5.6",
+          "Time": "16",
           "Unit": "DarkTemplar",
           "index": "Train5"
         },
@@ -9529,12 +9544,12 @@
             }
           },
           "Charge": {
-            "TimeUse": "49"
+            "TimeUse": "44.8"
           },
           "Cooldown": {
             "TimeUse": "0"
           },
-          "Time": "5.6",
+          "Time": "16",
           "Unit": "HighTemplar",
           "index": "Train4"
         }
@@ -9604,9 +9619,7 @@
         "Smart": 1
       },
       "PrepEffect": "WidowMineTargetTintApplyBehavior",
-      "PrepTime": {
-        "0": 1.19
-      },
+      "PrepTime": 1.5,
       "Range": 5,
       "RangeSlop": 0,
       "TargetFilters": "Visible;Player,Ally,Neutral,Structure,Missile,Item,Stasis,Dead,Hidden,Invulnerable",
@@ -9916,8 +9929,8 @@
             "State": "Restricted"
           },
           "Resource": {
-            "Minerals": 100,
-            "Vespene": 100
+            "Minerals": 150,
+            "Vespene": 150
           },
           "Time": "160",
           "Upgrade": "ZergGroundArmorsLevel1",
@@ -9930,8 +9943,8 @@
             "State": "Restricted"
           },
           "Resource": {
-            "Minerals": 150,
-            "Vespene": 150
+            "Minerals": 200,
+            "Vespene": 200
           },
           "Time": "190",
           "Upgrade": "ZergGroundArmorsLevel2",
@@ -9944,8 +9957,8 @@
             "State": "Restricted"
           },
           "Resource": {
-            "Minerals": 200,
-            "Vespene": 200
+            "Minerals": 250,
+            "Vespene": 250
           },
           "Time": "220",
           "Upgrade": "ZergGroundArmorsLevel3",
@@ -10237,7 +10250,7 @@
       "requires": [
         "CyberneticsCore"
       ],
-      "time": 45.51,
+      "time": 42,
       "type": "unit"
     },
     "Archon": {
@@ -13431,7 +13444,7 @@
       },
       "CostCategory": "Economy",
       "CostResource": {
-        "Minerals": 300
+        "Minerals": 400
       },
       "DeathRevealRadius": 3,
       "EditorCategories": "ObjectType:Structure,ObjectFamily:Melee",
@@ -13452,7 +13465,7 @@
         "UseLineOfSight": 1
       },
       "FogVisibility": "Snapshot",
-      "Food": 13,
+      "Food": 15,
       "Footprint": "Footprint5x5Contour",
       "GlossaryPriority": 30,
       "HotkeyCategory": "Unit/Category/TerranUnits",
@@ -13475,8 +13488,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 300,
-      "ScoreMake": 300,
+      "ScoreKill": 400,
+      "ScoreMake": 400,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2.5,
       "Sight": 11,
@@ -13595,7 +13608,7 @@
       },
       "CostCategory": "Economy",
       "CostResource": {
-        "Minerals": 300
+        "Minerals": 400
       },
       "DeathRevealRadius": 3,
       "EditorCategories": "ObjectType:Structure,ObjectFamily:Melee",
@@ -13609,7 +13622,7 @@
         "TownAlert": 1,
         "UseLineOfSight": 1
       },
-      "Food": 13,
+      "Food": 15,
       "GlossaryAlias": "CommandCenter",
       "Height": 3.25,
       "HotkeyAlias": "CommandCenter",
@@ -13628,7 +13641,7 @@
       "Race": "Terr",
       "Radius": 2.5,
       "RepairTime": 100,
-      "ScoreKill": 300,
+      "ScoreKill": 400,
       "SeparationRadius": 2.5,
       "Sight": 11,
       "Speed": 0.9375,
@@ -15039,9 +15052,6 @@
       "SubgroupPriority": 72,
       "TacticalAIThink": "AIThinkDisruptor",
       "TurningRate": 999.8437,
-      "WeaponArray": {
-        "Link": "DisruptorFakeWeapon"
-      },
       "id": 694,
       "name": "Disruptor",
       "race": "Protoss",
@@ -17048,13 +17058,6 @@
             "index": "9"
           },
           {
-            "AbilCmd": "MorphBackToGateway,Execute",
-            "Column": "1",
-            "Face": "MorphBackToGateway",
-            "Row": "2",
-            "Type": "AbilCmd"
-          },
-          {
             "AbilCmd": "MorphBuildingGatewayWarpGateFree,Cancel",
             "Column": "2",
             "Face": "Stalker",
@@ -17089,13 +17092,6 @@
             "AbilCmd": "UpgradeToWarpGate,Cancel",
             "Column": "4",
             "Face": "Cancel",
-            "Row": "2",
-            "Type": "AbilCmd"
-          },
-          {
-            "AbilCmd": "UpgradeToWarpGate,Execute",
-            "Column": "0",
-            "Face": "UpgradeToWarpGate",
             "Row": "2",
             "Type": "AbilCmd"
           },
@@ -17372,8 +17368,8 @@
       "KillXP": 30,
       "LateralAcceleration": 46.0625,
       "LifeArmorName": "Unit/LifeArmorName/TerranInfantryArmor",
-      "LifeMax": 100,
-      "LifeStart": 100,
+      "LifeMax": 125,
+      "LifeStart": 125,
       "MinimapRadius": 0.375,
       "Mob": "Multiplayer",
       "PlaneArray": {
@@ -17680,8 +17676,8 @@
       "KillXP": 30,
       "LateralAcceleration": 46.0625,
       "LifeArmorName": "Unit/LifeArmorName/TerranInfantryArmor",
-      "LifeMax": 100,
-      "LifeStart": 100,
+      "LifeMax": 125,
+      "LifeStart": 125,
       "MinimapRadius": 0.375,
       "Mob": "Multiplayer",
       "PlaneArray": {
@@ -17855,8 +17851,8 @@
       "KillXP": 30,
       "LateralAcceleration": 46.0625,
       "LifeArmorName": "Unit/LifeArmorName/TerranInfantryArmor",
-      "LifeMax": 100,
-      "LifeStart": 100,
+      "LifeMax": 125,
+      "LifeStart": 125,
       "MinimapRadius": 0.375,
       "Mob": "Multiplayer",
       "PlaneArray": {
@@ -18402,7 +18398,7 @@
       },
       "CostCategory": "Economy",
       "CostResource": {
-        "Minerals": 350
+        "Minerals": 325
       },
       "DeathRevealRadius": 3,
       "EditorCategories": "ObjectType:Structure,ObjectFamily:Melee",
@@ -18422,7 +18418,7 @@
         "UseLineOfSight": 1
       },
       "FogVisibility": "Snapshot",
-      "Food": 4,
+      "Food": 6,
       "Footprint": "Footprint6x5DropOffCreepSourceContour",
       "GlossaryPriority": 10,
       "HotkeyCategory": "Unit/Category/ZergUnits",
@@ -18445,8 +18441,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 350,
-      "ScoreMake": 300,
+      "ScoreKill": 325,
+      "ScoreMake": 275,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2,
       "Sight": 12,
@@ -19113,7 +19109,7 @@
       },
       "CostCategory": "Technology",
       "CostResource": {
-        "Minerals": 700,
+        "Minerals": 675,
         "Vespene": 250
       },
       "DeathRevealRadius": 3,
@@ -19130,7 +19126,7 @@
         "UseLineOfSight": 1
       },
       "FogVisibility": "Snapshot",
-      "Food": 4,
+      "Food": 6,
       "Footprint": "Footprint6x5DropOffCreepSourceContour",
       "GlossaryPriority": 18,
       "HotkeyCategory": "Unit/Category/ZergUnits",
@@ -19155,8 +19151,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 950,
-      "ScoreMake": 900,
+      "ScoreKill": 925,
+      "ScoreMake": 875,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2,
       "Sight": 12,
@@ -19850,13 +19846,43 @@
       "CardLayouts": {
         "LayoutButtons": [
           {
-            "AbilCmd": "InfestationPitResearch,Research4",
-            "Face": "ResearchNeuralParasite",
+            "AbilCmd": "InfestationPitResearch,Research3",
+            "Column": "0",
+            "Face": "EvolveInfestorEnergyUpgrade",
+            "Row": "0",
+            "Type": "AbilCmd",
             "index": "2"
           },
           {
-            "index": "3",
-            "removed": "1"
+            "AbilCmd": "InfestationPitResearch,Research4",
+            "Column": "1",
+            "Face": "ResearchNeuralParasite",
+            "Row": "0",
+            "Type": "AbilCmd",
+            "index": "3"
+          },
+          {
+            "AbilCmd": "InfestationPitResearch,Research4",
+            "Column": "1",
+            "Face": "ResearchNeuralParasite",
+            "Row": "0",
+            "Type": "AbilCmd",
+            "index": "3"
+          },
+          {
+            "AbilCmd": "InfestationPitResearch,Research6",
+            "Column": "0",
+            "Face": "EvolveAmorphousArmorcloud",
+            "Row": "0",
+            "Type": "AbilCmd",
+            "index": "2"
+          },
+          {
+            "AbilCmd": "InfestationPitResearch,Research6",
+            "Column": "2",
+            "Face": "EvolveFlyingLocusts",
+            "Row": "0",
+            "Type": "AbilCmd"
           }
         ]
       },
@@ -20279,9 +20305,6 @@
       "SubgroupPriority": 94,
       "TacticalAIThink": "AIThinkInfestor",
       "TurningRate": 999.8437,
-      "WeaponArray": {
-        "Link": "InfestorWeaponAcidSpores"
-      },
       "id": 111,
       "name": "Infestor",
       "race": "Zerg",
@@ -20704,7 +20727,7 @@
       },
       "CostCategory": "Technology",
       "CostResource": {
-        "Minerals": 500,
+        "Minerals": 475,
         "Vespene": 100
       },
       "DeathRevealRadius": 3,
@@ -20721,7 +20744,7 @@
         "UseLineOfSight": 1
       },
       "FogVisibility": "Snapshot",
-      "Food": 4,
+      "Food": 6,
       "Footprint": "Footprint6x5DropOffCreepSourceContour",
       "GlossaryPriority": 14,
       "HotkeyCategory": "Unit/Category/ZergUnits",
@@ -20744,8 +20767,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 600,
-      "ScoreMake": 550,
+      "ScoreKill": 575,
+      "ScoreMake": 525,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2,
       "Sight": 12,
@@ -22205,8 +22228,8 @@
       "LateralAcceleration": 2.0625,
       "LifeArmor": 2,
       "LifeArmorName": "Unit/LifeArmorName/ProtossBuildingPlating",
-      "LifeMax": 400,
-      "LifeStart": 400,
+      "LifeMax": 350,
+      "LifeStart": 350,
       "MinimapRadius": 1.375,
       "Mob": "Multiplayer",
       "Mover": "Fly",
@@ -22223,8 +22246,8 @@
       "ShieldArmorName": "Unit/ShieldArmorName/ProtossPlasmaShields",
       "ShieldRegenDelay": 10,
       "ShieldRegenRate": 2,
-      "ShieldsMax": 200,
-      "ShieldsStart": 200,
+      "ShieldsMax": 350,
+      "ShieldsStart": 350,
       "Sight": 14,
       "Speed": 1.6054,
       "SubgroupPriority": 96,
@@ -22455,7 +22478,7 @@
         "Structure": 1
       },
       "BehaviorArray": {
-        "Link": "NexusDeath"
+        "Link": "FastEnablerPowerSourceNexus"
       },
       "CardLayouts": {
         "LayoutButtons": [
@@ -22526,7 +22549,7 @@
         "UseLineOfSight": 1
       },
       "FogVisibility": "Snapshot",
-      "Food": 13,
+      "Food": 15,
       "Footprint": "Footprint5x5Contour",
       "GlossaryPriority": 10,
       "HotkeyCategory": "Unit/Category/ProtossUnits",
@@ -23239,7 +23262,7 @@
       },
       "CostCategory": "Economy",
       "CostResource": {
-        "Minerals": 450
+        "Minerals": 550
       },
       "DeathRevealRadius": 3,
       "Description": "Button/Tooltip/OrbitalCommandUnit",
@@ -23260,7 +23283,7 @@
         "UseLineOfSight": 1
       },
       "FogVisibility": "Snapshot",
-      "Food": 13,
+      "Food": 15,
       "Footprint": "Footprint5x5Contour",
       "GlossaryPriority": 32,
       "HotkeyCategory": "Unit/Category/TerranUnits",
@@ -23284,8 +23307,8 @@
         "Terrazine": 1,
         "Vespene": 1
       },
-      "ScoreKill": 450,
-      "ScoreMake": 450,
+      "ScoreKill": 550,
+      "ScoreMake": 550,
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 2.5,
       "Sight": 11,
@@ -23384,7 +23407,7 @@
       },
       "CostCategory": "Economy",
       "CostResource": {
-        "Minerals": 450
+        "Minerals": 550
       },
       "DamageDealtXP": 1,
       "DamageTakenXP": 1,
@@ -23403,7 +23426,7 @@
         "TownAlert": 1,
         "UseLineOfSight": 1
       },
-      "Food": 13,
+      "Food": 15,
       "GlossaryAlias": "OrbitalCommand",
       "Height": 3.75,
       "HotkeyAlias": "OrbitalCommand",
@@ -23422,7 +23445,7 @@
       "Race": "Terr",
       "Radius": 2.5,
       "RepairTime": 135,
-      "ScoreKill": 450,
+      "ScoreKill": 550,
       "SeparationRadius": 2.5,
       "Sight": 11,
       "Speed": 0.9375,
@@ -23527,7 +23550,7 @@
       "ScoreResult": "BuildOrder",
       "SeparationRadius": 0.75,
       "Sight": 11,
-      "Speed": 0.6054,
+      "Speed": 0.6406,
       "StationaryTurningRate": 499.9218,
       "SubgroupPriority": 72,
       "TechAliasArray": "Alias_Overlord",
@@ -24377,7 +24400,7 @@
         "UseLineOfSight": 1
       },
       "FogVisibility": "Snapshot",
-      "Food": 13,
+      "Food": 15,
       "Footprint": "Footprint5x5Contour",
       "GlossaryCategory": "Unit/Category/TerranUnits",
       "GlossaryPriority": 240,
@@ -24760,17 +24783,31 @@
         "Armored": 1,
         "Structure": 1
       },
-      "BehaviorArray": {
-        "Link": "PowerSource"
-      },
-      "CardLayouts": {
-        "LayoutButtons": {
-          "AbilCmd": "BuildInProgress,Cancel",
-          "Column": "4",
-          "Face": "CancelBuilding",
-          "Row": "2",
-          "Type": "AbilCmd"
+      "BehaviorArray": [
+        {
+          "Link": "FastEnablerPowerUser"
+        },
+        {
+          "Link": "PowerSourceFast"
         }
+      ],
+      "CardLayouts": {
+        "LayoutButtons": [
+          {
+            "AbilCmd": "BuildInProgress,Cancel",
+            "Column": "4",
+            "Face": "CancelBuilding",
+            "Row": "2",
+            "Type": "AbilCmd"
+          },
+          {
+            "Behavior": "PowerSourceFast",
+            "Column": "0",
+            "Face": "ImprovedEnergy",
+            "Row": "2",
+            "Type": "Passive"
+          }
+        ]
       },
       "Collide": {
         "Burrow": 1,
@@ -25886,7 +25923,7 @@
       "id": 49,
       "name": "Reaper",
       "race": "Terran",
-      "time": 47.6,
+      "time": 44.8,
       "type": "unit"
     },
     "Refinery": {
@@ -27700,7 +27737,7 @@
         "Structure": 1
       },
       "BehaviorArray": {
-        "Link": "PowerUserQueueSmall"
+        "Link": "BatteryEnergy"
       },
       "CardLayouts": {
         "LayoutButtons": [
@@ -27747,7 +27784,7 @@
       "EditorCategories": "ObjectType:Structure,ObjectFamily:Melee",
       "EnergyMax": 100,
       "EnergyRegenRate": 0.5625,
-      "EnergyStart": 75,
+      "EnergyStart": 50,
       "FlagArray": {
         "AIDefense": 1,
         "ArmorDisabledWhileConstructing": 1,
@@ -31870,24 +31907,10 @@
             "Type": "AbilCmd"
           },
           {
-            "AbilCmd": "MorphBuildingGatewayWarpGateFree,Execute",
-            "Column": "0",
-            "Face": "UpgradeToWarpGate",
-            "Row": "2",
-            "Type": "AbilCmd"
-          },
-          {
             "AbilCmd": "Rally,Rally1",
             "Column": "4",
             "Face": "Rally",
             "Row": "1",
-            "Type": "AbilCmd"
-          },
-          {
-            "AbilCmd": "UpgradeToWarpGate,Execute",
-            "Column": "0",
-            "Face": "UpgradeToWarpGate",
-            "Row": "2",
             "Type": "AbilCmd"
           },
           {
@@ -31983,7 +32006,7 @@
       "Radius": 1.75,
       "ScoreKill": 150,
       "ScoreResult": "BuildOrder",
-      "SelectAlias": "WarpGate",
+      "SelectAlias": "Gateway",
       "SeparationRadius": 1.75,
       "ShieldArmorName": "Unit/ShieldArmorName/ProtossPlasmaShields",
       "ShieldRegenDelay": 10,
@@ -33512,17 +33535,17 @@
       "time": 220
     },
     "ZergGroundArmorsLevel1": {
-      "gas": 100,
+      "gas": 150,
       "id": 56,
-      "minerals": 100,
+      "minerals": 150,
       "name": "ZergGroundArmorsLevel1",
       "requires": [],
       "time": 160
     },
     "ZergGroundArmorsLevel2": {
-      "gas": 150,
+      "gas": 200,
       "id": 57,
-      "minerals": 150,
+      "minerals": 200,
       "name": "ZergGroundArmorsLevel2",
       "requires": [
         "Lair",
@@ -33531,9 +33554,9 @@
       "time": 190
     },
     "ZergGroundArmorsLevel3": {
-      "gas": 200,
+      "gas": 250,
       "id": 58,
-      "minerals": 200,
+      "minerals": 250,
       "name": "ZergGroundArmorsLevel3",
       "requires": [
         "Hive",
