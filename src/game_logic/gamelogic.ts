@@ -80,9 +80,9 @@ class GameLogic {
         this.boIndex = 0
         this.minerals = 50
         this.vespene = 0
-        this.supplyUsed = 8
-        this.supplyLeft = this.race === "zerg" ? 4 : 5
-        this.supplyCap = this.race === "zerg" ? 12 : 13
+        this.supplyUsed = 12
+        this.supplyLeft = this.race === "zerg" ? 2 : 3
+        this.supplyCap = this.race === "zerg" ? 14 : 15
         this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
         this.resourceHistory = {
             minerals: [this.minerals],
@@ -96,7 +96,7 @@ class GameLogic {
         this.idleUnits = new Set()
         // Units that have a task, a barracks with reactor that only trains one marine will be busy
         this.busyUnits = new Set()
-        this.workersMinerals = 8
+        this.workersMinerals = 12
         this.workersVespene = 0
         this.workersScouting = 0
         this.muleCount = 0
@@ -156,9 +156,9 @@ class GameLogic {
         this.boIndex = 0
         this.minerals = 50
         this.vespene = 0
-        this.supplyUsed = 8
-        this.supplyLeft = this.race === "zerg" ? 4 : 5
-        this.supplyCap = this.race === "zerg" ? 12 : 13
+        this.supplyUsed = 12
+        this.supplyLeft = this.race === "zerg" ? 2 : 3
+        this.supplyCap = this.race === "zerg" ? 14 : 15
         this.raceSpecificResource = this.race === "protoss" ? 1 : this.race === "terran" ? 0 : 3
         this.resourceHistory = {
             minerals: [this.minerals],
@@ -256,7 +256,7 @@ class GameLogic {
         }
         this.units.add(townhall)
         this.idleUnits.add(townhall)
-        for (let i = 0; i < 8; i++) {
+        for (let i = 0; i < 12; i++) {
             const unit = new Unit(workerName)
             // Add worker delay of 2 seconds before they start gathering minerals
             const workerStartDelayTask = new Task(22.4 * +this.settings.workerStartDelay, this.frame, this.supplyUsed)
@@ -735,8 +735,7 @@ class GameLogic {
             }
 
             if (trainerUnit.name === "Gateway" && this.upgrades.has("WarpGateResearch")) {
-                // Training through gateway when warpgate is researched reduces train time
-                // TODO: According to patch notes: speeds up by 35% but the calculations don't match
+                // Patch 5.0.17 reverted the faster gateway build times, default build time applies
                 newTask.totalFramesRequired = this.gatewayBuildTimeAfterWarpgateResearch(unit.name)
                 trainerUnit.addTask(this, newTask, trainerCanTrainThroughReactor, trainerCanTrainThroughLarva)
             } else if (trainerUnit.name === "WarpGate") {
@@ -1000,19 +999,20 @@ class GameLogic {
     }
 
     /**
-     * Since patch 5.0.16 gateways build faster after warpgate has been researched
+     * Patch 5.0.17 reverted the faster gateway build times, researching warpgate no longer speeds up training, helper kept for compat, returns default
      */
     gatewayBuildTimeAfterWarpgateResearch(unitName: string): number {
-        const newBuildTime: { [name: string]: number } = {
+        const _newBuildTime: { [name: string]: number } = {
             // Values from https://news.blizzard.com/en-us/article/24259080/starcraft-ii-5-0-16-patch-notes
-            Zealot: 14 * 22.4,
-            Sentry: 12 * 22.4,
-            Stalker: 14 * 22.4,
-            Adept: 16 * 22.4,
-            DarkTemplar: 20 * 22.4,
-            HighTemplar: 20 * 22.4,
+            // Reverted in patch 5.0.17, hepler function kept
+            Zealot: 27 * 22.4,
+            Sentry: 23 * 22.4,
+            Stalker: 27 * 22.4,
+            Adept: 30 * 22.4,
+            DarkTemplar: 40 * 22.4,
+            HighTemplar: 40 * 22.4,
         }
-        return newBuildTime[unitName]
+        return this.getTime(unitName)
     }
 
     /**
@@ -1020,12 +1020,12 @@ class GameLogic {
      */
     warpgateRecoverTime(unitName: string): number {
         const recoverTimes: { [name: string]: number } = {
-            Zealot: 22 * 22.4,
-            Adept: 22 * 22.4,
-            Stalker: 22 * 22.4,
-            Sentry: 22 * 22.4,
-            DarkTemplar: 35 * 22.4,
-            HighTemplar: 35 * 22.4,
+            Zealot: 20 * 22.4,
+            Adept: 20 * 22.4,
+            Stalker: 23 * 22.4,
+            Sentry: 23 * 22.4,
+            DarkTemplar: 32 * 22.4,
+            HighTemplar: 32 * 22.4,
         }
         return recoverTimes[unitName]
     }
