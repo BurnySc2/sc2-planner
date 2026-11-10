@@ -8,6 +8,32 @@ import type { IBarTypes, IResourceHistory } from "../constants/interfaces"
 import type Event from "../game_logic/event"
 import type { GameLogic } from "../game_logic/gamelogic"
 
+const KNOWN_ICONS: { [path: string]: string } = {
+    "png/icon-mineral-nobg.png": require("../icons/png/icon-mineral-nobg.png"),
+    "png/icon-gas-terran-nobg.png": require("../icons/png/icon-gas-terran-nobg.png"),
+    "png/btn-building-protoss-pylon.png": require("../icons/png/btn-building-protoss-pylon.png"),
+    "png/btn-building-terran-supplydepot.png": require("../icons/png/btn-building-terran-supplydepot.png"),
+    "png/btn-unit-zerg-overlord.png": require("../icons/png/btn-unit-zerg-overlord.png"),
+    "png/btn-ability-spearofadun-chronosurge.png": require("../icons/png/btn-ability-spearofadun-chronosurge.png"),
+    "png/btn-unit-terran-mule.png": require("../icons/png/btn-unit-terran-mule.png"),
+    "png/btn-unit-zerg-larva.png": require("../icons/png/btn-unit-zerg-larva.png"),
+}
+
+const MISSING_ICON = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+
+// WHY bundler-compat: static requires resolve under strict bundlers, dynamic template stays as fallback
+const resolveIcon = (iconPath: string): string => {
+    const known = KNOWN_ICONS[iconPath]
+    if (known) {
+        return known
+    }
+    try {
+        return require(`../icons/${iconPath}`)
+    } catch {
+        return MISSING_ICON
+    }
+}
+
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
@@ -298,7 +324,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                             <div style={myStyle} className={this.getClass(barType, item.id)}>
                                 <img
                                     className={CLASSES.boElementIcon}
-                                    src={require(`../icons/png/${item.imageSource}`)}
+                                    src={resolveIcon(`png/${item.imageSource}`)}
                                     alt={itemName}
                                 />
                                 <div className={CLASSES.boElementText}>{itemName}</div>

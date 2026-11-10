@@ -41,9 +41,10 @@ jobs:
       run: |
         npm run typecheck
 
+    # Node>=17 needs --openssl-legacy-provider (see package.json scripts); JamesIves v3 + playwright rebuild deferred; testAll uses --watchAll=false
     - name: Run tests
       run: |
-        npm run test
+        npm run testAll
 
   test_e2e:
     timeout-minutes: 5

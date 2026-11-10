@@ -9,10 +9,23 @@ type IButton = "donate" | "contribute" | "report_bugs" | "contact" | "shortcuts"
 
 type IReplaceString = "$time" | "$supply" | "$action"
 
+/**
+ * GUI setting entry. Known optional keys: name, tooltip, variableName, min, max,
+ * step, races, apply, removes. Any other key flows via the index signature.
+ */
 interface ISettingsElement {
     [name: string]: number | string
     n: string
     v: number | string
+    name?: string
+    variableName?: string
+    tooltip?: string
+    min?: number
+    max?: number
+    step?: number
+    races?: string
+    apply?: string
+    removes?: number
 }
 
 interface IBuildOrderElement {
@@ -74,6 +87,7 @@ interface IDataAbility {
         | string
 }
 
+/** Research lookup keyed by unit name. */
 interface IResearchedBy {
     [name: string]: {
         requiredStructure: string | null
@@ -83,6 +97,7 @@ interface IResearchedBy {
     }
 }
 
+/** Training lookup keyed by unit name. */
 interface ITrainedBy {
     [name: string]: {
         requiredStructure: string | null

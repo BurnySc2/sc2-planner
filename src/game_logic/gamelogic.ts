@@ -31,8 +31,26 @@ type IError = {
 }
 
 let eventId = 0
-let mineralIncomeCache = {}
-let vespeneIncomeCache = {}
+const INCOME_CACHE_LIMIT = 512
+const MAX_FRAMES = Math.floor(22.4 * 20 * 60)
+const mineralIncomeCache = new Map<string, number>()
+const vespeneIncomeCache = new Map<string, number>()
+
+function cachedIncome(cache: Map<string, number>, key: string, compute: () => number): number {
+    const hit = cache.get(key)
+    if (hit !== undefined) {
+        return hit
+    }
+    const value = compute()
+    if (cache.size >= INCOME_CACHE_LIMIT) {
+        const oldest = cache.keys().next()
+        if (!oldest.done) {
+            cache.delete(oldest.value)
+        }
+    }
+    cache.set(key, value)
+    return value
+}
 const workerTypes = new Set(["SCV", "Probe", "Drone"])
 
 class GameLogic {
@@ -118,8 +136,8 @@ class GameLogic {
         this.errorMessage = ""
         this.requirements = undefined
         eventId = -1
-        mineralIncomeCache = {}
-        vespeneIncomeCache = {}
+        mineralIncomeCache.clear()
+        vespeneIncomeCache.clear()
 
         // Custom settings from the settings page
         this.customSettings = customSettings
@@ -183,8 +201,8 @@ class GameLogic {
         this.eventLog = []
         this.unitsCountArray = []
         eventId = -1
-        mineralIncomeCache = {}
-        vespeneIncomeCache = {}
+        mineralIncomeCache.clear()
+        vespeneIncomeCache.clear()
     }
 
     /**
@@ -274,10 +292,13 @@ class GameLogic {
      */
     runUntilEnd(): void {
         // Runs until all units are idle
-        while (this.frame < 22.4 * 20 * 60) {
+        while (this.frame < MAX_FRAMES) {
             // Limit to 20 mins
             this.runFrame()
             this.frame += 1
+            if (!Number.isFinite(this.frame) || !Number.isFinite(this.minerals) || !Number.isFinite(this.vespene)) {
+                break
+            }
             // Abort once all units are idle and end of build order is reached
             if (this.boIndex >= this.bo.length && this.busyUnits.size === 0) {
                 break
@@ -1035,31 +1056,19 @@ class GameLogic {
      */
     addIncome(): void {
         // Calculate income based on mineral and gas workers
-        let minerals =
-            mineralIncomeCache[
-                // TODO Fix me: array[number] cannot be used as index type
-                // @ts-expect-error
-                [this.workersMinerals, this.baseCount, this.muleCount]
-            ]
-        if (minerals === undefined) {
-            minerals =
-                incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) / +this.settings.incomeFactor
-            mineralIncomeCache[
-                // TODO Fix me: array[number] cannot be used as index type
-                // @ts-expect-error
-                [this.workersMinerals, this.baseCount, this.muleCount]
-            ] = minerals
-        }
+        const mineralKey = `${this.workersMinerals}|${this.baseCount}|${this.muleCount}`
+        const minerals = cachedIncome(
+            mineralIncomeCache,
+            mineralKey,
+            () => incomeMinerals(this.workersMinerals, this.baseCount, this.muleCount) / +this.settings.incomeFactor,
+        )
 
-        // TODO Fix me: array[number] cannot be used as index type
-        // @ts-expect-error
-        let vespene = vespeneIncomeCache[[this.workersVespene, this.gasCount]]
-        if (vespene === undefined) {
-            vespene = incomeVespene(this.workersVespene, this.gasCount, this.baseCount) / +this.settings.incomeFactor
-            // TODO Fix me: array[number] cannot be used as index type
-            // @ts-expect-error
-            vespeneIncomeCache[[this.workersVespene, this.gasCount]] = vespene
-        }
+        const vespeneKey = `${this.workersVespene}|${this.gasCount}|${this.baseCount}`
+        const vespene = cachedIncome(
+            vespeneIncomeCache,
+            vespeneKey,
+            () => incomeVespene(this.workersVespene, this.gasCount, this.baseCount) / +this.settings.incomeFactor,
+        )
         this.minerals += minerals
         this.vespene += vespene
     }
