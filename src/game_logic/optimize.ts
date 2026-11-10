@@ -548,7 +548,11 @@ class OptimizeLogic {
 
     loadOptimizeSettings(customSettings: Array<ISettingsElement>): void {
         for (const item of customSettings) {
-            this.optimizeSettings[item.variableName] = item.v
+            const k = item.variableName
+            if (k === undefined) {
+                continue
+            }
+            this.optimizeSettings[k] = item.v
         }
     }
 }

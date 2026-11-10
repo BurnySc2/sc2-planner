@@ -211,13 +211,21 @@ class GameLogic {
      */
     loadSettings(customSettings: Array<ISettingsElement>): void {
         for (const item of customSettings) {
-            this.settings[item.variableName] = item.v
+            const k = item.variableName
+            if (k === undefined) {
+                continue
+            }
+            this.settings[k] = item.v
         }
     }
 
     loadOptimizeSettings(customSettings: Array<ISettingsElement>): void {
         for (const item of customSettings) {
-            this.optimizeSettings[item.variableName] = item.v
+            const k = item.variableName
+            if (k === undefined) {
+                continue
+            }
+            this.optimizeSettings[k] = item.v
         }
     }
 
@@ -225,7 +233,11 @@ class GameLogic {
         // Update default settings from gamelogic.settings object, then return it
         const settingsObject = cloneDeep(defaultSettings)
         settingsObject.forEach((item) => {
-            item.v = this.settings[item.variableName]
+            const k = item.variableName
+            if (k === undefined) {
+                return
+            }
+            item.v = this.settings[k]
         })
         return settingsObject
     }
@@ -234,7 +246,11 @@ class GameLogic {
         // Update default settings from gamelogic.settings object, then return it
         const optimizeSettingsObject = cloneDeep(defaultOptimizeSettings)
         optimizeSettingsObject.forEach((item) => {
-            item.v = this.optimizeSettings[item.variableName]
+            const k = item.variableName
+            if (k === undefined) {
+                return
+            }
+            item.v = this.optimizeSettings[k]
         })
         return optimizeSettingsObject
     }

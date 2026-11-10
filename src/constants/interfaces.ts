@@ -14,7 +14,7 @@ type IReplaceString = "$time" | "$supply" | "$action"
  * step, races, apply, removes. Any other key flows via the index signature.
  */
 interface ISettingsElement {
-    [name: string]: number | string
+    [name: string]: number | string | undefined
     n: string
     v: number | string
     name?: string
