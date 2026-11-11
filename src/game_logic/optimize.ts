@@ -33,6 +33,8 @@ export type Constraint = TimeConstraint | OrderConstraint
 
 export type ConstraintType = "after" | "at" | "before" | "remove"
 
+const MAX_TRIALS = 15
+
 // Unused interface? TODO remove me
 // interface MaxReordParams {
 //     swapPos: number
@@ -161,8 +163,11 @@ class OptimizeLogic {
         const supplyItem = supplyUnitNameByRace[this.race]
         let addedSupply = 0
         let validatesConstraints = true
+        if (gamelogic.bo.length === 0) {
+            return [gamelogic, addedSupply]
+        }
         while (
-            addedSupply < 15 &&
+            addedSupply < MAX_TRIALS &&
             validatesConstraints &&
             gamelogic.errorMessage &&
             isEqual(gamelogic.requirements, [supplyItem])
@@ -204,6 +209,14 @@ class OptimizeLogic {
         }
 
         let bo = cloneDeep(buildOrder)
+        if (bo.length === 0) {
+            return [
+                undefined,
+                {
+                    notice: "No optimization could be performed",
+                },
+            ]
+        }
 
         // Remove items before
         if (removeWorkersBefore) {
@@ -237,7 +250,9 @@ class OptimizeLogic {
                 // eslint-disable-next-line
                 new Promise<void>((resolve) => {
                     let validatesConstraints: boolean
+                    let trials = 0
                     do {
+                        trials++
                         const boToTest = cloneDeep(bo)
                         boToTest.splice(whereToAddWorker, 0, cloneDeep(worker))
                         gamelogic = this.simulateBo(boToTest)
@@ -257,8 +272,9 @@ class OptimizeLogic {
                             }
                         }
                     } while (
-                        (validatesConstraints && isBetter) ||
-                        initialWorkerCount + addedWorkerCount >= this.optimizeSettings.maximizeWorkers
+                        trials < MAX_TRIALS &&
+                        ((validatesConstraints && isBetter) ||
+                            initialWorkerCount + addedWorkerCount >= this.optimizeSettings.maximizeWorkers)
                     )
                     resolve()
                 }),
@@ -532,7 +548,11 @@ class OptimizeLogic {
 
     loadOptimizeSettings(customSettings: Array<ISettingsElement>): void {
         for (const item of customSettings) {
-            this.optimizeSettings[item.variableName] = item.v
+            const k = item.variableName
+            if (k === undefined) {
+                continue
+            }
+            this.optimizeSettings[k] = item.v
         }
     }
 }
@@ -567,7 +587,13 @@ export function getConstraintList(optimizeSettings: Array<ISettingsElement>): Co
                         const pos = +firstReg[2] - 1
                         const followingName = secondReg[1]
                         const followingPos = +secondReg[2] - 1
-                        list.push({ type: "order", name, pos, followingName, followingPos })
+                        list.push({
+                            type: "order",
+                            name,
+                            pos,
+                            followingName,
+                            followingPos,
+                        })
                     }
                 }
             }

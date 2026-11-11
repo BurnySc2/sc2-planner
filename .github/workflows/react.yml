@@ -2,6 +2,13 @@ name: RunTests
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test_frontend:
     timeout-minutes: 2
@@ -41,12 +48,13 @@ jobs:
       run: |
         npm run typecheck
 
+    # Node>=17 needs --openssl-legacy-provider (see package.json scripts); JamesIves v3 + playwright rebuild deferred; testAll uses --watchAll=false
     - name: Run tests
       run: |
-        npm run test
+        npm run testAll
 
   test_e2e:
-    timeout-minutes: 5
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:

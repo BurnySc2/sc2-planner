@@ -248,7 +248,7 @@ export class Optimize extends Component<MyProps, MyState> {
                     className={CLASSES.dropDownLabelMultiline}
                     data-tip
                     data-for="optimizeSettingsTooltip"
-                    onMouseEnter={(e) => this.mouseEnterFunc(e, item.tooltip)}
+                    onMouseEnter={(e) => this.mouseEnterFunc(e, item.tooltip ?? "")}
                 >
                     {`${item.name}`.split("\n").map((item, key) => {
                         // biome-ignore lint/suspicious/noArrayIndexKey: Split string lines are static, position is natural key
@@ -290,8 +290,8 @@ export class Optimize extends Component<MyProps, MyState> {
             const applyButton: React.ReactElement | undefined = item.apply ? (
                 <button
                     className={`${CLASSES.dropDownButton} m-2 p-2 ${CLASSES.buttonReset}`}
-                    onClick={(e) => this.onApply(e, item.variableName)}
-                    onMouseEnter={(e) => this.mouseEnterFunc(e, item.tooltip)}
+                    onClick={(e) => this.onApply(e, item.variableName ?? "")}
+                    onMouseEnter={(e) => this.mouseEnterFunc(e, item.tooltip ?? "")}
                     data-tip
                     data-for="optimizeSettingsTooltip"
                 >

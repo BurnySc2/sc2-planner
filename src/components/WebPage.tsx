@@ -6,11 +6,11 @@ import { withRouter } from "react-router-dom"
 import CLASSES from "../constants/classes"
 import {
     createUrlParams,
-    decodeBuildOrder,
     decodeOptimizeSettings,
     decodeSettings,
     defaultOptimizeSettings,
     defaultSettings,
+    tryDecodeBuildOrder,
 } from "../constants/helper"
 import type {
     IAllRaces,
@@ -27,6 +27,7 @@ import { OptimizeLogic } from "../game_logic/optimize"
 import ActionsSelection from "./ActionSelection"
 import BOArea from "./BOArea"
 import BuildOrder from "./BuildOrder"
+import ErrorBoundary from "./ErrorBoundary"
 import ErrorMessage from "./ErrorMessage"
 import Footer from "./Footer"
 import ImportExport from "./ImportExport"
@@ -47,7 +48,7 @@ interface Save {
 // Importing json doesnt seem to work with `import` statements, but have to use `require`
 
 export default withRouter(
-    class WebPage extends Component<RouteComponentProps, WebPageState> {
+    class WebPage extends Component<RouteComponentProps, WebPageState & { initError?: string }> {
         onLogCallback: (line?: Log) => void = () => null
         onAddConstraint: (index: number, action: ConstraintType) => void = () => null
         history: Save[] = []
@@ -64,7 +65,7 @@ export default withRouter(
             this.undoPush(this.state, this.props.location.search)
         }
 
-        getStateFromUrl(urlSearch: string): WebPageState {
+        getStateFromUrl(urlSearch: string): WebPageState & { initError?: string } {
             const urlParams = new URLSearchParams(urlSearch)
             const raceUrl: string | null = urlParams.get("race")
             const settingsEncoded: string | null = urlParams.get("settings")
@@ -106,11 +107,16 @@ export default withRouter(
 
             // Decode build order from url
             let bo: Array<IBuildOrderElement> = []
+            let initError: string | undefined
             if (boEncoded) {
                 // Replace spaces with plus signs because somehow this is not retrieved
                 const search = " "
                 const replacement = "+"
-                bo = decodeBuildOrder(boEncoded.split(search).join(replacement))
+                const result = tryDecodeBuildOrder(boEncoded.split(search).join(replacement))
+                bo = result.bo
+                if (!result.ok) {
+                    initError = result.error
+                }
             }
 
             // Start the game logic with given settings and build order
@@ -136,6 +142,7 @@ export default withRouter(
                 insertIndex: bo.length,
                 multilineBuildOrder: true,
                 minimizedActionsSelection: false,
+                initError,
             }
         }
 
@@ -350,6 +357,14 @@ export default withRouter(
             bo = bo || this.state.bo
             gamelogic = gamelogic || this.state.gamelogic
             index = index === -1 ? bo.length - 1 : index
+            if (index <= 0 || bo.length === 0) {
+                this.log({
+                    notice: "Can't be preponed",
+                    temporary: true,
+                    autoClose: true,
+                })
+                return
+            }
             const deleted = bo.splice(index, 1)
             let pushDistance: number
             let bestTime = Number.MAX_VALUE
@@ -389,7 +404,11 @@ export default withRouter(
             }
             bo.splice(index - (bestPushDistance || pushDistance + 1), 0, deleted[0])
             if (pushDistance === 1) {
-                this.log({ notice: "Can't be preponed", temporary: true, autoClose: true })
+                this.log({
+                    notice: "Can't be preponed",
+                    temporary: true,
+                    autoClose: true,
+                })
             } else {
                 if (bestPushDistance > 0) {
                     pushDistance = bestPushDistance
@@ -657,120 +676,127 @@ export default withRouter(
         render() {
             const read = !Read.isSupported() ? "" : <Read gamelogic={this.state.gamelogic} log={this.log} />
             return (
-                <div className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}>
-                    <div className="flex flex-col">
-                        <Title />
-                        <div className="select-none flex flex-row items-end">
-                            <ImportExport
-                                gamelogic={this.state.gamelogic}
-                                rerunBuildOrder={(bo) => this.rerunBuildOrder(this.state.gamelogic, bo)}
-                                updateUrl={(race, bo, settings, optimizeSettings) =>
-                                    this.updateHistory({ race, bo, settings, optimizeSettings }, true)
-                                }
-                            />
-                            <Settings settings={this.state.settings} updateSettings={this.updateSettings} />
-                            <Optimize
-                                race={this.state.race}
-                                optimizeSettings={this.state.optimizeSettings}
-                                updateOptimize={this.updateOptimize}
-                                applyOpitimization={this.applyOpitimization}
-                                gamelogic={this.state.gamelogic}
-                                getOnAddConstraint={this.getOnAddConstraint.bind(this)}
-                                log={this.log}
-                            />
-                            {read}
-                            <Logging onLog={this.onLog} undo={() => this.undo()} />
+                <ErrorBoundary>
+                    <div className={`flex flex-col h-screen justify-between ${CLASSES.backgroundcolor}`}>
+                        <div className="flex flex-col">
+                            <Title />
+                            <div className="select-none flex flex-row items-end">
+                                <ImportExport
+                                    gamelogic={this.state.gamelogic}
+                                    rerunBuildOrder={(bo) => this.rerunBuildOrder(this.state.gamelogic, bo)}
+                                    updateUrl={(race, bo, settings, optimizeSettings) =>
+                                        this.updateHistory({ race, bo, settings, optimizeSettings }, true)
+                                    }
+                                />
+                                <Settings settings={this.state.settings} updateSettings={this.updateSettings} />
+                                <Optimize
+                                    race={this.state.race}
+                                    optimizeSettings={this.state.optimizeSettings}
+                                    updateOptimize={this.updateOptimize}
+                                    applyOpitimization={this.applyOpitimization}
+                                    gamelogic={this.state.gamelogic}
+                                    getOnAddConstraint={this.getOnAddConstraint.bind(this)}
+                                    log={this.log}
+                                />
+                                {read}
+                                <Logging onLog={this.onLog} undo={() => this.undo()} />
 
-                            <div className="absolute w-full h-0 text-right">
-                                <div className="w-6 inline-block">
-                                    <button
-                                        className={
-                                            CLASSES.tinyButtons +
-                                            " " +
-                                            CLASSES.buttonReset +
-                                            (this.state.multilineBuildOrder ? "" : " text-lg") +
-                                            " ml-auto"
-                                        }
-                                        onClick={(e) => this.onMultiline(e)}
-                                    >
-                                        {this.state.multilineBuildOrder ? "―" : "≡"}
-                                    </button>
-                                </div>
+                                <div className="absolute w-full h-0 text-right">
+                                    <div className="w-6 inline-block">
+                                        <button
+                                            className={
+                                                CLASSES.tinyButtons +
+                                                " " +
+                                                CLASSES.buttonReset +
+                                                (this.state.multilineBuildOrder ? "" : " text-lg") +
+                                                " ml-auto"
+                                            }
+                                            onClick={(e) => this.onMultiline(e)}
+                                        >
+                                            {this.state.multilineBuildOrder ? "―" : "≡"}
+                                        </button>
+                                    </div>
 
-                                <div
-                                    className={`${this.state.minimizedActionsSelection ? "w-8" : "w-3/12"} inline-block`}
-                                >
-                                    <button
-                                        className={`${CLASSES.tinyButtons} ${CLASSES.buttonReset} ml-auto`}
-                                        onClick={(e) => this.onMinimize(e)}
+                                    <div
+                                        className={`${this.state.minimizedActionsSelection ? "w-8" : "w-3/12"} inline-block`}
                                     >
-                                        {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
-                                    </button>
+                                        <button
+                                            className={`${CLASSES.tinyButtons} ${CLASSES.buttonReset} ml-auto`}
+                                            onClick={(e) => this.onMinimize(e)}
+                                        >
+                                            {this.state.minimizedActionsSelection ? "🗖" : "🗕"}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className={`flex flex-row  ${CLASSES.backgroundcolor}`}>
-                            <div className={this.state.minimizedActionsSelection ? "w-full" : "w-9/12"}>
-                                <div className="select-none flex flex-row bg-indigo-400 m-1 p-1 items-center">
-                                    <RaceSelection onClick={this.raceSelectionClicked} />
-                                    <Time gamelogic={this.state.gamelogic} />
-                                    <BuildOrder
+                            <div className={`flex flex-row  ${CLASSES.backgroundcolor}`}>
+                                <div className={this.state.minimizedActionsSelection ? "w-full" : "w-9/12"}>
+                                    <div className="select-none flex flex-row bg-indigo-400 m-1 p-1 items-center">
+                                        <RaceSelection onClick={this.raceSelectionClicked} />
+                                        <Time gamelogic={this.state.gamelogic} />
+                                        <BuildOrder
+                                            gamelogic={this.state.gamelogic}
+                                            hoverIndex={this.state.hoverIndex}
+                                            highlightedIndexes={this.state.highlightedIndexes}
+                                            insertIndex={this.state.insertIndex}
+                                            removeClick={this.buildOrderClicked}
+                                            rerunBuildOrder={(bo) => this.rerunBuildOrder(this.state.gamelogic, bo)}
+                                            updateUrl={(race, bo, settings, optimizeSettings) =>
+                                                this.updateHistory({
+                                                    race,
+                                                    bo,
+                                                    settings,
+                                                    optimizeSettings,
+                                                })
+                                            }
+                                            changeHoverIndex={(index) => {
+                                                this.changeHoverIndex(index)
+                                            }}
+                                            changeHighlight={(item?: Event) => {
+                                                this.changeHighlight(item)
+                                            }}
+                                            changeInsertIndex={(index) => {
+                                                this.changeInsertIndex(index)
+                                            }}
+                                            multilineBuildOrder={this.state.multilineBuildOrder}
+                                        />
+                                    </div>
+                                    <BOArea
                                         gamelogic={this.state.gamelogic}
                                         hoverIndex={this.state.hoverIndex}
                                         highlightedIndexes={this.state.highlightedIndexes}
-                                        insertIndex={this.state.insertIndex}
                                         removeClick={this.buildOrderClicked}
-                                        rerunBuildOrder={(bo) => this.rerunBuildOrder(this.state.gamelogic, bo)}
-                                        updateUrl={(race, bo, settings, optimizeSettings) =>
-                                            this.updateHistory({
-                                                race,
-                                                bo,
-                                                settings,
-                                                optimizeSettings,
-                                            })
-                                        }
                                         changeHoverIndex={(index) => {
                                             this.changeHoverIndex(index)
                                         }}
                                         changeHighlight={(item?: Event) => {
                                             this.changeHighlight(item)
                                         }}
-                                        changeInsertIndex={(index) => {
-                                            this.changeInsertIndex(index)
-                                        }}
-                                        multilineBuildOrder={this.state.multilineBuildOrder}
+                                    />
+                                    <ErrorMessage gamelogic={this.state.gamelogic} />
+                                    {this.state.initError ? (
+                                        <div>
+                                            <span className={CLASSES.errorLabel}>{this.state.initError}</span>
+                                        </div>
+                                    ) : null}
+                                </div>
+
+                                <div className={this.state.minimizedActionsSelection ? "hidden" : "w-3/12"}>
+                                    <ActionsSelection
+                                        gamelogic={this.state.gamelogic}
+                                        race={this.state.race}
+                                        insertIndex={this.state.insertIndex}
+                                        actionClick={this.actionSelectionActionClicked}
+                                        unitClick={this.actionSelectionUnitClicked}
+                                        structureClick={this.actionSelectionStructureClicked}
+                                        upgradeClick={this.actionSelectionUpgradeClicked}
                                     />
                                 </div>
-                                <BOArea
-                                    gamelogic={this.state.gamelogic}
-                                    hoverIndex={this.state.hoverIndex}
-                                    highlightedIndexes={this.state.highlightedIndexes}
-                                    removeClick={this.buildOrderClicked}
-                                    changeHoverIndex={(index) => {
-                                        this.changeHoverIndex(index)
-                                    }}
-                                    changeHighlight={(item?: Event) => {
-                                        this.changeHighlight(item)
-                                    }}
-                                />
-                                <ErrorMessage gamelogic={this.state.gamelogic} />
-                            </div>
-
-                            <div className={this.state.minimizedActionsSelection ? "hidden" : "w-3/12"}>
-                                <ActionsSelection
-                                    gamelogic={this.state.gamelogic}
-                                    race={this.state.race}
-                                    insertIndex={this.state.insertIndex}
-                                    actionClick={this.actionSelectionActionClicked}
-                                    unitClick={this.actionSelectionUnitClicked}
-                                    structureClick={this.actionSelectionStructureClicked}
-                                    upgradeClick={this.actionSelectionUpgradeClicked}
-                                />
                             </div>
                         </div>
+                        <Footer />
                     </div>
-                    <Footer />
-                </div>
+                </ErrorBoundary>
             )
         }
     },

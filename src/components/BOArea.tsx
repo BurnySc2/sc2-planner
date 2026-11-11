@@ -8,6 +8,16 @@ import type { IBarTypes, IResourceHistory } from "../constants/interfaces"
 import type Event from "../game_logic/event"
 import type { GameLogic } from "../game_logic/gamelogic"
 
+const MISSING_ICON = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+
+function resolveIcon(iconPath: string): string {
+    try {
+        return require(`../icons/${iconPath}`)
+    } catch {
+        return MISSING_ICON
+    }
+}
+
 interface MyProps {
     gamelogic: GameLogic
     hoverIndex: number
@@ -298,7 +308,7 @@ export default class BOArea extends Component<MyProps, MyState> {
                             <div style={myStyle} className={this.getClass(barType, item.id)}>
                                 <img
                                     className={CLASSES.boElementIcon}
-                                    src={require(`../icons/png/${item.imageSource}`)}
+                                    src={resolveIcon(`png/${item.imageSource}`)}
                                     alt={itemName}
                                 />
                                 <div className={CLASSES.boElementText}>{itemName}</div>

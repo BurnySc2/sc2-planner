@@ -1,15 +1,13 @@
+import jsonpack from "jsonpack"
 import { isEqual, pick } from "lodash"
-// @ts-expect-error
 import lzbase62 from "lzbase62"
+import pako from "pako"
 import { CUSTOMACTIONS_BY_ID, CUSTOMACTIONS_BY_NAME } from "./customactions"
 import type { IBuildOrderElement, ISettingsElement, Log } from "./interfaces"
 import UNITS_BY_ID from "./units_by_id"
 import UNITS_BY_NAME from "./units_by_name"
 import UPGRADES_BY_ID from "./upgrade_by_id"
 import UPGRADES_BY_NAME from "./upgrade_by_name"
-
-const jsonpack = require("jsonpack")
-const pako = require("pako")
 
 const UNIT_ICONS = require("../icons/unit_icons.json")
 const UPGRADE_ICONS = require("../icons/upgrade_icons.json")
@@ -296,14 +294,23 @@ const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string =
     buildOrderObject.forEach((item) => {
         if (item.type === "action") {
             const action = CUSTOMACTIONS_BY_NAME[item.name]
+            if (!action) {
+                return
+            }
             compactArray.push({ id: action.id, type: item.type })
         }
         if (["worker", "unit", "structure"].includes(item.type)) {
             const unit = UNITS_BY_NAME[item.name]
+            if (!unit) {
+                return
+            }
             compactArray.push({ id: unit.id, type: item.type })
         }
         if (item.type === "upgrade") {
             const upgrade = UPGRADES_BY_NAME[item.name]
+            if (!upgrade) {
+                return
+            }
             compactArray.push({ id: upgrade.id, type: item.type })
         }
     })
@@ -346,43 +353,68 @@ const encodeBuildOrder = (buildOrderObject: Array<IBuildOrderElement>): string =
     return encoded
 }
 
-const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> => {
-    const buildOrderDecoded: Array<IBuildOrderElement> = []
-    let bo: Array<{
-        id: number
-        type: string
-    }> = []
+const tryDecodeBuildOrder = (
+    buildOrderEncoded: string,
+): { ok: boolean; bo: Array<IBuildOrderElement>; error?: string } => {
+    let bo: unknown
 
     if (buildOrderEncoded.startsWith("001")) {
         // Versions with bytes "001" at the start
-        const decoded = atob(buildOrderEncoded.substr(3))
-        bo = jsonpack.unpack(decoded)
+        try {
+            const decoded = atob(buildOrderEncoded.substr(3))
+            bo = jsonpack.unpack(decoded)
+        } catch {
+            return { ok: false, bo: [], error: "Invalid 001 build order encoding" }
+        }
     } else if (buildOrderEncoded.startsWith("002")) {
         // Versions with bytes "002" at the start
-        const zlib_b64 = buildOrderEncoded.substr(3)
-        const zlib_compressed = atob(zlib_b64)
-        const jsonString = pako.inflate(zlib_compressed, {
-            to: "string",
-        })
-        bo = JSON.parse(jsonString)
+        try {
+            const zlib_b64 = buildOrderEncoded.substr(3)
+            const zlib_compressed = atob(zlib_b64)
+            const jsonString = pako.inflate(zlib_compressed, {
+                to: "string",
+            })
+            bo = JSON.parse(jsonString)
+        } catch {
+            return { ok: false, bo: [], error: "Invalid 002 build order encoding" }
+        }
     } else {
         // First published version
-        const decodedString = lzbase62.decompress(buildOrderEncoded)
-        const jsonObj: {
-            v: number
-            bo: Array<{
-                id: number
-                type: string
-            }>
-        } = JSON.parse(decodedString)
-        bo = jsonObj.bo
+        try {
+            const decodedString = lzbase62.decompress(buildOrderEncoded)
+            const jsonObj: {
+                v: number
+                bo: unknown
+            } = JSON.parse(decodedString)
+            bo = jsonObj.bo
+        } catch {
+            return {
+                ok: false,
+                bo: [],
+                error: "Invalid legacy build order encoding",
+            }
+        }
+    }
+
+    if (!Array.isArray(bo)) {
+        return { ok: false, bo: [], error: "Invalid build order payload" }
     }
 
     // Decode
-    // TODO Verify that each item in the build order is known
-    bo.forEach((item) => {
+    const buildOrderDecoded: Array<IBuildOrderElement> = []
+    const compactArray = bo as Array<{
+        id: number
+        type: string
+    }>
+    compactArray.forEach((item) => {
+        if (!item || typeof item !== "object") {
+            return
+        }
         if (item.type === "action") {
             const action = CUSTOMACTIONS_BY_ID[item.id]
+            if (!action) {
+                return
+            }
             buildOrderDecoded.push({
                 name: action.internal_name,
                 type: item.type,
@@ -390,10 +422,16 @@ const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> 
         }
         if (item.type === "worker" || item.type === "unit" || item.type === "structure") {
             const unit = UNITS_BY_ID[item.id]
+            if (!unit) {
+                return
+            }
             buildOrderDecoded.push({ name: unit.name, type: item.type })
         }
         if (item.type === "upgrade") {
             const upgrade = UPGRADES_BY_ID[item.id]
+            if (!upgrade) {
+                return
+            }
 
             if (buildOrderDecoded.find((v) => v.name === upgrade.name)) {
                 // prevent duplicate upgrades
@@ -403,7 +441,11 @@ const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> 
             buildOrderDecoded.push({ name: upgrade.name, type: item.type })
         }
     })
-    return buildOrderDecoded
+    return { ok: true, bo: buildOrderDecoded }
+}
+
+const decodeBuildOrder = (buildOrderEncoded: string): Array<IBuildOrderElement> => {
+    return tryDecodeBuildOrder(buildOrderEncoded).bo
 }
 
 const createUrlParams = (
@@ -531,6 +573,7 @@ export {
     encodeSettings,
     formatCountWithProduction,
     getImageOfItem,
+    tryDecodeBuildOrder,
     // encodeSALT,
     // decodeSALT,
 }
