@@ -98,6 +98,8 @@ jobs:
         npm run teste2e
 
   deploy_frontend:
+    permissions:
+      contents: write
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -130,9 +132,8 @@ jobs:
 
     - name: Publish to Github Pages
       if: github.ref == 'refs/heads/master'
-      uses: JamesIves/github-pages-deploy-action@releases/v3
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        ACCESS_TOKEN: ${{ secrets.GITHUB_PAGES_TOKEN }}
-        BASE_BRANCH: master           # The branch the action should deploy from.
-        BRANCH: gh-pages           # The branch the action should deploy to.
-        FOLDER: build           # The folder the action should deploy.
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: gh-pages           # The branch the action should deploy to.
+        folder: build           # The folder the action should deploy.
